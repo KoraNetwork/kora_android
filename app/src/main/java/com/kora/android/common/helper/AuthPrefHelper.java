@@ -1,4 +1,4 @@
-package com.kora.android.data.local;
+package com.kora.android.common.helper;
 
 import android.content.Context;
 

@@ -46,29 +46,24 @@ public class RxCallAdapterWrapper<R> implements CallAdapter<R, Object> {
 
     private Object convert(final Object o) {
         if (o instanceof Completable)
-            return ((Completable) o).onErrorResumeNext(throwable -> Completable.error(handleErrorToShow(throwable)));
+            return ((Completable) o).onErrorResumeNext(throwable ->
+                    Completable.error(asRetrofitException(throwable)));
         else if (o instanceof Single)
             return ((Single) o).onErrorResumeNext(new Function<Throwable, SingleSource>() {
                 @Override
                 public SingleSource apply(Throwable throwable) throws Exception {
-                    return Single.error(handleErrorToShow(throwable));
+                    return Single.error(asRetrofitException(throwable));
                 }
             });
         else if (o instanceof Observable)
             return ((Observable) o).onErrorResumeNext(new Function<Throwable, ObservableSource>() {
                 @Override
                 public ObservableSource apply(final Throwable throwable) throws Exception {
-                    return Observable.error(throwable);
+                    return Observable.error(asRetrofitException(throwable));
                 }
             });
         else
             throw new RuntimeException("Not allowed reactive call = " + o.toString());
-    }
-
-    private RetrofitException handleErrorToShow(Throwable throwable) {
-        RetrofitException retrofitException = asRetrofitException(throwable);
-//        mErrorManager.handleError(retrofitException);
-        return retrofitException;
     }
 
     public RetrofitException asRetrofitException(Throwable throwable) {

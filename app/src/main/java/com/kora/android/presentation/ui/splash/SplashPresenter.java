@@ -1,6 +1,6 @@
 package com.kora.android.presentation.ui.splash;
 
-import com.kora.android.data.local.AuthPrefHelper;
+import com.kora.android.common.helper.AuthPrefHelper;
 import com.kora.android.domain.base.DefaultCompletableObserver;
 import com.kora.android.domain.usecase.splash.SplashUseCase;
 import com.kora.android.injection.annotation.ConfigPersistent;

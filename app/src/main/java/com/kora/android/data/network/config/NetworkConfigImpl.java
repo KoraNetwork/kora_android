@@ -1,6 +1,6 @@
 package com.kora.android.data.network.config;
 
-import com.kora.android.data.local.AuthPrefHelper;
+import com.kora.android.common.helper.AuthPrefHelper;
 
 import java.util.Arrays;
 import java.util.List;
@@ -11,10 +11,12 @@ import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
 
-public class NetworkConfigImpl implements NetworkConfig {
+import static com.kora.android.data.network.Constants.API_BASE_URL;
+import static com.kora.android.data.network.Constants.API_PATH;
+import static com.kora.android.data.network.Constants.CONNECTION_TIMEOUT;
+import static com.kora.android.data.network.Constants.HEADER_SESSION_TOKEN;
 
-    private static final String HEADER_SESSION_TOKEN = "Session-Token";
-    private static final int CONNECTION_TIMEOUT = 40; // sec
+public class NetworkConfigImpl implements NetworkConfig {
 
     private final AuthPrefHelper mAuthPrefHelper;
 
@@ -38,7 +40,7 @@ public class NetworkConfigImpl implements NetworkConfig {
 
     @Override
     public String getBaseUrl() {
-        return BaseApiPathConst.API_BASE_URL + BaseApiPathConst.API_PATH;
+        return API_BASE_URL + API_PATH;
     }
 
     @Override

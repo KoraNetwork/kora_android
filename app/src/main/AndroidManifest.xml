@@ -4,6 +4,8 @@
     package="com.kora.android">
 
     <application
+        android:largeHeap="true"
+
         android:name=".KoraApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -32,6 +34,13 @@
         <activity
             android:name=".presentation.ui.login.LoginActivity"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".presentation.ui.main.MainActivity"
+            android:screenOrientation="portrait" />
+
+        <service
+            android:name=".web3j.WalletGenService"/>
 
     </application>
 
