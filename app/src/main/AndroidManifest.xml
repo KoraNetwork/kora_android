@@ -24,23 +24,12 @@
         </activity>
 
         <activity
-            android:name=".presentation.ui.welcome.WelcomeActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".presentation.ui.registration.RegistrationActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".presentation.ui.login.LoginActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
             android:name=".presentation.ui.main.MainActivity"
             android:screenOrientation="portrait" />
 
-        <service
-            android:name=".web3j.WalletGenService"/>
+        <activity
+            android:name=".presentation.ui.welcome.WelcomeActivity"
+            android:screenOrientation="portrait" />
 
     </application>
 

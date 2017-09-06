@@ -5,15 +5,23 @@ import android.content.Context;
 import com.kora.android.KoraApplication;
 import com.kora.android.common.helper.AuthPrefHelper;
 import com.kora.android.injection.module.ApplicationModule;
+import com.kora.android.injection.module.EtherWalletModule;
 import com.kora.android.injection.module.NetworkModule;
 import com.kora.android.injection.module.RepositoryModule;
+import com.kora.android.data.web3j.storage.EtherWalletStorage;
+import com.kora.android.data.web3j.utils.EtherWalletUtils;
 
 import javax.inject.Singleton;
 
 import dagger.Component;
 
 @Singleton
-@Component(modules = {ApplicationModule.class, NetworkModule.class, RepositoryModule.class})
+@Component(modules = {
+        ApplicationModule.class,
+        NetworkModule.class,
+        RepositoryModule.class,
+        EtherWalletModule.class
+})
 public interface ApplicationComponent {
 
     void inject(final KoraApplication application);
@@ -21,6 +29,9 @@ public interface ApplicationComponent {
     Context context();
 
     AuthPrefHelper authPrefHelper();
+
+    EtherWalletUtils etherWalletUtils();
+    EtherWalletStorage etherWalletStorage();
 
 //    SomeService someService();
 //    SomeRepository someRepository();

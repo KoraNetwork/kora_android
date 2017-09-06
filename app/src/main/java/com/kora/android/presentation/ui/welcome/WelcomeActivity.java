@@ -7,9 +7,6 @@ import android.support.v7.widget.Toolbar;
 import com.kora.android.R;
 import com.kora.android.injection.component.ActivityComponent;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
-import com.kora.android.presentation.ui.login.LoginActivity;
-import com.kora.android.presentation.ui.registration.RegistrationActivity;
-import com.kora.android.web3j.WalletGenService;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -37,21 +34,6 @@ public class WelcomeActivity extends BaseActivity<WelcomePresenter> implements W
 
     @Override
     protected void onViewReady(Bundle savedInstanceState) {
-//        setToolbar(mToolbar, true);
         setToolbar(mToolbar, R.drawable.ic_back_black);
-
-        final Intent intent = new Intent(this, WalletGenService.class);
-        intent.putExtra("PASSWORD", "123456789");
-        startService(intent);
-    }
-
-    @OnClick(R.id.button_login)
-    public void showLoginScreen() {
-        startActivity(LoginActivity.getLaunchIntent(this));
-    }
-
-    @OnClick(R.id.button_register)
-    public void showRegistrationScreen() {
-        startActivity(RegistrationActivity.getLaunchIntent(this));
     }
 }

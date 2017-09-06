@@ -10,7 +10,7 @@ import dagger.Provides;
 @Module
 public class FragmentModule {
 
-    private BaseFragment mFragment;
+    private final BaseFragment mFragment;
 
     public FragmentModule(BaseFragment fragment) {
         mFragment = fragment;
