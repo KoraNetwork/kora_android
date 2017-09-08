@@ -8,13 +8,13 @@ import android.util.Log;
 
 import com.kora.android.data.web3j.model.EtherWallet;
 
-import org.web3j.crypto.Wallet;
+import org.web3j.crypto.Credentials;
+import org.web3j.crypto.WalletUtils;
 
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.channels.FileChannel;
@@ -29,8 +29,8 @@ public class EtherWalletStorage {
 
     private final Context mContext;
 
-    public EtherWalletStorage(Context context) {
-        mContext = context;
+    public EtherWalletStorage(final Context context) {
+        this.mContext = context;
     }
 
     public List<EtherWallet> getWalletList() {
@@ -65,7 +65,7 @@ public class EtherWalletStorage {
         return etherWalletList;
     }
 
-    public void addWallet(EtherWallet etherWallet) {
+    public void addWallet(final EtherWallet etherWallet) {
         final List<EtherWallet> etherWalletList = getWalletList();
         if (etherWalletList.contains(etherWallet))
             return;
@@ -98,7 +98,7 @@ public class EtherWalletStorage {
         }
     }
 
-    public void exportWallet(String walletFileName) {
+    public void exportWallet(final String walletFileName) {
         final List<EtherWallet> etherWalletList = getWalletList();
         final EtherWallet etherWallet = new EtherWallet(walletFileName);
         if (!etherWalletList.contains(etherWallet))
@@ -117,7 +117,7 @@ public class EtherWalletStorage {
         mContext.sendBroadcast(mediaScannerIntent);
     }
 
-    private void copyFile(File original, File copy) {
+    private void copyFile(final File original, final File copy) {
         FileChannel inChannel = null;
         FileChannel outChannel = null;
         try {
@@ -138,5 +138,17 @@ public class EtherWalletStorage {
                 outChannel.close();
         } catch (Exception ignored) {
         }
+    }
+
+    public Credentials getCredentials(final String walletFileName, final String password) {
+        final File file = new File(mContext.getFilesDir(), walletFileName);
+        Credentials credentials = null;
+        try {
+            credentials = WalletUtils.loadCredentials(password, file);
+        } catch (Exception e) {
+            Log.e("_____", e.toString());
+            e.printStackTrace();
+        }
+        return credentials;
     }
 }

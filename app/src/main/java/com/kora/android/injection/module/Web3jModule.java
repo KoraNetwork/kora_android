@@ -2,6 +2,7 @@ package com.kora.android.injection.module;
 
 import android.content.Context;
 
+import com.kora.android.data.web3j.connection.Web3jConnection;
 import com.kora.android.data.web3j.storage.EtherWalletStorage;
 import com.kora.android.data.web3j.utils.EtherWalletUtils;
 
@@ -11,7 +12,7 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module
-public class EtherWalletModule {
+public class Web3jModule {
 
     @Singleton
     @Provides
@@ -23,5 +24,11 @@ public class EtherWalletModule {
     @Provides
     public EtherWalletStorage provideEtherWalletStorage(final Context context) {
         return new EtherWalletStorage(context);
+    }
+
+    @Singleton
+    @Provides
+    public Web3jConnection provideWeb3jConnection(final Context context) {
+        return new Web3jConnection(context);
     }
 }

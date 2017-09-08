@@ -2,15 +2,18 @@ package com.kora.android.presentation.ui.main;
 
 import android.util.Log;
 
+import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.data.web3j.model.EtherWallet;
 import com.kora.android.domain.base.DefaultCompletableObserver;
 import com.kora.android.domain.base.DefaultSingleObserver;
+import com.kora.android.domain.usecase.transaction.SendTransactionUseCase;
 import com.kora.android.domain.usecase.wallet.ExportWalletUseCase;
 import com.kora.android.domain.usecase.wallet.GenerateWalletUseCase;
 import com.kora.android.domain.usecase.wallet.GetWalletListUseCase;
 import com.kora.android.injection.annotation.ConfigPersistent;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -23,14 +26,17 @@ public class MainPresenter extends BasePresenter<MainView> {
     private final GenerateWalletUseCase mGenerateWalletUseCase;
     private final GetWalletListUseCase mGetWalletListUseCase;
     private final ExportWalletUseCase mExportWalletUseCase;
+    private final SendTransactionUseCase mSendTransactionUseCase;
 
     @Inject
     public MainPresenter(final GenerateWalletUseCase generateWalletUseCase,
                          final GetWalletListUseCase getWalletListUseCase,
-                         final ExportWalletUseCase exportWalletUseCase) {
+                         final ExportWalletUseCase exportWalletUseCase,
+                         final SendTransactionUseCase sendTransactionUseCase) {
         mGenerateWalletUseCase = generateWalletUseCase;
         mGetWalletListUseCase = getWalletListUseCase;
         mExportWalletUseCase = exportWalletUseCase;
+        mSendTransactionUseCase = sendTransactionUseCase;
     }
 
     public void generateWallet(final String password, final String privateKey) {
@@ -45,6 +51,20 @@ public class MainPresenter extends BasePresenter<MainView> {
     public void exportWallet(String walletFileNmae) {
         mExportWalletUseCase.setData(walletFileNmae);
         addDisposable(mExportWalletUseCase.execute(new ExportWalletObserver()));
+    }
+
+    public void sendTransaction(final String walletFileName,
+                                final String password,
+                                final String addressFrom,
+                                final String addressTo,
+                                final BigInteger amount) {
+        mSendTransactionUseCase.setData(
+                walletFileName,
+                password,
+                addressFrom,
+                addressTo,
+                amount);
+        addDisposable(mSendTransactionUseCase.execute(new SendTransactionObserver()));
     }
 
     private class GetWalletListObserver extends DefaultSingleObserver<List<EtherWallet>> {
@@ -127,6 +147,41 @@ public class MainPresenter extends BasePresenter<MainView> {
             super.onError(e);
             if (!isViewAttached()) return;
             getView().showProgress(false);
+        }
+    }
+
+    private class SendTransactionObserver extends DefaultSingleObserver<String> {
+        @Override
+        protected void onStart() {
+            if (!isViewAttached()) return;
+            getView().showProgress(true);
+        }
+
+        @Override
+        public void onSuccess(@NonNull String transactionHash) {
+            Log.e("_____", transactionHash);
+
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+        }
+
+        @Override
+        public void onError(@NonNull Throwable e) {
+            super.onError(e);
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+        }
+
+        @Override
+        public void handleNetworkError(RetrofitException retrofitException) {
+            Log.e("_____", retrofitException.getMessage());
+            retrofitException.printStackTrace();
+        }
+
+        @Override
+        public void handleUnexpectedError(RetrofitException exception) {
+            Log.e("_____", exception.getMessage());
+            super.handleUnexpectedError(exception);
         }
     }
 }
