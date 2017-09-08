@@ -1,38 +1,46 @@
 package com.kora.android.data.web3j.storage;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Environment;
 import android.util.Log;
 
 import com.kora.android.data.web3j.model.EtherWallet;
+
+import org.web3j.crypto.Wallet;
 
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.List;
 
 public class EtherWalletStorage {
 
-    private final static String WALLETS_FILE_NAME = "wallets.dat";
+    private static final String WALLET_LIST_FILE_NAME = "wallets";
+    private static final String EXPORT_FOLDER_NAME = "Kora";
+    private static final String JSON_FILE_EXTENSION = ".json";
 
     private final Context mContext;
 
-    private ArrayList<EtherWallet> etherWalletList;
-
     public EtherWalletStorage(Context context) {
         mContext = context;
-        loadWalletList();
     }
 
-    private void loadWalletList() {
+    public List<EtherWallet> getWalletList() {
+        List<EtherWallet> etherWalletList;
         File file;
         FileInputStream fileInputStream = null;
         BufferedInputStream bufferedInputStream = null;
         ObjectInputStream objectInputStream = null;
         try {
-            file = new File(mContext.getFilesDir(), WALLETS_FILE_NAME);
+            file = new File(mContext.getFilesDir(), WALLET_LIST_FILE_NAME);
             fileInputStream = new FileInputStream(file);
             bufferedInputStream = new BufferedInputStream(fileInputStream);
             objectInputStream = new ObjectInputStream(bufferedInputStream);
@@ -41,9 +49,9 @@ public class EtherWalletStorage {
         try {
             etherWalletList = (ArrayList<EtherWallet>) objectInputStream.readObject();
         } catch (Exception e) {
+            etherWalletList = new ArrayList<>();
             Log.e("_____", e.toString());
             e.printStackTrace();
-            etherWalletList = new ArrayList<>();
         }
         try {
             if (objectInputStream != null)
@@ -54,27 +62,23 @@ public class EtherWalletStorage {
                 fileInputStream.close();
         } catch (Exception ignored) {
         }
-    }
-
-    public ArrayList<EtherWallet> getWalletList() {
         return etherWalletList;
     }
 
-    public boolean addWallet(EtherWallet etherWallet) {
-        for (int i = 0; i < etherWalletList.size(); i++)
-            if (etherWalletList.get(i).getPublicKey().equalsIgnoreCase(etherWallet.getPublicKey()))
-                return false;
+    public void addWallet(EtherWallet etherWallet) {
+        final List<EtherWallet> etherWalletList = getWalletList();
+        if (etherWalletList.contains(etherWallet))
+            return;
         etherWalletList.add(etherWallet);
-        saveWalletList();
-        return true;
+        saveWalletList(etherWalletList);
     }
 
-    private void saveWalletList() {
+    private void saveWalletList(List<EtherWallet> etherWalletList) {
         File file;
         FileOutputStream fileOutputStream = null;
         ObjectOutputStream objectOutputStream = null;
         try {
-            file = new File(mContext.getFilesDir(), WALLETS_FILE_NAME);
+            file = new File(mContext.getFilesDir(), WALLET_LIST_FILE_NAME);
             fileOutputStream = new FileOutputStream(file);
             objectOutputStream = new ObjectOutputStream(fileOutputStream);
         } catch (Exception ignored) {
@@ -90,6 +94,48 @@ public class EtherWalletStorage {
                 objectOutputStream.close();
             if (fileOutputStream != null)
                 fileOutputStream.close();
+        } catch (Exception ignored) {
+        }
+    }
+
+    public void exportWallet(String walletFileName) {
+        final List<EtherWallet> etherWalletList = getWalletList();
+        final EtherWallet etherWallet = new EtherWallet(walletFileName);
+        if (!etherWalletList.contains(etherWallet))
+            return;
+        final File folder = new File(Environment.getExternalStorageDirectory(), EXPORT_FOLDER_NAME);
+        if (!folder.exists())
+            folder.mkdirs();
+        final File original = new File(mContext.getFilesDir(), walletFileName);
+        final File copy = new File(folder, walletFileName + JSON_FILE_EXTENSION);
+
+        copyFile(original, copy);
+
+        final Intent mediaScannerIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        final Uri fileUri = Uri.fromFile(copy);
+        mediaScannerIntent.setData(fileUri);
+        mContext.sendBroadcast(mediaScannerIntent);
+    }
+
+    private void copyFile(File original, File copy) {
+        FileChannel inChannel = null;
+        FileChannel outChannel = null;
+        try {
+            inChannel = new FileInputStream(original).getChannel();
+            outChannel = new FileOutputStream(copy).getChannel();
+        } catch (Exception ignored) {
+        }
+        try {
+            inChannel.transferTo(0, inChannel.size(), outChannel);
+        } catch (Exception e) {
+            Log.e("_____", e.toString());
+            e.printStackTrace();
+        }
+        try {
+            if (inChannel != null)
+                inChannel.close();
+            if (outChannel != null)
+                outChannel.close();
         } catch (Exception ignored) {
         }
     }

@@ -19,6 +19,6 @@ public class GetWalletListUseCase extends AsyncUseCase<DisposableSingleObserver,
 
     @Override
     protected Single buildTask() {
-        return Single.just("").map(s -> mEtherWalletStorage.getWalletList());
+        return Single.just(mEtherWalletStorage.getWalletList());
     }
 }

@@ -38,4 +38,20 @@ public class EtherWallet implements Serializable {
                 "address='" + address + "\n" +
                 "}";
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        EtherWallet that = (EtherWallet) o;
+
+        return publicKey.equals(that.publicKey);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return publicKey.hashCode();
+    }
 }

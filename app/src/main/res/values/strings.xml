@@ -9,4 +9,9 @@
     <string name="dialog_retry_negative_btn">Cancel</string>
 
     <string name="dialog_action_ok">OK</string>
+
+    <string name="dialog_permission_write_title">Info</string>
+    <string name="dialog_permission_write_message">Can not export wallet to external storage. Permission should be granted.</string>
+
+
 </resources>

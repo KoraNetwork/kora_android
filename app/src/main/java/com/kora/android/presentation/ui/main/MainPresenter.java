@@ -3,7 +3,9 @@ package com.kora.android.presentation.ui.main;
 import android.util.Log;
 
 import com.kora.android.data.web3j.model.EtherWallet;
+import com.kora.android.domain.base.DefaultCompletableObserver;
 import com.kora.android.domain.base.DefaultSingleObserver;
+import com.kora.android.domain.usecase.wallet.ExportWalletUseCase;
 import com.kora.android.domain.usecase.wallet.GenerateWalletUseCase;
 import com.kora.android.domain.usecase.wallet.GetWalletListUseCase;
 import com.kora.android.injection.annotation.ConfigPersistent;
@@ -20,12 +22,15 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     private final GenerateWalletUseCase mGenerateWalletUseCase;
     private final GetWalletListUseCase mGetWalletListUseCase;
+    private final ExportWalletUseCase mExportWalletUseCase;
 
     @Inject
     public MainPresenter(final GenerateWalletUseCase generateWalletUseCase,
-                         final GetWalletListUseCase getWalletListUseCase) {
+                         final GetWalletListUseCase getWalletListUseCase,
+                         final ExportWalletUseCase exportWalletUseCase) {
         mGenerateWalletUseCase = generateWalletUseCase;
         mGetWalletListUseCase = getWalletListUseCase;
+        mExportWalletUseCase = exportWalletUseCase;
     }
 
     public void generateWallet(final String password, final String privateKey) {
@@ -34,10 +39,15 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     public void getWalletList() {
-        mGetWalletListUseCase.execute(new GetWalletListSubscriber());
+        addDisposable(mGetWalletListUseCase.execute(new GetWalletListObserver()));
     }
 
-    private class GetWalletListSubscriber extends DefaultSingleObserver<List<EtherWallet>> {
+    public void exportWallet(String walletFileNmae) {
+        mExportWalletUseCase.setData(walletFileNmae);
+        addDisposable(mExportWalletUseCase.execute(new ExportWalletObserver()));
+    }
+
+    private class GetWalletListObserver extends DefaultSingleObserver<List<EtherWallet>> {
         @Override
         protected void onStart() {
             if (!isViewAttached()) return;
@@ -80,6 +90,31 @@ public class MainPresenter extends BasePresenter<MainView> {
         @Override
         public void onSuccess(@NonNull EtherWallet etherWallet) {
             Log.e("_____", etherWallet.toString());
+
+            getView().showProgress(false);
+        }
+
+        @Override
+        public void onError(@NonNull Throwable e) {
+            Log.e("_____", e.toString());
+            e.printStackTrace();
+
+            super.onError(e);
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+        }
+    }
+
+    private class ExportWalletObserver extends DefaultCompletableObserver {
+        @Override
+        protected void onStart() {
+            if (!isViewAttached()) return;
+            getView().showProgress(true);
+        }
+
+        @Override
+        public void onComplete() {
+            Log.e("_____", "EXPORTED");
 
             getView().showProgress(false);
         }
