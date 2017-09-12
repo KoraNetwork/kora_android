@@ -64,7 +64,9 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainVie
 //                "123456789",
 //                "0x5c3d13b00f0fde8de60c45ab62ec0125c6b0f890",
 //                "0x97bb2587b02715e2936b95f36892a457966757ff",
-//                BigInteger.valueOf(10000000000000000L));
+//                BigInteger.valueOf(100000000000000000L));
+
+        getPresenter().createIdentity();
     }
 
     public void exportWallet() {

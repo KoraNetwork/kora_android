@@ -6,6 +6,7 @@ import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.data.web3j.model.EtherWallet;
 import com.kora.android.domain.base.DefaultCompletableObserver;
 import com.kora.android.domain.base.DefaultSingleObserver;
+import com.kora.android.domain.usecase.identity.CreateIdentityUseCase;
 import com.kora.android.domain.usecase.transaction.SendTransactionUseCase;
 import com.kora.android.domain.usecase.wallet.ExportWalletUseCase;
 import com.kora.android.domain.usecase.wallet.GenerateWalletUseCase;
@@ -27,16 +28,19 @@ public class MainPresenter extends BasePresenter<MainView> {
     private final GetWalletListUseCase mGetWalletListUseCase;
     private final ExportWalletUseCase mExportWalletUseCase;
     private final SendTransactionUseCase mSendTransactionUseCase;
+    private final CreateIdentityUseCase mCreateIdentityUseCase;
 
     @Inject
     public MainPresenter(final GenerateWalletUseCase generateWalletUseCase,
                          final GetWalletListUseCase getWalletListUseCase,
                          final ExportWalletUseCase exportWalletUseCase,
-                         final SendTransactionUseCase sendTransactionUseCase) {
+                         final SendTransactionUseCase sendTransactionUseCase,
+                         final CreateIdentityUseCase createIdentityUseCase) {
         mGenerateWalletUseCase = generateWalletUseCase;
         mGetWalletListUseCase = getWalletListUseCase;
         mExportWalletUseCase = exportWalletUseCase;
         mSendTransactionUseCase = sendTransactionUseCase;
+        mCreateIdentityUseCase = createIdentityUseCase;
     }
 
     public void generateWallet(final String password, final String privateKey) {
@@ -65,6 +69,10 @@ public class MainPresenter extends BasePresenter<MainView> {
                 addressTo,
                 amount);
         addDisposable(mSendTransactionUseCase.execute(new SendTransactionObserver()));
+    }
+
+    public void createIdentity() {
+        addDisposable(mCreateIdentityUseCase.execute(new CreateIdentityObserver()));
     }
 
     private class GetWalletListObserver extends DefaultSingleObserver<List<EtherWallet>> {
@@ -151,6 +159,41 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     private class SendTransactionObserver extends DefaultSingleObserver<String> {
+        @Override
+        protected void onStart() {
+            if (!isViewAttached()) return;
+            getView().showProgress(true);
+        }
+
+        @Override
+        public void onSuccess(@NonNull String transactionHash) {
+            Log.e("_____", transactionHash);
+
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+        }
+
+        @Override
+        public void onError(@NonNull Throwable e) {
+            super.onError(e);
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+        }
+
+        @Override
+        public void handleNetworkError(RetrofitException retrofitException) {
+            Log.e("_____", retrofitException.getMessage());
+            retrofitException.printStackTrace();
+        }
+
+        @Override
+        public void handleUnexpectedError(RetrofitException exception) {
+            Log.e("_____", exception.getMessage());
+            super.handleUnexpectedError(exception);
+        }
+    }
+
+    private class CreateIdentityObserver extends DefaultSingleObserver<String> {
         @Override
         protected void onStart() {
             if (!isViewAttached()) return;

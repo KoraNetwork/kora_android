@@ -61,7 +61,7 @@ public class SendTransactionUseCase extends AsyncUseCase<DisposableSingleObserve
     protected Single buildTask() {
         return Single.just(true).map(a -> {
 
-            final Web3j web3j = mWeb3jConnection.getWeb3j();
+            final Web3j web3j = mWeb3jConnection.getWeb3jRinkeby();
 
             final EthGetTransactionCount ethGetTransactionCount = web3j
                     .ethGetTransactionCount(mAddressFrom, DefaultBlockParameterName.LATEST)
