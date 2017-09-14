@@ -14,7 +14,7 @@ import org.web3j.protocol.infura.InfuraHttpService;
 import java.math.BigInteger;
 
 import static com.kora.android.data.web3j.Constants.RINKEBY_IDENTITY_MANAGER_ADDRESS;
-import static com.kora.android.data.web3j.Constants.KOVAN_IDENTITY_MANAGER_ADDRESS;
+import static com.kora.android.data.web3j.Constants.RINKEBY_META_IDENTITY_MANAGER_ADDRESS;
 import static com.kora.android.data.web3j.Constants.ROPSTEN_TESTNET_CLIENT;
 import static com.kora.android.data.web3j.Constants.RINKEBY_TESTNET_CLIENT;
 import static com.kora.android.data.web3j.Constants.KOVAN_TESTNET_CLIENT;
@@ -68,7 +68,7 @@ public class Web3jConnection {
         return RINKEBY_IDENTITY_MANAGER_ADDRESS;
     }
 
-    public String getIdentityManagerKovan() {
-        return KOVAN_IDENTITY_MANAGER_ADDRESS;
+    public String getMetaIdentityManagerRinkeby() {
+        return RINKEBY_META_IDENTITY_MANAGER_ADDRESS;
     }
 }

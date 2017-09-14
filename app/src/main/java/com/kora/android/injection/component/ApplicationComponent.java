@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.kora.android.KoraApplication;
 import com.kora.android.common.helper.AuthPrefHelper;
+import com.kora.android.common.helper.ProxyPrefHelper;
 import com.kora.android.data.web3j.connection.Web3jConnection;
 import com.kora.android.injection.module.ApplicationModule;
 import com.kora.android.injection.module.Web3jModule;
@@ -30,6 +31,7 @@ public interface ApplicationComponent {
     Context context();
 
     AuthPrefHelper authPrefHelper();
+    ProxyPrefHelper proxyPrefHelper();
 
     EtherWalletUtils etherWalletUtils();
     EtherWalletStorage etherWalletStorage();

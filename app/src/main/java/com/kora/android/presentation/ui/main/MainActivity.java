@@ -11,6 +11,8 @@ import com.kora.android.common.permission.SecurityException;
 import com.kora.android.injection.component.ActivityComponent;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 
+import java.math.BigInteger;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -63,8 +65,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainVie
 //                "5c3d13b00f0fde8de60c45ab62ec0125c6b0f890",
 //                "123456789",
 //                "0x5c3d13b00f0fde8de60c45ab62ec0125c6b0f890",
-//                "0x97bb2587b02715e2936b95f36892a457966757ff",
-//                BigInteger.valueOf(100000000000000000L));
+//                "0xe0a7ba5eaba1c4599f91edd639d080fd670efe4d",
+//                BigInteger.valueOf(5000000000000000000L));
 
         getPresenter().createIdentity();
     }

@@ -2,40 +2,24 @@ package com.kora.android.domain.usecase.identity;
 
 import android.util.Log;
 
-import com.kora.android.data.network.enumclass.Kind;
-import com.kora.android.data.network.exception.RetrofitException;
+import com.kora.android.common.helper.ProxyPrefHelper;
 import com.kora.android.data.web3j.connection.Web3jConnection;
+import com.kora.android.data.web3j.smart_contracts.IdentityManager;
+import com.kora.android.data.web3j.smart_contracts.MetaIdentityManager;
 import com.kora.android.data.web3j.storage.EtherWalletStorage;
 import com.kora.android.domain.base.AsyncUseCase;
 
-import org.web3j.abi.EventValues;
-import org.web3j.abi.FunctionEncoder;
-import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Address;
-import org.web3j.abi.datatypes.Function;
-import org.web3j.abi.datatypes.Type;
-import org.web3j.abi.datatypes.Utf8String;
+import org.web3j.abi.datatypes.Bool;
+import org.web3j.abi.datatypes.DynamicBytes;
+import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.crypto.Credentials;
-import org.web3j.crypto.TransactionEncoder;
 import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.Response;
-import org.web3j.protocol.core.methods.request.EthFilter;
-import org.web3j.protocol.core.methods.request.RawTransaction;
-import org.web3j.protocol.core.methods.request.Transaction;
-import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
-import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
-import org.web3j.protocol.core.methods.response.EthSendTransaction;
-import org.web3j.tx.ChainId;
-import org.web3j.utils.Convert;
-import org.web3j.utils.Numeric;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Optional;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -46,12 +30,15 @@ public class CreateIdentityUseCase extends AsyncUseCase<DisposableSingleObserver
 
     private final Web3jConnection mWeb3jConnection;
     private final EtherWalletStorage mEtherWalletStorage;
+    private final ProxyPrefHelper mProxyPrefHelper;
 
     private Response.Error mError;
 
     @Inject
     public CreateIdentityUseCase(final Web3jConnection web3jConnection,
-                                 final EtherWalletStorage etherWalletStorage) {
+                                 final EtherWalletStorage etherWalletStorage,
+                                 final ProxyPrefHelper proxyPrefHelper) {
+        this.mProxyPrefHelper = proxyPrefHelper;
         this.mWeb3jConnection = web3jConnection;
         this.mEtherWalletStorage = etherWalletStorage;
     }
@@ -60,52 +47,68 @@ public class CreateIdentityUseCase extends AsyncUseCase<DisposableSingleObserver
     protected Single buildTask() {
         return Single.just(true).map(a -> {
 
-            final String fromAddress = "0x5c3d13b00f0fde8de60c45ab62ec0125c6b0f890";
-            final BigInteger amount = BigInteger.ONE;
             final String walletFileName = "5c3d13b00f0fde8de60c45ab62ec0125c6b0f890";
             final String password = "123456789";
+            final String addressFrom = "0x5c3d13b00f0fde8de60c45ab62ec0125c6b0f890";
+            final BigInteger amount = BigInteger.ZERO;
+            final String addressTo = "0x97bb2587b02715e2936b95f36892a457966757ff";
 
             ////////////////////////////////////////////////////////////////////////////////////////
 
             final Web3j web3j = mWeb3jConnection.getWeb3jRinkeby();
+            final Credentials credentials = mEtherWalletStorage.getCredentials(walletFileName, password);
 
-            final EthGetTransactionCount ethGetTransactionCount = web3j
-                    .ethGetTransactionCount(fromAddress, DefaultBlockParameterName.LATEST)
-                    .sendAsync()
-                    .get();
-            mError = ethGetTransactionCount.getError();
-            if (mError != null)
-                throw new RetrofitException(mError.getMessage(), null, null, Kind.UNEXPECTED, null, null);
-            final BigInteger nonce = ethGetTransactionCount.getTransactionCount();
+            final MetaIdentityManager metaIdentityManager = MetaIdentityManager.load(
+                    mWeb3jConnection.getMetaIdentityManagerRinkeby(),
+                    web3j,
+                    credentials,
+                    mWeb3jConnection.getGasPrice(),
+                    mWeb3jConnection.getGasLimit()
+            );
 
 
 
-//            final Function function = new Function(
-//                    "createIdentity",
-//                    Arrays.asList(new Address("123"), new Address("123")),
-//                    Collections.<TypeReference<?>>emptyList());
+//            final TransactionReceipt transactionReceipt = metaIdentityManager.createIdentity(
+//                    new Address(addressFrom), new Address(password)
+//            ).get();
 //
-//            final String encodedFunction = FunctionEncoder.encode(function);
+//            final List<MetaIdentityManager.IdentityCreatedEventResponse> identityCreatedEventResponses =
+//                    metaIdentityManager.getIdentityCreatedEvents(transactionReceipt);
 //
-//            final Transaction transaction = Transaction.createFunctionCallTransaction(
-//                    fromAddress,
-//                    nonce,
-//                    mWeb3jConnection.getGasPrice(),
-//                    mWeb3jConnection.getGasLimit(),
-//                    mWeb3jConnection.getIdentityManagerRinkeby(),
-//                    amount,
-//                    encodedFunction);
+//            final MetaIdentityManager.IdentityCreatedEventResponse identityCreatedEventResponse =
+//                    identityCreatedEventResponses.get(0);
+//            Log.e("_____", identityCreatedEventResponse.toString());
 //
-//            final EthSendTransaction ethSendTransaction = web3j
-//                    .ethSendTransaction(transaction)
-//                    .sendAsync()
-//                    .get();
-//            mError = ethSendTransaction.getError();
-//            if (mError != null)
-//                throw new RetrofitException(mError.getMessage(), null, null, Kind.UNEXPECTED, null, null);
-//            final String transactionHash = ethSendTransaction.getTransactionHash();
+//            mProxyPrefHelper.storeProxyAddress(identityCreatedEventResponse.getIdentity().toString());
 
-            return nonce;
+
+
+//            final String identityAddress = mProxyPrefHelper.getProxyAddress();
+//            Log.e("_____", identityAddress);
+//
+//            final Bool bool = metaIdentityManager.isOwner(
+//                    new Address(identityAddress),
+//                    new Address(addressFrom)
+//            ).get();
+//            Log.e("_____", String.valueOf(bool.getValue()));
+
+
+
+            final String identityAddress = mProxyPrefHelper.getProxyAddress();
+            Log.e("_____", identityAddress);
+
+            final TransactionReceipt transactionReceipt = metaIdentityManager.forwardTo(
+                    new Address(addressFrom),
+                    new Address(identityAddress),
+                    new Address(addressTo),
+                    new Uint256(BigInteger.ONE),
+                    DynamicBytes.DEFAULT
+            ).get();
+            Log.e("_____", transactionReceipt.getTransactionHash());
+
+
+
+            return "";
         });
     }
 }
