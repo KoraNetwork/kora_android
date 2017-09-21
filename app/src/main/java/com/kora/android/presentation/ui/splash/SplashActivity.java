@@ -6,6 +6,7 @@ import com.kora.android.R;
 import com.kora.android.injection.component.ActivityComponent;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.main.MainActivity;
+import com.kora.android.presentation.ui.registration.step_1.FirstStepActivity;
 import com.kora.android.presentation.ui.welcome.WelcomeActivity;
 
 public class SplashActivity extends BaseActivity<SplashPresenter> implements SplashView {
@@ -37,5 +38,7 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
 //            startActivity(WelcomeActivity.getLaunchIntent(this));
 //        else
             startActivity(MainActivity.getLaunchIntent(this));
+
+//        startActivity(FirstStepActivity.getLaunchIntent(this));
     }
 }

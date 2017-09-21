@@ -7,12 +7,12 @@ public class EtherWallet implements Serializable {
     private static final long serialVersionUID = 2622313531196422839L;
     private static final String ADDRESS_PREFIX = "0x";
 
-    private String publicKey;
+    private String walletFileName;
     private String address;
 
-    public EtherWallet(String publicKey) {
-        this.publicKey = publicKey;
-        this.address = ADDRESS_PREFIX + publicKey;
+    public EtherWallet(String walletFileName) {
+        this.walletFileName = walletFileName;
+        this.address = ADDRESS_PREFIX + walletFileName;
     }
 
     public String getAddress() {
@@ -23,18 +23,18 @@ public class EtherWallet implements Serializable {
         this.address = address;
     }
 
-    public String getPublicKey() {
-        return publicKey;
+    public String getWalletFileName() {
+        return walletFileName;
     }
 
-    public void setPublicKey(String publicKey) {
-        this.publicKey = publicKey;
+    public void setWalletFileName(String walletFileName) {
+        this.walletFileName = walletFileName;
     }
 
     @Override
     public String toString() {
         return "EtherWallet{" + "\n" +
-                "publicKey='" + publicKey + "\n" +
+                "walletFileName='" + walletFileName + "\n" +
                 "address='" + address + "\n" +
                 "}";
     }
@@ -44,11 +44,11 @@ public class EtherWallet implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         EtherWallet that = (EtherWallet) o;
-        return publicKey.equals(that.publicKey);
+        return walletFileName.equals(that.walletFileName);
     }
 
     @Override
     public int hashCode() {
-        return publicKey.hashCode();
+        return walletFileName.hashCode();
     }
 }

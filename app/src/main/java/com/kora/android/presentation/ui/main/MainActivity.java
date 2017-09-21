@@ -49,7 +49,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainVie
         setToolbar(mToolbar, R.drawable.ic_back_black);
 
         final String password = "123456789";
-        final String privateKey = "29984ecd73f5e4f9e2fc5ce49dfe61a5b13571ab34c0d427ca066a170cc4e851";
+//        final String privateKey = "29984ecd73f5e4f9e2fc5ce49dfe61a5b13571ab34c0d427ca066a170cc4e851";
+        final String privateKey = "fc0c329808e37c81fa441809f648f091c14c530177083fec386b7a220fb460e5";
 
         // create new wallet
 //        getPresenter().generateWallet(password, null);
@@ -62,13 +63,13 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainVie
 //        exportWallet();
 
 //        getPresenter().sendTransaction(
-//                "5c3d13b00f0fde8de60c45ab62ec0125c6b0f890",
+//                "97bb2587B02715e2936b95f36892a457966757FF".toLowerCase(),
 //                "123456789",
-//                "0x5c3d13b00f0fde8de60c45ab62ec0125c6b0f890",
-//                "0xe0a7ba5eaba1c4599f91edd639d080fd670efe4d",
-//                BigInteger.valueOf(5000000000000000000L));
+//                "0x97bb2587B02715e2936b95f36892a457966757FF".toLowerCase(),
+//                "0x5c3D13b00F0fdE8dE60C45aB62EC0125C6b0F890".toLowerCase(),
+//                new BigInteger("20000000000000000000"));
 
-        getPresenter().createIdentity();
+//        getPresenter().createIdentity();
     }
 
     public void exportWallet() {

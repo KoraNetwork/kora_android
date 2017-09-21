@@ -43,7 +43,7 @@ public class GenerateWalletUseCase extends AsyncUseCase<DisposableSingleObserver
 
     @Override
     protected Single buildTask() {
-        return Single.just("").map(s -> {
+        return Single.just(true).map(a -> {
             String walletFileName;
             if (mPrivateKey == null || mPrivateKey.isEmpty()) {
                 // create new wallet

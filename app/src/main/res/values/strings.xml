@@ -13,5 +13,11 @@
     <string name="dialog_permission_write_title">Info</string>
     <string name="dialog_permission_write_message">Can not export wallet to external storage. Permission should be granted.</string>
 
+    <string name="registration_registration">Registration</string>
+    <string name="registration_please_enter">Please, enter your phone number and we will send you an SMS to verify your number</string>
+    <string name="registration_phone_number">Phone number</string>
+    <string name="registration_phone_number_empty">Phone number filed is empty</string>
+    <string name="registration_phone_number_incorrect">Phone number is incorrect</string>
+    <string name="registration_send">SEND</string>
 
 </resources>

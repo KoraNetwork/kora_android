@@ -16,7 +16,7 @@
         android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.NoActionBar">
+        android:theme="@style/AppTheme">
 
         <activity
             android:name=".presentation.ui.splash.SplashActivity"
@@ -33,6 +33,10 @@
 
         <activity
             android:name=".presentation.ui.welcome.WelcomeActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".presentation.ui.registration.step_1.FirstStepActivity"
             android:screenOrientation="portrait" />
 
     </application>

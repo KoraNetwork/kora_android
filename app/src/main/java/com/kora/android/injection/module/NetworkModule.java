@@ -3,6 +3,7 @@ package com.kora.android.injection.module;
 import com.github.aurae.retrofit2.LoganSquareConverterFactory;
 import com.kora.android.data.network.config.NetworkConfigImpl;
 import com.kora.android.data.network.factory.RxErrorHandlingCallAdapterFactory;
+import com.kora.android.data.network.sercvice.RegistrationService;
 
 import java.util.concurrent.TimeUnit;
 
@@ -40,9 +41,9 @@ public class NetworkModule {
                 .build();
     }
 
-//    @Singleton
-//    @Provides
-//    SomeService provideSomeService(final Retrofit retrofit) {
-//        return retrofit.create(SomeService.class);
-//    }
+    @Singleton
+    @Provides
+    RegistrationService provideRegistrationService(final Retrofit retrofit) {
+        return retrofit.create(RegistrationService.class);
+    }
 }
