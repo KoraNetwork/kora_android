@@ -13,10 +13,6 @@ public class PhoneNumberRequest {
 
     }
 
-    public PhoneNumberRequest(String phoneNumber) {
-        this.mPhoneNumber = phoneNumber;
-    }
-
     public PhoneNumberRequest addPhoneNumber(final String phoneNumber) {
         mPhoneNumber = phoneNumber;
         return this;

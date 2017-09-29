@@ -1,30 +1,36 @@
 package com.kora.android.data.repository;
 
-import com.kora.android.common.helper.AuthPrefHelper;
+import com.kora.android.common.helper.SessionPrefHelper;
+import com.kora.android.data.network.model.request.ConfirmationCodeRequest;
 import com.kora.android.data.network.model.request.PhoneNumberRequest;
+import com.kora.android.data.network.model.response.ConfirmationCodeResponse;
+import com.kora.android.data.network.model.response.PhoneNumberResponse;
 import com.kora.android.data.network.sercvice.RegistrationService;
 
 import io.reactivex.Completable;
+import io.reactivex.Single;
 
 public class RegistrationRepositoryImpl implements RegistrationRepository {
 
     private final RegistrationService mRegistrationService;
-    private final AuthPrefHelper mAuthPrefHelper;
 
-    public RegistrationRepositoryImpl(final RegistrationService registrationService,
-                                      final AuthPrefHelper authPrefHelper) {
+    public RegistrationRepositoryImpl(final RegistrationService registrationService) {
         this.mRegistrationService = registrationService;
-        this.mAuthPrefHelper = authPrefHelper;
     }
 
     @Override
-    public Completable sendPhoneNumber(final String phoneNumber) {
+    public Single<PhoneNumberResponse> sendPhoneNumber(final String phoneNumber) {
         final PhoneNumberRequest phoneNumberRequest = new PhoneNumberRequest()
                 .addPhoneNumber(phoneNumber);
-        return mRegistrationService.sendPhoneNumber(phoneNumberRequest)
-                .map(sessionResponse -> {
-                    mAuthPrefHelper.storeSessionToken(sessionResponse.getSessionToken());
-                    return true;
-                }).toCompletable();
+        return mRegistrationService.sendPhoneNumber(phoneNumberRequest);
+    }
+
+    @Override
+    public Single<ConfirmationCodeResponse> sendConfirmationCode(final String phoneNumber,
+                                                                 final String confirmationCode) {
+        final ConfirmationCodeRequest confirmationCodeRequest = new ConfirmationCodeRequest()
+                .addPhoneNumber(phoneNumber)
+                .addConfirmationCode(confirmationCode);
+        return mRegistrationService.sendConfirmationCode(confirmationCodeRequest);
     }
 }

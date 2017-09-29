@@ -11,9 +11,19 @@ public class TextValidator {
         return matcher.find();
     }
 
-    public static String addPlusIfNeeded(String phoneNumber) {
-        if (!phoneNumber.startsWith("+"))
-            phoneNumber = "+" + phoneNumber;
+    public static String deletePlusIfNeeded(String phoneNumber) {
+        if (phoneNumber.startsWith("+"))
+            phoneNumber = phoneNumber.substring(1);
         return phoneNumber;
+    }
+
+    public static boolean isConfirmationCodeValid(String confirmationCode) {
+        final Pattern pattern = Pattern.compile("^(\\d{4})$");
+        final Matcher matcher = pattern.matcher(confirmationCode);
+        return matcher.find();
+    }
+
+    public static String getCodeFromMessage(final String message) {
+        return message.replaceAll("[^0-9]", "");
     }
 }

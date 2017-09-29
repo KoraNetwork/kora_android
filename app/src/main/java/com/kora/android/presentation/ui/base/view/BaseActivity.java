@@ -200,8 +200,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
             getSupportActionBar().setDisplayHomeAsUpEnabled(asHomeEnabled);
     }
 
-    public void setToolbar(final Toolbar toolbar,
-                           @DrawableRes int resId) {
+    public void setToolbar(final Toolbar toolbar, @DrawableRes int resId) {
         toolbar.setTitle("");
         toolbar.setNavigationIcon(resId);
         setSupportActionBar(toolbar);

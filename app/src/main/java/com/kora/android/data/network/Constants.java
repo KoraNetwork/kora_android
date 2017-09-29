@@ -5,6 +5,6 @@ public interface Constants {
     String HEADER_SESSION_TOKEN = "Session-Token";
     int CONNECTION_TIMEOUT = 40;
 
-    String API_BASE_URL = "";
+    String API_BASE_URL = "http://ec2-13-59-231-138.us-east-2.compute.amazonaws.com/";
     String API_PATH = "";
 }

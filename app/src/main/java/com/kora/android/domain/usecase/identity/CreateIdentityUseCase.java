@@ -1,8 +1,11 @@
 package com.kora.android.domain.usecase.identity;
 
+import android.app.AlarmManager;
 import android.util.Log;
 
 import com.kora.android.common.helper.ProxyPrefHelper;
+import com.kora.android.data.network.enumclass.Kind;
+import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.data.web3j.connection.Web3jConnection;
 import com.kora.android.data.web3j.smart_contracts.HumanStandardToken;
 import com.kora.android.data.web3j.smart_contracts.IdentityManager;
@@ -11,6 +14,7 @@ import com.kora.android.data.web3j.storage.EtherWalletStorage;
 import com.kora.android.domain.base.AsyncUseCase;
 
 import org.web3j.abi.FunctionEncoder;
+import org.web3j.abi.FunctionReturnDecoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Bool;
@@ -22,9 +26,12 @@ import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.abi.datatypes.generated.Uint8;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.Response;
 
 import org.web3j.protocol.core.methods.request.Transaction;
+import org.web3j.protocol.core.methods.response.EthCall;
+import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tx.ClientTransactionManager;
@@ -40,7 +47,9 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import javax.inject.Inject;
@@ -84,10 +93,135 @@ public class CreateIdentityUseCase extends AsyncUseCase<DisposableSingleObserver
             final Web3j web3j = mWeb3jConnection.getWeb3jRinkeby();
             final Credentials credentials = mEtherWalletStorage.getCredentials(ownerFileName, password);
 
+
+
+            // CREATE TOKEN SMART CONTRACT
+//            final HumanStandardToken humanStandardToken = HumanStandardToken.deploy(
+//                    web3j,
+//                    credentials,
+//                    mWeb3jConnection.getGasPrice(),
+//                    mWeb3jConnection.getGasLimit(),
+//                    BigInteger.ZERO,
+//                    new Uint256(new BigInteger("1000000000000000000000")),
+//                    new Utf8String("Kora Token"),
+//                    new Uint8(BigInteger.valueOf(18)),
+//                    new Utf8String("KTN")
+//            ).get();
+
+
+
+            // LOAD TOKEN SMART CONTRACT AND CALL FUNCTIONS
+//            final HumanStandardToken humanStandardToken = HumanStandardToken.load(
+//                    smartContractAddress,
+//                    web3j,
+//                    credentials,
+//                    mWeb3jConnection.getGasPrice(),
+//                    mWeb3jConnection.getGasLimit()
+//            );
+//
+//            final Uint256 totalSupplyUint256 = humanStandardToken.totalSupply().get();
+//            final BigDecimal totalSupplyBigDecimal = Convert.fromWei(new BigDecimal(totalSupplyUint256.getValue()), Convert.Unit.ETHER);
+//            Log.e("_____", "totalSupply:" + String.valueOf(totalSupplyBigDecimal));
+//
+//            final Uint256 balanceUint256 = humanStandardToken.balanceOf(new Address(proxyAddress)).get();
+//            final BigDecimal balanceBigDecimal = Convert.fromWei(new BigDecimal(balanceUint256.getValue()), Convert.Unit.ETHER);
+//            Log.e("_____", "balance:" + String.valueOf(balanceBigDecimal));
+//
+//            final TransactionReceipt transactionReceipt = humanStandardToken.transfer(
+//                    new Address(proxyAddress),
+//                    new Uint256(new BigInteger("100000000000000000000"))
+//            ).get();
+//            Log.e("_____", "transactionHash:" + transactionReceipt.getTransactionHash());
+
+
+
+            // ETH_CALL balanceOf()
+//            final Function function = new Function(
+//                    "balanceOf",
+//                    Collections.singletonList(new Address(proxyAddress)),
+//                    Collections.singletonList(new TypeReference<Uint256>() {})
+//            );
+//            final String encodedFunction = FunctionEncoder.encode(function);
+//
+//            final EthCall response = web3j
+//                    .ethCall(
+//                            Transaction.createEthCallTransaction(ownerAddress, smartContractAddress, encodedFunction),
+//                            DefaultBlockParameterName.LATEST)
+//                    .sendAsync()
+//                    .get();
+//
+//            final List<Type> someTypes = FunctionReturnDecoder.decode(response.getValue(), function.getOutputParameters());
+//            Log.e("_____", String.valueOf(someTypes.get(0).getValue()));
+
+
+            // TRANSACTIONS USING UPORT
+//            final MetaIdentityManager metaIdentityManager = MetaIdentityManager.load(
+//                    mWeb3jConnection.getMetaIdentityManagerRinkeby(),
+//                    web3j,
+//                    credentials,
+//                    mWeb3jConnection.getGasPrice(),
+//                    mWeb3jConnection.getGasLimit()
+//            );
+//
+//            final Function function = new Function(
+//                    "transfer",
+//                    Arrays.asList(
+//                            new Address(receiverAddress),
+//                            new Uint256(new BigInteger("1000000000000000000"))
+//                    ),
+//                    Collections.emptyList()
+//            );
+//
+//            final String stringFunction = FunctionEncoder.encode(function);
+//            final byte[] byteArrayFunction = Numeric.hexStringToByteArray(stringFunction);
+//
+//            ethCallCheckBalance(web3j, proxyAddress, smartContractAddress);
+//
+//            final TransactionReceipt transactionReceipt = metaIdentityManager.forwardTo(
+//                    new Address(ownerAddress),
+//                    new Address(proxyAddress),
+//                    new Address(smartContractAddress),
+//                    Uint256.DEFAULT,
+//                    new DynamicBytes(byteArrayFunction)
+//            ).get();
+//            Log.e("_____", transactionReceipt.getTransactionHash());
+//
+//            ethCallCheckBalance(web3j, proxyAddress, smartContractAddress);
+
+
+
+
+
+
+
+
+
+            final String bankFileName = "97bb2587b02715e2936b95f36892a457966757ff";
+            final String bankAddress = "0x97bb2587b02715e2936b95f36892a457966757ff";
+
+            final Credentials ownerCredentials = mEtherWalletStorage.getCredentials(ownerFileName, password);
+            final Credentials bankCredentials = mEtherWalletStorage.getCredentials(bankFileName, password);
+
+            final MetaIdentityManager metaIdentityManager = MetaIdentityManager.load(
+                    mWeb3jConnection.getMetaIdentityManagerRinkeby(),
+                    web3j,
+                    ownerCredentials,
+                    mWeb3jConnection.getGasPrice(),
+                    mWeb3jConnection.getGasLimit()
+            );
+
+            final HumanStandardToken humanStandardToken = HumanStandardToken.load(
+                    smartContractAddress,
+                    web3j,
+                    bankCredentials,
+                    mWeb3jConnection.getGasPrice(),
+                    mWeb3jConnection.getGasLimit()
+            );
+
             final Function function = new Function(
                     "transfer",
                     Arrays.asList(
-                            new Address(receiverAddress),
+                            new Address("0x97bb2587b02715e2936b95f36892a457966757ff"),
                             new Uint256(new BigInteger("1000000000000000000"))
                     ),
                     Collections.emptyList()
@@ -96,60 +230,31 @@ public class CreateIdentityUseCase extends AsyncUseCase<DisposableSingleObserver
             final String stringFunction = FunctionEncoder.encode(function);
             final byte[] byteArrayFunction = Numeric.hexStringToByteArray(stringFunction);
 
-            final MetaIdentityManager metaIdentityManager = MetaIdentityManager.load(
-                    mWeb3jConnection.getMetaIdentityManagerRinkeby(),
-                    web3j,
-                    credentials,
-                    mWeb3jConnection.getGasPrice(),
-                    mWeb3jConnection.getGasLimit()
-            );
-
-            final TransactionReceipt transactionReceipt = metaIdentityManager.forwardTo(
+            final Future<TransactionReceipt> forwardTo = metaIdentityManager.forwardTo(
                     new Address(ownerAddress),
                     new Address(proxyAddress),
                     new Address(smartContractAddress),
                     Uint256.DEFAULT,
                     new DynamicBytes(byteArrayFunction)
-            ).get();
-            Log.e("_____", transactionReceipt.getTransactionHash());
+            );
 
-//            final HumanStandardToken humanStandardToken = HumanStandardToken.load(
-//                    smartContractAddress,
-//                    web3j,
-//                    credentials,
-//                    mWeb3jConnection.getGasPrice(),
-//                    mWeb3jConnection.getGasLimit()
-//            );
+            final Future<TransactionReceipt> transfer = humanStandardToken.transfer(
+                    new Address(proxyAddress),
+                    new Uint256(new BigInteger("500000000000000000"))
+            );
 
-//            final long l1 = Long.MAX_VALUE;
-//            final long l2 = Long.MAX_VALUE;
-//            final BigInteger bigInteger = new BigInteger("1000000000000000000000");
-//
-//            final HumanStandardToken humanStandardToken = HumanStandardToken.deploy(
-//                    web3j,
-//                    credentials,
-//                    mWeb3jConnection.getGasPrice(),
-//                    mWeb3jConnection.getGasLimit(),
-//                    BigInteger.ZERO,
-//                    new Uint256(bigInteger),
-//                    new Utf8String("Kora Token"),
-//                    new Uint8(BigInteger.valueOf(18)),
-//                    new Utf8String("KTN")
-//            ).get();
+            final TransactionReceipt forwardToTransactionReceipt = forwardTo.get();
+            final TransactionReceipt transferTransactionReceipt = transfer.get();
 
-//            final Uint256 totalSupplyUint256 = humanStandardToken.totalSupply().get();
-//            final BigDecimal totalSupplyBigDecimal = Convert.fromWei(new BigDecimal(totalSupplyUint256.getValue()), Convert.Unit.ETHER);
-//            Log.e("_____", "totalSupply:" + String.valueOf(totalSupplyBigDecimal));
-//
-//            final Uint256 balanceUint256 = humanStandardToken.balanceOf(new Address(credentials.getAddress())).get();
-//            final BigDecimal balanceBigDecimal = Convert.fromWei(new BigDecimal(balanceUint256.getValue()), Convert.Unit.ETHER);
-//            Log.e("_____", "balance:" + String.valueOf(balanceBigDecimal));
+            Log.e("_____", "bankTransactionHash:" + forwardToTransactionReceipt.getTransactionHash());
+            Log.e("_____", "ownerTransactionHash:" + transferTransactionReceipt.getTransactionHash());
 
-//            final TransactionReceipt transactionReceipt = humanStandardToken.transfer(
-//                    new Address(proxyAddress),
-//                    new Uint256(new BigInteger("100000000000000000000"))
-//            ).get();
-//            Log.e("_____", "transactionHash:" + transactionReceipt.getTransactionHash());
+
+
+
+
+
+
 
 
 
@@ -206,5 +311,29 @@ public class CreateIdentityUseCase extends AsyncUseCase<DisposableSingleObserver
 
             return "";
         });
+    }
+
+    private void ethCallCheckBalance(final Web3j web3j,
+                                     final String checkBalanceAddress,
+                                     final String smartContractAddress)
+            throws ExecutionException, InterruptedException {
+
+        final Function function = new Function(
+                "balanceOf",
+                Collections.singletonList(new Address(checkBalanceAddress)),
+                Collections.singletonList(new TypeReference<Uint256>() {
+                })
+        );
+        final String encodedFunction = FunctionEncoder.encode(function);
+
+        final EthCall response = web3j
+                .ethCall(
+                        Transaction.createEthCallTransaction(checkBalanceAddress, smartContractAddress, encodedFunction),
+                        DefaultBlockParameterName.LATEST)
+                .sendAsync()
+                .get();
+
+        final List<Type> someTypes = FunctionReturnDecoder.decode(response.getValue(), function.getOutputParameters());
+        Log.e("_____", String.valueOf(someTypes.get(0).getValue()));
     }
 }

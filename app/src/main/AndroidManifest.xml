@@ -3,10 +3,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.kora.android">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
 
     <application
         android:name=".KoraApplication"
@@ -36,8 +41,18 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".presentation.ui.registration.step_1.FirstStepActivity"
-            android:screenOrientation="portrait" />
+            android:name=".presentation.ui.registration.step1.FirstStepActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+
+        <activity
+            android:name=".presentation.ui.registration.step2.SecondStepActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+
+        <service
+            android:name=".presentation.service.IncomingSmsService"
+            android:exported="false" />
 
     </application>
 

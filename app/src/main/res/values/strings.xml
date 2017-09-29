@@ -10,14 +10,33 @@
 
     <string name="dialog_action_ok">OK</string>
 
-    <string name="dialog_permission_write_title">Info</string>
-    <string name="dialog_permission_write_message">Can not export wallet to external storage. Permission should be granted.</string>
+    <string name="dialog_permission_export_wallet_title">Info</string>
+    <string name="dialog_permission_export_wallet_message">Can not export wallet to external storage. Permission should be granted.</string>
+
+    <string name="dialog_permission_get_phone_number_title">Info</string>
+    <string name="dialog_permission_get_phone_number_message">Can not get phone number. Permission should be granted.</string>
 
     <string name="registration_registration">Registration</string>
-    <string name="registration_please_enter">Please, enter your phone number and we will send you an SMS to verify your number</string>
+    <string name="registration_enter_phone_number">Please, enter your phone number and we will send you an SMS to verify your number</string>
     <string name="registration_phone_number">Phone number</string>
     <string name="registration_phone_number_empty">Phone number filed is empty</string>
     <string name="registration_phone_number_incorrect">Phone number is incorrect</string>
     <string name="registration_send">SEND</string>
+
+    <string name="registration_confirmation_code">Confirmation code</string>
+    <string name="registration_enter_confirmation_code">Please, enter your confirmation code from SMS</string>
+    <string name="registration_confirm">CONFIRM</string>
+    <string name="registration_confirmation_code_empty">Confirmation code number filed is empty</string>
+    <string name="registration_confirmation_code_incorrect">Confirmation code is incorrect</string>
+    <string name="registration_code_not_received">Didn\'t receive confirmation code?</string>
+    <string name="registration_resend">RESEND</string>
+    <string name="registration_dialog_wrong_code_title">Error</string>
+    <string name="registration_dialog_wrong_code_message">Wrong confirmation code. Try to resend.</string>
+
+    <string name="font_name_muli">Muli</string>
+    <string name="font_name_muli_bold">MuliBold</string>
+    <string name="font_name_muli_light">MuliLight</string>
+    <string name="font_name_muli_regular">MuliRegular</string>
+    <string name="font_name_muli_semi_bold">MuliSemiBold</string>
 
 </resources>

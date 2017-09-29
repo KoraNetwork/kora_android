@@ -34,6 +34,6 @@ public class WelcomeActivity extends BaseActivity<WelcomePresenter> implements W
 
     @Override
     protected void onViewReady(Bundle savedInstanceState) {
-        setToolbar(mToolbar, R.drawable.ic_back_black);
+        setToolbar(mToolbar, R.drawable.ic_back_grey);
     }
 }

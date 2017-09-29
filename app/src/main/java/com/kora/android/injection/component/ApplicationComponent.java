@@ -3,7 +3,8 @@ package com.kora.android.injection.component;
 import android.content.Context;
 
 import com.kora.android.KoraApplication;
-import com.kora.android.common.helper.AuthPrefHelper;
+import com.kora.android.common.helper.RegistrationPrefHelper;
+import com.kora.android.common.helper.SessionPrefHelper;
 import com.kora.android.common.helper.ProxyPrefHelper;
 import com.kora.android.data.network.sercvice.RegistrationService;
 import com.kora.android.data.repository.RegistrationRepository;
@@ -32,7 +33,8 @@ public interface ApplicationComponent {
 
     Context context();
 
-    AuthPrefHelper authPrefHelper();
+    RegistrationPrefHelper registrationPrefHelper();
+    SessionPrefHelper authPrefHelper();
     ProxyPrefHelper proxyPrefHelper();
 
     EtherWalletUtils etherWalletUtils();

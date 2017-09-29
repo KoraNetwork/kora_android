@@ -29,14 +29,14 @@ public class PermissionChecker {
         return ActivityCompat.shouldShowRequestPermissionRationale(mBaseActivity, permission);
     }
 
-    public void verifyPermissions(final String... permissions) throws SecurityException {
+    public void verifyPermissions(final String... permissions) throws PermissionException {
         final SparseArray<String> nonGrantedPermissions = new SparseArray<>(permissions.length);
         int i = 0;
         for (String permission : permissions) {
             if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED)
                 nonGrantedPermissions.append(i++, permission);
         }
-        if (nonGrantedPermissions.size() > 0) throw new SecurityException(nonGrantedPermissions);
+        if (nonGrantedPermissions.size() > 0) throw new PermissionException(nonGrantedPermissions);
     }
 
     public boolean permissionsGranted(@NonNull final String[] permissions,

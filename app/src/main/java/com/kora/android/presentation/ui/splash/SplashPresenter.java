@@ -1,6 +1,6 @@
 package com.kora.android.presentation.ui.splash;
 
-import com.kora.android.common.helper.AuthPrefHelper;
+import com.kora.android.common.helper.SessionPrefHelper;
 import com.kora.android.domain.base.DefaultCompletableObserver;
 import com.kora.android.domain.usecase.splash.SplashUseCase;
 import com.kora.android.injection.annotation.ConfigPersistent;
@@ -11,13 +11,13 @@ import javax.inject.Inject;
 @ConfigPersistent
 public class SplashPresenter extends BasePresenter<SplashView> {
 
-    private final AuthPrefHelper mAuthPrefHelper;
+    private final SessionPrefHelper mSessionPrefHelper;
     private final SplashUseCase mSplashUseCase;
 
     @Inject
     public SplashPresenter(final SplashUseCase splashUseCase,
-                           final AuthPrefHelper authPrefHelper) {
-        mAuthPrefHelper = authPrefHelper;
+                           final SessionPrefHelper sessionPrefHelper) {
+        mSessionPrefHelper = sessionPrefHelper;
         mSplashUseCase = splashUseCase;
     }
 
@@ -30,7 +30,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         @Override
         public void onComplete() {
             if (!isViewAttached()) return;
-            getView().showNextScreen(mAuthPrefHelper.getSessionToken().isEmpty());
+            getView().showNextScreen(mSessionPrefHelper.getSessionToken().isEmpty());
         }
     }
 }

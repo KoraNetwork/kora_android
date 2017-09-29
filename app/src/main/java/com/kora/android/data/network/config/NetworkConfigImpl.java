@@ -1,6 +1,6 @@
 package com.kora.android.data.network.config;
 
-import com.kora.android.common.helper.AuthPrefHelper;
+import com.kora.android.common.helper.SessionPrefHelper;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,11 +18,11 @@ import static com.kora.android.data.network.Constants.HEADER_SESSION_TOKEN;
 
 public class NetworkConfigImpl implements NetworkConfig {
 
-    private final AuthPrefHelper mAuthPrefHelper;
+    private final SessionPrefHelper mSessionPrefHelper;
 
     @Inject
-    public NetworkConfigImpl(final AuthPrefHelper authPrefHelper) {
-        mAuthPrefHelper = authPrefHelper;
+    public NetworkConfigImpl(final SessionPrefHelper sessionPrefHelper) {
+        mSessionPrefHelper = sessionPrefHelper;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class NetworkConfigImpl implements NetworkConfig {
     }
 
     private String getAuthToken() {
-        return mAuthPrefHelper.getSessionToken();
+        return mSessionPrefHelper.getSessionToken();
     }
 
     @Override
