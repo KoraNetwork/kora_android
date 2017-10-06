@@ -45,6 +45,7 @@
     <string name="registration_personal_info">Personal information</string>
     <string name="registration_enter_personal_info">Please, enter your personal information</string>
     <string name="registration_upload_photo">Upload Photo</string>
+    <string name="registration_required">*</string>
     <string name="registration_user_name">User Name</string>
     <string name="registration_legal_name">Legal Name</string>
     <string name="registration_email">Email</string>
@@ -57,8 +58,8 @@
     <string name="registration_user_name_empty">User name field is empty</string>
     <string name="registration_user_name_incorrect">User name is incorrect, e.g. John_99</string>
     <string name="registration_user_name_too_short">User name is too short</string>
-    <string name="registration_email_empty">Email field is empty</string>
     <string name="registration_email_incorrect">Email is incorrect, e.g. john99@mail.com</string>
+    <string name="registration_currency_empty">Currency field is empty</string>
     <string name="registration_password_empty">Password field is empty</string>
     <string name="registration_password_too_short">Password is too short</string>
     <string name="registration_confirm_password_empty">Confirm password field is empty</string>

@@ -96,6 +96,10 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
                 return;
             }
         }
+        if (mUser.getCurrency() == null || mUser.getCurrency().isEmpty()) {
+            getView().showEmptyCurrency();
+            return;
+        }
         if (mUser.getPassword() == null || mUser.getPassword().isEmpty()) {
             getView().showEmptyPassword();
             return;

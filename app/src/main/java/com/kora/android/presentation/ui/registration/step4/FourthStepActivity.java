@@ -48,6 +48,9 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
     @BindView(R.id.edit_layout_email)
     TextInputLayout mElEmail;
 
+    @BindView(R.id.edit_layout_currency)
+    TextInputLayout mElCurrency;
+
     @BindView(R.id.edit_layout_password)
     TextInputLayout mElPassword;
     @BindView(R.id.edit_layout_confirm_password)
@@ -77,8 +80,6 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
     @Override
     protected void onViewReady(final Bundle savedInstanceState) {
         setToolbar(mToolbar, R.drawable.ic_back_grey);
-
-        requestFocus();
     }
 
     @Override
@@ -90,10 +91,6 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
                 (dialogInterface, i) -> super.onBackPressed(),
                 R.string.registration_dialog_negative_back_pressed,
                 (dialogInterface, i) -> dialogInterface.dismiss());
-    }
-
-    private void requestFocus() {
-        mEtPhoneNumber.requestFocus();
     }
 
     @OnClick({R.id.image_view_avatar, R.id.text_view_upload_photo})
@@ -177,7 +174,14 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
 
     @OnTextChanged(R.id.edit_text_currency)
     void onChangedCurrency(final CharSequence currency) {
+        mElCurrency.setError(null);
         getPresenter().setCurrency(currency.toString().trim());
+    }
+
+    @Override
+    public void showEmptyCurrency() {
+        mElCurrency.setError(getString(R.string.registration_currency_empty));
+        ViewUtils.scrollToView(mSvContainer, mRlContainer, mElCurrency);
     }
 
     @OnTextChanged(R.id.edit_text_postal_code)
