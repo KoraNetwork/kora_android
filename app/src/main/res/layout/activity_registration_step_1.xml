@@ -63,7 +63,8 @@
                     android:inputType="phone"
                     android:maxLength="13"
                     android:maxLines="1"
-                    android:textColor="@color/color_edit_text" />
+                    android:textColor="@color/color_edit_text"
+                    android:textSize="18sp" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.v7.widget.CardView

@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.kora.android.R;
 import com.kora.android.common.permission.PermissionChecker;
@@ -14,9 +15,12 @@ import com.kora.android.common.permission.PermissionException;
 import com.kora.android.injection.component.ActivityComponent;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 
+import java.math.BigInteger;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static com.kora.android.common.Keys.PermissionChecker.PERMISSION_REQUEST_CODE_WRITE_EXTERNAL_STORAGE;
@@ -25,6 +29,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainVie
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
+    @BindView(R.id.text_view_main_screen)
+    TextView mTvMainScreen;
 
     @Inject
     PermissionChecker mPermissionChecker;
@@ -50,8 +56,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainVie
         setToolbar(mToolbar, R.drawable.ic_back_grey);
 
         final String password = "123456789";
-//        final String privateKey = "29984ecd73f5e4f9e2fc5ce49dfe61a5b13571ab34c0d427ca066a170cc4e851";
-        final String privateKey = "fc0c329808e37c81fa441809f648f091c14c530177083fec386b7a220fb460e5";
+        final String privateKey = "29984ecd73f5e4f9e2fc5ce49dfe61a5b13571ab34c0d427ca066a170cc4e851";
+//        final String privateKey = "fc0c329808e37c81fa441809f648f091c14c530177083fec386b7a220fb460e5";
 
         // create new wallet
 //        getPresenter().generateWallet(password, null);
@@ -64,23 +70,28 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainVie
 //        exportWallet();
 
 //        getPresenter().sendTransaction(
-//                "97bb2587B02715e2936b95f36892a457966757FF".toLowerCase(),
+//                "5c3D13b00F0fdE8dE60C45aB62EC0125C6b0F890".toLowerCase(),
 //                "123456789",
-//                "0x97bb2587B02715e2936b95f36892a457966757FF".toLowerCase(),
 //                "0x5c3D13b00F0fdE8dE60C45aB62EC0125C6b0F890".toLowerCase(),
-//                new BigInteger("20000000000000000000"));
+//                "0x97bb2587B02715e2936b95f36892a457966757FF".toLowerCase(),
+//                new BigInteger("100000000000000000"));
 
 //        getPresenter().createIdentity();
 
-        final TelephonyManager telephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-        final String phoneNumber = telephonyManager.getLine1Number();
+//        final TelephonyManager telephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+//        final String phoneNumber = telephonyManager.getLine1Number();
+//
+//        if (phoneNumber == null)
+//            Log.e("_____", "NULL");
+//        else if (phoneNumber.isEmpty())
+//            Log.e("_____", "EMPTY");
+//        else if (!phoneNumber.isEmpty())
+//            Log.e("_____", phoneNumber);
+    }
 
-        if (phoneNumber == null)
-            Log.e("_____", "NULL");
-        else if (phoneNumber.isEmpty())
-            Log.e("_____", "EMPTY");
-        else if (!phoneNumber.isEmpty())
-            Log.e("_____", phoneNumber);
+    @OnClick(R.id.text_view_main_screen)
+    public void onClickMainScreen() {
+        getPresenter().startGetCountriesTask();
     }
 
     public void exportWallet() {

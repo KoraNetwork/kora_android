@@ -1,4 +1,4 @@
-package com.kora.android.domain.usecase.wallet;
+package com.kora.android.domain.usecase.test;
 
 import android.content.Context;
 

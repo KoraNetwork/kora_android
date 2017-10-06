@@ -7,7 +7,8 @@ import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
-import static com.kora.android.common.Keys.IncomingSms.INCOMING_SMS_SENDER;
+import static com.kora.android.common.Keys.IncomingSms.INCOMING_SMS_SENDER_1;
+import static com.kora.android.common.Keys.IncomingSms.INCOMING_SMS_SENDER_2;
 
 public class IncomingSmsReceiver extends BroadcastReceiver {
 
@@ -26,7 +27,7 @@ public class IncomingSmsReceiver extends BroadcastReceiver {
                 final SmsMessage smsMessage = SmsMessage.createFromPdu((byte[]) pdusObject);
                 final String sender = smsMessage.getDisplayOriginatingAddress();
                 final String message = smsMessage.getDisplayMessageBody();
-                if (sender.equals(INCOMING_SMS_SENDER))
+                if (sender.equalsIgnoreCase(INCOMING_SMS_SENDER_1) || sender.equalsIgnoreCase(INCOMING_SMS_SENDER_2))
                     mReceiverListener.onReceiveSms(message);
             }
         } catch (Exception e) {

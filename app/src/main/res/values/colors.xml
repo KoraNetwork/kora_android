@@ -21,4 +21,10 @@
     <color name="color_dialog_button_text">#FF2B74A5</color>
 
     <color name="red">#D50000</color>
+
+    <color name="color_text_blue">#2b74a5</color>
+    
+    <color name="color_transparent">#00ffffff</color>
+
+    <color name="color_cropping_background">#000000</color>
 </resources>

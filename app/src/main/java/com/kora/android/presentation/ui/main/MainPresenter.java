@@ -6,13 +6,17 @@ import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.data.web3j.model.EtherWallet;
 import com.kora.android.domain.base.DefaultCompletableObserver;
 import com.kora.android.domain.base.DefaultSingleObserver;
-import com.kora.android.domain.usecase.identity.CreateIdentityUseCase;
+import com.kora.android.domain.usecase.registration.GetCountriesUseCase;
+import com.kora.android.domain.usecase.test.TestUseCase;
 import com.kora.android.domain.usecase.transaction.SendTransactionUseCase;
-import com.kora.android.domain.usecase.wallet.ExportWalletUseCase;
-import com.kora.android.domain.usecase.wallet.GenerateWalletUseCase;
-import com.kora.android.domain.usecase.wallet.GetWalletListUseCase;
+import com.kora.android.domain.usecase.test.ExportWalletUseCase;
+import com.kora.android.domain.usecase.test.GenerateWalletUseCase;
+import com.kora.android.domain.usecase.test.GetWalletListUseCase;
 import com.kora.android.injection.annotation.ConfigPersistent;
+import com.kora.android.presentation.model.Country;
+import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
+import com.kora.android.presentation.ui.registration.step1.FirstStepPresenter;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -20,6 +24,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Action;
 
 @ConfigPersistent
 public class MainPresenter extends BasePresenter<MainView> {
@@ -28,19 +33,26 @@ public class MainPresenter extends BasePresenter<MainView> {
     private final GetWalletListUseCase mGetWalletListUseCase;
     private final ExportWalletUseCase mExportWalletUseCase;
     private final SendTransactionUseCase mSendTransactionUseCase;
-    private final CreateIdentityUseCase mCreateIdentityUseCase;
+    private final TestUseCase mTestUseCase;
+    private final GetCountriesUseCase mGetCountriesUseCase;
 
     @Inject
     public MainPresenter(final GenerateWalletUseCase generateWalletUseCase,
                          final GetWalletListUseCase getWalletListUseCase,
                          final ExportWalletUseCase exportWalletUseCase,
                          final SendTransactionUseCase sendTransactionUseCase,
-                         final CreateIdentityUseCase createIdentityUseCase) {
+                         final TestUseCase testUseCase,
+                         final GetCountriesUseCase getCountriesUseCase) {
         mGenerateWalletUseCase = generateWalletUseCase;
         mGetWalletListUseCase = getWalletListUseCase;
         mExportWalletUseCase = exportWalletUseCase;
         mSendTransactionUseCase = sendTransactionUseCase;
-        mCreateIdentityUseCase = createIdentityUseCase;
+        mTestUseCase = testUseCase;
+        mGetCountriesUseCase = getCountriesUseCase;
+    }
+
+    public void startGetCountriesTask() {
+        addDisposable(mGetCountriesUseCase.execute(new GetCountriesObserver()));
     }
 
     public void generateWallet(final String password, final String privateKey) {
@@ -72,7 +84,7 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     public void createIdentity() {
-        addDisposable(mCreateIdentityUseCase.execute(new CreateIdentityObserver()));
+        addDisposable(mTestUseCase.execute(new CreateIdentityObserver()));
     }
 
     private class GetWalletListObserver extends DefaultSingleObserver<List<EtherWallet>> {
@@ -225,6 +237,43 @@ public class MainPresenter extends BasePresenter<MainView> {
         public void handleUnexpectedError(RetrofitException exception) {
             Log.e("_____", exception.getMessage());
             super.handleUnexpectedError(exception);
+        }
+    }
+
+    private Action mGetPhoneNumberAction = new Action() {
+        @Override
+        public void run() throws Exception {
+            addDisposable(mGetCountriesUseCase.execute(new GetCountriesObserver()));
+        }
+    };
+
+    private class GetCountriesObserver extends DefaultSingleObserver<List<Country>> {
+
+        @Override
+        protected void onStart() {
+            if (!isViewAttached()) return;
+            getView().showProgress(true);
+        }
+
+        @Override
+        public void onSuccess(@NonNull final List<Country> countryList) {
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+
+            for (int i = 0; i < countryList.size(); i++)
+                Log.e("_____", countryList.get(i).toString());
+        }
+
+        @Override
+        public void onError(@NonNull Throwable throwable) {
+            super.onError(throwable);
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+        }
+
+        @Override
+        public void handleNetworkError(final RetrofitException retrofitException) {
+            getView().showErrorWithRetry(new RetryAction(mGetPhoneNumberAction));
         }
     }
 }

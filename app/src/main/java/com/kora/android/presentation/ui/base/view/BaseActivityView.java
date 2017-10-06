@@ -18,6 +18,9 @@ public interface BaseActivityView<P extends Presenter> extends BaseView<P> {
     void showToastMessage(@NonNull final String text);
 
     void showDialogMessage(@StringRes int title,
+                           final String message);
+
+    void showDialogMessage(@StringRes int title,
                            @StringRes int message);
 
     void showDialogMessage(@StringRes int title,

@@ -17,12 +17,11 @@ import io.reactivex.observers.DisposableSingleObserver;
 @ConfigPersistent
 public class GetPhoneNumberUseCase extends AsyncUseCase<DisposableSingleObserver, Single> {
 
-
     private final Context mContext;
 
     @Inject
-    public GetPhoneNumberUseCase(Context context) {
-        this.mContext = context;
+    public GetPhoneNumberUseCase(final Context context) {
+        mContext = context;
     }
 
     @Override

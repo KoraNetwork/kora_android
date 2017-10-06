@@ -16,6 +16,12 @@ public class Web3jModule {
 
     @Singleton
     @Provides
+    public Web3jConnection provideWeb3jConnection() {
+        return new Web3jConnection();
+    }
+
+    @Singleton
+    @Provides
     public EtherWalletUtils provideEtherWalletUtils() {
         return new EtherWalletUtils();
     }
@@ -24,11 +30,5 @@ public class Web3jModule {
     @Provides
     public EtherWalletStorage provideEtherWalletStorage(final Context context) {
         return new EtherWalletStorage(context);
-    }
-
-    @Singleton
-    @Provides
-    public Web3jConnection provideWeb3jConnection(final Context context) {
-        return new Web3jConnection(context);
     }
 }

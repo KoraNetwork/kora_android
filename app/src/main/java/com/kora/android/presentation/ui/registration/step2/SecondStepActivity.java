@@ -11,6 +11,7 @@ import com.kora.android.common.permission.PermissionChecker;
 import com.kora.android.common.permission.PermissionException;
 import com.kora.android.injection.component.ActivityComponent;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
+import com.kora.android.presentation.ui.registration.step3.ThirdStepActivity;
 
 import javax.inject.Inject;
 
@@ -85,10 +86,26 @@ public class SecondStepActivity extends BaseActivity<SecondStepPresenter> implem
         }
     }
 
+    @Override
+    public void showConfirmationCode(final String confirmationCode) {
+        mEtConfirmationCode.getText().clear();
+        mEtConfirmationCode.setText(confirmationCode);
+    }
+
     @OnTextChanged(R.id.edit_text_confirmation_code)
     void onChangedPhoneNumber(final CharSequence confirmationCode) {
         mElConfirmationCode.setError(null);
         getPresenter().setConfirmationCode(confirmationCode.toString().trim());
+    }
+
+    @Override
+    public void showEmptyConfirmationCode() {
+        mElConfirmationCode.setError(getString(R.string.registration_confirmation_code_empty));
+    }
+
+    @Override
+    public void showIncorrectConfirmationCode() {
+        mElConfirmationCode.setError(getString(R.string.registration_confirmation_code_incorrect));
     }
 
     @OnClick(R.id.card_view_confirm)
@@ -102,28 +119,14 @@ public class SecondStepActivity extends BaseActivity<SecondStepPresenter> implem
     }
 
     @Override
-    public void showConfirmationCode(final String confirmationCode) {
-        mEtConfirmationCode.getText().clear();
-        mEtConfirmationCode.setText(confirmationCode);
-    }
-
-    @Override
-    public void showEmptyConfirmationCode() {
-        mElConfirmationCode.setError(getString(R.string.registration_confirmation_code_empty));
-    }
-
-    @Override
-    public void showIncorrectConfirmationCode() {
-        mElConfirmationCode.setError(getString(R.string.registration_confirmation_code_incorrect));
-    }
-
-    @Override
     public void showNextScreen() {
-        showToastMessage("SUCCESS");
+        startActivity(ThirdStepActivity.getLaunchIntent(this));
     }
 
     @Override
-    public void showWrongConfirmationCode() {
-        showDialogMessage(R.string.registration_dialog_wrong_code_title, R.string.registration_dialog_wrong_code_message);
+    public void showServerErrorConfirmationCode() {
+        showDialogMessage(
+                R.string.registration_dialog_title_server_error_code,
+                R.string.registration_dialog_message_server_error_code);
     }
 }

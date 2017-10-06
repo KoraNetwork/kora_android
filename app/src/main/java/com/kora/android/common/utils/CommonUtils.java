@@ -15,7 +15,7 @@ public class CommonUtils {
         return false;
     }
 
-    private static boolean isNetworkConnected(final Context context) {
+    public static boolean isNetworkConnected(final Context context) {
         final ConnectivityManager connectivityManager =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();

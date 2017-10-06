@@ -20,12 +20,25 @@ public class EtherWalletUtils {
     // methods are taken from original class org.web3j.crypto.WalletUtils to change getWalletFileName(WalletFile walletFile)
 
     public String generateNewWalletFile(
+            final String password, final File destinationDirectory)
+            throws CipherException, IOException, InvalidAlgorithmParameterException,
+            NoSuchAlgorithmException, NoSuchProviderException {
+        return generateNewWalletFile(password, destinationDirectory, true);
+    }
+
+    public String generateNewWalletFile(
             String password, File destinationDirectory, boolean useFullScrypt)
             throws CipherException, IOException, InvalidAlgorithmParameterException,
             NoSuchAlgorithmException, NoSuchProviderException {
 
         ECKeyPair ecKeyPair = Keys.createEcKeyPair();
         return generateWalletFile(password, ecKeyPair, destinationDirectory, useFullScrypt);
+    }
+
+    public String generateWalletFile(
+            String password, ECKeyPair ecKeyPair, File destinationDirectory)
+            throws CipherException, IOException {
+        return generateWalletFile(password, ecKeyPair, destinationDirectory, true);
     }
 
     public String generateWalletFile(

@@ -91,3 +91,16 @@
 # http://proguard.sourceforge.net/manual/examples.html#stacktrace
 -renamesourcefileattribute SourceFile
 -keepattributes SourceFile,LineNumberTable
+
+# Rxjava rules
+# Paparrazi
+-dontwarn rx.internal.util.**
+
+-keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
+    long producerIndex;
+    long consumerIndex;
+}
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
+    long producerNode;
+    long consumerNode;
+}

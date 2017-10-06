@@ -10,5 +10,5 @@ public interface SecondStepView extends BaseView<SecondStepPresenter> {
     void showIncorrectConfirmationCode();
 
     void showNextScreen();
-    void showWrongConfirmationCode();
+    void showServerErrorConfirmationCode();
 }

@@ -11,7 +11,7 @@ import io.reactivex.observers.DisposableCompletableObserver;
 
 public class SplashUseCase extends AsyncUseCase<DisposableCompletableObserver, Completable> {
 
-    private final static int DELAY = 1000;
+    private final static int DELAY = 2000;
 
     @Inject
     public SplashUseCase() {

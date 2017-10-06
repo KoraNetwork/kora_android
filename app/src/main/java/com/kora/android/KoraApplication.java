@@ -6,6 +6,7 @@ import android.content.Context;
 import com.kora.android.injection.component.ApplicationComponent;
 import com.kora.android.injection.component.DaggerApplicationComponent;
 import com.kora.android.injection.module.ApplicationModule;
+import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo;
 
 public class KoraApplication extends Application {
 
@@ -14,6 +15,8 @@ public class KoraApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        RxPaparazzo.register(this);
 
         getComponent().inject(this);
     }

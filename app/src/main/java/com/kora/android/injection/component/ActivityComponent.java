@@ -5,6 +5,8 @@ import com.kora.android.injection.module.ActivityModule;
 import com.kora.android.presentation.ui.main.MainActivity;
 import com.kora.android.presentation.ui.registration.step1.FirstStepActivity;
 import com.kora.android.presentation.ui.registration.step2.SecondStepActivity;
+import com.kora.android.presentation.ui.registration.step3.ThirdStepActivity;
+import com.kora.android.presentation.ui.registration.step4.FourthStepActivity;
 import com.kora.android.presentation.ui.splash.SplashActivity;
 import com.kora.android.presentation.ui.welcome.WelcomeActivity;
 
@@ -20,4 +22,6 @@ public interface ActivityComponent {
 
     void inject(FirstStepActivity firstStepActivity);
     void inject(SecondStepActivity secondStepActivity);
+    void inject(ThirdStepActivity thirdStepActivity);
+    void inject(FourthStepActivity fourthStepActivity);
 }

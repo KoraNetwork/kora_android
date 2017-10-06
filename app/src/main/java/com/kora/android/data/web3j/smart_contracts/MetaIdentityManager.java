@@ -404,32 +404,6 @@ public final class MetaIdentityManager extends Contract {
         public Address recoveryKey;
 
         public Address owner;
-
-        public Address getIdentity() {
-            return identity;
-        }
-
-        public Address getCreator() {
-            return creator;
-        }
-
-        public Address getRecoveryKey() {
-            return recoveryKey;
-        }
-
-        public Address getOwner() {
-            return owner;
-        }
-
-        @Override
-        public String toString() {
-            return "IdentityCreatedEventResponse{" + "\n" +
-                    "identity=" + identity + "\n" +
-                    "creator=" + creator + "\n" +
-                    "recoveryKey=" + recoveryKey + "\n" +
-                    "owner=" + owner +
-                    '}';
-        }
     }
 
     public static class OwnerAddedEventResponse {

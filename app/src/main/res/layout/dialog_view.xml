@@ -35,7 +35,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:id="@+id/text_message"
+                android:id="@+id/text_view_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/color_dialog_text"

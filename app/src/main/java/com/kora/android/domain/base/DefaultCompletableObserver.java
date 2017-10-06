@@ -14,9 +14,9 @@ public class DefaultCompletableObserver extends DisposableCompletableObserver {
     }
 
     @Override
-    public void onError(@NonNull final Throwable e) {
-        if (e instanceof RetrofitException) {
-            RetrofitException retrofitException = (RetrofitException) e;
+    public void onError(@NonNull final Throwable throwable) {
+        if (throwable instanceof RetrofitException) {
+            RetrofitException retrofitException = (RetrofitException) throwable;
             if (retrofitException.getKind() == Kind.NETWORK) {
                 handleNetworkError(retrofitException);
             } else if (retrofitException.getKind() == Kind.HTTP) {
@@ -27,28 +27,35 @@ public class DefaultCompletableObserver extends DisposableCompletableObserver {
         }
     }
 
-    private void handleHttpError(final RetrofitException error) {
-        switch (error.getResponse().code()) {
+    private void handleHttpError(final RetrofitException retrofitException) {
+        switch (retrofitException.getResponse().code()) {
             case 401:
                 handleUnauthorizedException();
                 break;
+            case 422:
+                handleValidationException(retrofitException);
+                break;
             case 504:
-                handleNetworkError(error);
+                handleNetworkError(retrofitException);
                 break;
             case 500:
                 break;
         }
     }
 
-    public void handleNetworkError(RetrofitException retrofitException) {
+    public void handleValidationException(final RetrofitException retrofitException) {
+
+    }
+
+    public void handleNetworkError(final RetrofitException retrofitException) {
 
     }
 
     public void handleUnauthorizedException() {
-        // TODO: redirect to start screen and clear session (mPreferencesHelper)
+
     }
 
-    public void handleUnexpectedError(final RetrofitException exception) {
-        // TODO: Something went wrong...
+    public void handleUnexpectedError(final RetrofitException retrofitException) {
+
     }
 }

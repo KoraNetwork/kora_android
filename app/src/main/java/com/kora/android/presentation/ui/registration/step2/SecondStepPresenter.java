@@ -9,7 +9,7 @@ import android.util.Log;
 
 import com.kora.android.common.helper.RegistrationPrefHelper;
 import com.kora.android.common.utils.CommonUtils;
-import com.kora.android.common.utils.TextValidator;
+import com.kora.android.common.utils.StringUtils;
 import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.data.network.model.response.ConfirmationCodeResponse;
 import com.kora.android.data.network.model.response.PhoneNumberResponse;
@@ -50,7 +50,7 @@ public class SecondStepPresenter extends BasePresenter<SecondStepView> {
             public void onReceive(final Context context, final Intent intent) {
                 if (intent.hasExtra(INCOMING_SMS_EXTRA_MESSAGE)) {
                     final String message = intent.getStringExtra(INCOMING_SMS_EXTRA_MESSAGE);
-                    final String confirmationCode = TextValidator.getCodeFromMessage(message);
+                    final String confirmationCode = StringUtils.getCodeFromMessage(message);
 
                     if(!isViewAttached()) return;
                     getView().showConfirmationCode(confirmationCode);
@@ -80,11 +80,12 @@ public class SecondStepPresenter extends BasePresenter<SecondStepView> {
             getView().showEmptyConfirmationCode();
             return;
         }
-        if (!TextValidator.isConfirmationCodeValid(mConfirmationCode)) {
+        if (!StringUtils.isConfirmationCodeValid(mConfirmationCode)) {
             getView().showIncorrectConfirmationCode();
             return;
         }
         final String mPhoneNumber = mRegistrationPrefHelper.getPhoneNumber();
+
         mSendConfirmationCodeUseCase.setData(mPhoneNumber, mConfirmationCode);
         addDisposable(mSendConfirmationCodeUseCase.execute(new SendConfirmationCodeObserver()));
     }
@@ -129,7 +130,7 @@ public class SecondStepPresenter extends BasePresenter<SecondStepView> {
             if (confirmationCodeResponse.isConfirmed()) {
                 getView().showNextScreen();
             } else {
-                getView().showWrongConfirmationCode();
+                getView().showServerErrorConfirmationCode();
             }
         }
 
@@ -164,13 +165,13 @@ public class SecondStepPresenter extends BasePresenter<SecondStepView> {
         }
 
         @Override
-        public void onError(@NonNull final Throwable e) {
-            super.onError(e);
+        public void onError(@NonNull final Throwable throwable) {
+            super.onError(throwable);
             if (!isViewAttached()) return;
             getView().showProgress(false);
 
             Log.e("_____", "onError()");
-            e.printStackTrace();
+            throwable.printStackTrace();
         }
 
         @Override

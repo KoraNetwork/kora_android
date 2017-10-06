@@ -7,7 +7,7 @@ import io.reactivex.observers.DisposableObserver;
 public class DefaultObserver<T> extends DisposableObserver<T> {
 
     @Override
-    public void onNext(T t) {
+    public void onNext(final T t) {
 
     }
 
@@ -17,9 +17,9 @@ public class DefaultObserver<T> extends DisposableObserver<T> {
     }
 
     @Override
-    public void onError(Throwable e) {
-        if (!(e instanceof RetrofitException)) {
-            e.printStackTrace();
+    public void onError(final Throwable throwable) {
+        if (!(throwable instanceof RetrofitException)) {
+            throwable.printStackTrace();
         }
     }
 }

@@ -17,9 +17,13 @@ public interface Keys {
     }
 
     interface RegistrationHelperKeys {
-        String REGISTRATION_HELPER_FILE_NAME = "com_kora_android_registration_helper_file_name";
-        String REGISTRATION_HELPER_PASSWORD = "com_kora_android_registration_helper_password";
-        String REGISTRATION_HELPER_PHONE_NUMBER = "com_kora_android_registration_phone_number";
+        String REGISTRATION_HELPER_FILE_NAME = "REGISTRATION_HELPER_FILE_NAME";
+        String REGISTRATION_HELPER_FILE_PASSWORD = "REGISTRATION_HELPER_FILE_PASSWORD";
+        String REGISTRATION_HELPER_PHONE_NUMBER = "REGISTRATION_HELPER_PHONE_NUMBER";
+        String REGISTRATION_HELPER_IDENTITY_ADDRESS = "REGISTRATION_HELPER_IDENTITY_ADDRESS";
+        String REGISTRATION_HELPER_CREATOR_ADDRESS = "REGISTRATION_HELPER_CREATOR_ADDRESS";
+        String REGISTRATION_HELPER_RECOVERY_ADDRESS = "REGISTRATION_HELPER_RECOVERY_ADDRESS";
+        String REGISTRATION_HELPER_OWNER_ADDRESS = "REGISTRATION_HELPER_OWNER_ADDRESS";
     }
 
     interface PermissionChecker {
@@ -28,7 +32,8 @@ public interface Keys {
     }
 
     interface IncomingSms {
-        String INCOMING_SMS_SENDER = "Autoinform";
+        String INCOMING_SMS_SENDER_1 = "AutoInform";
+        String INCOMING_SMS_SENDER_2 = "InfoSms";
         String INCOMING_SMS_ACTION_RECEIVED = "INCOMING_SMS_ACTION_RECEIVED";
         String INCOMING_SMS_EXTRA_MESSAGE = "INCOMING_SMS_EXTRA_MESSAGE";
     }

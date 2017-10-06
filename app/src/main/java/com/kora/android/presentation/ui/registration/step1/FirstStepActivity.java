@@ -49,7 +49,7 @@ public class FirstStepActivity extends BaseActivity<FirstStepPresenter> implemen
 
     @Override
     public int getLayoutResource() {
-        return R.layout.activity_regitration_step_1;
+        return R.layout.activity_registration_step_1;
     }
 
     @Override
@@ -57,11 +57,16 @@ public class FirstStepActivity extends BaseActivity<FirstStepPresenter> implemen
         setToolbar(mToolbar, R.drawable.ic_back_grey);
 
         requestFocus();
-        requestPermissions();
+        getPresenter().startDeleteWalletsTask();
     }
 
     private void requestFocus() {
         mEtPhoneNumber.requestFocus();
+    }
+
+    @Override
+    public void showNextViews() {
+        requestPermissions();
     }
 
     private void requestPermissions() {
@@ -91,11 +96,6 @@ public class FirstStepActivity extends BaseActivity<FirstStepPresenter> implemen
         getPresenter().setPhoneNumber(phoneNumber.toString().trim());
     }
 
-    @OnClick(R.id.card_view_send)
-    public void onClickSend() {
-        getPresenter().startSendPhoneNumberTask();
-    }
-
     @Override
     public void showPhoneNumber(final String phoneNumber) {
         mEtPhoneNumber.setText(phoneNumber);
@@ -111,8 +111,20 @@ public class FirstStepActivity extends BaseActivity<FirstStepPresenter> implemen
         mElPhoneNumber.setError(getString(R.string.registration_phone_number_incorrect));
     }
 
+    @OnClick(R.id.card_view_send)
+    public void onClickSend() {
+        getPresenter().startSendPhoneNumberTask();
+    }
+
     @Override
     public void showNextScreen() {
         startActivity(SecondStepActivity.getLaunchIntent(this));
+    }
+
+    @Override
+    public void showServerErrorPhoneNumber() {
+        showDialogMessage(
+                R.string.registration_dialog_title_server_error_phone,
+                R.string.registration_dialog_message_server_error_phone);
     }
 }

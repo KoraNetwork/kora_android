@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kora.android.KoraApplication;
@@ -89,14 +90,27 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     }
 
     @Override
-    public void showProgress(boolean showProgress) {
-        if (showProgress) {
+    public void showProgress(final boolean isVisible) {
+        showProgress(isVisible, true, R.string.dialog_progress_loading);
+    }
+
+    @Override
+    public void showProgress(final boolean isVisible,
+                             final boolean isCancelable,
+                             @StringRes final int stringId) {
+        if (isVisible) {
             if (mProgressDialog == null || !mProgressDialog.isShowing()) {
                 mProgressDialog = new ProgressDialog(this, R.style.AppTheme_Dialog);
-                mProgressDialog.setMessage(getString(R.string.dialog_loading));
+                mProgressDialog.setCancelable(isCancelable);
                 mProgressDialog.show();
+                mProgressDialog.setContentView(R.layout.progress_view);
+                final TextView tvMessage = mProgressDialog.findViewById(R.id.text_view_message);
+                tvMessage.setText(stringId);
             } else {
                 mProgressDialog.show();
+                mProgressDialog.setContentView(R.layout.progress_view);
+                final TextView tvMessage = mProgressDialog.findViewById(R.id.text_view_message);
+                tvMessage.setText(stringId);
             }
         } else if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
@@ -131,6 +145,20 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     @Override
     public void showToastMessage(@NonNull String text) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showDialogMessage(@StringRes int title,
+                                  final String message) {
+
+        if (mMultiDialog != null && mMultiDialog.isShowing()) return;
+        mMultiDialog = new MultiDialog.DialogBuilder()
+                .setTitle(title)
+                .setMessage(message)
+                .setCloseButton(R.string.dialog_action_ok, (dialogInterface, i) ->
+                        dialogInterface.cancel())
+                .build(this);
+        mMultiDialog.show();
     }
 
     @Override

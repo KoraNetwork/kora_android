@@ -23,7 +23,7 @@ public class MultiDialog {
 
     @BindView(R.id.text_title)
     TextView mTitleText;
-    @BindView(R.id.text_message)
+    @BindView(R.id.text_view_message)
     TextView mMessageText;
     @BindView(R.id.text_btn_ok)
     TextView mCloseButton;

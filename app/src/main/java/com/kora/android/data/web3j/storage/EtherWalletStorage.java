@@ -73,6 +73,24 @@ public class EtherWalletStorage {
         saveWalletList(etherWalletList);
     }
 
+    public void deleteWallets() {
+        final List<EtherWallet> etherWalletList = getWalletList();
+        if (etherWalletList.isEmpty())
+            return;
+        try {
+            for (int i = 0; i < etherWalletList.size(); i++) {
+                final EtherWallet etherWallet = etherWalletList.get(i);
+                final File file = new File(mContext.getFilesDir(), etherWallet.getWalletFileName());
+                file.delete();
+            }
+        } catch (Exception e) {
+            Log.e("_____", e.toString());
+            e.printStackTrace();
+        }
+        etherWalletList.clear();
+        saveWalletList(etherWalletList);
+    }
+
     private void saveWalletList(List<EtherWallet> etherWalletList) {
         File file;
         FileOutputStream fileOutputStream = null;

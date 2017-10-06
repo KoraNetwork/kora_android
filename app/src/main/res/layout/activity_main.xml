@@ -12,10 +12,12 @@
     </android.support.v7.widget.Toolbar>
 
     <TextView
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
+        android:id="@+id/text_view_main_screen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:clickable="true"
         android:gravity="center"
         android:text="KORA\nMAIN\nSCREEN"
         android:textColor="@android:color/black"

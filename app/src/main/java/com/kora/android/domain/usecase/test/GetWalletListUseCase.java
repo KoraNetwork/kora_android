@@ -1,4 +1,4 @@
-package com.kora.android.domain.usecase.wallet;
+package com.kora.android.domain.usecase.test;
 
 import com.kora.android.data.web3j.storage.EtherWalletStorage;
 import com.kora.android.domain.base.AsyncUseCase;

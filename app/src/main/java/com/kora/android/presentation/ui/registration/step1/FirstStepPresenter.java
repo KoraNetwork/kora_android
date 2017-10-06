@@ -3,12 +3,14 @@ package com.kora.android.presentation.ui.registration.step1;
 import android.util.Log;
 
 import com.kora.android.common.helper.RegistrationPrefHelper;
-import com.kora.android.common.utils.TextValidator;
+import com.kora.android.common.utils.StringUtils;
 import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.data.network.model.response.PhoneNumberResponse;
+import com.kora.android.domain.base.DefaultCompletableObserver;
 import com.kora.android.domain.base.DefaultSingleObserver;
 import com.kora.android.domain.usecase.registration.GetPhoneNumberUseCase;
 import com.kora.android.domain.usecase.registration.SendPhoneNumberUseCase;
+import com.kora.android.domain.usecase.wallet.DeleteWalletsUseCase;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
 
@@ -19,7 +21,8 @@ import io.reactivex.functions.Action;
 
 public class FirstStepPresenter extends BasePresenter<FirstStepView> {
 
-    private final RegistrationPrefHelper mRregistrationPrefHelper;
+    private final RegistrationPrefHelper mRegistrationPrefHelper;
+    private final DeleteWalletsUseCase mDeleteWalletsUseCase;
     private final GetPhoneNumberUseCase mGetPhoneNumberUseCase;
     private final SendPhoneNumberUseCase mSendPhoneNumberUseCase;
 
@@ -27,11 +30,18 @@ public class FirstStepPresenter extends BasePresenter<FirstStepView> {
 
     @Inject
     public FirstStepPresenter(final RegistrationPrefHelper registrationPrefHelper,
+                              final DeleteWalletsUseCase deleteWalletsUseCase,
                               final GetPhoneNumberUseCase getPhoneNumberUseCase,
                               final SendPhoneNumberUseCase sendPhoneNumberUseCase) {
-        mRregistrationPrefHelper = registrationPrefHelper;
+        mRegistrationPrefHelper = registrationPrefHelper;
+        mDeleteWalletsUseCase = deleteWalletsUseCase;
         mGetPhoneNumberUseCase = getPhoneNumberUseCase;
         mSendPhoneNumberUseCase = sendPhoneNumberUseCase;
+    }
+
+    public void startDeleteWalletsTask() {
+        mRegistrationPrefHelper.clear();
+        addDisposable(mDeleteWalletsUseCase.execute(new DeleteWalletsObserver()));
     }
 
     public void startGetPhoneNumberTask() {
@@ -43,26 +53,54 @@ public class FirstStepPresenter extends BasePresenter<FirstStepView> {
             getView().showEmptyPhoneNumber();
             return;
         }
-        if (!TextValidator.isPhoneNumberValid(mPhoneNumber)) {
+        if (!StringUtils.isPhoneNumberValid(mPhoneNumber)) {
             getView().showIncorrectPhoneNumber();
             return;
         }
-        mPhoneNumber = TextValidator.deletePlusIfNeeded(mPhoneNumber);
+        mPhoneNumber = StringUtils.deletePlusIfNeeded(mPhoneNumber);
+
         mSendPhoneNumberUseCase.setData(mPhoneNumber);
         addDisposable(mSendPhoneNumberUseCase.execute(new SendPhoneNumberObserver()));
     }
 
-    private Action sendPhoneNumberAction = new Action() {
+    private Action mSendPhoneNumberAction = new Action() {
         @Override
         public void run() throws Exception {
             addDisposable(mSendPhoneNumberUseCase.execute(new SendPhoneNumberObserver()));
         }
     };
 
-    public void setPhoneNumber(String phoneNumber) {
+    public void setPhoneNumber(final String phoneNumber) {
         mPhoneNumber = phoneNumber;
     }
 
+    private class DeleteWalletsObserver extends DefaultCompletableObserver {
+
+        @Override
+        protected void onStart() {
+            super.onStart();
+            if (!isViewAttached()) return;
+            getView().showProgress(true);
+        }
+
+        @Override
+        public void onComplete() {
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+
+            getView().showNextViews();
+        }
+
+        @Override
+        public void onError(@NonNull final Throwable throwable) {
+            super.onError(throwable);
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+
+            Log.e("_____", throwable.toString());
+            throwable.printStackTrace();
+        }
+    }
 
     private class GetPhoneNumberObserver extends DefaultSingleObserver<String> {
 
@@ -73,22 +111,25 @@ public class FirstStepPresenter extends BasePresenter<FirstStepView> {
         }
 
         @Override
-        public void onSuccess(@NonNull String phoneNumber) {
+        public void onSuccess(@NonNull final String phoneNumber) {
             if (!isViewAttached()) return;
             getView().showProgress(false);
 
             if (phoneNumber == null || phoneNumber.isEmpty())
                 return;
-            if (!TextValidator.isPhoneNumberValid(phoneNumber))
+            if (!StringUtils.isPhoneNumberValid(phoneNumber))
                 return;
             getView().showPhoneNumber(phoneNumber);
         }
 
         @Override
-        public void onError(@NonNull Throwable e) {
-            super.onError(e);
+        public void onError(@NonNull final Throwable throwable) {
+            super.onError(throwable);
             if (!isViewAttached()) return;
             getView().showProgress(false);
+
+            Log.e("_____", throwable.toString());
+            throwable.printStackTrace();
         }
     }
 
@@ -101,13 +142,15 @@ public class FirstStepPresenter extends BasePresenter<FirstStepView> {
         }
 
         @Override
-        public void onSuccess(@NonNull PhoneNumberResponse phoneNumberResponse) {
+        public void onSuccess(@NonNull final PhoneNumberResponse phoneNumberResponse) {
             if(!isViewAttached()) return;
             getView().showProgress(false);
 
             if (phoneNumberResponse.isSent()) {
-                mRregistrationPrefHelper.storePhoneNumber(mPhoneNumber);
+                mRegistrationPrefHelper.storePhoneNumber(mPhoneNumber);
                 getView().showNextScreen();
+            } else {
+                getView().showServerErrorPhoneNumber();
             }
         }
 
@@ -117,13 +160,13 @@ public class FirstStepPresenter extends BasePresenter<FirstStepView> {
             if (!isViewAttached()) return;
             getView().showProgress(false);
 
-            Log.e("_____", "onError()");
+            Log.e("_____", e.toString());
             e.printStackTrace();
         }
 
         @Override
-        public void handleNetworkError(RetrofitException retrofitException) {
-            getView().showErrorWithRetry(new RetryAction(sendPhoneNumberAction));
+        public void handleNetworkError(final RetrofitException retrofitException) {
+            getView().showErrorWithRetry(new RetryAction(mSendPhoneNumberAction));
         }
     }
 }

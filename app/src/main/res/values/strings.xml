@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Kora</string>
 
-    <string name="dialog_loading">Loading</string>
+    <string name="dialog_progress_loading">Loading</string>
 
     <string name="dialog_retry_alert_title">Please try again later</string>
     <string name="dialog_retry_message">The Internet connection appears to be offline.</string>
@@ -22,16 +22,52 @@
     <string name="registration_phone_number_empty">Phone number filed is empty</string>
     <string name="registration_phone_number_incorrect">Phone number is incorrect</string>
     <string name="registration_send">SEND</string>
+    <string name="registration_dialog_title_server_error_phone">Error</string>
+    <string name="registration_dialog_message_server_error_phone">Phone number is already registered.</string>
 
     <string name="registration_confirmation_code">Confirmation code</string>
     <string name="registration_enter_confirmation_code">Please, enter your confirmation code from SMS</string>
     <string name="registration_confirm">CONFIRM</string>
-    <string name="registration_confirmation_code_empty">Confirmation code number filed is empty</string>
+    <string name="registration_confirmation_code_empty">Confirmation code filed is empty</string>
     <string name="registration_confirmation_code_incorrect">Confirmation code is incorrect</string>
     <string name="registration_code_not_received">Didn\'t receive confirmation code?</string>
     <string name="registration_resend">RESEND</string>
-    <string name="registration_dialog_wrong_code_title">Error</string>
-    <string name="registration_dialog_wrong_code_message">Wrong confirmation code. Try to resend.</string>
+    <string name="registration_dialog_title_server_error_code">Error</string>
+    <string name="registration_dialog_message_server_error_code">Wrong confirmation code. Try to resend.</string>
+
+    <string name="registration_create_pin_code">Create a PIN code</string>
+    <string name="registration_create_4_digit_pin_code">Create a 4-digit PIN that you will use when making transactions</string>
+    <string name="registration_next">NEXT</string>
+    <string name="registration_pin_code_empty">Pin code fields are empty</string>
+    <string name="registration_pin_code_too_short">Pin code is too short</string>
+    <string name="registration_creating_identity_wait">App is creating identity. Please wait for a while. Please do not exit the app.</string>
+
+    <string name="registration_personal_info">Personal information</string>
+    <string name="registration_enter_personal_info">Please, enter your personal information</string>
+    <string name="registration_upload_photo">Upload Photo</string>
+    <string name="registration_user_name">User Name</string>
+    <string name="registration_legal_name">Legal Name</string>
+    <string name="registration_email">Email</string>
+    <string name="registration_date_of_birth">Date of Birth</string>
+    <string name="registration_currency">Currency</string>
+    <string name="registration_postal_code">Postal Code</string>
+    <string name="registration_address">Address (Street, house, apartment)</string>
+    <string name="registration_password">Password</string>
+    <string name="registration_confirm_password">Confirm Password</string>
+    <string name="registration_user_name_empty">User name field is empty</string>
+    <string name="registration_user_name_incorrect">User name is incorrect, e.g. John_99</string>
+    <string name="registration_user_name_too_short">User name is too short</string>
+    <string name="registration_email_empty">Email field is empty</string>
+    <string name="registration_email_incorrect">Email is incorrect, e.g. john99@mail.com</string>
+    <string name="registration_password_empty">Password field is empty</string>
+    <string name="registration_password_too_short">Password is too short</string>
+    <string name="registration_confirm_password_empty">Confirm password field is empty</string>
+    <string name="registration_confirm_password_incorrect">Confirm password does not match</string>
+    <string name="registration_dialog_title_server_validation_error">Error</string>
+    <string name="registration_dialog_title_back_pressed">Warning</string>
+    <string name="registration_dialog_message_back_pressed">If you will return on previous screen, you will need to create identity again. It will take time. Are you sure you want to go back?</string>
+    <string name="registration_dialog_positive_back_pressed">Return</string>
+    <string name="registration_dialog_negative_back_pressed">Cancel</string>
 
     <string name="font_name_muli">Muli</string>
     <string name="font_name_muli_bold">MuliBold</string>
