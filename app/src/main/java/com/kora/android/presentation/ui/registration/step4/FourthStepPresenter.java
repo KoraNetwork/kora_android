@@ -6,11 +6,12 @@ import com.google.gson.Gson;
 import com.kora.android.common.helper.RegistrationPrefHelper;
 import com.kora.android.common.utils.StringUtils;
 import com.kora.android.data.network.exception.RetrofitException;
-import com.kora.android.data.network.model.response.ErrorResponse;
+import com.kora.android.data.network.model.response.ErrorResponseRegistration;
 import com.kora.android.data.network.model.response.UserResponse;
 import com.kora.android.domain.base.DefaultSingleObserver;
 import com.kora.android.domain.usecase.registration.RegistrationUseCase;
 import com.kora.android.injection.annotation.ConfigPersistent;
+import com.kora.android.presentation.model.Country;
 import com.kora.android.presentation.model.User;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
@@ -35,6 +36,12 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
         mRegistrationPrefHelper = registrationPrefHelper;
         mRegistrationUseCase = registrationUseCase;
         mUser = new User();
+    }
+
+    public void startGetCountryTask() {
+        final Country country = mRegistrationPrefHelper.getCountry();
+        if (country != null)
+            getView().showCurrency(country);
     }
 
     public void setAvatar(final String avatar) {
@@ -95,10 +102,6 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
                 getView().showIncorrectEmail();
                 return;
             }
-        }
-        if (mUser.getCurrency() == null || mUser.getCurrency().isEmpty()) {
-            getView().showEmptyCurrency();
-            return;
         }
         if (mUser.getPassword() == null || mUser.getPassword().isEmpty()) {
             getView().showEmptyPassword();
@@ -169,16 +172,16 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
         public void handleValidationException(final RetrofitException retrofitException) {
             try {
                 final String errorResponseString = new String(retrofitException.getResponse().errorBody().bytes(), "UTF-8");
-                final ErrorResponse errorResponse = new Gson().fromJson(errorResponseString, ErrorResponse.class);
+                final ErrorResponseRegistration errorResponseRegistration = new Gson().fromJson(errorResponseString, ErrorResponseRegistration.class);
 //                Log.e("_____", errorResponseString);
-//                Log.e("_____", errorResponse.toString());
+//                Log.e("_____", errorResponseRegistration.toString());
                 String message = "";
-                if (errorResponse.getInvalidattributes().getUserNameUnique() != null)
-                    message += errorResponse.getInvalidattributes().getUserNameUnique().get(0).getMessage();
-                if (errorResponse.getInvalidattributes().getEmail() != null)
-                    message += errorResponse.getInvalidattributes().getEmail().get(0).getMessage();
-                if (errorResponse.getInvalidattributes().getPhone() != null)
-                    message += errorResponse.getInvalidattributes().getPhone().get(0).getMessage();
+                if (errorResponseRegistration.getInvalidattributes().getUserNameUnique() != null)
+                    message += errorResponseRegistration.getInvalidattributes().getUserNameUnique().get(0).getMessage();
+                if (errorResponseRegistration.getInvalidattributes().getEmail() != null)
+                    message += errorResponseRegistration.getInvalidattributes().getEmail().get(0).getMessage();
+                if (errorResponseRegistration.getInvalidattributes().getPhone() != null)
+                    message += errorResponseRegistration.getInvalidattributes().getPhone().get(0).getMessage();
                 if (!message.isEmpty())
                     getView().showServerErrorValidation(message);
             } catch (final Exception exception) {

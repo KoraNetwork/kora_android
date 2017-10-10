@@ -2,15 +2,20 @@ package com.kora.android.presentation.ui.registration.step1;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.kora.android.R;
 import com.kora.android.common.permission.PermissionChecker;
+import com.kora.android.common.utils.ViewUtils;
 import com.kora.android.injection.component.ActivityComponent;
+import com.kora.android.presentation.model.Country;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
+import com.kora.android.presentation.ui.registration.countries.CountriesActivity;
 import com.kora.android.presentation.ui.registration.step2.SecondStepActivity;
 
 import javax.inject.Inject;
@@ -19,10 +24,11 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 
-import static android.Manifest.permission.READ_PHONE_STATE;
 import static android.Manifest.permission.READ_SMS;
-import static android.content.pm.PackageManager.PERMISSION_GRANTED;
-import static com.kora.android.common.Keys.PermissionChecker.PERMISSION_REQUEST_CODE_READ_PHONE_STATE_AND_READ_SMS;
+import static com.kora.android.common.Keys.PermissionChecker.PERMISSION_REQUEST_CODE_READ_SMS;
+import static com.kora.android.common.Keys.SelectCountry.SELECT_COUNTRY_EXTRA;
+import static com.kora.android.common.Keys.SelectCountry.SELECT_COUNTRY_REQUEST_CODE;
+import static com.kora.android.data.network.Constants.API_BASE_URL;
 
 public class FirstStepActivity extends BaseActivity<FirstStepPresenter> implements FirstStepView {
 
@@ -31,6 +37,10 @@ public class FirstStepActivity extends BaseActivity<FirstStepPresenter> implemen
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
+    @BindView(R.id.image_view_country_flag)
+    ImageView mIvCountryFlag;
+    @BindView(R.id.text_view_phone_code)
+    TextView mTvPhoneCode;
     @BindView(R.id.edit_layout_phone_number)
     TextInputLayout mElPhoneNumber;
     @BindView(R.id.edit_text_phone_number)
@@ -66,27 +76,32 @@ public class FirstStepActivity extends BaseActivity<FirstStepPresenter> implemen
 
     @Override
     public void showNextViews() {
-        requestPermissions();
+        requestPermission();
     }
 
-    private void requestPermissions() {
-        mPermissionChecker.requestPermissions(
-                PERMISSION_REQUEST_CODE_READ_PHONE_STATE_AND_READ_SMS,
-                READ_PHONE_STATE,
-                READ_SMS);
+    private void requestPermission() {
+        mPermissionChecker.requestPermissions(PERMISSION_REQUEST_CODE_READ_SMS, READ_SMS);
+    }
+
+    @OnClick(R.id.card_view_select_country)
+    public void onClickSelectCountry() {
+        startActivityForResult(CountriesActivity.getLaunchIntent(this), SELECT_COUNTRY_REQUEST_CODE);
     }
 
     @Override
-    public void onRequestPermissionsResult(final int requestCode,
-                                           @NonNull final String[] permissions,
-                                           @NonNull final int[] grantResults) {
-        switch (requestCode) {
-            case PERMISSION_REQUEST_CODE_READ_PHONE_STATE_AND_READ_SMS:
-                if (grantResults[0] == PERMISSION_GRANTED)
-                    getPresenter().startGetPhoneNumberTask();
-                break;
-            default:
-                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        if (requestCode == SELECT_COUNTRY_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                final Country country = data.getParcelableExtra(SELECT_COUNTRY_EXTRA);
+                getPresenter().setCountry(country);
+                Glide.with(this)
+                        .load(API_BASE_URL + country.getFlag())
+                        .into(mIvCountryFlag);
+                mTvPhoneCode.setText(country.getPhoneCode());
+                mElPhoneNumber.setError(null);
+                mEtPhoneNumber.setText(null);
+                ViewUtils.setMaxLength(mEtPhoneNumber, country.getPhoneCode());
+            }
         }
     }
 
@@ -94,11 +109,6 @@ public class FirstStepActivity extends BaseActivity<FirstStepPresenter> implemen
     void onChangedPhoneNumber(final CharSequence phoneNumber) {
         mElPhoneNumber.setError(null);
         getPresenter().setPhoneNumber(phoneNumber.toString().trim());
-    }
-
-    @Override
-    public void showPhoneNumber(final String phoneNumber) {
-        mEtPhoneNumber.setText(phoneNumber);
     }
 
     @Override
@@ -126,5 +136,12 @@ public class FirstStepActivity extends BaseActivity<FirstStepPresenter> implemen
         showDialogMessage(
                 R.string.registration_dialog_title_server_error_phone,
                 R.string.registration_dialog_message_server_error_phone);
+    }
+
+    @Override
+    public void showTwilioErrorPhoneNumber(final String message) {
+        showDialogMessage(
+                R.string.registration_dialog_title_twilio_error_phone,
+                message);
     }
 }

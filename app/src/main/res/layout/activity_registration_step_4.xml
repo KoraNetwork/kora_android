@@ -164,44 +164,64 @@
                     android:textSize="16sp" />
             </android.support.design.widget.TextInputLayout>
 
-            <TextView
-                android:id="@+id/text_view_required_currency"
+            <android.support.v7.widget.CardView
+                android:id="@+id/card_view_select_currency"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignTop="@+id/edit_layout_currency"
-                android:layout_marginEnd="25dp"
-                android:layout_marginRight="25dp"
-                android:text="@string/registration_required"
-                android:textColor="@color/color_text_blue"
-                android:textSize="20sp" />
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/edit_layout_currency"
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edit_layout_date_of_birth"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                app:errorEnabled="true">
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="12dp"
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:contentPaddingLeft="8dp"
+                app:contentPaddingRight="4dp">
 
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/edit_text_currency"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/registration_currency"
-                    android:inputType="text"
-                    android:maxLength="10"
-                    android:maxLines="1"
-                    android:textColor="@color/color_edit_text"
-                    android:textSize="16sp" />
-            </android.support.design.widget.TextInputLayout>
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/image_view_country_flag"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:src="@drawable/ic_flag_usa" />
+
+                    <TextView
+                        android:id="@+id/text_view_currency"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_toEndOf="@+id/image_view_country_flag"
+                        android:layout_toRightOf="@+id/image_view_country_flag"
+                        android:fontFamily="sans-serif"
+                        android:text="@string/registration_currency_usa"
+                        android:textColor="@color/color_button_text_black"
+                        android:textSize="18sp" />
+
+                    <ImageView
+                        android:id="@+id/image_view_drop_down"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginStart="2dp"
+                        android:layout_toEndOf="@+id/text_view_currency"
+                        android:layout_toRightOf="@+id/text_view_currency"
+                        android:src="@drawable/ic_drop_down" />
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/edit_layout_postal_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/edit_layout_currency"
+                android:layout_below="@+id/card_view_select_currency"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 app:errorEnabled="true">
@@ -310,13 +330,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edit_layout_confirm_password"
-                android:layout_marginBottom="42dp"
+                android:layout_marginBottom="36dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="16dp"
                 android:clickable="true"
                 android:foreground="?android:attr/selectableItemBackground"
-                app:cardBackgroundColor="@color/color_button_blue"
+                app:cardBackgroundColor="@color/color_button_background_blue"
                 app:cardCornerRadius="4dp"
                 app:cardElevation="4dp"
                 app:contentPadding="12dp">
@@ -333,7 +353,7 @@
                         android:layout_centerVertical="true"
                         android:fontFamily="sans-serif"
                         android:text="@string/registration_confirm"
-                        android:textColor="@color/color_button_text"
+                        android:textColor="@color/color_button_text_white"
                         android:textSize="14sp"
                         app:font="@string/font_name_muli_bold" />
                 </RelativeLayout>

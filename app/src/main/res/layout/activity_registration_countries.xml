@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize" />
+
+    <com.kora.android.views.CustomTextView
+        android:id="@+id/text_view_select_country"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/registration_select_country"
+        android:textColor="@color/color_text_title"
+        android:textSize="24sp"
+        app:font="@string/font_name_muli_semi_bold" />
+
+    <LinearLayout
+        android:layout_marginTop="24dp"
+        android:id="@+id/linear_layout_search"
+        android:layout_below="@+id/text_view_select_country"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/image_view_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_search"/>
+
+        <EditText
+            android:id="@+id/edit_text_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:inputType="text"
+            android:maxLength="35"
+            android:maxLines="1"
+            android:src="@drawable/ic_search"
+            android:textColor="@color/color_text_title"
+            android:textSize="16sp"
+            tools:text="USA" />
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view_countries"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linear_layout_search"
+        android:layout_marginTop="24dp"/>
+
+</RelativeLayout>

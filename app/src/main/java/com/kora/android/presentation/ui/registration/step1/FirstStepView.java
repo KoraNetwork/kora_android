@@ -6,11 +6,10 @@ public interface FirstStepView extends BaseView<FirstStepPresenter> {
 
     void showNextViews();
 
-    void showPhoneNumber(final String phoneNumber);
-
     void showEmptyPhoneNumber();
     void showIncorrectPhoneNumber();
 
     void showNextScreen();
     void showServerErrorPhoneNumber();
+    void showTwilioErrorPhoneNumber(final String message);
 }

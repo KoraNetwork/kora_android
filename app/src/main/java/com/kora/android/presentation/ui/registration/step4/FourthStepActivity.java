@@ -18,7 +18,9 @@ import com.bumptech.glide.request.RequestOptions;
 import com.kora.android.R;
 import com.kora.android.common.utils.ViewUtils;
 import com.kora.android.injection.component.ActivityComponent;
+import com.kora.android.presentation.model.Country;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
+import com.kora.android.presentation.ui.registration.currencies.CurrenciesActivity;
 import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo;
 import com.miguelbcr.ui.rx_paparazzo2.entities.Options;
 import com.miguelbcr.ui.rx_paparazzo2.entities.size.CustomMaxSize;
@@ -30,6 +32,10 @@ import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+
+import static com.kora.android.common.Keys.SelectCurrency.SELECT_CURRENCY_EXTRA;
+import static com.kora.android.common.Keys.SelectCurrency.SELECT_CURRENCY_REQUEST_CODE;
+import static com.kora.android.data.network.Constants.API_BASE_URL;
 
 public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implements FourthStepView {
 
@@ -48,8 +54,10 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
     @BindView(R.id.edit_layout_email)
     TextInputLayout mElEmail;
 
-    @BindView(R.id.edit_layout_currency)
-    TextInputLayout mElCurrency;
+    @BindView(R.id.image_view_country_flag)
+    ImageView mIvCountryFlag;
+    @BindView(R.id.text_view_currency)
+    TextView mTvCurrency;
 
     @BindView(R.id.edit_layout_password)
     TextInputLayout mElPassword;
@@ -80,6 +88,8 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
     @Override
     protected void onViewReady(final Bundle savedInstanceState) {
         setToolbar(mToolbar, R.drawable.ic_back_grey);
+
+        getPresenter().startGetCountryTask();
     }
 
     @Override
@@ -91,6 +101,15 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
                 (dialogInterface, i) -> super.onBackPressed(),
                 R.string.registration_dialog_negative_back_pressed,
                 (dialogInterface, i) -> dialogInterface.dismiss());
+    }
+
+    @Override
+    public void showCurrency(final Country country) {
+        Glide.with(this)
+                .load(API_BASE_URL + country.getFlag())
+                .into(mIvCountryFlag);
+        mTvCurrency.setText(country.getCurrency());
+        getPresenter().setCurrency(country.getCurrency());
     }
 
     @OnClick({R.id.image_view_avatar, R.id.text_view_upload_photo})
@@ -172,16 +191,23 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
         getPresenter().setDateOfBirth(dateOfBirth.toString().trim());
     }
 
-    @OnTextChanged(R.id.edit_text_currency)
-    void onChangedCurrency(final CharSequence currency) {
-        mElCurrency.setError(null);
-        getPresenter().setCurrency(currency.toString().trim());
+    @OnClick(R.id.card_view_select_currency)
+    void OnClickSelectCurrency() {
+        startActivityForResult(CurrenciesActivity.getLaunchIntent(this), SELECT_CURRENCY_REQUEST_CODE);
     }
 
     @Override
-    public void showEmptyCurrency() {
-        mElCurrency.setError(getString(R.string.registration_currency_empty));
-        ViewUtils.scrollToView(mSvContainer, mRlContainer, mElCurrency);
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        if (requestCode == SELECT_CURRENCY_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                final Country country = data.getParcelableExtra(SELECT_CURRENCY_EXTRA);
+                getPresenter().setCurrency(country.getCurrency());
+                Glide.with(this)
+                        .load(API_BASE_URL + country.getFlag())
+                        .into(mIvCountryFlag);
+                mTvCurrency.setText(country.getCurrency());
+            }
+        }
     }
 
     @OnTextChanged(R.id.edit_text_postal_code)

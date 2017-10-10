@@ -1,6 +1,9 @@
 package com.kora.android.presentation.model;
 
-public class Country {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Country implements Parcelable {
 
     private String mName;
     private String mCurrency;
@@ -68,4 +71,41 @@ public class Country {
                 "mFlag=" + mFlag + "\n" +
                 '}';
     }
+
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.mName);
+        dest.writeString(this.mCurrency);
+        dest.writeString(this.mPhoneCode);
+        dest.writeString(this.mFlag);
+    }
+
+    public Country() {
+    }
+
+    protected Country(Parcel in) {
+        this.mName = in.readString();
+        this.mCurrency = in.readString();
+        this.mPhoneCode = in.readString();
+        this.mFlag = in.readString();
+    }
+
+    public static final Creator<Country> CREATOR = new Creator<Country>() {
+        @Override
+        public Country createFromParcel(Parcel source) {
+            return new Country(source);
+        }
+
+        @Override
+        public Country[] newArray(int size) {
+            return new Country[size];
+        }
+    };
 }

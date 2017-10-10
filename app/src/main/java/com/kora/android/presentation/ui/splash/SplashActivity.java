@@ -14,7 +14,7 @@ import com.kora.android.presentation.ui.registration.step4.FourthStepActivity;
 public class SplashActivity extends BaseActivity<SplashPresenter> implements SplashView {
 
     @Override
-    public void injectToComponent(ActivityComponent activityComponent) {
+    public void injectToComponent(final ActivityComponent activityComponent) {
         activityComponent.inject(this);
     }
 
@@ -24,7 +24,7 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
     }
 
     @Override
-    protected void onViewReady(Bundle savedInstanceState) {
+    protected void onViewReady(final Bundle savedInstanceState) {
 
     }
 

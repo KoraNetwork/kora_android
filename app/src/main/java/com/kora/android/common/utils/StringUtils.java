@@ -5,19 +5,20 @@ import java.util.regex.Pattern;
 
 public class StringUtils {
 
-    public static boolean isPhoneNumberValid(String phoneNumber) {
-        final Pattern pattern = Pattern.compile("^(\\+?)(\\d{10,12})$");
+    public static boolean isPhoneNumberValid(final String phoneNumber) {
+        final Pattern pattern = Pattern.compile("(\\d{9,11})$");
         final Matcher matcher = pattern.matcher(phoneNumber);
         return matcher.find();
     }
 
-    public static String deletePlusIfNeeded(String phoneNumber) {
+    public static String deletePlusIfNeeded(final String phoneNumber) {
         if (phoneNumber.startsWith("+"))
-            phoneNumber = phoneNumber.substring(1);
-        return phoneNumber;
+            return phoneNumber.substring(1);
+        else
+            return phoneNumber;
     }
 
-    public static boolean isConfirmationCodeValid(String confirmationCode) {
+    public static boolean isConfirmationCodeValid(final String confirmationCode) {
         final Pattern pattern = Pattern.compile("^(\\d{4})$");
         final Matcher matcher = pattern.matcher(confirmationCode);
         return matcher.find();

@@ -1,10 +1,13 @@
 package com.kora.android.presentation.ui.registration.step4;
 
+import com.kora.android.presentation.model.Country;
 import com.kora.android.presentation.ui.base.view.BaseView;
 
 import java.io.File;
 
 public interface FourthStepView extends BaseView<FourthStepPresenter> {
+
+    void showCurrency(final Country country);
 
     void showAvatar(final File file);
 
@@ -13,8 +16,6 @@ public interface FourthStepView extends BaseView<FourthStepPresenter> {
     void showTooShortUserName();
 
     void showIncorrectEmail();
-
-    void showEmptyCurrency();
 
     void showEmptyPassword();
     void showTooShortPassword();

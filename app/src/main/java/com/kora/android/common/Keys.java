@@ -1,7 +1,5 @@
 package com.kora.android.common;
 
-import android.Manifest;
-
 public interface Keys {
 
     interface SessionHelperKeys {
@@ -19,6 +17,7 @@ public interface Keys {
     interface RegistrationHelperKeys {
         String REGISTRATION_HELPER_FILE_NAME = "REGISTRATION_HELPER_FILE_NAME";
         String REGISTRATION_HELPER_FILE_PASSWORD = "REGISTRATION_HELPER_FILE_PASSWORD";
+        String REGISTRATION_HELPER_COUNTRY = "REGISTRATION_HELPER_COUNTRY";
         String REGISTRATION_HELPER_PHONE_NUMBER = "REGISTRATION_HELPER_PHONE_NUMBER";
         String REGISTRATION_HELPER_IDENTITY_ADDRESS = "REGISTRATION_HELPER_IDENTITY_ADDRESS";
         String REGISTRATION_HELPER_CREATOR_ADDRESS = "REGISTRATION_HELPER_CREATOR_ADDRESS";
@@ -27,7 +26,7 @@ public interface Keys {
     }
 
     interface PermissionChecker {
-        int PERMISSION_REQUEST_CODE_READ_PHONE_STATE_AND_READ_SMS = 111;
+        int PERMISSION_REQUEST_CODE_READ_SMS = 111;
         int PERMISSION_REQUEST_CODE_WRITE_EXTERNAL_STORAGE = 222;
     }
 
@@ -36,5 +35,22 @@ public interface Keys {
         String INCOMING_SMS_SENDER_2 = "InfoSms";
         String INCOMING_SMS_ACTION_RECEIVED = "INCOMING_SMS_ACTION_RECEIVED";
         String INCOMING_SMS_EXTRA_MESSAGE = "INCOMING_SMS_EXTRA_MESSAGE";
+    }
+
+    interface DefaultCountry {
+        String DEFAULT_COUNTRY_NAME = "United States";
+        String DEFAULT_COUNTRY_CURRENCY = "USD";
+        String DEFAULT_COUNTRY_PHONE_CODE = "+1";
+        String DEFAULT_COUNTRY_FLAG = "/images/flags/US.png";
+    }
+
+    interface SelectCountry {
+        int SELECT_COUNTRY_REQUEST_CODE = 111;
+        String SELECT_COUNTRY_EXTRA = "SELECT_COUNTRY_EXTRA";
+    }
+
+    interface SelectCurrency {
+        int SELECT_CURRENCY_REQUEST_CODE = 222;
+        String SELECT_CURRENCY_EXTRA = "SELECT_CURRENCY_EXTRA";
     }
 }

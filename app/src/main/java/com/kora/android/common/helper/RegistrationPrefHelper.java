@@ -2,11 +2,14 @@ package com.kora.android.common.helper;
 
 import android.content.Context;
 
+import com.google.gson.Gson;
+import com.kora.android.presentation.model.Country;
 import com.pddstudio.preferences.encrypted.EncryptedPreferences;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import static com.kora.android.common.Keys.RegistrationHelperKeys.REGISTRATION_HELPER_COUNTRY;
 import static com.kora.android.common.Keys.RegistrationHelperKeys.REGISTRATION_HELPER_CREATOR_ADDRESS;
 import static com.kora.android.common.Keys.RegistrationHelperKeys.REGISTRATION_HELPER_FILE_NAME;
 import static com.kora.android.common.Keys.RegistrationHelperKeys.REGISTRATION_HELPER_FILE_PASSWORD;
@@ -26,6 +29,16 @@ public class RegistrationPrefHelper {
                 .withPreferenceName(REGISTRATION_HELPER_FILE_NAME)
                 .withEncryptionPassword(REGISTRATION_HELPER_FILE_PASSWORD)
                 .build();
+    }
+
+    public void storeCountry(final Country country) {
+        final String countryString = new Gson().toJson(country);
+        mEncryptedPreferences.edit().putString(REGISTRATION_HELPER_COUNTRY, countryString).apply();
+    }
+
+    public Country getCountry() {
+        final String countryString = mEncryptedPreferences.getString(REGISTRATION_HELPER_COUNTRY, "");
+        return new Gson().fromJson(countryString, Country.class);
     }
 
     public void storePhoneNumber(final String phoneNumber) {

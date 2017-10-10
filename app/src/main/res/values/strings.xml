@@ -19,11 +19,13 @@
     <string name="registration_registration">Registration</string>
     <string name="registration_enter_phone_number">Please, enter your phone number and we will send you an SMS to verify your number</string>
     <string name="registration_phone_number">Phone number</string>
+    <string name="registration_phone_code_usa">+1</string>
     <string name="registration_phone_number_empty">Phone number filed is empty</string>
     <string name="registration_phone_number_incorrect">Phone number is incorrect</string>
     <string name="registration_send">SEND</string>
     <string name="registration_dialog_title_server_error_phone">Error</string>
     <string name="registration_dialog_message_server_error_phone">Phone number is already registered.</string>
+    <string name="registration_dialog_title_twilio_error_phone">Error</string>
 
     <string name="registration_confirmation_code">Confirmation code</string>
     <string name="registration_enter_confirmation_code">Please, enter your confirmation code from SMS</string>
@@ -59,7 +61,7 @@
     <string name="registration_user_name_incorrect">User name is incorrect, e.g. John_99</string>
     <string name="registration_user_name_too_short">User name is too short</string>
     <string name="registration_email_incorrect">Email is incorrect, e.g. john99@mail.com</string>
-    <string name="registration_currency_empty">Currency field is empty</string>
+    <string name="registration_currency_usa">USD</string>
     <string name="registration_password_empty">Password field is empty</string>
     <string name="registration_password_too_short">Password is too short</string>
     <string name="registration_confirm_password_empty">Confirm password field is empty</string>
@@ -69,6 +71,13 @@
     <string name="registration_dialog_message_back_pressed">If you will return on previous screen, you will need to create identity again. It will take time. Are you sure you want to go back?</string>
     <string name="registration_dialog_positive_back_pressed">Return</string>
     <string name="registration_dialog_negative_back_pressed">Cancel</string>
+
+    <string name="registration_select_country">Select country</string>
+    <string name="registration_enter_country">Enter country</string>
+    <string name="registration_brackets" formatted="false">" (%s)"</string>
+
+    <string name="registration_select_currecny">Select currency</string>
+    <string name="registration_enter_currency">Enter currency</string>
 
     <string name="font_name_muli">Muli</string>
     <string name="font_name_muli_bold">MuliBold</string>

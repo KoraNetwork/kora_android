@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class ErrorResponse {
+public class ErrorResponseRegistration {
 
     @SerializedName("error")
     private String mError;
@@ -49,7 +49,7 @@ public class ErrorResponse {
 
     @Override
     public String toString() {
-        return "ErrorResponse{" + "\n" +
+        return "ErrorResponseRegistration{" + "\n" +
                 "mError='" + mError + "\n" +
                 "mStatus=" + mStatus + "\n" +
                 "mSummary='" + mSummary + "\n" +

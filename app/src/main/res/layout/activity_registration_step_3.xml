@@ -119,12 +119,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edit_layout_create_pin_code"
+                android:layout_marginBottom="24dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="36dp"
                 android:clickable="true"
                 android:foreground="?android:attr/selectableItemBackground"
-                app:cardBackgroundColor="@color/color_button_blue"
+                app:cardBackgroundColor="@color/color_button_background_blue"
                 app:cardCornerRadius="4dp"
                 app:cardElevation="4dp"
                 app:contentPadding="12dp">
@@ -141,7 +142,7 @@
                         android:layout_centerVertical="true"
                         android:fontFamily="sans-serif"
                         android:text="@string/registration_next"
-                        android:textColor="@color/color_button_text"
+                        android:textColor="@color/color_button_text_white"
                         android:textSize="14sp"
                         app:font="@string/font_name_muli_bold" />
                 </RelativeLayout>
