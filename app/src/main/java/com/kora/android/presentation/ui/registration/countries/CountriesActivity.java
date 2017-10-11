@@ -12,7 +12,7 @@ import android.widget.EditText;
 import com.kora.android.R;
 import com.kora.android.common.utils.ViewUtils;
 import com.kora.android.injection.component.ActivityComponent;
-import com.kora.android.presentation.model.Country;
+import com.kora.android.presentation.model.CountryEntity;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.registration.countries.adapter.CountryAdapter;
 
@@ -70,8 +70,8 @@ public class CountriesActivity extends BaseActivity<CountriesPresenter> implemen
     }
 
     @Override
-    public void showCountries(final List<Country> countryList) {
-        mCountryAdapter.addAll(countryList);
+    public void showCountries(final List<CountryEntity> countryEntityList) {
+        mCountryAdapter.addAll(countryEntityList);
     }
 
     @Override
@@ -90,10 +90,10 @@ public class CountriesActivity extends BaseActivity<CountriesPresenter> implemen
     }
 
     @Override
-    public void onClickSelectCounrty(final Country country, final int position) {
+    public void onClickSelectCounrty(final CountryEntity countryEntity, final int position) {
         ViewUtils.hideKeyboard(this);
         final Intent intent = new Intent();
-        intent.putExtra(SELECT_COUNTRY_EXTRA, country);
+        intent.putExtra(SELECT_COUNTRY_EXTRA, countryEntity);
         setResult(RESULT_OK, intent);
         finish();
     }

@@ -6,7 +6,9 @@ import com.kora.android.KoraApplication;
 import com.kora.android.common.helper.RegistrationPrefHelper;
 import com.kora.android.common.helper.SessionPrefHelper;
 import com.kora.android.common.helper.ProxyPrefHelper;
+import com.kora.android.data.network.sercvice.LoginService;
 import com.kora.android.data.network.sercvice.RegistrationService;
+import com.kora.android.data.repository.LoginRepository;
 import com.kora.android.data.repository.RegistrationRepository;
 import com.kora.android.data.web3j.connection.Web3jConnection;
 import com.kora.android.injection.module.ApplicationModule;
@@ -41,6 +43,9 @@ public interface ApplicationComponent {
     EtherWalletStorage etherWalletStorage();
     Web3jConnection web3jConnection();
 
-    RegistrationService someService();
-    RegistrationRepository someRepository();
+    RegistrationService registrationService();
+    LoginService loginService();
+
+    RegistrationRepository registrationRepository();
+    LoginRepository loginRepository();
 }

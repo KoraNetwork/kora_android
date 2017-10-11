@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.kora.android.R;
-import com.kora.android.presentation.model.Country;
+import com.kora.android.presentation.model.CountryEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +28,8 @@ import static com.kora.android.data.network.Constants.API_BASE_URL;
 public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryViewHolder> implements Filterable {
 
     private final Context mContext;
-    private final List<Country> mOriginalCountryList;
-    private final List<Country> mFilteredCountryList;
+    private final List<CountryEntity> mOriginalCountryEntityList;
+    private final List<CountryEntity> mFilteredCountryEntityList;
     private final CountryFilter mCountryFilter;
 
     private OnItemClickListener mOnItemClickListener;
@@ -37,8 +37,8 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryV
     @Inject
     public CountryAdapter(final Context context) {
         mContext = context;
-        mOriginalCountryList = new ArrayList<>();
-        mFilteredCountryList = new ArrayList<>();
+        mOriginalCountryEntityList = new ArrayList<>();
+        mFilteredCountryEntityList = new ArrayList<>();
         mCountryFilter = new CountryFilter(this);
     }
 
@@ -50,13 +50,13 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryV
 
     @Override
     public void onBindViewHolder(final CountryAdapter.CountryViewHolder holder, final int position) {
-        final Country country = mFilteredCountryList.get(position);
-        holder.setData(country, position);
+        final CountryEntity countryEntity = mFilteredCountryEntityList.get(position);
+        holder.setData(countryEntity, position);
     }
 
     @Override
     public int getItemCount() {
-        return mFilteredCountryList.size();
+        return mFilteredCountryEntityList.size();
     }
 
     @Override
@@ -64,9 +64,9 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryV
         return mCountryFilter;
     }
 
-    public void addAll(List<Country> countryList) {
-        mOriginalCountryList.addAll(countryList);
-        mFilteredCountryList.addAll(countryList);
+    public void addAll(List<CountryEntity> countryEntityList) {
+        mOriginalCountryEntityList.addAll(countryEntityList);
+        mFilteredCountryEntityList.addAll(countryEntityList);
         notifyDataSetChanged();
     }
 
@@ -80,25 +80,25 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryV
 
         @Override
         protected FilterResults performFiltering(final CharSequence charSequence) {
-            mFilteredCountryList.clear();
+            mFilteredCountryEntityList.clear();
             final FilterResults filterResults = new FilterResults();
             if (charSequence.length() == 0) {
-                mFilteredCountryList.addAll(mOriginalCountryList);
+                mFilteredCountryEntityList.addAll(mOriginalCountryEntityList);
             } else {
                 final String filterPattern = charSequence.toString().toLowerCase().trim();
-                for (final Country country : mOriginalCountryList) {
-                    if (country.getName().toLowerCase().contains(filterPattern)
-                            && !mFilteredCountryList.contains(country)) {
-                        mFilteredCountryList.add(country);
+                for (final CountryEntity countryEntity : mOriginalCountryEntityList) {
+                    if (countryEntity.getName().toLowerCase().contains(filterPattern)
+                            && !mFilteredCountryEntityList.contains(countryEntity)) {
+                        mFilteredCountryEntityList.add(countryEntity);
                     }
-                    if (country.getPhoneCode().toLowerCase().contains(filterPattern)
-                            && !mFilteredCountryList.contains(country)) {
-                        mFilteredCountryList.add(country);
+                    if (countryEntity.getPhoneCode().toLowerCase().contains(filterPattern)
+                            && !mFilteredCountryEntityList.contains(countryEntity)) {
+                        mFilteredCountryEntityList.add(countryEntity);
                     }
                 }
             }
-            filterResults.values = mFilteredCountryList;
-            filterResults.count = mFilteredCountryList.size();
+            filterResults.values = mFilteredCountryEntityList;
+            filterResults.count = mFilteredCountryEntityList.size();
             return filterResults;
         }
 
@@ -122,21 +122,21 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryV
             ButterKnife.bind(this, itemView);
         }
 
-        public void setData(final Country country, final int position) {
+        public void setData(final CountryEntity countryEntity, final int position) {
             final Context context = mCvContainer.getContext();
             mCvContainer.setOnClickListener(v ->
-                    mOnItemClickListener.onClickSelectCounrty(country, position));
+                    mOnItemClickListener.onClickSelectCounrty(countryEntity, position));
             Glide.with(context)
-                    .load(API_BASE_URL + country.getFlag())
+                    .load(API_BASE_URL + countryEntity.getFlag())
                     .into(mIvCountryFlag);
-            final String countryNameAndPhoneCode = country.getName() +
-                    context.getString(R.string.registration_brackets, country.getPhoneCode());
+            final String countryNameAndPhoneCode = countryEntity.getName() +
+                    context.getString(R.string.registration_brackets, countryEntity.getPhoneCode());
             mTvCountryNameAndPhoneCode.setText(countryNameAndPhoneCode);
         }
     }
 
     public interface OnItemClickListener {
-        void onClickSelectCounrty(final Country country, final int position);
+        void onClickSelectCounrty(final CountryEntity countryEntity, final int position);
     }
 
     public void setOnItemClickListener(final OnItemClickListener onItemClickListener) {

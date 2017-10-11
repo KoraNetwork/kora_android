@@ -13,10 +13,9 @@ import com.kora.android.domain.usecase.test.ExportWalletUseCase;
 import com.kora.android.domain.usecase.test.GenerateWalletUseCase;
 import com.kora.android.domain.usecase.test.GetWalletListUseCase;
 import com.kora.android.injection.annotation.ConfigPersistent;
-import com.kora.android.presentation.model.Country;
+import com.kora.android.presentation.model.CountryEntity;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
-import com.kora.android.presentation.ui.registration.step1.FirstStepPresenter;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -247,7 +246,7 @@ public class MainPresenter extends BasePresenter<MainView> {
         }
     };
 
-    private class GetCountriesObserver extends DefaultSingleObserver<List<Country>> {
+    private class GetCountriesObserver extends DefaultSingleObserver<List<CountryEntity>> {
 
         @Override
         protected void onStart() {
@@ -256,12 +255,12 @@ public class MainPresenter extends BasePresenter<MainView> {
         }
 
         @Override
-        public void onSuccess(@NonNull final List<Country> countryList) {
+        public void onSuccess(@NonNull final List<CountryEntity> countryEntityList) {
             if (!isViewAttached()) return;
             getView().showProgress(false);
 
-            for (int i = 0; i < countryList.size(); i++)
-                Log.e("_____", countryList.get(i).toString());
+            for (int i = 0; i < countryEntityList.size(); i++)
+                Log.e("_____", countryEntityList.get(i).toString());
         }
 
         @Override

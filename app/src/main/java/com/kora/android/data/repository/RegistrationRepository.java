@@ -1,15 +1,13 @@
 package com.kora.android.data.repository;
 
 import com.kora.android.data.network.model.response.ConfirmationCodeResponse;
-import com.kora.android.data.network.model.response.CountryResponse;
 import com.kora.android.data.network.model.response.PhoneNumberResponse;
-import com.kora.android.data.network.model.response.RegistrationResponse;
-import com.kora.android.data.network.model.response.UserResponse;
-import com.kora.android.presentation.model.Country;
-import com.kora.android.presentation.model.User;
+import com.kora.android.presentation.model.CountryEntity;
+import com.kora.android.presentation.model.UserEntity;
 
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Single;
 
 public interface RegistrationRepository {
@@ -19,7 +17,7 @@ public interface RegistrationRepository {
     Single<ConfirmationCodeResponse> sendConfirmationCode(final String phoneNumber,
                                                           final String confirmationCode);
 
-    Single<UserResponse> register(final User user);
+    Completable register(final UserEntity userEntity);
 
-    Single <List<Country>>getCountries();
+    Single <List<CountryEntity>>getCountries();
 }

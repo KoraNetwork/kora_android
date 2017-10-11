@@ -12,7 +12,7 @@ import android.widget.EditText;
 import com.kora.android.R;
 import com.kora.android.common.utils.ViewUtils;
 import com.kora.android.injection.component.ActivityComponent;
-import com.kora.android.presentation.model.Country;
+import com.kora.android.presentation.model.CountryEntity;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.registration.currencies.adapter.CurrencyAdapter;
 
@@ -70,8 +70,8 @@ public class CurrenciesActivity extends BaseActivity<CurrenciesPresenter> implem
     }
 
     @Override
-    public void showCurrencies(final List<Country> countryList) {
-        mCurrencyAdapter.addAll(countryList);
+    public void showCurrencies(final List<CountryEntity> countryEntityList) {
+        mCurrencyAdapter.addAll(countryEntityList);
     }
 
     @Override
@@ -90,10 +90,10 @@ public class CurrenciesActivity extends BaseActivity<CurrenciesPresenter> implem
     }
 
     @Override
-    public void onClickSelectCurrency(final Country country, final int position) {
+    public void onClickSelectCurrency(final CountryEntity countryEntity, final int position) {
         ViewUtils.hideKeyboard(this);
         final Intent intent = new Intent();
-        intent.putExtra(SELECT_CURRENCY_EXTRA, country);
+        intent.putExtra(SELECT_CURRENCY_EXTRA, countryEntity);
         setResult(RESULT_OK, intent);
         finish();
     }

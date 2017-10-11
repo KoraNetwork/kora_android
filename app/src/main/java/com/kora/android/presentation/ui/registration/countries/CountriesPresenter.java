@@ -1,15 +1,12 @@
 package com.kora.android.presentation.ui.registration.countries;
 
-import android.util.Log;
-
 import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.domain.base.DefaultSingleObserver;
 import com.kora.android.domain.usecase.registration.GetCountriesUseCase;
 import com.kora.android.injection.annotation.ConfigPersistent;
-import com.kora.android.presentation.model.Country;
+import com.kora.android.presentation.model.CountryEntity;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
-import com.kora.android.presentation.ui.main.MainPresenter;
 
 import java.util.List;
 
@@ -40,7 +37,7 @@ public class CountriesPresenter extends BasePresenter<CountriesView> {
         }
     };
 
-    private class GetCountriesObserver extends DefaultSingleObserver<List<Country>> {
+    private class GetCountriesObserver extends DefaultSingleObserver<List<CountryEntity>> {
 
         @Override
         protected void onStart() {
@@ -49,11 +46,11 @@ public class CountriesPresenter extends BasePresenter<CountriesView> {
         }
 
         @Override
-        public void onSuccess(@NonNull final List<Country> countryList) {
+        public void onSuccess(@NonNull final List<CountryEntity> countryEntityList) {
             if (!isViewAttached()) return;
             getView().showProgress(false);
 
-            getView().showCountries(countryList);
+            getView().showCountries(countryEntityList);
         }
 
         @Override

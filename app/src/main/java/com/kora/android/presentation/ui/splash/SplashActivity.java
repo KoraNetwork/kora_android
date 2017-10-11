@@ -5,11 +5,7 @@ import android.os.Bundle;
 import com.kora.android.R;
 import com.kora.android.injection.component.ActivityComponent;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
-import com.kora.android.presentation.ui.main.MainActivity;
-import com.kora.android.presentation.ui.registration.step1.FirstStepActivity;
-import com.kora.android.presentation.ui.registration.step3.ThirdStepActivity;
-import com.kora.android.presentation.ui.registration.step3.ThirdStepView;
-import com.kora.android.presentation.ui.registration.step4.FourthStepActivity;
+import com.kora.android.presentation.ui.login.LoginActivity;
 
 public class SplashActivity extends BaseActivity<SplashPresenter> implements SplashView {
 
@@ -25,12 +21,6 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
 
     @Override
     protected void onViewReady(final Bundle savedInstanceState) {
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         getPresenter().startSplashTask();
     }
 
@@ -41,10 +31,12 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
 //        else
 //        startActivity(MainActivity.getLaunchIntent(this));
 
-        startActivity(FirstStepActivity.getLaunchIntent(this));
+//        startActivity(FirstStepActivity.getLaunchIntent(this));
 
 //        startActivity(ThirdStepActivity.getLaunchIntent(this));
 
 //        startActivity(FourthStepActivity.getLaunchIntent(this));
+
+        startActivity(LoginActivity.getLaunchIntent(this));
     }
 }

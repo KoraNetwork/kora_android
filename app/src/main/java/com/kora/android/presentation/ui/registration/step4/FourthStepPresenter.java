@@ -4,15 +4,17 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.kora.android.common.helper.RegistrationPrefHelper;
+import com.kora.android.common.helper.SessionPrefHelper;
 import com.kora.android.common.utils.StringUtils;
 import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.data.network.model.response.ErrorResponseRegistration;
-import com.kora.android.data.network.model.response.UserResponse;
+import com.kora.android.data.network.model.response.RegistrationResponse;
+import com.kora.android.domain.base.DefaultCompletableObserver;
 import com.kora.android.domain.base.DefaultSingleObserver;
-import com.kora.android.domain.usecase.registration.RegistrationUseCase;
+import com.kora.android.domain.usecase.registration.RegisterUseCase;
 import com.kora.android.injection.annotation.ConfigPersistent;
-import com.kora.android.presentation.model.Country;
-import com.kora.android.presentation.model.User;
+import com.kora.android.presentation.model.CountryEntity;
+import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
 
@@ -25,59 +27,62 @@ import io.reactivex.functions.Action;
 public class FourthStepPresenter extends BasePresenter<FourthStepView> {
 
     private final RegistrationPrefHelper mRegistrationPrefHelper;
-    private final RegistrationUseCase mRegistrationUseCase;
+    private final SessionPrefHelper mSessionPrefHelper;
+    private final RegisterUseCase mRegisterUseCase;
 
-    private User mUser;
+    private UserEntity mUserEntity;
     private String mConfirmPassword;
 
     @Inject
     public FourthStepPresenter(final RegistrationPrefHelper registrationPrefHelper,
-                               final RegistrationUseCase registrationUseCase) {
+                               final SessionPrefHelper sessionPrefHelper,
+                               final RegisterUseCase registerUseCase) {
         mRegistrationPrefHelper = registrationPrefHelper;
-        mRegistrationUseCase = registrationUseCase;
-        mUser = new User();
+        mSessionPrefHelper = sessionPrefHelper;
+        mRegisterUseCase = registerUseCase;
+        mUserEntity = new UserEntity();
     }
 
     public void startGetCountryTask() {
-        final Country country = mRegistrationPrefHelper.getCountry();
-        if (country != null)
-            getView().showCurrency(country);
+        final CountryEntity countryEntity = mRegistrationPrefHelper.getCountry();
+        if (countryEntity != null)
+            getView().showCurrency(countryEntity);
     }
 
     public void setAvatar(final String avatar) {
-        mUser.setAvatar(avatar);
+        mUserEntity.setAvatar(avatar);
     }
 
     public void setUserName(final String userName) {
-        mUser.setUserName(userName);
+        mUserEntity.setUserName(userName);
     }
 
     public void setLegalName(final String legalName) {
-        mUser.setLegalName(legalName);
+        mUserEntity.setLegalName(legalName);
     }
 
     public void setEmail(final String email) {
-        mUser.setEmail(email);
+        mUserEntity.setEmail(email);
     }
 
     public void setDateOfBirth(final String dateOfBirth) {
-        mUser.setDateOfBirth(dateOfBirth);
+        mUserEntity.setDateOfBirth(dateOfBirth);
     }
 
     public void setCurrency(final String currency) {
-        mUser.setCurrency(currency);
+        mUserEntity.setCurrency(currency);
     }
 
     public void setPostalCode(final String postalCode) {
-        mUser.setPostalCode(postalCode);
+        mUserEntity.setPostalCode(postalCode);
     }
 
     public void setAddress(final String address) {
-        mUser.setAddress(address);
+        mUserEntity.setAddress(address);
     }
 
     public void setPassword(final String password) {
-        mUser.setPassword(password);
+        mUserEntity.setPassword(password);
     }
 
     public void setConfirmPassword(final String confirmPassword) {
@@ -85,29 +90,29 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
     }
 
     public void startRegistrationTask() {
-        if (mUser.getUserName() == null || mUser.getUserName().isEmpty()) {
+        if (mUserEntity.getUserName() == null || mUserEntity.getUserName().isEmpty()) {
             getView().showEmptyUserName();
             return;
         }
-        if (!StringUtils.isUserNameValid(mUser.getUserName())) {
+        if (!StringUtils.isUserNameValid(mUserEntity.getUserName())) {
             getView().showIncorrectUserName();
             return;
         }
-        if (!StringUtils.isUserNameLongEnough(mUser.getUserName())) {
+        if (!StringUtils.isUserNameLongEnough(mUserEntity.getUserName())) {
             getView().showTooShortUserName();
             return;
         }
-        if (mUser.getEmail() != null && !mUser.getEmail().isEmpty()) {
-            if (!StringUtils.isEmailValid(mUser.getEmail())) {
+        if (mUserEntity.getEmail() != null && !mUserEntity.getEmail().isEmpty()) {
+            if (!StringUtils.isEmailValid(mUserEntity.getEmail())) {
                 getView().showIncorrectEmail();
                 return;
             }
         }
-        if (mUser.getPassword() == null || mUser.getPassword().isEmpty()) {
+        if (mUserEntity.getPassword() == null || mUserEntity.getPassword().isEmpty()) {
             getView().showEmptyPassword();
             return;
         }
-        if (!StringUtils.isPasswordLongEnough(mUser.getPassword())) {
+        if (!StringUtils.isPasswordLongEnough(mUserEntity.getPassword())) {
             getView().showTooShortPassword();
             return;
         }
@@ -115,31 +120,31 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
             getView().showEmptyConfirmPassword();
             return;
         }
-        if (!mUser.getPassword().equals(mConfirmPassword)) {
+        if (!mUserEntity.getPassword().equals(mConfirmPassword)) {
             getView().showIncorrectConfirmPassword();
             return;
         }
-        mUser.setPhoneNumber(mRegistrationPrefHelper.getPhoneNumber());
-        mUser.setIdentity(mRegistrationPrefHelper.getIdentityAddress());
-        mUser.setCreator(mRegistrationPrefHelper.getCreatorAddress());
-        mUser.setRecoveryKey(mRegistrationPrefHelper.getRecoveryAddress());
-        mUser.setOwner(mRegistrationPrefHelper.getOwnerAddress());
+        mUserEntity.setPhoneNumber(mRegistrationPrefHelper.getPhoneNumber());
+        mUserEntity.setIdentity(mRegistrationPrefHelper.getIdentityAddress());
+        mUserEntity.setCreator(mRegistrationPrefHelper.getCreatorAddress());
+        mUserEntity.setRecoveryKey(mRegistrationPrefHelper.getRecoveryAddress());
+        mUserEntity.setOwner(mRegistrationPrefHelper.getOwnerAddress());
 
-//        mUser.setPhoneNumber("380995551114");
-//        mUser.setIdentity("0x5c3D13b00F0fdE8dE60C45aB62EC0125C6b0F890".toLowerCase());
+//        mUserEntity.setPhoneNumber("380995551114");
+//        mUserEntity.setIdentity("0x5c3D13b00F0fdE8dE60C45aB62EC0125C6b0F890".toLowerCase());
 
-        mRegistrationUseCase.setData(mUser);
-        addDisposable(mRegistrationUseCase.execute(new RegistrationObserver()));
+        mRegisterUseCase.setData(mUserEntity);
+        addDisposable(mRegisterUseCase.execute(new RegisterObserver()));
     }
 
-    private Action mRegistrationAction = new Action() {
+    private Action mRegisterAction = new Action() {
         @Override
         public void run() throws Exception {
-            addDisposable(mRegistrationUseCase.execute(new RegistrationObserver()));
+            addDisposable(mRegisterUseCase.execute(new RegisterObserver()));
         }
     };
 
-    private class RegistrationObserver extends DefaultSingleObserver<UserResponse> {
+    private class RegisterObserver extends DefaultCompletableObserver {
 
         @Override
         protected void onStart() {
@@ -148,11 +153,10 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
         }
 
         @Override
-        public void onSuccess(@NonNull final UserResponse userResponse) {
+        public void onComplete() {
             if(!isViewAttached()) return;
             getView().showProgress(false);
 
-            Log.e("_____", userResponse.toString());
             getView().showNextScreen();
         }
 
@@ -165,7 +169,7 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
 
         @Override
         public void handleNetworkError(final RetrofitException retrofitException) {
-            getView().showErrorWithRetry(new RetryAction(mRegistrationAction));
+            getView().showErrorWithRetry(new RetryAction(mRegisterAction));
         }
 
         @Override
@@ -183,7 +187,7 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
                 if (errorResponseRegistration.getInvalidattributes().getPhone() != null)
                     message += errorResponseRegistration.getInvalidattributes().getPhone().get(0).getMessage();
                 if (!message.isEmpty())
-                    getView().showServerErrorValidation(message);
+                    getView().showServerError(message);
             } catch (final Exception exception) {
                 exception.printStackTrace();
             }

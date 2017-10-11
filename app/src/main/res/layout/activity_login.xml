@@ -1,39 +1,184 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:padding="30dp">
+    android:focusableInTouchMode="true">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="KORA\nLOGIN\nSCREEN"
-        android:textColor="@android:color/black"
-        android:textSize="20sp" />
-
-    <EditText
-        android:layout_marginTop="50dp"
-        android:id="@+id/edit_email"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="EMAIL"/>
+        android:layout_height="?attr/actionBarSize" />
 
-    <EditText
-        android:layout_marginTop="5dp"
-        android:id="@+id/edit_password"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="PASSWORD" />
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:fillViewport="true">
 
-    <Button
-        android:layout_marginTop="5dp"
-        android:id="@+id/button_login"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="LOGIN" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
+            <com.kora.android.views.CustomTextView
+                android:layout_centerHorizontal="true"
+                android:id="@+id/text_view_welcome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/login_welcome"
+                android:textColor="@color/color_text_title"
+                android:textSize="24sp"
+                app:font="@string/font_name_muli_semi_bold" />
 
-</LinearLayout>
+            <ImageView
+                android:layout_marginTop="24dp"
+                android:layout_below="@+id/text_view_welcome"
+                android:id="@+id/image_view_kora_logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_kora_logo"
+                android:layout_centerHorizontal="true"/>
+
+            <com.kora.android.views.CustomTextView
+                android:layout_below="@+id/image_view_kora_logo"
+                android:id="@+id/text_view_log_in"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="72dp"
+                android:text="@string/login_login"
+                android:textColor="@color/color_text_title"
+                android:textSize="20sp"
+                app:font="@string/font_name_muli_semi_bold" />
+
+            <com.kora.android.views.CustomTextView
+                android:id="@+id/text_view_enter_phone_name_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/text_view_log_in"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="6dp"
+                android:text="@string/login_enter_identifier"
+                android:textColor="@color/color_text_text"
+                android:textSize="16sp"
+                app:font="@string/font_name_muli" />
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/edit_layout_identifier"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/text_view_enter_phone_name_email"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="46dp"
+                app:errorEnabled="true">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/edit_text_identifier"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/login_identifier"
+                    android:inputType="text"
+                    android:maxLength="35"
+                    android:maxLines="1"
+                    android:textColor="@color/color_edit_text"
+                    android:textSize="18sp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/edit_layout_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edit_layout_identifier"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                app:errorEnabled="true">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/edit_text_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/login_password"
+                    android:inputType="textPassword"
+                    android:maxLength="10"
+                    android:maxLines="1"
+                    android:textColor="@color/color_edit_text"
+                    android:textSize="18sp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/card_view_login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edit_layout_password"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardBackgroundColor="@color/color_button_background_green"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="4dp"
+                app:contentPadding="12dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <com.kora.android.views.CustomTextView
+                        android:id="@+id/text_view_confirm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="sans-serif"
+                        android:text="@string/login_log_in"
+                        android:textColor="@color/color_button_text_white"
+                        android:textSize="14sp"
+                        app:font="@string/font_name_muli_bold" />
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/card_view_login"
+                android:layout_marginBottom="24dp"
+                android:layout_marginTop="48dp"
+                android:gravity="center">
+
+                <com.kora.android.views.CustomTextView
+                    android:id="@+id/text_view_no_account"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:text="@string/login_no_account"
+                    android:textColor="@color/color_text_text"
+                    android:textSize="14sp"
+                    app:font="@string/font_name_muli" />
+
+                <com.kora.android.views.CustomTextView
+                    android:id="@+id/text_view_registration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:fontFamily="sans-serif"
+                    android:text="@string/login_registration"
+                    android:textColor="@color/color_button_background_blue"
+                    android:textSize="14sp"
+                    app:font="@string/font_name_muli" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

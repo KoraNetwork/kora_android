@@ -13,7 +13,7 @@ import com.kora.android.R;
 import com.kora.android.common.permission.PermissionChecker;
 import com.kora.android.common.utils.ViewUtils;
 import com.kora.android.injection.component.ActivityComponent;
-import com.kora.android.presentation.model.Country;
+import com.kora.android.presentation.model.CountryEntity;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.registration.countries.CountriesActivity;
 import com.kora.android.presentation.ui.registration.step2.SecondStepActivity;
@@ -47,9 +47,7 @@ public class FirstStepActivity extends BaseActivity<FirstStepPresenter> implemen
     TextInputEditText mEtPhoneNumber;
 
     public static Intent getLaunchIntent(final BaseActivity baseActivity) {
-        final Intent intent = new Intent(baseActivity, FirstStepActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        return intent;
+        return new Intent(baseActivity, FirstStepActivity.class);
     }
 
     @Override
@@ -66,12 +64,7 @@ public class FirstStepActivity extends BaseActivity<FirstStepPresenter> implemen
     protected void onViewReady(final Bundle savedInstanceState) {
         setToolbar(mToolbar, R.drawable.ic_back_grey);
 
-        requestFocus();
         getPresenter().startDeleteWalletsTask();
-    }
-
-    private void requestFocus() {
-        mEtPhoneNumber.requestFocus();
     }
 
     @Override
@@ -92,15 +85,15 @@ public class FirstStepActivity extends BaseActivity<FirstStepPresenter> implemen
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         if (requestCode == SELECT_COUNTRY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                final Country country = data.getParcelableExtra(SELECT_COUNTRY_EXTRA);
-                getPresenter().setCountry(country);
+                final CountryEntity countryEntity = data.getParcelableExtra(SELECT_COUNTRY_EXTRA);
+                getPresenter().setCountry(countryEntity);
                 Glide.with(this)
-                        .load(API_BASE_URL + country.getFlag())
+                        .load(API_BASE_URL + countryEntity.getFlag())
                         .into(mIvCountryFlag);
-                mTvPhoneCode.setText(country.getPhoneCode());
+                mTvPhoneCode.setText(countryEntity.getPhoneCode());
                 mElPhoneNumber.setError(null);
                 mEtPhoneNumber.setText(null);
-                ViewUtils.setMaxLength(mEtPhoneNumber, country.getPhoneCode());
+                ViewUtils.setMaxLength(mEtPhoneNumber, countryEntity.getPhoneCode());
             }
         }
     }
@@ -132,14 +125,14 @@ public class FirstStepActivity extends BaseActivity<FirstStepPresenter> implemen
     }
 
     @Override
-    public void showServerErrorPhoneNumber() {
+    public void showServerError() {
         showDialogMessage(
                 R.string.registration_dialog_title_server_error_phone,
                 R.string.registration_dialog_message_server_error_phone);
     }
 
     @Override
-    public void showTwilioErrorPhoneNumber(final String message) {
+    public void showTwilioError(final String message) {
         showDialogMessage(
                 R.string.registration_dialog_title_twilio_error_phone,
                 message);

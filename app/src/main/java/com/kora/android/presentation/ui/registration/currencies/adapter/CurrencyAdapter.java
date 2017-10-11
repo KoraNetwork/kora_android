@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.kora.android.R;
-import com.kora.android.presentation.model.Country;
+import com.kora.android.presentation.model.CountryEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +28,8 @@ import static com.kora.android.data.network.Constants.API_BASE_URL;
 public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.CurrencyViewHolder> implements Filterable {
 
     private final Context mContext;
-    private final List<Country> mOriginalCountryList;
-    private final List<Country> mFilteredCountryList;
+    private final List<CountryEntity> mOriginalCountryEntityList;
+    private final List<CountryEntity> mFilteredCountryEntityList;
     private final CountryFilter mCountryFilter;
 
     private OnItemClickListener mOnItemClickListener;
@@ -37,8 +37,8 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
     @Inject
     public CurrencyAdapter(final Context context) {
         mContext = context;
-        mOriginalCountryList = new ArrayList<>();
-        mFilteredCountryList = new ArrayList<>();
+        mOriginalCountryEntityList = new ArrayList<>();
+        mFilteredCountryEntityList = new ArrayList<>();
         mCountryFilter = new CountryFilter(this);
     }
 
@@ -50,13 +50,13 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
 
     @Override
     public void onBindViewHolder(final CurrencyViewHolder holder, final int position) {
-        final Country country = mFilteredCountryList.get(position);
-        holder.setData(country, position);
+        final CountryEntity countryEntity = mFilteredCountryEntityList.get(position);
+        holder.setData(countryEntity, position);
     }
 
     @Override
     public int getItemCount() {
-        return mFilteredCountryList.size();
+        return mFilteredCountryEntityList.size();
     }
 
     @Override
@@ -64,9 +64,9 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
         return mCountryFilter;
     }
 
-    public void addAll(List<Country> countryList) {
-        mOriginalCountryList.addAll(countryList);
-        mFilteredCountryList.addAll(countryList);
+    public void addAll(List<CountryEntity> countryEntityList) {
+        mOriginalCountryEntityList.addAll(countryEntityList);
+        mFilteredCountryEntityList.addAll(countryEntityList);
         notifyDataSetChanged();
     }
 
@@ -80,21 +80,21 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
 
         @Override
         protected FilterResults performFiltering(final CharSequence charSequence) {
-            mFilteredCountryList.clear();
+            mFilteredCountryEntityList.clear();
             final FilterResults filterResults = new FilterResults();
             if (charSequence.length() == 0) {
-                mFilteredCountryList.addAll(mOriginalCountryList);
+                mFilteredCountryEntityList.addAll(mOriginalCountryEntityList);
             } else {
                 final String filterPattern = charSequence.toString().toLowerCase().trim();
-                for (final Country country : mOriginalCountryList) {
-                    if (country.getCurrency().toLowerCase().contains(filterPattern)
-                            && !mFilteredCountryList.contains(country)) {
-                        mFilteredCountryList.add(country);
+                for (final CountryEntity countryEntity : mOriginalCountryEntityList) {
+                    if (countryEntity.getCurrency().toLowerCase().contains(filterPattern)
+                            && !mFilteredCountryEntityList.contains(countryEntity)) {
+                        mFilteredCountryEntityList.add(countryEntity);
                     }
                 }
             }
-            filterResults.values = mFilteredCountryList;
-            filterResults.count = mFilteredCountryList.size();
+            filterResults.values = mFilteredCountryEntityList;
+            filterResults.count = mFilteredCountryEntityList.size();
             return filterResults;
         }
 
@@ -118,19 +118,19 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.Curren
             ButterKnife.bind(this, itemView);
         }
 
-        public void setData(final Country country, final int position) {
+        public void setData(final CountryEntity countryEntity, final int position) {
             final Context context = mCvContainer.getContext();
             mCvContainer.setOnClickListener(v ->
-                    mOnItemClickListener.onClickSelectCurrency(country, position));
+                    mOnItemClickListener.onClickSelectCurrency(countryEntity, position));
             Glide.with(context)
-                    .load(API_BASE_URL + country.getFlag())
+                    .load(API_BASE_URL + countryEntity.getFlag())
                     .into(mIvCountryFlag);
-            mTvCountryCurrency.setText(country.getCurrency());
+            mTvCountryCurrency.setText(countryEntity.getCurrency());
         }
     }
 
     public interface OnItemClickListener {
-        void onClickSelectCurrency(final Country country, final int position);
+        void onClickSelectCurrency(final CountryEntity countryEntity, final int position);
     }
 
     public void setOnItemClickListener(final OnItemClickListener onItemClickListener) {

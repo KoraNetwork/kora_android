@@ -1,8 +1,9 @@
 package com.kora.android.data.repository.mapper;
 
 import com.kora.android.data.network.model.response.CountryResponse;
-import com.kora.android.presentation.model.Country;
-import com.kora.android.presentation.model.User;
+import com.kora.android.data.network.model.response.UserResponse;
+import com.kora.android.presentation.model.CountryEntity;
+import com.kora.android.presentation.model.UserEntity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +12,7 @@ import javax.inject.Inject;
 
 import io.reactivex.ObservableTransformer;
 import io.reactivex.Single;
+import io.reactivex.SingleTransformer;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
@@ -21,8 +23,8 @@ public class RegistrationMapper {
 
     }
 
-    public Single<Map<String, RequestBody>> transformUserToFormData(final User user) {
-        return Single.just(user)
+    public Single<Map<String, RequestBody>> transformUserToFormData(final UserEntity userEntity) {
+        return Single.just(userEntity)
                 .map(model -> {
                     final HashMap<String, RequestBody> map = new HashMap<>();
                     if (model.getPhoneNumber() != null)
@@ -59,13 +61,32 @@ public class RegistrationMapper {
         return string != null ? RequestBody.create(MediaType.parse("multipart/form-data"), string) : null;
     }
 
-    public ObservableTransformer<CountryResponse, Country> transformResponseToEntityCountry() {
+    public ObservableTransformer<CountryResponse, CountryEntity> transformResponseToEntityCountry() {
         return countryResponseObservable -> countryResponseObservable
-                .map(countryResponse -> new Country()
+                .map(countryResponse -> new CountryEntity()
                         .addName(countryResponse.getName())
                         .addCurrency(countryResponse.getCurrency())
                         .addPhoneCode(countryResponse.getPhoneCode())
                         .addFlag(countryResponse.getFlag())
+                );
+    }
+
+    public SingleTransformer<UserResponse, UserEntity> transformResponseToEntityUser() {
+        return userResponseObservable -> userResponseObservable
+                .map(userResponse -> new UserEntity()
+                        .addAvatar(userResponse.getAvatar())
+                        .addPhoneNumber(userResponse.getPhoneNumber())
+                        .addIdentity(userResponse.getIdentity())
+                        .addCreator(userResponse.getCreator())
+                        .addRecoveryKey(userResponse.getRecoveryKey())
+                        .addOwner(userResponse.getOwner())
+                        .addUserName(userResponse.getUserName())
+                        .addLegalName(userResponse.getLegalName())
+                        .addEmail(userResponse.getEmail())
+                        .addDateOfBirth(userResponse.getDateOfBirth())
+                        .addCurrency(userResponse.getCurrency())
+                        .addPostalCode(userResponse.getPostalCode())
+                        .addAddress(userResponse.getAddress())
                 );
     }
 }

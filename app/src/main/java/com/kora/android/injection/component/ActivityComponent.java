@@ -2,6 +2,7 @@ package com.kora.android.injection.component;
 
 import com.kora.android.injection.annotation.PerActivity;
 import com.kora.android.injection.module.ActivityModule;
+import com.kora.android.presentation.ui.login.LoginActivity;
 import com.kora.android.presentation.ui.main.MainActivity;
 import com.kora.android.presentation.ui.registration.countries.CountriesActivity;
 import com.kora.android.presentation.ui.registration.currencies.CurrenciesActivity;
@@ -10,7 +11,6 @@ import com.kora.android.presentation.ui.registration.step2.SecondStepActivity;
 import com.kora.android.presentation.ui.registration.step3.ThirdStepActivity;
 import com.kora.android.presentation.ui.registration.step4.FourthStepActivity;
 import com.kora.android.presentation.ui.splash.SplashActivity;
-import com.kora.android.presentation.ui.welcome.WelcomeActivity;
 
 import dagger.Subcomponent;
 
@@ -19,7 +19,6 @@ import dagger.Subcomponent;
 public interface ActivityComponent {
 
     void inject(SplashActivity splashActivity);
-    void inject(WelcomeActivity welcomeActivity);
     void inject(MainActivity mainActivity);
 
     void inject(FirstStepActivity firstStepActivity);
@@ -29,4 +28,6 @@ public interface ActivityComponent {
 
     void inject(CountriesActivity countriesActivity);
     void inject(CurrenciesActivity currenciesActivity);
+
+    void inject(LoginActivity loginActivity);
 }

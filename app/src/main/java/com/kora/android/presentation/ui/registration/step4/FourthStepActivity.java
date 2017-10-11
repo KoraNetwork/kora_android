@@ -18,7 +18,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.kora.android.R;
 import com.kora.android.common.utils.ViewUtils;
 import com.kora.android.injection.component.ActivityComponent;
-import com.kora.android.presentation.model.Country;
+import com.kora.android.presentation.model.CountryEntity;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.registration.currencies.CurrenciesActivity;
 import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo;
@@ -104,12 +104,12 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
     }
 
     @Override
-    public void showCurrency(final Country country) {
+    public void showCurrency(final CountryEntity countryEntity) {
         Glide.with(this)
-                .load(API_BASE_URL + country.getFlag())
+                .load(API_BASE_URL + countryEntity.getFlag())
                 .into(mIvCountryFlag);
-        mTvCurrency.setText(country.getCurrency());
-        getPresenter().setCurrency(country.getCurrency());
+        mTvCurrency.setText(countryEntity.getCurrency());
+        getPresenter().setCurrency(countryEntity.getCurrency());
     }
 
     @OnClick({R.id.image_view_avatar, R.id.text_view_upload_photo})
@@ -200,12 +200,12 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         if (requestCode == SELECT_CURRENCY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                final Country country = data.getParcelableExtra(SELECT_CURRENCY_EXTRA);
-                getPresenter().setCurrency(country.getCurrency());
+                final CountryEntity countryEntity = data.getParcelableExtra(SELECT_CURRENCY_EXTRA);
+                getPresenter().setCurrency(countryEntity.getCurrency());
                 Glide.with(this)
-                        .load(API_BASE_URL + country.getFlag())
+                        .load(API_BASE_URL + countryEntity.getFlag())
                         .into(mIvCountryFlag);
-                mTvCurrency.setText(country.getCurrency());
+                mTvCurrency.setText(countryEntity.getCurrency());
             }
         }
     }
@@ -263,7 +263,7 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
     }
 
     @Override
-    public void showServerErrorValidation(final String message) {
-        showDialogMessage(R.string.registration_dialog_title_server_validation_error, message);
+    public void showServerError(final String message) {
+        showDialogMessage(R.string.registration_dialog_title_server_error_validation, message);
     }
 }

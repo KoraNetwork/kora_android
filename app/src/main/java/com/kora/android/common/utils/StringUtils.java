@@ -5,6 +5,23 @@ import java.util.regex.Pattern;
 
 public class StringUtils {
 
+    public static boolean isIdentifierValid(final String identifier) {
+        final Pattern phoneNumberPattern = Pattern.compile("(\\+?)(\\d{10,12})$");
+        final Matcher phoneNumberMatcher = phoneNumberPattern.matcher(identifier);
+
+        final Pattern userNamePattern = Pattern.compile("^[a-zA-Z0-9_]*$");
+        final Matcher userNameMatcher = userNamePattern.matcher(identifier);
+
+        final Pattern emailPattern = Pattern.compile("^(.)+(@)(.)+(\\.)(.)+$");
+        final Matcher emailMatcher = emailPattern.matcher(identifier);
+
+        return phoneNumberMatcher.find() || userNameMatcher.find() || emailMatcher.find();
+    }
+
+    public static boolean isIdentifierLongEnough(final String identifier) {
+        return identifier.length() >= 3;
+    }
+
     public static boolean isPhoneNumberValid(final String phoneNumber) {
         final Pattern pattern = Pattern.compile("(\\d{9,11})$");
         final Matcher matcher = pattern.matcher(phoneNumber);

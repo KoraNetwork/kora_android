@@ -99,7 +99,7 @@ public class ErrorResponseRegistration {
         }
     }
 
-    public static class UserNameUnique {
+    public static class UserName {
         @SerializedName("rule")
         private String mRule;
         @SerializedName("value")
@@ -133,7 +133,7 @@ public class ErrorResponseRegistration {
 
         @Override
         public String toString() {
-            return "UserNameUnique{" + "\n" +
+            return "UserName{" + "\n" +
                     "       mRule=" + mRule + "\n" +
                     "       mValue=" + mValue + "\n" +
                     "       mMessage='" + mMessage + "\n" +
@@ -187,8 +187,8 @@ public class ErrorResponseRegistration {
         @SerializedName("phone")
         private List<Phone> mPhone;
 
-        @SerializedName("userNameUnique")
-        private List<UserNameUnique> mUserNameUnique;
+        @SerializedName("userName")
+        private List<UserName> mUserName;
 
         @SerializedName("email")
         private List<Email> mEmail;
@@ -201,12 +201,12 @@ public class ErrorResponseRegistration {
             this.mEmail = mEmail;
         }
 
-        public List<UserNameUnique> getUserNameUnique() {
-            return mUserNameUnique;
+        public List<UserName> getUserNameUnique() {
+            return mUserName;
         }
 
-        public void setUserNameUnique(List<UserNameUnique> mUserNameUnique) {
-            this.mUserNameUnique = mUserNameUnique;
+        public void setUserName(List<UserName> mUserName) {
+            this.mUserName = mUserName;
         }
 
         public List<Phone> getPhone() {
@@ -221,7 +221,7 @@ public class ErrorResponseRegistration {
         public String toString() {
             return "Invalidattributes{" + "\n" +
                     "   mPhone=" + mPhone + "\n" +
-                    "   mUserNameUnique=" + mUserNameUnique + "\n" +
+                    "   mUserName=" + mUserName + "\n" +
                     "   mEmail=" + mEmail + "\n" +
                     "   }";
         }

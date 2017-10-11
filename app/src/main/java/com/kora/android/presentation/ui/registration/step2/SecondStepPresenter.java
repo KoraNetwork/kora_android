@@ -130,7 +130,7 @@ public class SecondStepPresenter extends BasePresenter<SecondStepView> {
             if (confirmationCodeResponse.isConfirmed()) {
                 getView().showNextScreen();
             } else {
-                getView().showServerErrorConfirmationCode();
+                getView().showServerError();
             }
         }
 
