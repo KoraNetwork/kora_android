@@ -4,7 +4,6 @@ import com.kora.android.common.helper.RegistrationPrefHelper;
 import com.kora.android.common.utils.StringUtils;
 import com.kora.android.data.network.config.ErrorModel;
 import com.kora.android.data.network.exception.RetrofitException;
-import com.kora.android.data.network.model.response.PhoneNumberResponse;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.usecase.registration.SendPhoneNumberUseCase;
 import com.kora.android.domain.usecase.wallet.DeleteWalletsUseCase;
@@ -112,7 +111,7 @@ public class FirstStepPresenter extends BasePresenter<FirstStepView> {
         }
     }
 
-    private class SendPhoneNumberObserver extends DefaultInternetSubscriber<PhoneNumberResponse> {
+    private class SendPhoneNumberObserver extends DefaultInternetSubscriber<Object> {
 
         @Override
         protected void onStart() {

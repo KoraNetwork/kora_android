@@ -1,6 +1,6 @@
 package com.kora.android.domain.usecase.registration;
 
-import com.kora.android.data.repository.RegistrationRepository;
+import com.kora.android.data.repository.AuthRepository;
 import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.AsyncUseCase;
 import com.kora.android.presentation.model.UserEntity;
@@ -12,13 +12,13 @@ import io.reactivex.Observable;
 @ConfigPersistent
 public class RegisterUseCase extends AsyncUseCase {
 
-    private final RegistrationRepository mRegistrationRepository;
+    private final AuthRepository mAuthRepository;
 
     private UserEntity mUserEntity;
 
     @Inject
-    public RegisterUseCase(final RegistrationRepository registrationRepository) {
-        this.mRegistrationRepository = registrationRepository;
+    public RegisterUseCase(final AuthRepository authRepository) {
+        this.mAuthRepository = authRepository;
     }
 
     public void setData(final UserEntity userEntity) {
@@ -27,6 +27,6 @@ public class RegisterUseCase extends AsyncUseCase {
 
     @Override
     protected Observable buildObservableTask() {
-        return mRegistrationRepository.register(mUserEntity);
+        return mAuthRepository.register(mUserEntity);
     }
 }

@@ -15,11 +15,29 @@ import io.reactivex.ObservableTransformer;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
-public class RegistrationMapper {
+public class AuthMapper {
 
     @Inject
-    public RegistrationMapper() {
+    public AuthMapper() {
+    }
 
+    public ObservableTransformer<UserResponse, UserEntity> transformResponseToEntityUser() {
+        return userResponseObservable -> userResponseObservable
+                .map(userResponse -> new UserEntity()
+                        .addAvatar(userResponse.getAvatar())
+                        .addPhoneNumber(userResponse.getPhoneNumber())
+                        .addIdentity(userResponse.getIdentity())
+                        .addCreator(userResponse.getCreator())
+                        .addRecoveryKey(userResponse.getRecoveryKey())
+                        .addOwner(userResponse.getOwner())
+                        .addUserName(userResponse.getUserName())
+                        .addLegalName(userResponse.getLegalName())
+                        .addEmail(userResponse.getEmail())
+                        .addDateOfBirth(userResponse.getDateOfBirth())
+                        .addCurrency(userResponse.getCurrency())
+                        .addPostalCode(userResponse.getPostalCode())
+                        .addAddress(userResponse.getAddress())
+                );
     }
 
     public Observable<Map<String, RequestBody>> transformUserToFormData(final UserEntity userEntity) {
@@ -67,25 +85,6 @@ public class RegistrationMapper {
                         .addCurrency(countryResponse.getCurrency())
                         .addPhoneCode(countryResponse.getPhoneCode())
                         .addFlag(countryResponse.getFlag())
-                );
-    }
-
-    public ObservableTransformer<UserResponse, UserEntity> transformResponseToEntityUser() {
-        return userResponseObservable -> userResponseObservable
-                .map(userResponse -> new UserEntity()
-                        .addAvatar(userResponse.getAvatar())
-                        .addPhoneNumber(userResponse.getPhoneNumber())
-                        .addIdentity(userResponse.getIdentity())
-                        .addCreator(userResponse.getCreator())
-                        .addRecoveryKey(userResponse.getRecoveryKey())
-                        .addOwner(userResponse.getOwner())
-                        .addUserName(userResponse.getUserName())
-                        .addLegalName(userResponse.getLegalName())
-                        .addEmail(userResponse.getEmail())
-                        .addDateOfBirth(userResponse.getDateOfBirth())
-                        .addCurrency(userResponse.getCurrency())
-                        .addPostalCode(userResponse.getPostalCode())
-                        .addAddress(userResponse.getAddress())
                 );
     }
 }

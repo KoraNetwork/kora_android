@@ -92,12 +92,6 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         Toast.makeText(this, "YEAH", Toast.LENGTH_LONG).show();
     }
 
-    @Override
-    public void showServerError() {
-        showDialogMessage(
-                R.string.login_dialog_title_server_error,
-                R.string.login_dialog_message_server_error);
-    }
 
     @OnClick(R.id.text_view_registration)
     public void onClickRegistration() {
