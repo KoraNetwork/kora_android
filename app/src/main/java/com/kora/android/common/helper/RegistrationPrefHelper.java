@@ -3,7 +3,7 @@ package com.kora.android.common.helper;
 import android.content.Context;
 
 import com.google.gson.Gson;
-import com.kora.android.presentation.model.Country;
+import com.kora.android.presentation.model.CountryEntity;
 import com.pddstudio.preferences.encrypted.EncryptedPreferences;
 
 import javax.inject.Inject;
@@ -31,14 +31,14 @@ public class RegistrationPrefHelper {
                 .build();
     }
 
-    public void storeCountry(final Country country) {
-        final String countryString = new Gson().toJson(country);
+    public void storeCountry(final CountryEntity countryEntity) {
+        final String countryString = new Gson().toJson(countryEntity);
         mEncryptedPreferences.edit().putString(REGISTRATION_HELPER_COUNTRY, countryString).apply();
     }
 
-    public Country getCountry() {
+    public CountryEntity getCountry() {
         final String countryString = mEncryptedPreferences.getString(REGISTRATION_HELPER_COUNTRY, "");
-        return new Gson().fromJson(countryString, Country.class);
+        return new Gson().fromJson(countryString, CountryEntity.class);
     }
 
     public void storePhoneNumber(final String phoneNumber) {

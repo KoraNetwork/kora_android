@@ -4,7 +4,7 @@ import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.usecase.registration.GetCountriesUseCase;
 import com.kora.android.di.annotation.ConfigPersistent;
-import com.kora.android.presentation.model.Country;
+import com.kora.android.presentation.model.CountryEntity;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
 
@@ -37,7 +37,7 @@ public class CountriesPresenter extends BasePresenter<CountriesView> {
         }
     };
 
-    private class GetCountriesObserver extends DefaultInternetSubscriber<List<Country>> {
+    private class GetCountriesObserver extends DefaultInternetSubscriber<List<CountryEntity>> {
 
         @Override
         protected void onStart() {
@@ -46,7 +46,7 @@ public class CountriesPresenter extends BasePresenter<CountriesView> {
         }
 
         @Override
-        public void onNext(@NonNull final List<Country> countryList) {
+        public void onNext(@NonNull final List<CountryEntity> countryList) {
             if (!isViewAttached()) return;
             getView().showCountries(countryList);
         }

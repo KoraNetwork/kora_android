@@ -50,12 +50,6 @@ public class SecondStepActivity extends BaseActivity<SecondStepPresenter> implem
     @Override
     protected void onViewReady(final Bundle savedInstanceState) {
         setToolbar(mToolbar, R.drawable.ic_back_grey);
-
-        requestFocus();
-    }
-
-    private void requestFocus() {
-        mEtConfirmationCode.requestFocus();
     }
 
     @Override
@@ -124,7 +118,7 @@ public class SecondStepActivity extends BaseActivity<SecondStepPresenter> implem
     }
 
     @Override
-    public void showServerErrorConfirmationCode() {
+    public void showServerError() {
         showDialogMessage(
                 R.string.registration_dialog_title_server_error_code,
                 R.string.registration_dialog_message_server_error_code);

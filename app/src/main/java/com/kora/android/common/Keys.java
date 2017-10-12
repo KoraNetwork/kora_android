@@ -2,16 +2,17 @@ package com.kora.android.common;
 
 public interface Keys {
 
-    interface SessionHelperKeys {
-        String SESSION_HELPER_FILE_NAME = "com_kora_android_session_helper_file_name";
-        String SESSION_HELPER_PASSWORD = "com_kora_android_session_helper_password";
-        String SESSION_HELPER_SESSION_TOKEN = "com_kora_android_session_helper_session_token";
-    }
-
     interface ProxyHelperKeys {
         String PROXY_HELPER_FILE_NAME = "com_kora_android_proxy_helper_file_name";
         String PROXY_HELPER_PASSWORD = "com_kora_android_proxy_helper_password";
         String PROXY_HELPER_ADDRESS = "com_kora_android_proxy_helper_address";
+    }
+
+    interface SessionHelperKeys {
+        String SESSION_HELPER_FILE_NAME = "SESSION_HELPER_FILE_NAME";
+        String SESSION_HELPER_PASSWORD = "SESSION_HELPER_PASSWORD";
+        String SESSION_HELPER_SESSION_TOKEN = "SESSION_HELPER_SESSION_TOKEN";
+        String SESSION_HELPER_USER = "SESSION_HELPER_USER";
     }
 
     interface RegistrationHelperKeys {

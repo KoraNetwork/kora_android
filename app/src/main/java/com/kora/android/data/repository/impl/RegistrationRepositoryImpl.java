@@ -1,21 +1,23 @@
-package com.kora.android.data.repository;
+package com.kora.android.data.repository.impl;
 
+import android.util.Log;
 import android.webkit.MimeTypeMap;
 
+import com.kora.android.common.helper.SessionPrefHelper;
+import com.kora.android.data.repository.RegistrationRepository;
 import com.kora.android.data.repository.mapper.RegistrationMapper;
 import com.kora.android.data.network.model.request.ConfirmationCodeRequest;
 import com.kora.android.data.network.model.request.PhoneNumberRequest;
 import com.kora.android.data.network.model.response.ConfirmationCodeResponse;
 import com.kora.android.data.network.model.response.PhoneNumberResponse;
-import com.kora.android.data.network.model.response.RegistrationResponse;
-import com.kora.android.data.network.model.response.UserResponse;
 import com.kora.android.data.network.sercvice.RegistrationService;
-import com.kora.android.presentation.model.Country;
-import com.kora.android.presentation.model.User;
+import com.kora.android.presentation.model.CountryEntity;
+import com.kora.android.presentation.model.UserEntity;
 
 import java.io.File;
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import okhttp3.MediaType;
@@ -24,13 +26,24 @@ import okhttp3.RequestBody;
 
 public class RegistrationRepositoryImpl implements RegistrationRepository {
 
+    private final SessionPrefHelper mSessionPrefHelper;
     private final RegistrationService mRegistrationService;
     private final RegistrationMapper mRegistrationMapper;
 
-    public RegistrationRepositoryImpl(final RegistrationService registrationService,
+    public RegistrationRepositoryImpl(final SessionPrefHelper sessionPrefHelper,
+                                      final RegistrationService registrationService,
                                       final RegistrationMapper registrationMapper) {
+        mSessionPrefHelper = sessionPrefHelper;
         mRegistrationService = registrationService;
         mRegistrationMapper = registrationMapper;
+    }
+
+    @Override
+    public Single<List<CountryEntity>> getCountries() {
+        return mRegistrationService.getCountries()
+                .flatMap(countryResponses -> Observable.fromIterable(countryResponses)
+                        .compose(mRegistrationMapper.transformResponseToEntityCountry())
+                ).toList();
     }
 
     @Override
@@ -50,21 +63,26 @@ public class RegistrationRepositoryImpl implements RegistrationRepository {
     }
 
     @Override
-    public Single<UserResponse> register(final User user) {
-        return mRegistrationMapper.transformUserToFormData(user)
+    public Completable register(final UserEntity userEntity) {
+        return mRegistrationMapper.transformUserToFormData(userEntity)
                 .flatMap(userMap ->
-                        mRegistrationService.register(userMap, getFile(user.getAvatar(), "avatar"))
-                                .map(RegistrationResponse::getUserResponse));
+                        mRegistrationService.register(userMap, getFile(userEntity.getAvatar(), "avatar"))
+                                .map(registrationResponse -> {
+                                    mSessionPrefHelper.storeSessionToken(registrationResponse.getSessionToken());
 
+                                    Log.e("_____", registrationResponse.getSessionToken());
+
+                                    return registrationResponse.getUserResponse();
+                                }).compose(mRegistrationMapper.transformResponseToEntityUser())
+                                .map(userEntity1 -> {
+                                    mSessionPrefHelper.storeUser(userEntity1);
+
+                                    Log.e("_____", userEntity1.toString());
+
+                                    return userEntity1;
+                                })
+                ).toCompletable();
     }
-
-    @Override
-    public Single<List<Country>> getCountries() {
-        return mRegistrationService.getCountries()
-                .flatMap(countryResponses -> Observable.fromIterable(countryResponses)
-                        .compose(mRegistrationMapper.transformResponseToEntityCountry())).toList();
-    }
-
 
     private MultipartBody.Part getFile(final String imagePath, final String key) {
         if (imagePath == null)

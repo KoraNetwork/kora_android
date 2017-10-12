@@ -13,7 +13,7 @@ import com.kora.android.domain.usecase.test.GetWalletListUseCase;
 import com.kora.android.domain.usecase.test.TestUseCase;
 import com.kora.android.domain.usecase.transaction.SendTransactionUseCase;
 import com.kora.android.di.annotation.ConfigPersistent;
-import com.kora.android.presentation.model.Country;
+import com.kora.android.presentation.model.CountryEntity;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
 
 import java.math.BigInteger;
@@ -275,7 +275,7 @@ public class MainPresenter extends BasePresenter<MainView> {
         }
     };
 
-    private class GetCountriesObserver extends DefaultInternetSubscriber<List<Country>> {
+    private class GetCountriesObserver extends DefaultInternetSubscriber<List<CountryEntity>> {
 
         @Override
         protected void onStart() {
@@ -284,7 +284,7 @@ public class MainPresenter extends BasePresenter<MainView> {
         }
 
         @Override
-        public void onNext(@NonNull final List<Country> countryList) {
+        public void onNext(@NonNull final List<CountryEntity> countryList) {
             for (int i = 0; i < countryList.size(); i++)
                 Log.e("_____", countryList.get(i).toString());
         }

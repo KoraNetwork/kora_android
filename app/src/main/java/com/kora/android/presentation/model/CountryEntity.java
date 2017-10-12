@@ -3,29 +3,29 @@ package com.kora.android.presentation.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Country implements Parcelable {
+public class CountryEntity implements Parcelable {
 
     private String mName;
     private String mCurrency;
     private String mPhoneCode;
     private String mFlag;
 
-    public Country addName(final String name) {
+    public CountryEntity addName(final String name) {
         mName = name;
         return this;
     }
 
-    public Country addCurrency(final String currency) {
+    public CountryEntity addCurrency(final String currency) {
         mCurrency = currency;
         return this;
     }
 
-    public Country addPhoneCode(final String phoneCode) {
+    public CountryEntity addPhoneCode(final String phoneCode) {
         mPhoneCode = phoneCode;
         return this;
     }
 
-    public Country addFlag(final String flag) {
+    public CountryEntity addFlag(final String flag) {
         mFlag = flag;
         return this;
     }
@@ -64,15 +64,13 @@ public class Country implements Parcelable {
 
     @Override
     public String toString() {
-        return "Country{" + "\n" +
+        return "CountryEntity{" + "\n" +
                 "mName=" + mName + "\n" +
                 "mCurrency=" + mCurrency + "\n" +
                 "mPhoneCode=" + mPhoneCode + "\n" +
                 "mFlag=" + mFlag + "\n" +
                 '}';
     }
-
-
 
     @Override
     public int describeContents() {
@@ -87,25 +85,26 @@ public class Country implements Parcelable {
         dest.writeString(this.mFlag);
     }
 
-    public Country() {
+    public CountryEntity() {
+
     }
 
-    protected Country(Parcel in) {
+    protected CountryEntity(Parcel in) {
         this.mName = in.readString();
         this.mCurrency = in.readString();
         this.mPhoneCode = in.readString();
         this.mFlag = in.readString();
     }
 
-    public static final Creator<Country> CREATOR = new Creator<Country>() {
+    public static final Creator<CountryEntity> CREATOR = new Creator<CountryEntity>() {
         @Override
-        public Country createFromParcel(Parcel source) {
-            return new Country(source);
+        public CountryEntity createFromParcel(Parcel source) {
+            return new CountryEntity(source);
         }
 
         @Override
-        public Country[] newArray(int size) {
-            return new Country[size];
+        public CountryEntity[] newArray(int size) {
+            return new CountryEntity[size];
         }
     };
 }

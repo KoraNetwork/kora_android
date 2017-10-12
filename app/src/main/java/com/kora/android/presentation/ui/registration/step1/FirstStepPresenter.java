@@ -8,7 +8,7 @@ import com.kora.android.data.network.model.response.PhoneNumberResponse;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.usecase.registration.SendPhoneNumberUseCase;
 import com.kora.android.domain.usecase.wallet.DeleteWalletsUseCase;
-import com.kora.android.presentation.model.Country;
+import com.kora.android.presentation.model.CountryEntity;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
 
@@ -28,7 +28,7 @@ public class FirstStepPresenter extends BasePresenter<FirstStepView> {
     private final DeleteWalletsUseCase mDeleteWalletsUseCase;
     private final SendPhoneNumberUseCase mSendPhoneNumberUseCase;
 
-    private Country mCountry;
+    private CountryEntity mCountryEntity;
     private String mPhoneNumber;
 
     @Inject
@@ -38,7 +38,7 @@ public class FirstStepPresenter extends BasePresenter<FirstStepView> {
         mRegistrationPrefHelper = registrationPrefHelper;
         mDeleteWalletsUseCase = deleteWalletsUseCase;
         mSendPhoneNumberUseCase = sendPhoneNumberUseCase;
-        mCountry = new Country()
+        mCountryEntity = new CountryEntity()
                 .addName(DEFAULT_COUNTRY_NAME)
                 .addCurrency(DEFAULT_COUNTRY_CURRENCY)
                 .addPhoneCode(DEFAULT_COUNTRY_PHONE_CODE)
@@ -60,7 +60,7 @@ public class FirstStepPresenter extends BasePresenter<FirstStepView> {
             return;
         }
         final String phoneNumber =
-                StringUtils.deletePlusIfNeeded(mCountry.getPhoneCode()) + mPhoneNumber;
+                StringUtils.deletePlusIfNeeded(mCountryEntity.getPhoneCode()) + mPhoneNumber;
 
         mSendPhoneNumberUseCase.setData(phoneNumber);
         mSendPhoneNumberUseCase.execute(new SendPhoneNumberObserver());
@@ -73,8 +73,8 @@ public class FirstStepPresenter extends BasePresenter<FirstStepView> {
         }
     };
 
-    public void setCountry(final Country country) {
-        mCountry = country;
+    public void setCountry(final CountryEntity countryEntity) {
+        mCountryEntity = countryEntity;
     }
 
     public void setPhoneNumber(final String phoneNumber) {
@@ -125,13 +125,13 @@ public class FirstStepPresenter extends BasePresenter<FirstStepView> {
             if (!isViewAttached()) return;
 
             if (phoneNumberResponse.isSent()) {
-                mRegistrationPrefHelper.storeCountry(mCountry);
+                mRegistrationPrefHelper.storeCountry(mCountryEntity);
                 final String phoneNumber =
-                        StringUtils.deletePlusIfNeeded(mCountry.getPhoneCode()) + mPhoneNumber;
+                        StringUtils.deletePlusIfNeeded(mCountryEntity.getPhoneCode()) + mPhoneNumber;
                 mRegistrationPrefHelper.storePhoneNumber(phoneNumber);
                 getView().showNextScreen();
             } else {
-                getView().showServerErrorPhoneNumber();
+                getView().showServerError();
             }
         }
 
