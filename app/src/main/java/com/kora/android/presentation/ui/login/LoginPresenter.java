@@ -1,7 +1,7 @@
 package com.kora.android.presentation.ui.login;
 
-import com.kora.android.common.helper.SessionPrefHelper;
 import com.kora.android.common.utils.StringUtils;
+import com.kora.android.data.network.config.ErrorModel;
 import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
@@ -17,16 +17,13 @@ import io.reactivex.functions.Action;
 @ConfigPersistent
 public class LoginPresenter extends BasePresenter<LoginView> {
 
-    private final SessionPrefHelper mSessionPrefHelper;
     private final LoginUseCase mLoginUseCase;
 
     private String mIdentifier;
     private String mPassword;
 
     @Inject
-    public LoginPresenter(final SessionPrefHelper sessionPrefHelper,
-                          final LoginUseCase loginUseCase) {
-        mSessionPrefHelper = sessionPrefHelper;
+    public LoginPresenter(final LoginUseCase loginUseCase) {
         mLoginUseCase = loginUseCase;
     }
 
@@ -95,14 +92,20 @@ public class LoginPresenter extends BasePresenter<LoginView> {
         }
 
         @Override
+        public void handleUnprocessableEntity(ErrorModel errorModel) {
+            if (!isViewAttached()) return;
+            getView().showError(errorModel.getError());
+        }
+
+        @Override
         public void handleNetworkError(final RetrofitException retrofitException) {
             if (!isViewAttached()) return;
             getView().showErrorWithRetry(new RetryAction(mLoginAction));
         }
+    }
 
-        @Override
-        public void handleUnauthorizedException() {
-            getView().showServerError();
-        }
+    @Override
+    public void onDetachView() {
+        mLoginUseCase.dispose();
     }
 }

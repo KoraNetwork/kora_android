@@ -5,14 +5,14 @@ import android.webkit.MimeTypeMap;
 import com.kora.android.common.Keys;
 import com.kora.android.common.preferences.PreferenceHandler;
 import com.kora.android.data.network.model.request.ConfirmationCodeRequest;
+import com.kora.android.data.network.model.request.LoginRequest;
 import com.kora.android.data.network.model.request.PhoneNumberRequest;
 import com.kora.android.data.network.model.response.ConfirmationCodeResponse;
-import com.kora.android.data.network.model.response.PhoneNumberResponse;
-import com.kora.android.data.network.model.response.RegistrationResponse;
+import com.kora.android.data.network.model.response.LoginResponse;
 import com.kora.android.data.network.model.response.UserResponse;
-import com.kora.android.data.network.sercvice.RegistrationService;
-import com.kora.android.data.repository.RegistrationRepository;
-import com.kora.android.data.repository.mapper.RegistrationMapper;
+import com.kora.android.data.network.service.AuthService;
+import com.kora.android.data.repository.AuthRepository;
+import com.kora.android.data.repository.mapper.AuthMapper;
 import com.kora.android.presentation.model.CountryEntity;
 import com.kora.android.presentation.model.UserEntity;
 
@@ -29,36 +29,45 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 @Singleton
-public class RegistrationRepositoryImpl implements RegistrationRepository {
+public class AuthRepositoryImpl implements AuthRepository {
 
+    private final AuthService mAuthService;
     private final PreferenceHandler mPreferenceHandler;
-    private final RegistrationService mRegistrationService;
-    private final RegistrationMapper mRegistrationMapper;
-
-
+    private final AuthMapper mAuthMapper;
 
     @Inject
-    public RegistrationRepositoryImpl(final PreferenceHandler preferenceHandler,
-                                      final RegistrationService registrationService,
-                                      final RegistrationMapper registrationMapper) {
+    public AuthRepositoryImpl(final AuthService authService,
+                              final PreferenceHandler preferenceHandler,
+                              final AuthMapper authMapper) {
+        mAuthService = authService;
         mPreferenceHandler = preferenceHandler;
-        mRegistrationService = registrationService;
-        mRegistrationMapper = registrationMapper;
+        mAuthMapper = authMapper;
+    }
+
+    @Override
+    public Observable<UserEntity> login(String identifier, String password) {
+        final LoginRequest loginRequest = new LoginRequest()
+                .addIdentifier(identifier)
+                .addPassword(password);
+        return mAuthService.login(loginRequest)
+                .compose(saveToken())
+                .compose(mAuthMapper.transformResponseToEntityUser())
+                .compose(storeUser());
     }
 
     @Override
     public Observable<List<CountryEntity>> getCountries() {
-        return mRegistrationService.getCountries()
+        return mAuthService.getCountries()
                 .flatMap(countryResponses -> Observable.fromIterable(countryResponses)
-                        .compose(mRegistrationMapper.transformResponseToEntityCountry())
+                        .compose(mAuthMapper.transformResponseToEntityCountry())
                 ).toList().toObservable();
     }
 
     @Override
-    public Observable<PhoneNumberResponse> sendPhoneNumber(final String phoneNumber) {
+    public Observable<Object> sendPhoneNumber(final String phoneNumber) {
         final PhoneNumberRequest phoneNumberRequest = new PhoneNumberRequest()
                 .addPhoneNumber(phoneNumber);
-        return mRegistrationService.sendPhoneNumber(phoneNumberRequest);
+        return mAuthService.sendPhoneNumber(phoneNumberRequest);
     }
 
     @Override
@@ -67,15 +76,15 @@ public class RegistrationRepositoryImpl implements RegistrationRepository {
         final ConfirmationCodeRequest confirmationCodeRequest = new ConfirmationCodeRequest()
                 .addPhoneNumber(phoneNumber)
                 .addConfirmationCode(confirmationCode);
-        return mRegistrationService.sendConfirmationCode(confirmationCodeRequest);
+        return mAuthService.sendConfirmationCode(confirmationCodeRequest);
     }
 
     @Override
     public Observable<UserEntity> register(final UserEntity userEntity) {
-        return mRegistrationMapper.transformUserToFormData(userEntity)
-                .flatMap(userMap -> mRegistrationService.register(userMap, getFile(userEntity.getAvatar(), "avatar"))
+        return mAuthMapper.transformUserToFormData(userEntity)
+                .flatMap(userMap -> mAuthService.register(userMap, getFile(userEntity.getAvatar(), "avatar"))
                         .compose(saveToken())
-                        .compose(mRegistrationMapper.transformResponseToEntityUser())
+                        .compose(mAuthMapper.transformResponseToEntityUser())
                         .compose(storeUser()));
     }
 
@@ -103,7 +112,7 @@ public class RegistrationRepositoryImpl implements RegistrationRepository {
         });
     }
 
-    public ObservableTransformer<RegistrationResponse, UserResponse> saveToken() {
+    public ObservableTransformer<LoginResponse, UserResponse> saveToken() {
         return observable -> observable.map(authResponse -> {
             mPreferenceHandler.rememberString(Keys.Shared.TOKEN, authResponse.getSessionToken());
             return authResponse.getUserResponse();

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
 import com.kora.android.R;
 import com.kora.android.common.permission.PermissionChecker;
@@ -118,9 +119,7 @@ public class SecondStepActivity extends BaseActivity<SecondStepPresenter> implem
     }
 
     @Override
-    public void showServerError() {
-        showDialogMessage(
-                R.string.registration_dialog_title_server_error_code,
-                R.string.registration_dialog_message_server_error_code);
+    public void showSendCodeMessage() {
+        Toast.makeText(this, R.string.registration_dialog_message_verification_dode_was_sent, Toast.LENGTH_SHORT).show();
     }
 }

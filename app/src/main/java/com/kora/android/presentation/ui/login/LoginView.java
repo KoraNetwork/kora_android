@@ -12,5 +12,4 @@ public interface LoginView extends BaseView<LoginPresenter> {
     void showTooShortPassword();
 
     void showNextScreen();
-    void showServerError();
 }

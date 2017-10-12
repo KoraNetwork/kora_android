@@ -1,8 +1,8 @@
 package com.kora.android.domain.usecase.registration;
 
-import com.kora.android.data.repository.RegistrationRepository;
-import com.kora.android.domain.base.AsyncUseCase;
+import com.kora.android.data.repository.AuthRepository;
 import com.kora.android.di.annotation.ConfigPersistent;
+import com.kora.android.domain.base.AsyncUseCase;
 
 import javax.inject.Inject;
 
@@ -11,14 +11,14 @@ import io.reactivex.Observable;
 @ConfigPersistent
 public class SendConfirmationCodeUseCase extends AsyncUseCase {
 
-    private final RegistrationRepository mRegistrationRepository;
+    private final AuthRepository mAuthRepository;
 
     private String mPhoneNumber;
     private String mConfirmationCode;
 
     @Inject
-    public SendConfirmationCodeUseCase(final RegistrationRepository registrationRepository) {
-        mRegistrationRepository = registrationRepository;
+    public SendConfirmationCodeUseCase(final AuthRepository authRepository) {
+        mAuthRepository = authRepository;
     }
 
     public void setData(final String phoneNumber,
@@ -29,6 +29,6 @@ public class SendConfirmationCodeUseCase extends AsyncUseCase {
 
     @Override
     protected Observable buildObservableTask() {
-        return mRegistrationRepository.sendConfirmationCode(mPhoneNumber, mConfirmationCode);
+        return mAuthRepository.sendConfirmationCode(mPhoneNumber, mConfirmationCode);
     }
 }

@@ -33,7 +33,7 @@ public interface Keys {
 
     interface IncomingSms {
         String INCOMING_SMS_SENDER_1 = "AutoInform";
-        String INCOMING_SMS_SENDER_2 = "InfoSms";
+        String INCOMING_SMS_SENDER_2 = "InfoSMS";
         String INCOMING_SMS_ACTION_RECEIVED = "INCOMING_SMS_ACTION_RECEIVED";
         String INCOMING_SMS_EXTRA_MESSAGE = "INCOMING_SMS_EXTRA_MESSAGE";
     }

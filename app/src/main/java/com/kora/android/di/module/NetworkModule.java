@@ -3,8 +3,7 @@ package com.kora.android.di.module;
 import com.github.aurae.retrofit2.LoganSquareConverterFactory;
 import com.kora.android.data.network.config.NetworkConfigImpl;
 import com.kora.android.data.network.factory.RxErrorHandlingCallAdapterFactory;
-import com.kora.android.data.network.sercvice.LoginService;
-import com.kora.android.data.network.sercvice.RegistrationService;
+import com.kora.android.data.network.service.AuthService;
 
 import java.util.concurrent.TimeUnit;
 
@@ -44,13 +43,7 @@ public class NetworkModule {
 
     @Singleton
     @Provides
-    RegistrationService provideRegistrationService(final Retrofit retrofit) {
-        return retrofit.create(RegistrationService.class);
-    }
-
-    @Singleton
-    @Provides
-    LoginService loginService(final Retrofit retrofit) {
-        return retrofit.create(LoginService.class);
+    AuthService provideAuthService(final Retrofit retrofit) {
+        return retrofit.create(AuthService.class);
     }
 }

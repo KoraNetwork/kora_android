@@ -7,6 +7,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.kora.android.R;
@@ -25,6 +26,7 @@ import butterknife.OnClick;
 import butterknife.OnTextChanged;
 
 import static android.Manifest.permission.READ_SMS;
+import static android.Manifest.permission.RECEIVE_SMS;
 import static com.kora.android.common.Keys.PermissionChecker.PERMISSION_REQUEST_CODE_READ_SMS;
 import static com.kora.android.common.Keys.SelectCountry.SELECT_COUNTRY_EXTRA;
 import static com.kora.android.common.Keys.SelectCountry.SELECT_COUNTRY_REQUEST_CODE;
@@ -73,7 +75,7 @@ public class FirstStepActivity extends BaseActivity<FirstStepPresenter> implemen
     }
 
     private void requestPermission() {
-        mPermissionChecker.requestPermissions(PERMISSION_REQUEST_CODE_READ_SMS, READ_SMS);
+        mPermissionChecker.requestPermissions(PERMISSION_REQUEST_CODE_READ_SMS, READ_SMS, RECEIVE_SMS);
     }
 
     @OnClick(R.id.card_view_select_country)
@@ -121,20 +123,7 @@ public class FirstStepActivity extends BaseActivity<FirstStepPresenter> implemen
 
     @Override
     public void showNextScreen() {
+        Toast.makeText(this, R.string.registration_dialog_message_verification_dode_was_sent, Toast.LENGTH_SHORT).show();
         startActivity(SecondStepActivity.getLaunchIntent(this));
-    }
-
-    @Override
-    public void showServerError() {
-        showDialogMessage(
-                R.string.registration_dialog_title_server_error_phone,
-                R.string.registration_dialog_message_server_error_phone);
-    }
-
-    @Override
-    public void showTwilioError(final String message) {
-        showDialogMessage(
-                R.string.registration_dialog_title_twilio_error_phone,
-                message);
     }
 }

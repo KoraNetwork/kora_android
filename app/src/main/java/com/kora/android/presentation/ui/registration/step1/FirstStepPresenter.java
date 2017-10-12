@@ -4,7 +4,6 @@ import com.kora.android.common.helper.RegistrationPrefHelper;
 import com.kora.android.common.utils.StringUtils;
 import com.kora.android.data.network.config.ErrorModel;
 import com.kora.android.data.network.exception.RetrofitException;
-import com.kora.android.data.network.model.response.PhoneNumberResponse;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.usecase.registration.SendPhoneNumberUseCase;
 import com.kora.android.domain.usecase.wallet.DeleteWalletsUseCase;
@@ -107,32 +106,17 @@ public class FirstStepPresenter extends BasePresenter<FirstStepView> {
 
         @Override
         public void handleUnprocessableEntity(ErrorModel errorModel) {
-            if(!isViewAttached()) return;
+            if (!isViewAttached()) return;
             getView().showError(errorModel.getError());
         }
     }
 
-    private class SendPhoneNumberObserver extends DefaultInternetSubscriber<PhoneNumberResponse> {
+    private class SendPhoneNumberObserver extends DefaultInternetSubscriber<Object> {
 
         @Override
         protected void onStart() {
             if (!isViewAttached()) return;
             getView().showProgress(true);
-        }
-
-        @Override
-        public void onNext(@NonNull final PhoneNumberResponse phoneNumberResponse) {
-            if (!isViewAttached()) return;
-
-            if (phoneNumberResponse.isSent()) {
-                mRegistrationPrefHelper.storeCountry(mCountryEntity);
-                final String phoneNumber =
-                        StringUtils.deletePlusIfNeeded(mCountryEntity.getPhoneCode()) + mPhoneNumber;
-                mRegistrationPrefHelper.storePhoneNumber(phoneNumber);
-                getView().showNextScreen();
-            } else {
-                getView().showServerError();
-            }
         }
 
         @Override
@@ -144,8 +128,15 @@ public class FirstStepPresenter extends BasePresenter<FirstStepView> {
 
         @Override
         public void onComplete() {
+            mRegistrationPrefHelper.storeCountry(mCountryEntity);
+            final String phoneNumber =
+                    StringUtils.deletePlusIfNeeded(mCountryEntity.getPhoneCode()) + mPhoneNumber;
+            mRegistrationPrefHelper.storePhoneNumber(phoneNumber);
+
             if (!isViewAttached()) return;
             getView().showProgress(false);
+            getView().showNextScreen();
+
         }
 
         @Override
