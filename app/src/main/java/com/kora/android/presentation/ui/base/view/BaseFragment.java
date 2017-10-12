@@ -15,10 +15,10 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.kora.android.KoraApplication;
-import com.kora.android.injection.component.ConfigPersistentComponent;
-import com.kora.android.injection.component.DaggerConfigPersistentComponent;
-import com.kora.android.injection.component.FragmentComponent;
-import com.kora.android.injection.module.FragmentModule;
+import com.kora.android.di.component.ConfigPersistentComponent;
+import com.kora.android.di.component.DaggerConfigPersistentComponent;
+import com.kora.android.di.component.FragmentComponent;
+import com.kora.android.di.module.FragmentModule;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.Presenter;
 

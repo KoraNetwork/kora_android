@@ -1,8 +1,8 @@
-package com.kora.android.injection.component;
+package com.kora.android.di.component;
 
-import com.kora.android.injection.annotation.ConfigPersistent;
-import com.kora.android.injection.module.ActivityModule;
-import com.kora.android.injection.module.FragmentModule;
+import com.kora.android.di.annotation.ConfigPersistent;
+import com.kora.android.di.module.ActivityModule;
+import com.kora.android.di.module.FragmentModule;
 
 import dagger.Component;
 

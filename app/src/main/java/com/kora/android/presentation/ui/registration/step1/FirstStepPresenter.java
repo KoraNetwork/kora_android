@@ -1,15 +1,11 @@
 package com.kora.android.presentation.ui.registration.step1;
 
-import android.util.Log;
-
-import com.google.gson.Gson;
 import com.kora.android.common.helper.RegistrationPrefHelper;
 import com.kora.android.common.utils.StringUtils;
+import com.kora.android.data.network.config.ErrorModel;
 import com.kora.android.data.network.exception.RetrofitException;
-import com.kora.android.data.network.model.response.ErrorResponseTwilio;
 import com.kora.android.data.network.model.response.PhoneNumberResponse;
-import com.kora.android.domain.base.DefaultCompletableObserver;
-import com.kora.android.domain.base.DefaultSingleObserver;
+import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.usecase.registration.SendPhoneNumberUseCase;
 import com.kora.android.domain.usecase.wallet.DeleteWalletsUseCase;
 import com.kora.android.presentation.model.Country;
@@ -51,7 +47,7 @@ public class FirstStepPresenter extends BasePresenter<FirstStepView> {
 
     public void startDeleteWalletsTask() {
         mRegistrationPrefHelper.clear();
-        addDisposable(mDeleteWalletsUseCase.execute(new DeleteWalletsObserver()));
+        mDeleteWalletsUseCase.execute(new DeleteWalletsObserver());
     }
 
     public void startSendPhoneNumberTask() {
@@ -67,13 +63,13 @@ public class FirstStepPresenter extends BasePresenter<FirstStepView> {
                 StringUtils.deletePlusIfNeeded(mCountry.getPhoneCode()) + mPhoneNumber;
 
         mSendPhoneNumberUseCase.setData(phoneNumber);
-        addDisposable(mSendPhoneNumberUseCase.execute(new SendPhoneNumberObserver()));
+        mSendPhoneNumberUseCase.execute(new SendPhoneNumberObserver());
     }
 
     private Action mSendPhoneNumberAction = new Action() {
         @Override
         public void run() throws Exception {
-            addDisposable(mSendPhoneNumberUseCase.execute(new SendPhoneNumberObserver()));
+            mSendPhoneNumberUseCase.execute(new SendPhoneNumberObserver());
         }
     };
 
@@ -85,7 +81,7 @@ public class FirstStepPresenter extends BasePresenter<FirstStepView> {
         mPhoneNumber = phoneNumber;
     }
 
-    private class DeleteWalletsObserver extends DefaultCompletableObserver {
+    private class DeleteWalletsObserver extends DefaultInternetSubscriber {
 
         @Override
         protected void onStart() {
@@ -98,7 +94,6 @@ public class FirstStepPresenter extends BasePresenter<FirstStepView> {
         public void onComplete() {
             if (!isViewAttached()) return;
             getView().showProgress(false);
-
             getView().showNextViews();
         }
 
@@ -108,23 +103,26 @@ public class FirstStepPresenter extends BasePresenter<FirstStepView> {
             if (!isViewAttached()) return;
             getView().showProgress(false);
 
-            Log.e("_____", throwable.toString());
-            throwable.printStackTrace();
+        }
+
+        @Override
+        public void handleUnprocessableEntity(ErrorModel errorModel) {
+            if(!isViewAttached()) return;
+            getView().showError(errorModel.getError());
         }
     }
 
-    private class SendPhoneNumberObserver extends DefaultSingleObserver<PhoneNumberResponse> {
+    private class SendPhoneNumberObserver extends DefaultInternetSubscriber<PhoneNumberResponse> {
 
         @Override
         protected void onStart() {
-            if(!isViewAttached()) return;
+            if (!isViewAttached()) return;
             getView().showProgress(true);
         }
 
         @Override
-        public void onSuccess(@NonNull final PhoneNumberResponse phoneNumberResponse) {
-            if(!isViewAttached()) return;
-            getView().showProgress(false);
+        public void onNext(@NonNull final PhoneNumberResponse phoneNumberResponse) {
+            if (!isViewAttached()) return;
 
             if (phoneNumberResponse.isSent()) {
                 mRegistrationPrefHelper.storeCountry(mCountry);
@@ -142,27 +140,29 @@ public class FirstStepPresenter extends BasePresenter<FirstStepView> {
             super.onError(e);
             if (!isViewAttached()) return;
             getView().showProgress(false);
+        }
 
-            Log.e("_____", e.toString());
-            e.printStackTrace();
+        @Override
+        public void onComplete() {
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+        }
+
+        @Override
+        public void handleUnprocessableEntity(ErrorModel errorModel) {
+            if (!isViewAttached()) return;
+            getView().showError(errorModel.getError());
         }
 
         @Override
         public void handleNetworkError(final RetrofitException retrofitException) {
             getView().showErrorWithRetry(new RetryAction(mSendPhoneNumberAction));
         }
+    }
 
-        @Override
-        public void handleValidationException(final RetrofitException retrofitException) {
-            try {
-                final String errorResponseString = new String(retrofitException.getResponse().errorBody().bytes(), "UTF-8");
-                final ErrorResponseTwilio errorResponseTwilio = new Gson().fromJson(errorResponseString, ErrorResponseTwilio.class);
-//                Log.e("_____", errorResponseString);
-//                Log.e("_____", errorResponseTwilio.toString());
-                getView().showTwilioErrorPhoneNumber(errorResponseTwilio.getMessage());
-            } catch (final Exception exception) {
-                exception.printStackTrace();
-            }
-        }
+    @Override
+    public void onDetachView() {
+        mDeleteWalletsUseCase.dispose();
+        mSendPhoneNumberUseCase.dispose();
     }
 }

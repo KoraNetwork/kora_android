@@ -1,15 +1,12 @@
 package com.kora.android.presentation.ui.registration.countries;
 
-import android.util.Log;
-
 import com.kora.android.data.network.exception.RetrofitException;
-import com.kora.android.domain.base.DefaultSingleObserver;
+import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.usecase.registration.GetCountriesUseCase;
-import com.kora.android.injection.annotation.ConfigPersistent;
+import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.presentation.model.Country;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
-import com.kora.android.presentation.ui.main.MainPresenter;
 
 import java.util.List;
 
@@ -30,17 +27,17 @@ public class CountriesPresenter extends BasePresenter<CountriesView> {
     }
 
     public void startGetCountriesTask() {
-        addDisposable(mGetCountriesUseCase.execute(new GetCountriesObserver()));
+        mGetCountriesUseCase.execute(new GetCountriesObserver());
     }
 
     private Action mGetPhoneNumberAction = new Action() {
         @Override
         public void run() throws Exception {
-            addDisposable(mGetCountriesUseCase.execute(new GetCountriesObserver()));
+            mGetCountriesUseCase.execute(new GetCountriesObserver());
         }
     };
 
-    private class GetCountriesObserver extends DefaultSingleObserver<List<Country>> {
+    private class GetCountriesObserver extends DefaultInternetSubscriber<List<Country>> {
 
         @Override
         protected void onStart() {
@@ -49,11 +46,15 @@ public class CountriesPresenter extends BasePresenter<CountriesView> {
         }
 
         @Override
-        public void onSuccess(@NonNull final List<Country> countryList) {
+        public void onNext(@NonNull final List<Country> countryList) {
+            if (!isViewAttached()) return;
+            getView().showCountries(countryList);
+        }
+
+        @Override
+        public void onComplete() {
             if (!isViewAttached()) return;
             getView().showProgress(false);
-
-            getView().showCountries(countryList);
         }
 
         @Override
@@ -67,5 +68,10 @@ public class CountriesPresenter extends BasePresenter<CountriesView> {
         public void handleNetworkError(final RetrofitException retrofitException) {
             getView().showErrorWithRetry(new RetryAction(mGetPhoneNumberAction));
         }
+    }
+
+    @Override
+    public void onDetachView() {
+        mGetCountriesUseCase.dispose();
     }
 }

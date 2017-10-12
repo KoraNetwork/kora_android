@@ -1,15 +1,14 @@
 package com.kora.android.presentation.ui.registration.step3;
 
-import android.util.Log;
-
 import com.kora.android.R;
 import com.kora.android.common.helper.RegistrationPrefHelper;
 import com.kora.android.common.utils.StringUtils;
+import com.kora.android.data.network.config.ErrorModel;
 import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.data.web3j.model.response.IdentityCreatedResponse;
-import com.kora.android.domain.base.DefaultSingleObserver;
+import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.usecase.identity.CreateIdentityUseCase;
-import com.kora.android.injection.annotation.ConfigPersistent;
+import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
 
@@ -42,18 +41,18 @@ public class ThirdStepPresenter  extends BasePresenter<ThirdStepView> {
         }
 
         mCreateIdentityUseCase.setData(pinCode);
-        addDisposable(mCreateIdentityUseCase.execute(new CreateIdentityUseCaseObserver()));
+        mCreateIdentityUseCase.execute(new CreateIdentityUseCaseObserver());
     }
 
 
     private Action mCreateIdentityAction = new Action() {
         @Override
         public void run() throws Exception {
-            addDisposable(mCreateIdentityUseCase.execute(new CreateIdentityUseCaseObserver()));
+            mCreateIdentityUseCase.execute(new CreateIdentityUseCaseObserver());
         }
     };
 
-    private class CreateIdentityUseCaseObserver extends DefaultSingleObserver<IdentityCreatedResponse> {
+    private class CreateIdentityUseCaseObserver extends DefaultInternetSubscriber<IdentityCreatedResponse> {
 
         @Override
         protected void onStart() {
@@ -62,15 +61,21 @@ public class ThirdStepPresenter  extends BasePresenter<ThirdStepView> {
         }
 
         @Override
-        public void onSuccess(@NonNull final IdentityCreatedResponse identityCreatedResponse) {
-            if (!isViewAttached()) return;
-            getView().showProgress(false);
-
+        public void onNext(@NonNull final IdentityCreatedResponse identityCreatedResponse) {
             mRegistrationPrefHelper.storeIdentityAddress(identityCreatedResponse.getIdentity());
             mRegistrationPrefHelper.storeCreatorAddress(identityCreatedResponse.getCreator());
             mRegistrationPrefHelper.storeRecoveryAddress(identityCreatedResponse.getRecoveryKey());
             mRegistrationPrefHelper.storeOwnerAddress(identityCreatedResponse.getOwner());
+
+            if(!isViewAttached()) return;
             getView().showNextScreen();
+        }
+
+
+        @Override
+        public void onComplete() {
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
         }
 
         @Override
@@ -79,13 +84,23 @@ public class ThirdStepPresenter  extends BasePresenter<ThirdStepView> {
             if (!isViewAttached()) return;
             getView().showProgress(false);
 
-            Log.e("_____", "onError()");
-            throwable.printStackTrace();
+        }
+
+        @Override
+        public void handleUnprocessableEntity(ErrorModel errorModel) {
+            if(!isViewAttached()) return;
+            getView().showError(errorModel.getError());
         }
 
         @Override
         public void handleNetworkError(final RetrofitException retrofitException) {
+            if(!isViewAttached()) return;
             getView().showErrorWithRetry(new RetryAction(mCreateIdentityAction));
         }
+    }
+
+    @Override
+    public void onDetachView() {
+        mCreateIdentityUseCase.dispose();
     }
 }

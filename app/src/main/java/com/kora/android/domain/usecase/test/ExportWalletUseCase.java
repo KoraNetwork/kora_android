@@ -5,12 +5,9 @@ import com.kora.android.domain.base.AsyncUseCase;
 
 import javax.inject.Inject;
 
-import io.reactivex.Completable;
 import io.reactivex.Observable;
-import io.reactivex.Single;
-import io.reactivex.observers.DisposableCompletableObserver;
 
-public class ExportWalletUseCase extends AsyncUseCase<DisposableCompletableObserver, Completable> {
+public class ExportWalletUseCase extends AsyncUseCase {
 
     private final EtherWalletStorage mEtherWalletStorage;
 
@@ -26,10 +23,10 @@ public class ExportWalletUseCase extends AsyncUseCase<DisposableCompletableObser
     }
 
     @Override
-    protected Completable buildTask() {
-        return Single.just(true).map(a -> {
+    protected Observable buildObservableTask() {
+        return Observable.just(true).map(a -> {
             mEtherWalletStorage.exportWallet(mWalletFileName);
             return a;
-        }).toCompletable();
+        });
     }
 }

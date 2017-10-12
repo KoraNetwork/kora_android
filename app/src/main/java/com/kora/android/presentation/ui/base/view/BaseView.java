@@ -20,4 +20,6 @@ public interface BaseView<P extends Presenter> {
                       @StringRes final  int stringId);
 
     void showErrorWithRetry(final RetryAction retryAction);
+
+    void showError(String error);
 }

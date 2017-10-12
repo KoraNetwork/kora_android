@@ -2,10 +2,10 @@ package com.kora.android.domain.usecase.test;
 
 import android.content.Context;
 
-import com.kora.android.domain.base.AsyncUseCase;
 import com.kora.android.data.web3j.model.EtherWallet;
 import com.kora.android.data.web3j.storage.EtherWalletStorage;
 import com.kora.android.data.web3j.utils.EtherWalletUtils;
+import com.kora.android.domain.base.AsyncUseCase;
 
 import org.spongycastle.util.encoders.Hex;
 import org.web3j.crypto.ECKeyPair;
@@ -14,10 +14,9 @@ import java.io.File;
 
 import javax.inject.Inject;
 
-import io.reactivex.Single;
-import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.Observable;
 
-public class GenerateWalletUseCase extends AsyncUseCase<DisposableSingleObserver, Single> {
+public class GenerateWalletUseCase extends AsyncUseCase {
 
     private final Context mContext;
     private final EtherWalletUtils mEtherWalletUtils;
@@ -42,8 +41,8 @@ public class GenerateWalletUseCase extends AsyncUseCase<DisposableSingleObserver
     }
 
     @Override
-    protected Single buildTask() {
-        return Single.just(true).map(a -> {
+    protected Observable buildObservableTask() {
+        return Observable.just(true).map(a -> {
             String walletFileName;
             if (mPrivateKey == null || mPrivateKey.isEmpty()) {
                 // create new wallet

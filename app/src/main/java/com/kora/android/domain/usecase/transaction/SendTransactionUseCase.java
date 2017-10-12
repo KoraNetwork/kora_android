@@ -1,7 +1,5 @@
 package com.kora.android.domain.usecase.transaction;
 
-import android.util.Log;
-
 import com.kora.android.data.network.enumclass.Kind;
 import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.data.web3j.connection.Web3jConnection;
@@ -22,10 +20,9 @@ import java.math.BigInteger;
 
 import javax.inject.Inject;
 
-import io.reactivex.Single;
-import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.Observable;
 
-public class SendTransactionUseCase extends AsyncUseCase<DisposableSingleObserver, Single> {
+public class SendTransactionUseCase extends AsyncUseCase {
 
     private final Web3jConnection mWeb3jConnection;
     private final EtherWalletStorage mEtherWalletStorage;
@@ -58,8 +55,8 @@ public class SendTransactionUseCase extends AsyncUseCase<DisposableSingleObserve
     }
 
     @Override
-    protected Single buildTask() {
-        return Single.just(true).map(a -> {
+    protected Observable buildObservableTask() {
+        return Observable.just(true).map(a -> {
 
             final Web3j web3j = mWeb3jConnection.getWeb3jRinkeby();
 

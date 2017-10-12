@@ -6,10 +6,9 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import io.reactivex.Completable;
-import io.reactivex.observers.DisposableCompletableObserver;
+import io.reactivex.Observable;
 
-public class SplashUseCase extends AsyncUseCase<DisposableCompletableObserver, Completable> {
+public class SplashUseCase extends AsyncUseCase {
 
     private final static int DELAY = 2000;
 
@@ -19,7 +18,7 @@ public class SplashUseCase extends AsyncUseCase<DisposableCompletableObserver, C
     }
 
     @Override
-    protected Completable buildTask() {
-        return Completable.timer(DELAY, TimeUnit.MILLISECONDS);
+    protected Observable buildObservableTask() {
+        return Observable.timer(DELAY, TimeUnit.MILLISECONDS);
     }
 }

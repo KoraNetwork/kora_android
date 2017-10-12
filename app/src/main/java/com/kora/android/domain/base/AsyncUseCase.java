@@ -1,50 +1,40 @@
 package com.kora.android.domain.base;
 
-import io.reactivex.Completable;
+import dagger.internal.Preconditions;
 import io.reactivex.Observable;
-import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.observers.DisposableCompletableObserver;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
-import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 
-public abstract class AsyncUseCase<T, O> extends UseCase<T, O> {
+public abstract class AsyncUseCase extends UseCase {
+
+    private final CompositeDisposable disposables = new CompositeDisposable();
 
     @Override
-    public T execute(final T observableTaskSubscriber) {
-        final O task;
-        if ((task = buildTask()) == null)
-            throw new RuntimeException("Error request not declared");
-        if (task instanceof Single) {
-            return (T) wrapToAsync((Single) task, (DisposableSingleObserver) observableTaskSubscriber);
-        } else if (task instanceof Observable) {
-            return (T) wrapToAsync((Observable) task, (DisposableObserver) observableTaskSubscriber);
-        } else if (task instanceof Completable) {
-            return (T) wrapToAsync((Completable) task, (DisposableCompletableObserver) observableTaskSubscriber);
-        } else {
-            throw new RuntimeException("Not allowed task type");
+    public void execute(DisposableObserver observableTaskSubscriber) {
+        final Observable requestObservable;
+        if ((requestObservable = buildObservableTask()) == null)
+            throw new RuntimeException("Error observable request not declared");
+        final Observable observable = requestObservable
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        addDisposable((Disposable) observable.subscribeWith(observableTaskSubscriber));
+
+    }
+
+    public void dispose() {
+        if (!disposables.isDisposed()) {
+            disposables.dispose();
+            disposables.clear();
         }
     }
 
-    private <T extends Single, O extends DisposableSingleObserver> O wrapToAsync(final T task,
-                                                                                 final O observer) {
-        return (O) task.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(observer);
-    }
-
-    private <T extends Observable, O extends DisposableObserver> O wrapToAsync(final T task,
-                                                                               final O observer) {
-        return (O) task.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(observer);
-    }
-
-    private <T extends Completable, O extends DisposableCompletableObserver> O wrapToAsync(final T task,
-                                                                                           final O observer) {
-        return task.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(observer);
+    protected void addDisposable(Disposable disposable) {
+        Preconditions.checkNotNull(disposable);
+        Preconditions.checkNotNull(disposables);
+        disposables.add(disposable);
     }
 }

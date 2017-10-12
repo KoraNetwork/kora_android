@@ -2,21 +2,19 @@ package com.kora.android.presentation.ui.main;
 
 import android.util.Log;
 
+import com.kora.android.data.network.config.ErrorModel;
 import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.data.web3j.model.EtherWallet;
-import com.kora.android.domain.base.DefaultCompletableObserver;
-import com.kora.android.domain.base.DefaultSingleObserver;
+import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.usecase.registration.GetCountriesUseCase;
-import com.kora.android.domain.usecase.test.TestUseCase;
-import com.kora.android.domain.usecase.transaction.SendTransactionUseCase;
 import com.kora.android.domain.usecase.test.ExportWalletUseCase;
 import com.kora.android.domain.usecase.test.GenerateWalletUseCase;
 import com.kora.android.domain.usecase.test.GetWalletListUseCase;
-import com.kora.android.injection.annotation.ConfigPersistent;
+import com.kora.android.domain.usecase.test.TestUseCase;
+import com.kora.android.domain.usecase.transaction.SendTransactionUseCase;
+import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.presentation.model.Country;
-import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
-import com.kora.android.presentation.ui.registration.step1.FirstStepPresenter;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -52,21 +50,21 @@ public class MainPresenter extends BasePresenter<MainView> {
     }
 
     public void startGetCountriesTask() {
-        addDisposable(mGetCountriesUseCase.execute(new GetCountriesObserver()));
+        mGetCountriesUseCase.execute(new GetCountriesObserver());
     }
 
     public void generateWallet(final String password, final String privateKey) {
         mGenerateWalletUseCase.setData(password, privateKey);
-        addDisposable(mGenerateWalletUseCase.execute(new GenerateWalletObserver()));
+        mGenerateWalletUseCase.execute(new GenerateWalletObserver());
     }
 
     public void getWalletList() {
-        addDisposable(mGetWalletListUseCase.execute(new GetWalletListObserver()));
+        mGetWalletListUseCase.execute(new GetWalletListObserver());
     }
 
     public void exportWallet(String walletFileNmae) {
         mExportWalletUseCase.setData(walletFileNmae);
-        addDisposable(mExportWalletUseCase.execute(new ExportWalletObserver()));
+        mExportWalletUseCase.execute(new ExportWalletObserver());
     }
 
     public void sendTransaction(final String walletFileName,
@@ -80,14 +78,14 @@ public class MainPresenter extends BasePresenter<MainView> {
                 addressFrom,
                 addressTo,
                 amount);
-        addDisposable(mSendTransactionUseCase.execute(new SendTransactionObserver()));
+        mSendTransactionUseCase.execute(new SendTransactionObserver());
     }
 
     public void createIdentity() {
-        addDisposable(mTestUseCase.execute(new CreateIdentityObserver()));
+        mTestUseCase.execute(new CreateIdentityObserver());
     }
 
-    private class GetWalletListObserver extends DefaultSingleObserver<List<EtherWallet>> {
+    private class GetWalletListObserver extends DefaultInternetSubscriber<List<EtherWallet>> {
         @Override
         protected void onStart() {
             if (!isViewAttached()) return;
@@ -95,7 +93,7 @@ public class MainPresenter extends BasePresenter<MainView> {
         }
 
         @Override
-        public void onSuccess(@NonNull List<EtherWallet> etherWalletList) {
+        public void onNext(@NonNull List<EtherWallet> etherWalletList) {
             if (etherWalletList == null)
                 Log.e("_____", "NULL");
             else if (etherWalletList.isEmpty())
@@ -106,6 +104,11 @@ public class MainPresenter extends BasePresenter<MainView> {
                 }
             }
 
+        }
+
+        @Override
+        public void onComplete() {
+            if (!isViewAttached()) return;
             getView().showProgress(false);
         }
 
@@ -118,9 +121,15 @@ public class MainPresenter extends BasePresenter<MainView> {
             if (!isViewAttached()) return;
             getView().showProgress(false);
         }
+
+        @Override
+        public void handleUnprocessableEntity(ErrorModel errorModel) {
+            if (!isViewAttached()) return;
+            getView().showError(errorModel.getError());
+        }
     }
 
-    private class GenerateWalletObserver extends DefaultSingleObserver<EtherWallet> {
+    private class GenerateWalletObserver extends DefaultInternetSubscriber<EtherWallet> {
         @Override
         protected void onStart() {
             if (!isViewAttached()) return;
@@ -128,24 +137,31 @@ public class MainPresenter extends BasePresenter<MainView> {
         }
 
         @Override
-        public void onSuccess(@NonNull EtherWallet etherWallet) {
+        public void onNext(@NonNull EtherWallet etherWallet) {
             Log.e("_____", etherWallet.toString());
+        }
 
+        @Override
+        public void onComplete() {
+            if (!isViewAttached()) return;
             getView().showProgress(false);
         }
 
         @Override
-        public void onError(@NonNull Throwable e) {
-            Log.e("_____", e.toString());
-            e.printStackTrace();
-
-            super.onError(e);
+        public void onError(Throwable throwable) {
+            super.onError(throwable);
             if (!isViewAttached()) return;
             getView().showProgress(false);
         }
+
+        @Override
+        public void handleUnprocessableEntity(ErrorModel errorModel) {
+            if (!isViewAttached()) return;
+            getView().showError(errorModel.getError());
+        }
     }
 
-    private class ExportWalletObserver extends DefaultCompletableObserver {
+    private class ExportWalletObserver extends DefaultInternetSubscriber {
         @Override
         protected void onStart() {
             if (!isViewAttached()) return;
@@ -155,7 +171,7 @@ public class MainPresenter extends BasePresenter<MainView> {
         @Override
         public void onComplete() {
             Log.e("_____", "EXPORTED");
-
+            if (!isViewAttached()) return;
             getView().showProgress(false);
         }
 
@@ -168,9 +184,15 @@ public class MainPresenter extends BasePresenter<MainView> {
             if (!isViewAttached()) return;
             getView().showProgress(false);
         }
+
+        @Override
+        public void handleUnprocessableEntity(ErrorModel errorModel) {
+            if (!isViewAttached()) return;
+            getView().showError(errorModel.getError());
+        }
     }
 
-    private class SendTransactionObserver extends DefaultSingleObserver<String> {
+    private class SendTransactionObserver extends DefaultInternetSubscriber<String> {
         @Override
         protected void onStart() {
             if (!isViewAttached()) return;
@@ -178,9 +200,12 @@ public class MainPresenter extends BasePresenter<MainView> {
         }
 
         @Override
-        public void onSuccess(@NonNull String transactionHash) {
+        public void onNext(@NonNull String transactionHash) {
             Log.e("_____", transactionHash);
+        }
 
+        @Override
+        public void onComplete() {
             if (!isViewAttached()) return;
             getView().showProgress(false);
         }
@@ -193,19 +218,19 @@ public class MainPresenter extends BasePresenter<MainView> {
         }
 
         @Override
-        public void handleNetworkError(RetrofitException retrofitException) {
-            Log.e("_____", retrofitException.getMessage());
-            retrofitException.printStackTrace();
-        }
-
-        @Override
         public void handleUnexpectedError(RetrofitException exception) {
             Log.e("_____", exception.getMessage());
             super.handleUnexpectedError(exception);
         }
+
+        @Override
+        public void handleUnprocessableEntity(ErrorModel errorModel) {
+            if (!isViewAttached()) return;
+            getView().showError(errorModel.getError());
+        }
     }
 
-    private class CreateIdentityObserver extends DefaultSingleObserver<String> {
+    private class CreateIdentityObserver extends DefaultInternetSubscriber<String> {
         @Override
         protected void onStart() {
             if (!isViewAttached()) return;
@@ -213,9 +238,12 @@ public class MainPresenter extends BasePresenter<MainView> {
         }
 
         @Override
-        public void onSuccess(@NonNull String transactionHash) {
+        public void onNext(@NonNull String transactionHash) {
             Log.e("_____", transactionHash);
+        }
 
+        @Override
+        public void onComplete() {
             if (!isViewAttached()) return;
             getView().showProgress(false);
         }
@@ -228,26 +256,26 @@ public class MainPresenter extends BasePresenter<MainView> {
         }
 
         @Override
-        public void handleNetworkError(RetrofitException retrofitException) {
-            Log.e("_____", retrofitException.getMessage());
-            retrofitException.printStackTrace();
-        }
-
-        @Override
         public void handleUnexpectedError(RetrofitException exception) {
             Log.e("_____", exception.getMessage());
             super.handleUnexpectedError(exception);
+        }
+
+        @Override
+        public void handleUnprocessableEntity(ErrorModel errorModel) {
+            if (!isViewAttached()) return;
+            getView().showError(errorModel.getError());
         }
     }
 
     private Action mGetPhoneNumberAction = new Action() {
         @Override
         public void run() throws Exception {
-            addDisposable(mGetCountriesUseCase.execute(new GetCountriesObserver()));
+            mGetCountriesUseCase.execute(new GetCountriesObserver());
         }
     };
 
-    private class GetCountriesObserver extends DefaultSingleObserver<List<Country>> {
+    private class GetCountriesObserver extends DefaultInternetSubscriber<List<Country>> {
 
         @Override
         protected void onStart() {
@@ -256,12 +284,15 @@ public class MainPresenter extends BasePresenter<MainView> {
         }
 
         @Override
-        public void onSuccess(@NonNull final List<Country> countryList) {
-            if (!isViewAttached()) return;
-            getView().showProgress(false);
-
+        public void onNext(@NonNull final List<Country> countryList) {
             for (int i = 0; i < countryList.size(); i++)
                 Log.e("_____", countryList.get(i).toString());
+        }
+
+        @Override
+        public void onComplete() {
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
         }
 
         @Override
@@ -272,8 +303,19 @@ public class MainPresenter extends BasePresenter<MainView> {
         }
 
         @Override
-        public void handleNetworkError(final RetrofitException retrofitException) {
-            getView().showErrorWithRetry(new RetryAction(mGetPhoneNumberAction));
+        public void handleUnprocessableEntity(ErrorModel errorModel) {
+            if (!isViewAttached()) return;
+            getView().showError(errorModel.getError());
         }
+    }
+
+    @Override
+    public void onDetachView() {
+        mGenerateWalletUseCase.dispose();
+        mGetWalletListUseCase.dispose();
+        mExportWalletUseCase.dispose();
+        mSendTransactionUseCase.dispose();
+        mTestUseCase.dispose();
+        mGetCountriesUseCase.dispose();
     }
 }

@@ -1,4 +1,4 @@
-package com.kora.android.injection.module;
+package com.kora.android.di.module;
 
 import android.app.Application;
 import android.content.Context;

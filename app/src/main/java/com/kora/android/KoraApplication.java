@@ -3,9 +3,10 @@ package com.kora.android;
 import android.app.Application;
 import android.content.Context;
 
-import com.kora.android.injection.component.ApplicationComponent;
-import com.kora.android.injection.component.DaggerApplicationComponent;
-import com.kora.android.injection.module.ApplicationModule;
+import com.kora.android.common.preferences.PreferenceHelper;
+import com.kora.android.di.component.ApplicationComponent;
+import com.kora.android.di.component.DaggerApplicationComponent;
+import com.kora.android.di.module.ApplicationModule;
 import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo;
 
 public class KoraApplication extends Application {
@@ -17,6 +18,8 @@ public class KoraApplication extends Application {
         super.onCreate();
 
         RxPaparazzo.register(this);
+
+        PreferenceHelper.init(this, "kora");
 
         getComponent().inject(this);
     }

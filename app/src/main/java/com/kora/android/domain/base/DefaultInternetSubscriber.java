@@ -1,61 +1,70 @@
 package com.kora.android.domain.base;
 
+import android.support.annotation.CallSuper;
+
+import com.kora.android.data.network.config.ErrorModel;
 import com.kora.android.data.network.enumclass.Kind;
 import com.kora.android.data.network.exception.RetrofitException;
 
+import java.io.IOException;
+
 import io.reactivex.annotations.NonNull;
-import io.reactivex.observers.DisposableSingleObserver;
 
-public class DefaultSingleObserver<T> extends DisposableSingleObserver<T> {
+public abstract class DefaultInternetSubscriber<T> extends DefaultDisposableObserver<T> {
 
-    @Override
-    public void onSuccess(@NonNull final T t) {
-
-    }
-
+    @CallSuper
     @Override
     public void onError(@NonNull final Throwable throwable) {
-        if(throwable instanceof RetrofitException){
+        if (throwable instanceof RetrofitException) {
             RetrofitException retrofitException = (RetrofitException) throwable;
             if (retrofitException.getKind() == Kind.NETWORK) {
                 handleNetworkError(retrofitException);
-            }else if(retrofitException.getKind() == Kind.HTTP) {
+            } else if (retrofitException.getKind() == Kind.HTTP) {
                 handleHttpError(retrofitException);
-            }else if(retrofitException.getKind() == Kind.UNEXPECTED) {
+            } else if (retrofitException.getKind() == Kind.UNEXPECTED) {
                 handleUnexpectedError(retrofitException);
             }
         }
     }
 
     private void handleHttpError(final RetrofitException retrofitException) {
+        ErrorModel parsedError;
         switch (retrofitException.getResponse().code()) {
             case 401:
                 handleUnauthorizedException();
                 break;
             case 422:
-                handleValidationException(retrofitException);
-                break;
-            case 504:
-                handleNetworkError(retrofitException);
+                parsedError = parseError(retrofitException);
+                if (parsedError == null) return;
+                handleUnprocessableEntity(parsedError);
                 break;
             case 500:
+            case 504:
+                handleInternalServerError();
                 break;
         }
     }
 
-    public void handleValidationException(final RetrofitException retrofitException) {
+    private ErrorModel parseError(final RetrofitException exception) {
+        try {
+            return exception.getErrorBodyAs(ErrorModel.class);
+        } catch (IOException e) {
+            return null;
+        }
+    }
 
+    public void handleUnprocessableEntity(final ErrorModel errorModel) {
     }
 
     public void handleNetworkError(final RetrofitException retrofitException) {
-
     }
 
     public void handleUnauthorizedException() {
-
     }
 
     public void handleUnexpectedError(final RetrofitException retrofitException) {
+    }
 
+    public void handleInternalServerError() {
     }
 }

@@ -4,18 +4,14 @@ import android.content.Context;
 import android.telephony.TelephonyManager;
 
 import com.kora.android.domain.base.AsyncUseCase;
-import com.kora.android.injection.annotation.ConfigPersistent;
-
-import java.util.concurrent.TimeUnit;
+import com.kora.android.di.annotation.ConfigPersistent;
 
 import javax.inject.Inject;
 
-import io.reactivex.Completable;
-import io.reactivex.Single;
-import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.Observable;
 
 @ConfigPersistent
-public class GetPhoneNumberUseCase extends AsyncUseCase<DisposableSingleObserver, Single> {
+public class GetPhoneNumberUseCase extends AsyncUseCase {
 
     private final Context mContext;
 
@@ -25,10 +21,10 @@ public class GetPhoneNumberUseCase extends AsyncUseCase<DisposableSingleObserver
     }
 
     @Override
-    protected Single buildTask() {
-        return Single.just(true).map(a -> {
+    protected Observable buildObservableTask() {
+        return Observable.just(true).map(a -> {
             final TelephonyManager telephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
-            return telephonyManager.getLine1Number();
+            return telephonyManager.getLine1Number(); // TODO: permissions
         });
     }
 }

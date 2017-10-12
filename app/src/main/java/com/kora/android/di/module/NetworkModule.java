@@ -1,4 +1,4 @@
-package com.kora.android.injection.module;
+package com.kora.android.di.module;
 
 import com.github.aurae.retrofit2.LoganSquareConverterFactory;
 import com.kora.android.data.network.config.NetworkConfigImpl;

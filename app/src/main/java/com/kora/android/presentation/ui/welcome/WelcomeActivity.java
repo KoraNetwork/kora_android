@@ -5,11 +5,10 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
 import com.kora.android.R;
-import com.kora.android.injection.component.ActivityComponent;
+import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 
 public class WelcomeActivity extends BaseActivity<WelcomePresenter> implements WelcomeView {
 

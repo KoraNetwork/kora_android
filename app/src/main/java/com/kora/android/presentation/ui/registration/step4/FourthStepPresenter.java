@@ -1,16 +1,13 @@
 package com.kora.android.presentation.ui.registration.step4;
 
-import android.util.Log;
-
-import com.google.gson.Gson;
 import com.kora.android.common.helper.RegistrationPrefHelper;
 import com.kora.android.common.utils.StringUtils;
+import com.kora.android.data.network.config.ErrorModel;
 import com.kora.android.data.network.exception.RetrofitException;
-import com.kora.android.data.network.model.response.ErrorResponseRegistration;
 import com.kora.android.data.network.model.response.UserResponse;
-import com.kora.android.domain.base.DefaultSingleObserver;
+import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.usecase.registration.RegistrationUseCase;
-import com.kora.android.injection.annotation.ConfigPersistent;
+import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.presentation.model.Country;
 import com.kora.android.presentation.model.User;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
@@ -129,17 +126,17 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
 //        mUser.setIdentity("0x5c3D13b00F0fdE8dE60C45aB62EC0125C6b0F890".toLowerCase());
 
         mRegistrationUseCase.setData(mUser);
-        addDisposable(mRegistrationUseCase.execute(new RegistrationObserver()));
+        mRegistrationUseCase.execute(new RegistrationObserver());
     }
 
     private Action mRegistrationAction = new Action() {
         @Override
         public void run() throws Exception {
-            addDisposable(mRegistrationUseCase.execute(new RegistrationObserver()));
+            mRegistrationUseCase.execute(new RegistrationObserver());
         }
     };
 
-    private class RegistrationObserver extends DefaultSingleObserver<UserResponse> {
+    private class RegistrationObserver extends DefaultInternetSubscriber<UserResponse> {
 
         @Override
         protected void onStart() {
@@ -148,11 +145,8 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
         }
 
         @Override
-        public void onSuccess(@NonNull final UserResponse userResponse) {
+        public void onNext(@NonNull final UserResponse userResponse) {
             if(!isViewAttached()) return;
-            getView().showProgress(false);
-
-            Log.e("_____", userResponse.toString());
             getView().showNextScreen();
         }
 
@@ -164,29 +158,26 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
         }
 
         @Override
-        public void handleNetworkError(final RetrofitException retrofitException) {
-            getView().showErrorWithRetry(new RetryAction(mRegistrationAction));
+        public void onComplete() {
+            if(!isViewAttached()) return;
+            getView().showProgress(false);
         }
 
         @Override
-        public void handleValidationException(final RetrofitException retrofitException) {
-            try {
-                final String errorResponseString = new String(retrofitException.getResponse().errorBody().bytes(), "UTF-8");
-                final ErrorResponseRegistration errorResponseRegistration = new Gson().fromJson(errorResponseString, ErrorResponseRegistration.class);
-//                Log.e("_____", errorResponseString);
-//                Log.e("_____", errorResponseRegistration.toString());
-                String message = "";
-                if (errorResponseRegistration.getInvalidattributes().getUserNameUnique() != null)
-                    message += errorResponseRegistration.getInvalidattributes().getUserNameUnique().get(0).getMessage();
-                if (errorResponseRegistration.getInvalidattributes().getEmail() != null)
-                    message += errorResponseRegistration.getInvalidattributes().getEmail().get(0).getMessage();
-                if (errorResponseRegistration.getInvalidattributes().getPhone() != null)
-                    message += errorResponseRegistration.getInvalidattributes().getPhone().get(0).getMessage();
-                if (!message.isEmpty())
-                    getView().showServerErrorValidation(message);
-            } catch (final Exception exception) {
-                exception.printStackTrace();
-            }
+        public void handleUnprocessableEntity(ErrorModel errorModel) {
+            if(!isViewAttached()) return;
+            getView().showError(errorModel.getError());
         }
+
+        @Override
+        public void handleNetworkError(final RetrofitException retrofitException) {
+            if (!isViewAttached()) return;
+            getView().showErrorWithRetry(new RetryAction(mRegistrationAction));
+        }
+    }
+
+    @Override
+    public void onDetachView() {
+        mRegistrationUseCase.dispose();
     }
 }

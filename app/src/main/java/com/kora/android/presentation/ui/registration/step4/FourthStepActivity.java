@@ -17,7 +17,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.kora.android.R;
 import com.kora.android.common.utils.ViewUtils;
-import com.kora.android.injection.component.ActivityComponent;
+import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.model.Country;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.registration.currencies.CurrenciesActivity;

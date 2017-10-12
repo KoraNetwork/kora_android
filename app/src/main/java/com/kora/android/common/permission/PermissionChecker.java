@@ -6,7 +6,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.SparseArray;
 
-import com.kora.android.injection.annotation.PerActivity;
+import com.kora.android.di.annotation.PerActivity;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 
 import javax.inject.Inject;

@@ -4,7 +4,7 @@ import android.app.Dialog;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 
-import com.kora.android.injection.component.ActivityComponent;
+import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.ui.base.presenter.Presenter;
 
 public interface BaseActivityView<P extends Presenter> extends BaseView<P> {

@@ -1,7 +1,7 @@
-package com.kora.android.injection.component;
+package com.kora.android.di.component;
 
-import com.kora.android.injection.annotation.PerActivity;
-import com.kora.android.injection.module.ActivityModule;
+import com.kora.android.di.annotation.PerActivity;
+import com.kora.android.di.module.ActivityModule;
 import com.kora.android.presentation.ui.main.MainActivity;
 import com.kora.android.presentation.ui.registration.countries.CountriesActivity;
 import com.kora.android.presentation.ui.registration.currencies.CurrenciesActivity;

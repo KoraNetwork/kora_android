@@ -1,21 +1,16 @@
 package com.kora.android.presentation.ui.main;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
-import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.kora.android.R;
 import com.kora.android.common.permission.PermissionChecker;
 import com.kora.android.common.permission.PermissionException;
-import com.kora.android.injection.component.ActivityComponent;
+import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
-
-import java.math.BigInteger;
 
 import javax.inject.Inject;
 

@@ -1,9 +1,9 @@
 package com.kora.android.presentation.ui.splash;
 
 import com.kora.android.common.helper.SessionPrefHelper;
-import com.kora.android.domain.base.DefaultCompletableObserver;
+import com.kora.android.di.annotation.ConfigPersistent;
+import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.usecase.splash.SplashUseCase;
-import com.kora.android.injection.annotation.ConfigPersistent;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
 
 import javax.inject.Inject;
@@ -22,15 +22,20 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     }
 
     public void startSplashTask() {
-        addDisposable(mSplashUseCase.execute(new SplashSubscriber()));
+        mSplashUseCase.execute(new SplashSubscriber());
     }
 
-    private class SplashSubscriber extends DefaultCompletableObserver {
+    private class SplashSubscriber extends DefaultInternetSubscriber {
 
         @Override
         public void onComplete() {
             if (!isViewAttached()) return;
             getView().showNextScreen(mSessionPrefHelper.getSessionToken().isEmpty());
         }
+    }
+
+    @Override
+    public void onDetachView() {
+        mSplashUseCase.dispose();
     }
 }

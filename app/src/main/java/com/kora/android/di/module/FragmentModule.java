@@ -1,4 +1,4 @@
-package com.kora.android.injection.module;
+package com.kora.android.di.module;
 
 import android.support.v4.app.Fragment;
 

@@ -5,10 +5,9 @@ import com.kora.android.domain.base.AsyncUseCase;
 
 import javax.inject.Inject;
 
-import io.reactivex.Single;
-import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.Observable;
 
-public class GetWalletListUseCase extends AsyncUseCase<DisposableSingleObserver, Single> {
+public class GetWalletListUseCase extends AsyncUseCase {
 
     private final EtherWalletStorage mEtherWalletStorage;
 
@@ -18,7 +17,7 @@ public class GetWalletListUseCase extends AsyncUseCase<DisposableSingleObserver,
     }
 
     @Override
-    protected Single buildTask() {
-        return Single.just(mEtherWalletStorage.getWalletList());
+    protected Observable buildObservableTask() {
+        return Observable.just(mEtherWalletStorage.getWalletList());
     }
 }

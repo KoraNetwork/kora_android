@@ -19,10 +19,10 @@ import android.widget.Toast;
 
 import com.kora.android.KoraApplication;
 import com.kora.android.R;
-import com.kora.android.injection.component.ActivityComponent;
-import com.kora.android.injection.component.ConfigPersistentComponent;
-import com.kora.android.injection.component.DaggerConfigPersistentComponent;
-import com.kora.android.injection.module.ActivityModule;
+import com.kora.android.di.component.ActivityComponent;
+import com.kora.android.di.component.ConfigPersistentComponent;
+import com.kora.android.di.component.DaggerConfigPersistentComponent;
+import com.kora.android.di.module.ActivityModule;
 import com.kora.android.presentation.ui.base.custom.MultiDialog;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
@@ -145,6 +145,11 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     @Override
     public void showToastMessage(@NonNull String text) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showError(String error) {
+        showDialogMessage(R.string.error_title, error);
     }
 
     @Override

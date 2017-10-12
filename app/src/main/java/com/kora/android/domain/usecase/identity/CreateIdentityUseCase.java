@@ -24,10 +24,9 @@ import java.io.File;
 
 import javax.inject.Inject;
 
-import io.reactivex.Single;
-import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.Observable;
 
-public class CreateIdentityUseCase extends AsyncUseCase<DisposableSingleObserver, Single> {
+public class CreateIdentityUseCase extends AsyncUseCase {
 
     private final Context mContext;
     private final Web3jConnection mWeb3jConnection;
@@ -52,8 +51,8 @@ public class CreateIdentityUseCase extends AsyncUseCase<DisposableSingleObserver
     }
 
     @Override
-    protected Single buildTask() {
-        return Single.just(true).map(a -> {
+    protected Observable buildObservableTask() {
+        return Observable.just(true).map(a -> {
             final String ownerWalletFileName = mEtherWalletUtils.generateNewWalletFile(
                     mPinCode,
                     new File(mContext.getFilesDir(), ""));

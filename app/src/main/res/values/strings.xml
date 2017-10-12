@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Kora</string>
 
+    <string name="error_title">Error</string>
+
     <string name="dialog_progress_loading">Loading</string>
 
     <string name="dialog_retry_alert_title">Please try again later</string>

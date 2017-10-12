@@ -2,16 +2,15 @@ package com.kora.android.domain.usecase.registration;
 
 import com.kora.android.data.repository.RegistrationRepository;
 import com.kora.android.domain.base.AsyncUseCase;
-import com.kora.android.injection.annotation.ConfigPersistent;
+import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.presentation.model.User;
 
 import javax.inject.Inject;
 
-import io.reactivex.Single;
-import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.Observable;
 
 @ConfigPersistent
-public class RegistrationUseCase extends AsyncUseCase<DisposableSingleObserver, Single> {
+public class RegistrationUseCase extends AsyncUseCase {
 
     private final RegistrationRepository mRegistrationRepository;
 
@@ -27,7 +26,7 @@ public class RegistrationUseCase extends AsyncUseCase<DisposableSingleObserver, 
     }
 
     @Override
-    protected Single buildTask() {
+    protected Observable buildObservableTask() {
         return mRegistrationRepository.register(mUser);
     }
 }

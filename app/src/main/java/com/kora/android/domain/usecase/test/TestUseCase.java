@@ -1,14 +1,10 @@
 package com.kora.android.domain.usecase.test;
 
-import android.app.AlarmManager;
 import android.util.Log;
 
 import com.kora.android.common.helper.ProxyPrefHelper;
-import com.kora.android.data.network.enumclass.Kind;
-import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.data.web3j.connection.Web3jConnection;
 import com.kora.android.data.web3j.smart_contracts.HumanStandardToken;
-import com.kora.android.data.web3j.smart_contracts.IdentityManager;
 import com.kora.android.data.web3j.smart_contracts.MetaIdentityManager;
 import com.kora.android.data.web3j.storage.EtherWalletStorage;
 import com.kora.android.domain.base.AsyncUseCase;
@@ -17,47 +13,31 @@ import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.FunctionReturnDecoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Address;
-import org.web3j.abi.datatypes.Bool;
 import org.web3j.abi.datatypes.DynamicBytes;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
-import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Uint256;
-import org.web3j.abi.datatypes.generated.Uint8;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.Response;
-
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthCall;
-import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
-import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.web3j.tx.ClientTransactionManager;
-import org.web3j.tx.Contract;
-import org.web3j.tx.RawTransactionManager;
-import org.web3j.tx.TransactionManager;
-import org.web3j.utils.Convert;
 import org.web3j.utils.Numeric;
 
-import java.io.IOException;
-import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import javax.inject.Inject;
 
-import io.reactivex.Single;
-import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.Observable;
 
-public class TestUseCase extends AsyncUseCase<DisposableSingleObserver, Single> {
+public class TestUseCase extends AsyncUseCase {
 
     private final Web3jConnection mWeb3jConnection;
     private final EtherWalletStorage mEtherWalletStorage;
@@ -75,8 +55,8 @@ public class TestUseCase extends AsyncUseCase<DisposableSingleObserver, Single> 
     }
 
     @Override
-    protected Single buildTask() {
-        return Single.just(true).map(a -> {
+    protected Observable buildObservableTask() {
+        return Observable.just(true).map(a -> {
 
             final String ownerFileName = "5c3d13b00f0fde8de60c45ab62ec0125c6b0f890".toLowerCase();
             final String password = "123456789";

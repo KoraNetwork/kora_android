@@ -1,13 +1,12 @@
 package com.kora.android.presentation.ui.registration.currencies;
 
 import com.kora.android.data.network.exception.RetrofitException;
-import com.kora.android.domain.base.DefaultSingleObserver;
+import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.usecase.registration.GetCountriesUseCase;
-import com.kora.android.injection.annotation.ConfigPersistent;
+import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.presentation.model.Country;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
-import com.kora.android.presentation.ui.registration.countries.CountriesView;
 
 import java.util.List;
 
@@ -27,17 +26,17 @@ public class CurrenciesPresenter extends BasePresenter<CurrenciesView> {
     }
 
     public void startGetCountriesTask() {
-        addDisposable(mGetCountriesUseCase.execute(new GetCountriesObserver()));
+        mGetCountriesUseCase.execute(new GetCountriesObserver());
     }
 
     private Action mGetPhoneNumberAction = new Action() {
         @Override
         public void run() throws Exception {
-            addDisposable(mGetCountriesUseCase.execute(new GetCountriesObserver()));
+            mGetCountriesUseCase.execute(new GetCountriesObserver());
         }
     };
 
-    private class GetCountriesObserver extends DefaultSingleObserver<List<Country>> {
+    private class GetCountriesObserver extends DefaultInternetSubscriber<List<Country>> {
 
         @Override
         protected void onStart() {
@@ -46,11 +45,9 @@ public class CurrenciesPresenter extends BasePresenter<CurrenciesView> {
         }
 
         @Override
-        public void onSuccess(@NonNull final List<Country> countryList) {
+        public void onNext(List<Country> countries) {
             if (!isViewAttached()) return;
-            getView().showProgress(false);
-
-            getView().showCurrencies(countryList);
+            getView().showCurrencies(countries);
         }
 
         @Override
@@ -62,7 +59,13 @@ public class CurrenciesPresenter extends BasePresenter<CurrenciesView> {
 
         @Override
         public void handleNetworkError(final RetrofitException retrofitException) {
+            if(!isViewAttached()) return;
             getView().showErrorWithRetry(new RetryAction(mGetPhoneNumberAction));
         }
+    }
+
+    @Override
+    public void onDetachView() {
+        mGetCountriesUseCase.dispose();
     }
 }

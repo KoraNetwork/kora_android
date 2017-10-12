@@ -5,15 +5,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
 import com.kora.android.common.helper.RegistrationPrefHelper;
 import com.kora.android.common.utils.CommonUtils;
 import com.kora.android.common.utils.StringUtils;
+import com.kora.android.data.network.config.ErrorModel;
 import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.data.network.model.response.ConfirmationCodeResponse;
 import com.kora.android.data.network.model.response.PhoneNumberResponse;
-import com.kora.android.domain.base.DefaultSingleObserver;
+import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.usecase.registration.SendConfirmationCodeUseCase;
 import com.kora.android.domain.usecase.registration.SendPhoneNumberUseCase;
 import com.kora.android.presentation.service.IncomingSmsService;
@@ -87,26 +87,26 @@ public class SecondStepPresenter extends BasePresenter<SecondStepView> {
         final String mPhoneNumber = mRegistrationPrefHelper.getPhoneNumber();
 
         mSendConfirmationCodeUseCase.setData(mPhoneNumber, mConfirmationCode);
-        addDisposable(mSendConfirmationCodeUseCase.execute(new SendConfirmationCodeObserver()));
+        mSendConfirmationCodeUseCase.execute(new SendConfirmationCodeObserver());
     }
 
     private Action mSendConfirmationCodeAction = new Action() {
         @Override
         public void run() throws Exception {
-            addDisposable(mSendConfirmationCodeUseCase.execute(new SendConfirmationCodeObserver()));
+            mSendConfirmationCodeUseCase.execute(new SendConfirmationCodeObserver());
         }
     };
 
     public void startResendPhoneNumberTask() {
         final String phoneNumber = mRegistrationPrefHelper.getPhoneNumber();
         mSendPhoneNumberUseCase.setData(phoneNumber);
-        addDisposable(mSendPhoneNumberUseCase.execute(new SendPhoneNumberObserver()));
+        mSendPhoneNumberUseCase.execute(new SendPhoneNumberObserver());
     }
 
     private Action mSendPhoneNumberAction = new Action() {
         @Override
         public void run() throws Exception {
-            addDisposable(mSendPhoneNumberUseCase.execute(new SendPhoneNumberObserver()));
+            mSendPhoneNumberUseCase.execute(new SendPhoneNumberObserver());
         }
     };
 
@@ -114,7 +114,7 @@ public class SecondStepPresenter extends BasePresenter<SecondStepView> {
         this.mConfirmationCode = confirmationCode;
     }
 
-    private class SendConfirmationCodeObserver extends DefaultSingleObserver<ConfirmationCodeResponse> {
+    private class SendConfirmationCodeObserver extends DefaultInternetSubscriber<ConfirmationCodeResponse> {
 
         @Override
         protected void onStart() {
@@ -123,9 +123,8 @@ public class SecondStepPresenter extends BasePresenter<SecondStepView> {
         }
 
         @Override
-        public void onSuccess(@NonNull ConfirmationCodeResponse confirmationCodeResponse) {
+        public void onNext(@NonNull ConfirmationCodeResponse confirmationCodeResponse) {
             if (!isViewAttached()) return;
-            getView().showProgress(false);
 
             if (confirmationCodeResponse.isConfirmed()) {
                 getView().showNextScreen();
@@ -140,17 +139,28 @@ public class SecondStepPresenter extends BasePresenter<SecondStepView> {
             if (!isViewAttached()) return;
             getView().showProgress(false);
 
-            Log.e("_____", "onError()");
-            e.printStackTrace();
         }
 
         @Override
-        public void handleNetworkError(RetrofitException retrofitException) {
+        public void onComplete() {
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+        }
+
+        @Override
+        public void handleUnprocessableEntity(ErrorModel errorModel) {
+            if(!isViewAttached()) return;
+            getView().showError(errorModel.getError());
+        }
+
+        @Override
+        public void handleNetworkError(RetrofitException e) {
+            if(!isViewAttached()) return;
             getView().showErrorWithRetry(new RetryAction(mSendConfirmationCodeAction));
         }
     }
 
-    private class SendPhoneNumberObserver extends DefaultSingleObserver<PhoneNumberResponse> {
+    private class SendPhoneNumberObserver extends DefaultInternetSubscriber<PhoneNumberResponse> {
 
         @Override
         protected void onStart() {
@@ -159,7 +169,12 @@ public class SecondStepPresenter extends BasePresenter<SecondStepView> {
         }
 
         @Override
-        public void onSuccess(@NonNull PhoneNumberResponse phoneNumberResponse) {
+        public void onNext(@NonNull PhoneNumberResponse phoneNumberResponse) {
+
+        }
+
+        @Override
+        public void onComplete() {
             if(!isViewAttached()) return;
             getView().showProgress(false);
         }
@@ -169,14 +184,24 @@ public class SecondStepPresenter extends BasePresenter<SecondStepView> {
             super.onError(throwable);
             if (!isViewAttached()) return;
             getView().showProgress(false);
+        }
 
-            Log.e("_____", "onError()");
-            throwable.printStackTrace();
+        @Override
+        public void handleUnprocessableEntity(ErrorModel errorModel) {
+            if(!isViewAttached()) return;
+            getView().showError(errorModel.getError());
         }
 
         @Override
         public void handleNetworkError(RetrofitException retrofitException) {
+            if(!isViewAttached()) return;
             getView().showErrorWithRetry(new RetryAction(mSendPhoneNumberAction));
         }
+    }
+
+    @Override
+    public void onDetachView() {
+        mSendConfirmationCodeUseCase.dispose();
+        mSendPhoneNumberUseCase.dispose();
     }
 }

@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 
-import com.kora.android.injection.component.FragmentComponent;
+import com.kora.android.di.component.FragmentComponent;
 import com.kora.android.presentation.ui.base.presenter.Presenter;
 
 public interface BaseFragmentView<P extends Presenter> extends BaseView<P> {

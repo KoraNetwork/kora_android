@@ -1,4 +1,4 @@
-package com.kora.android.injection.annotation;
+package com.kora.android.di.annotation;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

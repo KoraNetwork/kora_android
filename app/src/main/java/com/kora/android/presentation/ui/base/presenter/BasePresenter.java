@@ -2,12 +2,8 @@ package com.kora.android.presentation.ui.base.presenter;
 
 import com.kora.android.presentation.ui.base.view.BaseView;
 
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-
 public abstract class BasePresenter<V extends BaseView> implements Presenter<V> {
 
-    private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
     private V mMvpView;
 
     @Override
@@ -27,12 +23,13 @@ public abstract class BasePresenter<V extends BaseView> implements Presenter<V> 
 
     @Override
     public void detachView() {
-        mCompositeDisposable.clear();
+        onDetachView();
         if (mMvpView != null)
             mMvpView = null;
     }
 
-    protected void addDisposable(Disposable subscription){
-        mCompositeDisposable.add(subscription);
+    @Override
+    public void onDetachView() {
+
     }
 }

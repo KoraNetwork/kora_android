@@ -1,4 +1,4 @@
-package com.kora.android.injection.module;
+package com.kora.android.di.module;
 
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 

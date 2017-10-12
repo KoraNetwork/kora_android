@@ -11,4 +11,6 @@ public interface Presenter<V extends BaseView> {
     boolean isViewAttached();
 
     void detachView();
+
+    void onDetachView();
 }

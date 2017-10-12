@@ -9,7 +9,7 @@ import android.support.v7.widget.Toolbar;
 import com.kora.android.R;
 import com.kora.android.common.permission.PermissionChecker;
 import com.kora.android.common.permission.PermissionException;
-import com.kora.android.injection.component.ActivityComponent;
+import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.registration.step3.ThirdStepActivity;
 

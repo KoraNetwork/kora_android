@@ -11,7 +11,7 @@ import android.widget.EditText;
 
 import com.kora.android.R;
 import com.kora.android.common.utils.ViewUtils;
-import com.kora.android.injection.component.ActivityComponent;
+import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.model.Country;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.registration.currencies.adapter.CurrencyAdapter;
