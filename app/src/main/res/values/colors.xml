@@ -4,16 +4,24 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF2B74A5</color>
 
+    <color name="color_toolbar">#46a6e4</color>
+
     <color name="color_white">#ffffff</color>
     <color name="color_black">#000000</color>
+    <color name="red">#D50000</color>
 
     <color name="color_text_title">#FF3B3D3D</color>
     <color name="color_text_text">#696a6b</color>
 
+    <color name="color_text_blue">#2b74a5</color>
+    <color name="color_text_black">#000000</color>
+    <color name="color_text_grey">#9E9E9E</color>
+
     <color name="color_edit_text">#DE000000</color>
 
-    <color name="color_button_background_blue">#FF2B74A5</color>
-    <color name="color_button_background_green">#62cd9a</color>
+    <color name="color_button_background_blue">#2b74a5</color>
+    <color name="color_button_background_green_1">#62cd9a</color>
+    <color name="color_button_background_green_2">#77cda4</color>
     <color name="color_button_text_white">#ffffff</color>
     <color name="color_button_text_black">#000000</color>
 
@@ -22,10 +30,7 @@
     <color name="color_dialog_text">#FF3B3D3D</color>
     <color name="color_dialog_button_text">#FF2B74A5</color>
 
-    <color name="red">#D50000</color>
 
-    <color name="color_text_blue">#2b74a5</color>
-    
     <color name="color_transparent">#00ffffff</color>
 
     <color name="color_cropping_background">#000000</color>

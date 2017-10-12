@@ -198,7 +198,6 @@
                         android:layout_marginStart="5dp"
                         android:layout_toEndOf="@+id/image_view_country_flag"
                         android:layout_toRightOf="@+id/image_view_country_flag"
-                        android:fontFamily="sans-serif"
                         android:text="@string/registration_currency_usa"
                         android:textColor="@color/color_button_text_black"
                         android:textSize="18sp" />
@@ -351,7 +350,6 @@
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
-                        android:fontFamily="sans-serif"
                         android:text="@string/registration_confirm"
                         android:textColor="@color/color_button_text_white"
                         android:textSize="14sp"

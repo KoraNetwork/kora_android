@@ -2,6 +2,7 @@ package com.kora.android.di.component;
 
 import com.kora.android.di.annotation.PerActivity;
 import com.kora.android.di.module.ActivityModule;
+import com.kora.android.presentation.ui.home.HomeActivity;
 import com.kora.android.presentation.ui.login.LoginActivity;
 import com.kora.android.presentation.ui.main.MainActivity;
 import com.kora.android.presentation.ui.registration.countries.CountriesActivity;
@@ -30,4 +31,6 @@ public interface ActivityComponent {
     void inject(CurrenciesActivity currenciesActivity);
 
     void inject(LoginActivity loginActivity);
+
+    void inject(HomeActivity homeActivity);
 }

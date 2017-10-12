@@ -97,6 +97,17 @@
     <string name="login_dialog_title_server_error">Error</string>
     <string name="login_dialog_message_server_error">Wrong identifier or password</string>
 
+    <string name="home_balance">Balance</string>
+    <string name="home_deposit">DEPOSIT</string>
+    <string name="home_withdraw">WITHDRAW</string>
+    <string name="home_my_apps">My Apps</string>
+    <string name="home_agent">Agent</string>
+    <string name="home_merchant">Merchant</string>
+    <string name="home_lending">Lending</string>
+    <string name="home_cooperative">Cooperative</string>
+    <string name="home_transactions">Transactions</string>
+    <string name="home_show_all_transactions">SHOW ALL TRANSACTIONS</string>
+
     <string name="font_name_muli">Muli</string>
     <string name="font_name_muli_bold">MuliBold</string>
     <string name="font_name_muli_light">MuliLight</string>
