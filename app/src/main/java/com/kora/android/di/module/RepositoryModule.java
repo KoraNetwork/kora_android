@@ -21,9 +21,8 @@ public class RepositoryModule {
     @Singleton
     @Provides
     public RegistrationRepository provideRegistrationRepository(final RegistrationService registrationService,
-                                                                final SessionPrefHelper sessionPrefHelper,
                                                                 final RegistrationMapper registrationMapper) {
-        return new RegistrationRepositoryImpl(sessionPrefHelper, registrationService, registrationMapper);
+        return new RegistrationRepositoryImpl(registrationService, registrationMapper);
     }
 
     @Singleton

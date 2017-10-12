@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
-import io.reactivex.Single;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.http.Body;
@@ -24,14 +23,14 @@ import retrofit2.http.PartMap;
 public interface RegistrationService {
 
     @POST("verificationCode/send/")
-    Single<PhoneNumberResponse> sendPhoneNumber(@Body final PhoneNumberRequest phoneNumberRequest);
+    Observable<PhoneNumberResponse> sendPhoneNumber(@Body final PhoneNumberRequest phoneNumberRequest);
 
     @POST("verificationCode/confirm/")
-    Single<ConfirmationCodeResponse> sendConfirmationCode(@Body final ConfirmationCodeRequest confirmationCodeRequest);
+    Observable<ConfirmationCodeResponse> sendConfirmationCode(@Body final ConfirmationCodeRequest confirmationCodeRequest);
 
     @Multipart
     @POST("auth/register/")
-    Single<RegistrationResponse> register(@PartMap final Map<String, RequestBody> userMap,
+    Observable<RegistrationResponse> register(@PartMap final Map<String, RequestBody> userMap,
                                           @Part final MultipartBody.Part imageFile);
 
     @GET("countries/")

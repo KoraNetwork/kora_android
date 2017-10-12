@@ -1,8 +1,10 @@
 package com.kora.android.data.repository;
 
+import com.kora.android.presentation.model.UserEntity;
+
 import io.reactivex.Observable;
 
 public interface LoginRepository {
 
-    Observable login(final String identifier, final String password);
+    Observable<UserEntity> login(final String identifier, final String password);
 }

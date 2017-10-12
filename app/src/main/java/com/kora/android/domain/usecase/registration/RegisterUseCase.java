@@ -1,19 +1,16 @@
 package com.kora.android.domain.usecase.registration;
 
 import com.kora.android.data.repository.RegistrationRepository;
+import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.AsyncUseCase;
-import com.kora.android.injection.annotation.ConfigPersistent;
 import com.kora.android.presentation.model.UserEntity;
 
 import javax.inject.Inject;
 
-import io.reactivex.Completable;
-import io.reactivex.Single;
-import io.reactivex.observers.DisposableCompletableObserver;
-import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.Observable;
 
 @ConfigPersistent
-public class RegisterUseCase extends AsyncUseCase<DisposableCompletableObserver, Completable> {
+public class RegisterUseCase extends AsyncUseCase {
 
     private final RegistrationRepository mRegistrationRepository;
 
@@ -25,11 +22,11 @@ public class RegisterUseCase extends AsyncUseCase<DisposableCompletableObserver,
     }
 
     public void setData(final UserEntity userEntity) {
-       mUserEntity = userEntity;
+        mUserEntity = userEntity;
     }
 
     @Override
-    protected Completable buildTask() {
+    protected Observable buildObservableTask() {
         return mRegistrationRepository.register(mUserEntity);
     }
 }

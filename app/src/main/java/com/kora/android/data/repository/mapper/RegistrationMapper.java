@@ -10,9 +10,8 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
-import io.reactivex.Single;
-import io.reactivex.SingleTransformer;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
@@ -23,8 +22,8 @@ public class RegistrationMapper {
 
     }
 
-    public Single<Map<String, RequestBody>> transformUserToFormData(final UserEntity userEntity) {
-        return Single.just(userEntity)
+    public Observable<Map<String, RequestBody>> transformUserToFormData(final UserEntity userEntity) {
+        return Observable.just(userEntity)
                 .map(model -> {
                     final HashMap<String, RequestBody> map = new HashMap<>();
                     if (model.getPhoneNumber() != null)
@@ -71,7 +70,7 @@ public class RegistrationMapper {
                 );
     }
 
-    public SingleTransformer<UserResponse, UserEntity> transformResponseToEntityUser() {
+    public ObservableTransformer<UserResponse, UserEntity> transformResponseToEntityUser() {
         return userResponseObservable -> userResponseObservable
                 .map(userResponse -> new UserEntity()
                         .addAvatar(userResponse.getAvatar())

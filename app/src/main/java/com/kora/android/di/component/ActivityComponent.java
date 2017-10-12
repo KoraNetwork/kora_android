@@ -11,7 +11,6 @@ import com.kora.android.presentation.ui.registration.step2.SecondStepActivity;
 import com.kora.android.presentation.ui.registration.step3.ThirdStepActivity;
 import com.kora.android.presentation.ui.registration.step4.FourthStepActivity;
 import com.kora.android.presentation.ui.splash.SplashActivity;
-import com.kora.android.presentation.ui.welcome.WelcomeActivity;
 
 import dagger.Subcomponent;
 
@@ -20,7 +19,6 @@ import dagger.Subcomponent;
 public interface ActivityComponent {
 
     void inject(SplashActivity splashActivity);
-    void inject(WelcomeActivity welcomeActivity);
     void inject(MainActivity mainActivity);
 
     void inject(FirstStepActivity firstStepActivity);
