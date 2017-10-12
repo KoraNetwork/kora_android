@@ -1,14 +1,18 @@
 package com.kora.android.di.module;
 
+import android.content.Context;
+
 import com.kora.android.common.helper.SessionPrefHelper;
+import com.kora.android.common.preferences.PreferenceHandler;
+import com.kora.android.common.preferences.PreferenceHandlerImpl;
 import com.kora.android.data.network.sercvice.LoginService;
+import com.kora.android.data.network.sercvice.RegistrationService;
 import com.kora.android.data.repository.LoginRepository;
+import com.kora.android.data.repository.RegistrationRepository;
 import com.kora.android.data.repository.impl.LoginRepositoryImpl;
+import com.kora.android.data.repository.impl.RegistrationRepositoryImpl;
 import com.kora.android.data.repository.mapper.LoginMapper;
 import com.kora.android.data.repository.mapper.RegistrationMapper;
-import com.kora.android.data.network.sercvice.RegistrationService;
-import com.kora.android.data.repository.RegistrationRepository;
-import com.kora.android.data.repository.impl.RegistrationRepositoryImpl;
 
 import javax.inject.Singleton;
 
@@ -20,9 +24,16 @@ public class RepositoryModule {
 
     @Singleton
     @Provides
-    public RegistrationRepository provideRegistrationRepository(final RegistrationService registrationService,
+    public PreferenceHandler providePreferenceHandler(final Context context) {
+        return new PreferenceHandlerImpl(context);
+    }
+
+    @Singleton
+    @Provides
+    public RegistrationRepository provideRegistrationRepository(final PreferenceHandler preferenceHandler,
+                                                                final RegistrationService registrationService,
                                                                 final RegistrationMapper registrationMapper) {
-        return new RegistrationRepositoryImpl(registrationService, registrationMapper);
+        return new RegistrationRepositoryImpl(preferenceHandler, registrationService, registrationMapper);
     }
 
     @Singleton

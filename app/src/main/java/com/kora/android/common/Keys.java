@@ -54,4 +54,10 @@ public interface Keys {
         int SELECT_CURRENCY_REQUEST_CODE = 222;
         String SELECT_CURRENCY_EXTRA = "SELECT_CURRENCY_EXTRA";
     }
+
+    interface Shared {
+        String NAME = "kora";
+        String TOKEN = "token";
+        String USER = "user";
+    }
 }

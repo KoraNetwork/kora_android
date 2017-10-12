@@ -6,6 +6,7 @@ import com.kora.android.KoraApplication;
 import com.kora.android.common.helper.RegistrationPrefHelper;
 import com.kora.android.common.helper.SessionPrefHelper;
 import com.kora.android.common.helper.ProxyPrefHelper;
+import com.kora.android.common.preferences.PreferenceHandler;
 import com.kora.android.data.network.sercvice.LoginService;
 import com.kora.android.data.network.sercvice.RegistrationService;
 import com.kora.android.data.repository.LoginRepository;
@@ -34,6 +35,8 @@ public interface ApplicationComponent {
     void inject(final KoraApplication application);
 
     Context context();
+
+    PreferenceHandler preferanceHandler();
 
     RegistrationPrefHelper registrationPrefHelper();
     SessionPrefHelper authPrefHelper();

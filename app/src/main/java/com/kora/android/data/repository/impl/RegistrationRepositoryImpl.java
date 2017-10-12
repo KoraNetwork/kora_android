@@ -2,8 +2,8 @@ package com.kora.android.data.repository.impl;
 
 import android.webkit.MimeTypeMap;
 
-import com.kora.android.common.preferences.Constants;
-import com.kora.android.common.preferences.PreferenceHelper;
+import com.kora.android.common.Keys;
+import com.kora.android.common.preferences.PreferenceHandler;
 import com.kora.android.data.network.model.request.ConfirmationCodeRequest;
 import com.kora.android.data.network.model.request.PhoneNumberRequest;
 import com.kora.android.data.network.model.response.ConfirmationCodeResponse;
@@ -19,19 +19,29 @@ import com.kora.android.presentation.model.UserEntity;
 import java.io.File;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
+@Singleton
 public class RegistrationRepositoryImpl implements RegistrationRepository {
 
+    private final PreferenceHandler mPreferenceHandler;
     private final RegistrationService mRegistrationService;
     private final RegistrationMapper mRegistrationMapper;
 
-    public RegistrationRepositoryImpl(final RegistrationService registrationService,
+
+
+    @Inject
+    public RegistrationRepositoryImpl(final PreferenceHandler preferenceHandler,
+                                      final RegistrationService registrationService,
                                       final RegistrationMapper registrationMapper) {
+        mPreferenceHandler = preferenceHandler;
         mRegistrationService = registrationService;
         mRegistrationMapper = registrationMapper;
     }
@@ -88,14 +98,14 @@ public class RegistrationRepositoryImpl implements RegistrationRepository {
 
     public ObservableTransformer<UserEntity, UserEntity> storeUser() {
         return observable -> observable.map(user -> {
-            PreferenceHelper.rememberObject(Constants.Shared.USER, user);
+            mPreferenceHandler.rememberObject(Keys.Shared.USER, user);
             return user;
         });
     }
 
     public ObservableTransformer<RegistrationResponse, UserResponse> saveToken() {
         return observable -> observable.map(authResponse -> {
-            PreferenceHelper.rememberString(Constants.Shared.TOKEN, authResponse.getSessionToken());
+            mPreferenceHandler.rememberString(Keys.Shared.TOKEN, authResponse.getSessionToken());
             return authResponse.getUserResponse();
         });
     }
