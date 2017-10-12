@@ -107,7 +107,7 @@ public class FirstStepPresenter extends BasePresenter<FirstStepView> {
 
         @Override
         public void handleUnprocessableEntity(ErrorModel errorModel) {
-            if(!isViewAttached()) return;
+            if (!isViewAttached()) return;
             getView().showError(errorModel.getError());
         }
     }
@@ -121,21 +121,6 @@ public class FirstStepPresenter extends BasePresenter<FirstStepView> {
         }
 
         @Override
-        public void onNext(@NonNull final PhoneNumberResponse phoneNumberResponse) {
-            if (!isViewAttached()) return;
-
-            if (phoneNumberResponse.isSent()) {
-                mRegistrationPrefHelper.storeCountry(mCountryEntity);
-                final String phoneNumber =
-                        StringUtils.deletePlusIfNeeded(mCountryEntity.getPhoneCode()) + mPhoneNumber;
-                mRegistrationPrefHelper.storePhoneNumber(phoneNumber);
-                getView().showNextScreen();
-            } else {
-                getView().showServerError();
-            }
-        }
-
-        @Override
         public void onError(@NonNull final Throwable e) {
             super.onError(e);
             if (!isViewAttached()) return;
@@ -144,8 +129,15 @@ public class FirstStepPresenter extends BasePresenter<FirstStepView> {
 
         @Override
         public void onComplete() {
+            mRegistrationPrefHelper.storeCountry(mCountryEntity);
+            final String phoneNumber =
+                    StringUtils.deletePlusIfNeeded(mCountryEntity.getPhoneCode()) + mPhoneNumber;
+            mRegistrationPrefHelper.storePhoneNumber(phoneNumber);
+
             if (!isViewAttached()) return;
             getView().showProgress(false);
+            getView().showNextScreen();
+
         }
 
         @Override

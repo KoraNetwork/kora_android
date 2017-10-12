@@ -15,8 +15,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 
-;
-
 public class LoginActivity extends BaseActivity<LoginPresenter> implements LoginView {
 
     @BindView(R.id.toolbar)

@@ -123,17 +123,6 @@ public class SecondStepPresenter extends BasePresenter<SecondStepView> {
         }
 
         @Override
-        public void onNext(@NonNull ConfirmationCodeResponse confirmationCodeResponse) {
-            if (!isViewAttached()) return;
-
-            if (confirmationCodeResponse.isConfirmed()) {
-                getView().showNextScreen();
-            } else {
-                getView().showServerError();
-            }
-        }
-
-        @Override
         public void onError(@NonNull final Throwable e) {
             super.onError(e);
             if (!isViewAttached()) return;
@@ -145,6 +134,7 @@ public class SecondStepPresenter extends BasePresenter<SecondStepView> {
         public void onComplete() {
             if (!isViewAttached()) return;
             getView().showProgress(false);
+            getView().showNextScreen();
         }
 
         @Override
@@ -169,14 +159,10 @@ public class SecondStepPresenter extends BasePresenter<SecondStepView> {
         }
 
         @Override
-        public void onNext(@NonNull PhoneNumberResponse phoneNumberResponse) {
-
-        }
-
-        @Override
         public void onComplete() {
             if(!isViewAttached()) return;
             getView().showProgress(false);
+            getView().showSendCodeMessage();
         }
 
         @Override

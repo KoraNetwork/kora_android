@@ -73,6 +73,7 @@
     <string name="registration_dialog_message_back_pressed">If you will return on previous screen, you will need to create identity again. It will take time. Are you sure you want to go back?</string>
     <string name="registration_dialog_positive_back_pressed">Return</string>
     <string name="registration_dialog_negative_back_pressed">Cancel</string>
+    <string name="registration_dialog_message_verification_dode_was_sent">SMS message with verification code was send</string>
 
     <string name="registration_select_country">Select countryEntity</string>
     <string name="registration_enter_country">Enter countryEntity</string>

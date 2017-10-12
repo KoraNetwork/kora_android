@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 
 import com.kora.android.R;
 import com.kora.android.di.component.ActivityComponent;
@@ -29,6 +31,8 @@ public class ThirdStepActivity extends BaseActivity<ThirdStepPresenter> implemen
     TextInputEditText mEtPinThirdDigit;
     @BindView(R.id.edit_text_pin_fourth_digit)
     TextInputEditText mEtPinFourthDigit;
+    @BindView(R.id.card_view_next)
+    CardView mNextButton;
 
     public static Intent getLaunchIntent(final BaseActivity baseActivity) {
         return new Intent(baseActivity, ThirdStepActivity.class);
@@ -48,6 +52,34 @@ public class ThirdStepActivity extends BaseActivity<ThirdStepPresenter> implemen
     @Override
     protected void onViewReady(final Bundle savedInstanceState) {
         setToolbar(mToolbar, R.drawable.ic_back_grey);
+
+        mEtPinFirstDigit.setOnKeyListener((v, keyCode, event) -> {
+            if ((keyCode >= KeyEvent.KEYCODE_0 && keyCode <= KeyEvent.KEYCODE_9)) {
+                mEtPinSecondDigit.requestFocus();
+            }
+            return false;
+        });
+
+        mEtPinSecondDigit.setOnKeyListener((v, keyCode, event) -> {
+            if ((keyCode >= KeyEvent.KEYCODE_0 && keyCode <= KeyEvent.KEYCODE_9)) {
+                mEtPinThirdDigit.requestFocus();
+            }
+            return false;
+        });
+
+        mEtPinThirdDigit.setOnKeyListener((v, keyCode, event) -> {
+            if ((keyCode >= KeyEvent.KEYCODE_0 && keyCode <= KeyEvent.KEYCODE_9)) {
+                mEtPinFourthDigit.requestFocus();
+            }
+            return false;
+        });
+
+        mEtPinFourthDigit.setOnKeyListener((v, keyCode, event) -> {
+            if ((keyCode >= KeyEvent.KEYCODE_0 && keyCode <= KeyEvent.KEYCODE_9)) {
+                mNextButton.requestFocus();
+            }
+            return false;
+        });
     }
 
     @OnTextChanged({
@@ -56,7 +88,7 @@ public class ThirdStepActivity extends BaseActivity<ThirdStepPresenter> implemen
             R.id.edit_text_pin_third_digit,
             R.id.edit_text_pin_fourth_digit
     })
-    void onChangedPhoneNumber() {
+    void onPinChanged() {
         mElCreatePinCode.setError(null);
     }
 

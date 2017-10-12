@@ -1,11 +1,9 @@
 package com.kora.android.presentation.ui.registration.step4;
 
 import com.kora.android.common.helper.RegistrationPrefHelper;
-import com.kora.android.common.helper.SessionPrefHelper;
 import com.kora.android.common.utils.StringUtils;
 import com.kora.android.data.network.config.ErrorModel;
 import com.kora.android.data.network.exception.RetrofitException;
-import com.kora.android.data.network.model.response.UserResponse;
 import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.usecase.registration.RegisterUseCase;
@@ -23,7 +21,6 @@ import io.reactivex.functions.Action;
 public class FourthStepPresenter extends BasePresenter<FourthStepView> {
 
     private final RegistrationPrefHelper mRegistrationPrefHelper;
-    private final SessionPrefHelper mSessionPrefHelper;
     private final RegisterUseCase mRegisterUseCase;
 
     private UserEntity mUserEntity;
@@ -31,10 +28,8 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
 
     @Inject
     public FourthStepPresenter(final RegistrationPrefHelper registrationPrefHelper,
-                               final SessionPrefHelper sessionPrefHelper,
                                final RegisterUseCase registerUseCase) {
         mRegistrationPrefHelper = registrationPrefHelper;
-        mSessionPrefHelper = sessionPrefHelper;
         mRegisterUseCase = registerUseCase;
         mUserEntity = new UserEntity();
     }
@@ -140,7 +135,7 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
         }
     };
 
-    private class RegistrationObserver extends DefaultInternetSubscriber<UserResponse> {
+    private class RegistrationObserver extends DefaultInternetSubscriber<UserEntity> {
 
         @Override
         protected void onStart() {
@@ -149,7 +144,7 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
         }
 
         @Override
-        public void onNext(@NonNull final UserResponse userResponse) {
+        public void onNext(@NonNull final UserEntity userEntity) {
             if(!isViewAttached()) return;
             getView().showNextScreen();
         }

@@ -37,10 +37,6 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".presentation.ui.welcome.WelcomeActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
             android:name=".presentation.ui.registration.step1.FirstStepActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
