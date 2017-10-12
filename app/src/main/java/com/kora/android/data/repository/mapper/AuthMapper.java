@@ -37,6 +37,9 @@ public class AuthMapper {
                         .addCurrency(userResponse.getCurrency())
                         .addPostalCode(userResponse.getPostalCode())
                         .addAddress(userResponse.getAddress())
+                        .addERC20Token(userResponse.getERC20Token())
+                        .addFlag(userResponse.getFlag())
+                        .addCurrencyNameFull(userResponse.getCurrencyNameFull())
                 );
     }
 
@@ -70,6 +73,8 @@ public class AuthMapper {
                         map.put("address", createPartFromString(model.getAddress()));
                     if (model.getPassword() != null)
                         map.put("password", createPartFromString(model.getPassword()));
+                    if (model.getCountryCode() != null)
+                        map.put("countryCode", createPartFromString(model.getCountryCode()));
                     return map;
                 });
     }
@@ -81,8 +86,11 @@ public class AuthMapper {
     public ObservableTransformer<CountryResponse, CountryEntity> transformResponseToEntityCountry() {
         return countryResponseObservable -> countryResponseObservable
                 .map(countryResponse -> new CountryEntity()
+                        .addCountryCode(countryResponse.getCountryCode())
                         .addName(countryResponse.getName())
                         .addCurrency(countryResponse.getCurrency())
+                        .addCurrencyNameFull(countryResponse.getCurrencyNameFull())
+                        .addERC20Token(countryResponse.getERC20Token())
                         .addPhoneCode(countryResponse.getPhoneCode())
                         .addFlag(countryResponse.getFlag())
                 );

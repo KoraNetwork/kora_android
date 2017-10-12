@@ -4,11 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
-import android.widget.Toast;
 
 import com.kora.android.R;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
+import com.kora.android.presentation.ui.home.HomeActivity;
 import com.kora.android.presentation.ui.registration.step1.FirstStepActivity;
 
 import butterknife.BindView;
@@ -89,7 +89,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @Override
     public void showNextScreen() {
-        Toast.makeText(this, "YEAH", Toast.LENGTH_LONG).show();
+        startActivity(HomeActivity.getLaunchIntent(this));
     }
 
 

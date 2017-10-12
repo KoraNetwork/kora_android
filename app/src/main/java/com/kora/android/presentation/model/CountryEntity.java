@@ -5,10 +5,18 @@ import android.os.Parcelable;
 
 public class CountryEntity implements Parcelable {
 
+    private String mCountryCode;
     private String mName;
     private String mCurrency;
+    private String mCurrencyNameFull;
+    private String mERC20Token;
     private String mPhoneCode;
     private String mFlag;
+
+    public CountryEntity addCountryCode(final String countryCode) {
+        mCountryCode = countryCode;
+        return this;
+    }
 
     public CountryEntity addName(final String name) {
         mName = name;
@@ -17,6 +25,16 @@ public class CountryEntity implements Parcelable {
 
     public CountryEntity addCurrency(final String currency) {
         mCurrency = currency;
+        return this;
+    }
+
+    public CountryEntity addCurrencyNameFull(final String currencyNameFull) {
+        mCurrencyNameFull = currencyNameFull;
+        return this;
+    }
+
+    public CountryEntity addERC20Token(final String ERC20Token) {
+        mERC20Token = ERC20Token;
         return this;
     }
 
@@ -62,15 +80,43 @@ public class CountryEntity implements Parcelable {
         this.mFlag = flag;
     }
 
+    public String getCountryCode() {
+        return mCountryCode;
+    }
+
+    public void setCountryCode(String countryCode) {
+        this.mCountryCode = countryCode;
+    }
+
+    public String getCurrencyFullName() {
+        return mCurrencyNameFull;
+    }
+
+    public void setCurrencyFullName(String currencyFullName) {
+        this.mCurrencyNameFull = currencyFullName;
+    }
+
+    public String getERC20Token() {
+        return mERC20Token;
+    }
+
+    public void setERC20Token(String ERC20Token) {
+        this.mERC20Token = ERC20Token;
+    }
+
     @Override
     public String toString() {
         return "CountryEntity{" + "\n" +
+                "mCountryCode=" + mCountryCode + "\n" +
                 "mName=" + mName + "\n" +
                 "mCurrency=" + mCurrency + "\n" +
+                "mCurrencyNameFull=" + mCurrencyNameFull + "\n" +
+                "mERC20Token=" + mERC20Token + "\n" +
                 "mPhoneCode=" + mPhoneCode + "\n" +
                 "mFlag=" + mFlag + "\n" +
-                '}';
+                "}";
     }
+
 
     @Override
     public int describeContents() {
@@ -79,19 +125,24 @@ public class CountryEntity implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.mCountryCode);
         dest.writeString(this.mName);
         dest.writeString(this.mCurrency);
+        dest.writeString(this.mCurrencyNameFull);
+        dest.writeString(this.mERC20Token);
         dest.writeString(this.mPhoneCode);
         dest.writeString(this.mFlag);
     }
 
     public CountryEntity() {
-
     }
 
     protected CountryEntity(Parcel in) {
+        this.mCountryCode = in.readString();
         this.mName = in.readString();
         this.mCurrency = in.readString();
+        this.mCurrencyNameFull = in.readString();
+        this.mERC20Token = in.readString();
         this.mPhoneCode = in.readString();
         this.mFlag = in.readString();
     }

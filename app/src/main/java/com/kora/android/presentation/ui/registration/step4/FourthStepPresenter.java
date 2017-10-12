@@ -76,6 +76,10 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
         mUserEntity.setPassword(password);
     }
 
+    public void setCountryCode(final String countryCode) {
+        mUserEntity.setCountryCode(countryCode);
+    }
+
     public void setConfirmPassword(final String confirmPassword) {
         mConfirmPassword = confirmPassword;
     }

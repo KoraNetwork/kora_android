@@ -18,7 +18,13 @@ public class UserEntity implements Parcelable {
     private String mCurrency;
     private String mPostalCode;
     private String mAddress;
+
     private String mPassword;
+    private String mCountryCode;
+
+    private String mERC20Token;
+    private String mFlag;
+    private String mCurrencyNameFull;
 
     public UserEntity addAvatar(final String avatar) {
         mAvatar = avatar;
@@ -82,6 +88,21 @@ public class UserEntity implements Parcelable {
 
     public UserEntity addAddress(final String address) {
         mAddress = address;
+        return this;
+    }
+
+    public UserEntity addERC20Token(final String ERC20Token) {
+        mERC20Token = ERC20Token;
+        return this;
+    }
+
+    public UserEntity addFlag(final String flag) {
+        mFlag = flag;
+        return this;
+    }
+
+    public UserEntity addCurrencyNameFull(final String currencyNameFull) {
+        mCurrencyNameFull = currencyNameFull;
         return this;
     }
 
@@ -197,6 +218,38 @@ public class UserEntity implements Parcelable {
         this.mPassword = mPassword;
     }
 
+    public String getCountryCode() {
+        return mCountryCode;
+    }
+
+    public void setCountryCode(String mCountryCode) {
+        this.mCountryCode = mCountryCode;
+    }
+
+    public String getERC20Token() {
+        return mERC20Token;
+    }
+
+    public void setERC20Token(String mERC20Token) {
+        this.mERC20Token = mERC20Token;
+    }
+
+    public String gemFlag() {
+        return mFlag;
+    }
+
+    public void setFlag(String mFlag) {
+        this.mFlag = mFlag;
+    }
+
+    public String getCurrencyNameFull() {
+        return mCurrencyNameFull;
+    }
+
+    public void setCurrencyNameFull(String mCurrencyNameFull) {
+        this.mCurrencyNameFull = mCurrencyNameFull;
+    }
+
     @Override
     public String toString() {
         return "UserEntity{" + "\n" +
@@ -214,8 +267,13 @@ public class UserEntity implements Parcelable {
                 "mPostalCode=" + mPostalCode + "\n" +
                 "mAddress=" + mAddress + "\n" +
                 "mPassword=" + mPassword + "\n" +
+                "mCountryCode=" + mCountryCode + "\n" +
+                "mERC20Token=" + mERC20Token + "\n" +
+                "mFlag=" + mFlag + "\n" +
+                "mCurrencyNameFull=" + mCurrencyNameFull + "\n" +
                 '}';
     }
+
 
     @Override
     public int describeContents() {
@@ -238,10 +296,13 @@ public class UserEntity implements Parcelable {
         dest.writeString(this.mPostalCode);
         dest.writeString(this.mAddress);
         dest.writeString(this.mPassword);
+        dest.writeString(this.mCountryCode);
+        dest.writeString(this.mERC20Token);
+        dest.writeString(this.mFlag);
+        dest.writeString(this.mCurrencyNameFull);
     }
 
     public UserEntity() {
-
     }
 
     protected UserEntity(Parcel in) {
@@ -259,6 +320,10 @@ public class UserEntity implements Parcelable {
         this.mPostalCode = in.readString();
         this.mAddress = in.readString();
         this.mPassword = in.readString();
+        this.mCountryCode = in.readString();
+        this.mERC20Token = in.readString();
+        this.mFlag = in.readString();
+        this.mCurrencyNameFull = in.readString();
     }
 
     public static final Creator<UserEntity> CREATOR = new Creator<UserEntity>() {

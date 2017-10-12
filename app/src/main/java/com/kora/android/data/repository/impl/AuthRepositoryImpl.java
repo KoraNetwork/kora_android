@@ -1,5 +1,6 @@
 package com.kora.android.data.repository.impl;
 
+import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import com.kora.android.common.Keys;

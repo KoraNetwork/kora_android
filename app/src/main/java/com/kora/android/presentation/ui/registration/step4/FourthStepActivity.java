@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -20,6 +19,7 @@ import com.kora.android.common.utils.ViewUtils;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.model.CountryEntity;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
+import com.kora.android.presentation.ui.home.HomeActivity;
 import com.kora.android.presentation.ui.registration.currencies.CurrenciesActivity;
 import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo;
 import com.miguelbcr.ui.rx_paparazzo2.entities.Options;
@@ -202,6 +202,7 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
             if (resultCode == RESULT_OK) {
                 final CountryEntity countryEntity = data.getParcelableExtra(SELECT_CURRENCY_EXTRA);
                 getPresenter().setCurrency(countryEntity.getCurrency());
+                getPresenter().setCountryCode(countryEntity.getCountryCode());
                 Glide.with(this)
                         .load(API_BASE_URL + countryEntity.getFlag())
                         .into(mIvCountryFlag);
@@ -259,7 +260,7 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
 
     @Override
     public void showNextScreen() {
-        Toast.makeText(this, "YEAH", Toast.LENGTH_LONG).show();
+        startActivity(HomeActivity.getLaunchIntent(this));
     }
 
     @Override
