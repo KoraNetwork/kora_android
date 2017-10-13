@@ -78,7 +78,7 @@ public class FirstStepActivity extends BaseActivity<FirstStepPresenter> implemen
         mPermissionChecker.requestPermissions(PERMISSION_REQUEST_CODE_READ_SMS, READ_SMS, RECEIVE_SMS);
     }
 
-    @OnClick(R.id.card_view_select_country)
+    @OnClick(R.id.relative_layout_select_country)
     public void onClickSelectCountry() {
         startActivityForResult(CountriesActivity.getLaunchIntent(this), SELECT_COUNTRY_REQUEST_CODE);
     }

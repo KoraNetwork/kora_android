@@ -19,7 +19,11 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="@color/color_toolbar">
+                android:background="@color/color_toolbar"
+                android:contentInsetLeft="0dp"
+                android:contentInsetStart="0dp"
+                app:contentInsetLeft="0dp"
+                app:contentInsetStart="0dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -30,8 +34,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="36dp"
-                        android:layout_marginStart="36dp"
                         android:src="@drawable/ic_kora_logo_small" />
                 </RelativeLayout>
 

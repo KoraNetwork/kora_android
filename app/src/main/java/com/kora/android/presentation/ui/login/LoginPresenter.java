@@ -48,6 +48,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             getView().showTooShortPassword();
             return;
         }
+        mIdentifier = StringUtils.deletePlusIfNeeded(mIdentifier);
 
         mLoginUseCase.setData(mIdentifier, mPassword);
         mLoginUseCase.execute(new LoginObserver());

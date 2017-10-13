@@ -164,63 +164,54 @@
                     android:textSize="16sp" />
             </android.support.design.widget.TextInputLayout>
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/card_view_select_currency"
+            <RelativeLayout
+                android:id="@+id/relative_layout_select_currency"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edit_layout_date_of_birth"
                 android:layout_marginBottom="12dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginStart="16dp"
-                android:clickable="true"
-                android:foreground="?android:attr/selectableItemBackground"
-                app:contentPaddingLeft="8dp"
-                app:contentPaddingRight="4dp">
+                android:clickable="true">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/image_view_country_flag"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:src="@drawable/ic_flag_usa" />
 
-                    <ImageView
-                        android:id="@+id/image_view_country_flag"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="true"
-                        android:src="@drawable/ic_flag_usa" />
+                <TextView
+                    android:id="@+id/text_view_currency"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_toEndOf="@+id/image_view_country_flag"
+                    android:layout_toRightOf="@+id/image_view_country_flag"
+                    android:text="@string/registration_currency_usa"
+                    android:textColor="@color/color_button_text_black"
+                    android:textSize="18sp" />
 
-                    <TextView
-                        android:id="@+id/text_view_currency"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginStart="5dp"
-                        android:layout_toEndOf="@+id/image_view_country_flag"
-                        android:layout_toRightOf="@+id/image_view_country_flag"
-                        android:text="@string/registration_currency_usa"
-                        android:textColor="@color/color_button_text_black"
-                        android:textSize="18sp" />
-
-                    <ImageView
-                        android:id="@+id/image_view_drop_down"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="2dp"
-                        android:layout_marginStart="2dp"
-                        android:layout_toEndOf="@+id/text_view_currency"
-                        android:layout_toRightOf="@+id/text_view_currency"
-                        android:src="@drawable/ic_drop_down" />
-                </RelativeLayout>
-
-            </android.support.v7.widget.CardView>
+                <ImageView
+                    android:id="@+id/image_view_drop_down"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_toEndOf="@+id/text_view_currency"
+                    android:layout_toRightOf="@+id/text_view_currency"
+                    android:src="@drawable/ic_drop_down" />
+            </RelativeLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/edit_layout_postal_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/card_view_select_currency"
+                android:layout_below="@+id/relative_layout_select_currency"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 app:errorEnabled="true">

@@ -6,6 +6,8 @@ import com.bluelinelabs.logansquare.annotation.JsonObject;
 @JsonObject
 public class UserResponse {
 
+    @JsonField(name = "id")
+    String mId;
     @JsonField(name = "avatar")
     String mAvatar;
     @JsonField(name = "phone")
@@ -38,6 +40,10 @@ public class UserResponse {
     String mFlag;
     @JsonField(name = "currencyNameFull")
     String mCurrencyNameFull;
+
+    public String getId() {
+        return mId;
+    }
 
     public String getAvatar() {
         return mAvatar;
@@ -106,6 +112,7 @@ public class UserResponse {
     @Override
     public String toString() {
         return "UserResponse{" + "\n" +
+                "mId=" + mId + "\n" +
                 "mAvatar=" + mAvatar + "\n" +
                 "mPhoneNumber=" + mPhoneNumber + "\n" +
                 "mIdentity=" + mIdentity + "\n" +

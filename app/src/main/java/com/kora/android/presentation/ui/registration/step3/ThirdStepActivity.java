@@ -53,33 +53,33 @@ public class ThirdStepActivity extends BaseActivity<ThirdStepPresenter> implemen
     protected void onViewReady(final Bundle savedInstanceState) {
         setToolbar(mToolbar, R.drawable.ic_back_grey);
 
-        mEtPinFirstDigit.setOnKeyListener((v, keyCode, event) -> {
-            if ((keyCode >= KeyEvent.KEYCODE_0 && keyCode <= KeyEvent.KEYCODE_9)) {
-                mEtPinSecondDigit.requestFocus();
-            }
-            return false;
-        });
-
-        mEtPinSecondDigit.setOnKeyListener((v, keyCode, event) -> {
-            if ((keyCode >= KeyEvent.KEYCODE_0 && keyCode <= KeyEvent.KEYCODE_9)) {
-                mEtPinThirdDigit.requestFocus();
-            }
-            return false;
-        });
-
-        mEtPinThirdDigit.setOnKeyListener((v, keyCode, event) -> {
-            if ((keyCode >= KeyEvent.KEYCODE_0 && keyCode <= KeyEvent.KEYCODE_9)) {
-                mEtPinFourthDigit.requestFocus();
-            }
-            return false;
-        });
-
-        mEtPinFourthDigit.setOnKeyListener((v, keyCode, event) -> {
-            if ((keyCode >= KeyEvent.KEYCODE_0 && keyCode <= KeyEvent.KEYCODE_9)) {
-                mNextButton.requestFocus();
-            }
-            return false;
-        });
+//        mEtPinFirstDigit.setOnKeyListener((v, keyCode, event) -> {
+//            if ((keyCode >= KeyEvent.KEYCODE_0 && keyCode <= KeyEvent.KEYCODE_9)) {
+//                mEtPinSecondDigit.requestFocus();
+//            }
+//            return false;
+//        });
+//
+//        mEtPinSecondDigit.setOnKeyListener((v, keyCode, event) -> {
+//            if ((keyCode >= KeyEvent.KEYCODE_0 && keyCode <= KeyEvent.KEYCODE_9)) {
+//                mEtPinThirdDigit.requestFocus();
+//            }
+//            return false;
+//        });
+//
+//        mEtPinThirdDigit.setOnKeyListener((v, keyCode, event) -> {
+//            if ((keyCode >= KeyEvent.KEYCODE_0 && keyCode <= KeyEvent.KEYCODE_9)) {
+//                mEtPinFourthDigit.requestFocus();
+//            }
+//            return false;
+//        });
+//
+//        mEtPinFourthDigit.setOnKeyListener((v, keyCode, event) -> {
+//            if ((keyCode >= KeyEvent.KEYCODE_0 && keyCode <= KeyEvent.KEYCODE_9)) {
+//                mNextButton.requestFocus();
+//            }
+//            return false;
+//        });
     }
 
     @OnTextChanged({

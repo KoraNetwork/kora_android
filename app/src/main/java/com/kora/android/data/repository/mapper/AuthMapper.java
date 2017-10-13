@@ -24,6 +24,7 @@ public class AuthMapper {
     public ObservableTransformer<UserResponse, UserEntity> transformResponseToEntityUser() {
         return userResponseObservable -> userResponseObservable
                 .map(userResponse -> new UserEntity()
+                        .addId(userResponse.getId())
                         .addAvatar(userResponse.getAvatar())
                         .addPhoneNumber(userResponse.getPhoneNumber())
                         .addIdentity(userResponse.getIdentity())

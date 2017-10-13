@@ -6,11 +6,6 @@
     android:layout_height="match_parent"
     android:focusableInTouchMode="true">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize" />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -21,22 +16,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.kora.android.views.CustomTextView
-                android:layout_centerHorizontal="true"
-                android:id="@+id/text_view_welcome"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="16dp"
-                android:text="@string/login_welcome"
-                android:textColor="@color/color_text_title"
-                android:textSize="24sp"
-                app:font="@string/font_name_muli_semi_bold" />
-
             <ImageView
-                android:layout_marginTop="24dp"
-                android:layout_below="@+id/text_view_welcome"
+                android:layout_marginTop="48dp"
                 android:id="@+id/image_view_kora_logo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -50,10 +31,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginTop="72dp"
+                android:layout_marginTop="48dp"
                 android:text="@string/login_login"
                 android:textColor="@color/color_text_title"
-                android:textSize="20sp"
+                android:textSize="24sp"
                 app:font="@string/font_name_muli_semi_bold" />
 
             <com.kora.android.views.CustomTextView
@@ -76,7 +57,7 @@
                 android:layout_below="@+id/text_view_enter_phone_name_email"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginTop="46dp"
+                android:layout_marginTop="36dp"
                 app:errorEnabled="true">
 
                 <android.support.design.widget.TextInputEditText
@@ -150,7 +131,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/card_view_login"
                 android:layout_marginBottom="24dp"
-                android:layout_marginTop="48dp"
+                android:layout_marginTop="36dp"
                 android:gravity="center">
 
                 <com.kora.android.views.CustomTextView

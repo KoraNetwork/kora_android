@@ -17,8 +17,6 @@ import butterknife.OnTextChanged;
 
 public class LoginActivity extends BaseActivity<LoginPresenter> implements LoginView {
 
-    @BindView(R.id.toolbar)
-    Toolbar mToolbar;
     @BindView(R.id.edit_layout_identifier)
     TextInputLayout mElIdentifier;
     @BindView(R.id.edit_layout_password)
@@ -42,7 +40,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @Override
     protected void onViewReady(final Bundle savedInstanceState) {
-        setToolbar(mToolbar, R.drawable.ic_back_grey);
+
     }
 
     @OnTextChanged(R.id.edit_text_identifier)

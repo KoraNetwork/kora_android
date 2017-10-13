@@ -191,7 +191,7 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
         getPresenter().setDateOfBirth(dateOfBirth.toString().trim());
     }
 
-    @OnClick(R.id.card_view_select_currency)
+    @OnClick(R.id.relative_layout_select_currency)
     void OnClickSelectCurrency() {
         startActivityForResult(CurrenciesActivity.getLaunchIntent(this), SELECT_CURRENCY_REQUEST_CODE);
     }

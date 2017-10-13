@@ -128,7 +128,7 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
         mUserEntity.setRecoveryKey(mRegistrationPrefHelper.getRecoveryAddress());
         mUserEntity.setOwner(mRegistrationPrefHelper.getOwnerAddress());
 
-//        mUserEntity.setPhoneNumber("380995551114");
+//        mUserEntity.setPhoneNumber("380995339692");
 //        mUserEntity.setIdentity("0x5c3D13b00F0fdE8dE60C45aB62EC0125C6b0F890".toLowerCase());
 
         mRegisterUseCase.setData(mUserEntity);

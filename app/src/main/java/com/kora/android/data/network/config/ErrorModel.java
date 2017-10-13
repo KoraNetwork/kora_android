@@ -34,7 +34,7 @@ public class ErrorModel {
     @JsonObject
     public static class Attributes {
 
-        @JsonField(name = {"userName", "email"})
+        @JsonField(name = {"userName", "email", "phone"})
         private List<AttributeName> mAttributeName;
 
         public List<AttributeName> getAttributeName() {

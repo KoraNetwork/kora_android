@@ -19,13 +19,16 @@ public class UserEntity implements Parcelable {
     private String mCurrency;
     private String mPostalCode;
     private String mAddress;
-
     private String mPassword;
     private String mCountryCode;
-
     private String mERC20Token;
     private String mFlag;
     private String mCurrencyNameFull;
+
+    public UserEntity addId(final String id) {
+        mId = id;
+        return this;
+    }
 
     public UserEntity addAvatar(final String avatar) {
         mAvatar = avatar;
@@ -105,6 +108,14 @@ public class UserEntity implements Parcelable {
     public UserEntity addCurrencyNameFull(final String currencyNameFull) {
         mCurrencyNameFull = currencyNameFull;
         return this;
+    }
+
+    public String getId() {
+        return mId;
+    }
+
+    public void setId(String mId) {
+        this.mId = mId;
     }
 
     public String getAvatar() {
@@ -251,17 +262,10 @@ public class UserEntity implements Parcelable {
         this.mCurrencyNameFull = mCurrencyNameFull;
     }
 
-    public String getId() {
-        return mId;
-    }
-
-    public void setId(String id) {
-        mId = id;
-    }
-
     @Override
     public String toString() {
         return "UserEntity{" + "\n" +
+                "mId=" + mId + "\n" +
                 "mAvatar=" + mAvatar + "\n" +
                 "mPhoneNumber=" + mPhoneNumber + "\n" +
                 "mIdentity=" + mIdentity + "\n" +
