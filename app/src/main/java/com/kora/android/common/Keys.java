@@ -39,8 +39,11 @@ public interface Keys {
     }
 
     interface DefaultCountry {
+        String DEFAULT_COUNTRY_CODE = "US";
         String DEFAULT_COUNTRY_NAME = "United States";
         String DEFAULT_COUNTRY_CURRENCY = "USD";
+        String DEFAULT_CURRENCY_NAME_FULL = "US Dollar";
+        String DEFAULT_ERC_20_TOKEN = "0x545053968018bff704408dacf69bb8f9cacf161f";
         String DEFAULT_COUNTRY_PHONE_CODE = "+1";
         String DEFAULT_COUNTRY_FLAG = "/images/flags/US.png";
     }

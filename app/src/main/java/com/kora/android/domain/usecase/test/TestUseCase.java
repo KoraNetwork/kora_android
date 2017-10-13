@@ -91,13 +91,13 @@ public class TestUseCase extends AsyncUseCase {
 
 
             // LOAD TOKEN SMART CONTRACT AND CALL FUNCTIONS
-//            final HumanStandardToken humanStandardToken = HumanStandardToken.load(
-//                    smartContractAddress,
-//                    web3j,
-//                    credentials,
-//                    mWeb3jConnection.getGasPrice(),
-//                    mWeb3jConnection.getGasLimit()
-//            );
+            final HumanStandardToken humanStandardToken = HumanStandardToken.load(
+                    "0x1d29e459f353901e5200db56ef5d6e7ccf772f4d",
+                    web3j,
+                    credentials,
+                    mWeb3jConnection.getGasPrice(),
+                    mWeb3jConnection.getGasLimit()
+            );
 //
 //            final Uint256 totalSupplyUint256 = humanStandardToken.totalSupply().get();
 //            final BigDecimal totalSupplyBigDecimal = Convert.fromWei(new BigDecimal(totalSupplyUint256.getValue()), Convert.Unit.ETHER);
@@ -107,11 +107,11 @@ public class TestUseCase extends AsyncUseCase {
 //            final BigDecimal balanceBigDecimal = Convert.fromWei(new BigDecimal(balanceUint256.getValue()), Convert.Unit.ETHER);
 //            Log.e("_____", "balance:" + String.valueOf(balanceBigDecimal));
 //
-//            final TransactionReceipt transactionReceipt = humanStandardToken.transfer(
-//                    new Address(proxyAddress),
-//                    new Uint256(new BigInteger("100000000000000000000"))
-//            ).get();
-//            Log.e("_____", "transactionHash:" + transactionReceipt.getTransactionHash());
+            final TransactionReceipt transactionReceipt = humanStandardToken.transfer(
+                    new Address("0x090a78d89c92b74e08e0169acdedd50195f57944"),
+                    new Uint256(new BigInteger("10000"))
+            ).get();
+            Log.e("_____", "transactionHash:" + transactionReceipt.getTransactionHash());
 
 
 
@@ -176,58 +176,58 @@ public class TestUseCase extends AsyncUseCase {
 
 
 
-            final String bankFileName = "97bb2587b02715e2936b95f36892a457966757ff";
-            final String bankAddress = "0x97bb2587b02715e2936b95f36892a457966757ff";
-
-            final Credentials ownerCredentials = mEtherWalletStorage.getCredentials(ownerFileName, password);
-            final Credentials bankCredentials = mEtherWalletStorage.getCredentials(bankFileName, password);
-
-            final MetaIdentityManager metaIdentityManager = MetaIdentityManager.load(
-                    mWeb3jConnection.getMetaIdentityManagerRinkeby(),
-                    web3j,
-                    ownerCredentials,
-                    mWeb3jConnection.getGasPrice(),
-                    mWeb3jConnection.getGasLimit()
-            );
-
-            final HumanStandardToken humanStandardToken = HumanStandardToken.load(
-                    smartContractAddress,
-                    web3j,
-                    bankCredentials,
-                    mWeb3jConnection.getGasPrice(),
-                    mWeb3jConnection.getGasLimit()
-            );
-
-            final Function function = new Function(
-                    "transfer",
-                    Arrays.asList(
-                            new Address("0x97bb2587b02715e2936b95f36892a457966757ff"),
-                            new Uint256(new BigInteger("1000000000000000000"))
-                    ),
-                    Collections.emptyList()
-            );
-
-            final String stringFunction = FunctionEncoder.encode(function);
-            final byte[] byteArrayFunction = Numeric.hexStringToByteArray(stringFunction);
-
-            final Future<TransactionReceipt> forwardTo = metaIdentityManager.forwardTo(
-                    new Address(ownerAddress),
-                    new Address(proxyAddress),
-                    new Address(smartContractAddress),
-                    Uint256.DEFAULT,
-                    new DynamicBytes(byteArrayFunction)
-            );
-
-            final Future<TransactionReceipt> transfer = humanStandardToken.transfer(
-                    new Address(proxyAddress),
-                    new Uint256(new BigInteger("500000000000000000"))
-            );
-
-            final TransactionReceipt forwardToTransactionReceipt = forwardTo.get();
-            final TransactionReceipt transferTransactionReceipt = transfer.get();
-
-            Log.e("_____", "bankTransactionHash:" + forwardToTransactionReceipt.getTransactionHash());
-            Log.e("_____", "ownerTransactionHash:" + transferTransactionReceipt.getTransactionHash());
+//            final String bankFileName = "97bb2587b02715e2936b95f36892a457966757ff";
+//            final String bankAddress = "0x97bb2587b02715e2936b95f36892a457966757ff";
+//
+//            final Credentials ownerCredentials = mEtherWalletStorage.getCredentials(ownerFileName, password);
+//            final Credentials bankCredentials = mEtherWalletStorage.getCredentials(bankFileName, password);
+//
+//            final MetaIdentityManager metaIdentityManager = MetaIdentityManager.load(
+//                    mWeb3jConnection.getMetaIdentityManagerRinkeby(),
+//                    web3j,
+//                    ownerCredentials,
+//                    mWeb3jConnection.getGasPrice(),
+//                    mWeb3jConnection.getGasLimit()
+//            );
+//
+//            final HumanStandardToken humanStandardToken = HumanStandardToken.load(
+//                    smartContractAddress,
+//                    web3j,
+//                    bankCredentials,
+//                    mWeb3jConnection.getGasPrice(),
+//                    mWeb3jConnection.getGasLimit()
+//            );
+//
+//            final Function function = new Function(
+//                    "transfer",
+//                    Arrays.asList(
+//                            new Address("0x97bb2587b02715e2936b95f36892a457966757ff"),
+//                            new Uint256(new BigInteger("1000000000000000000"))
+//                    ),
+//                    Collections.emptyList()
+//            );
+//
+//            final String stringFunction = FunctionEncoder.encode(function);
+//            final byte[] byteArrayFunction = Numeric.hexStringToByteArray(stringFunction);
+//
+//            final Future<TransactionReceipt> forwardTo = metaIdentityManager.forwardTo(
+//                    new Address(ownerAddress),
+//                    new Address(proxyAddress),
+//                    new Address(smartContractAddress),
+//                    Uint256.DEFAULT,
+//                    new DynamicBytes(byteArrayFunction)
+//            );
+//
+//            final Future<TransactionReceipt> transfer = humanStandardToken.transfer(
+//                    new Address(proxyAddress),
+//                    new Uint256(new BigInteger("500000000000000000"))
+//            );
+//
+//            final TransactionReceipt forwardToTransactionReceipt = forwardTo.get();
+//            final TransactionReceipt transferTransactionReceipt = transfer.get();
+//
+//            Log.e("_____", "bankTransactionHash:" + forwardToTransactionReceipt.getTransactionHash());
+//            Log.e("_____", "ownerTransactionHash:" + transferTransactionReceipt.getTransactionHash());
 
 
 

@@ -71,7 +71,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainVie
 //                "0x97bb2587B02715e2936b95f36892a457966757FF".toLowerCase(),
 //                new BigInteger("100000000000000000"));
 
-//        getPresenter().createIdentity();
+        getPresenter().createIdentity();
 
 //        final TelephonyManager telephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
 //        final String phoneNumber = telephonyManager.getLine1Number();

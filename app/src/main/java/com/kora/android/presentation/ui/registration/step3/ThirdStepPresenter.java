@@ -44,7 +44,6 @@ public class ThirdStepPresenter  extends BasePresenter<ThirdStepView> {
         mCreateIdentityUseCase.execute(new CreateIdentityUseCaseObserver());
     }
 
-
     private Action mCreateIdentityAction = new Action() {
         @Override
         public void run() throws Exception {
@@ -71,7 +70,6 @@ public class ThirdStepPresenter  extends BasePresenter<ThirdStepView> {
             getView().showNextScreen();
         }
 
-
         @Override
         public void onComplete() {
             if (!isViewAttached()) return;
@@ -84,12 +82,6 @@ public class ThirdStepPresenter  extends BasePresenter<ThirdStepView> {
             if (!isViewAttached()) return;
             getView().showProgress(false);
 
-        }
-
-        @Override
-        public void handleUnprocessableEntity(ErrorModel errorModel) {
-            if(!isViewAttached()) return;
-            getView().showError(errorModel.getError());
         }
 
         @Override

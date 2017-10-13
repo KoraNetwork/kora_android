@@ -8,6 +8,7 @@ import org.web3j.protocol.infura.InfuraHttpService;
 
 import java.math.BigInteger;
 
+import static com.kora.android.data.web3j.Constants.ETH_CALL_GET_BALANCE;
 import static com.kora.android.data.web3j.Constants.KORA_WALLET_PASSWORD;
 import static com.kora.android.data.web3j.Constants.KORA_WALLET_PRIVATE_KEY;
 import static com.kora.android.data.web3j.Constants.RINKEBY_IDENTITY_MANAGER_ADDRESS;
@@ -59,5 +60,9 @@ public class Web3jConnection {
 
     public String getKoraWalletPassword() {
         return KORA_WALLET_PASSWORD;
+    }
+
+    public String getEthCallGetBalabce() {
+        return ETH_CALL_GET_BALANCE;
     }
 }

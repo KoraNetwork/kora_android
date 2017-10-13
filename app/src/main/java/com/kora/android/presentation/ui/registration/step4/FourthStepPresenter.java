@@ -1,5 +1,7 @@
 package com.kora.android.presentation.ui.registration.step4;
 
+import android.util.Log;
+
 import com.kora.android.common.helper.RegistrationPrefHelper;
 import com.kora.android.common.utils.StringUtils;
 import com.kora.android.data.network.config.ErrorModel;
@@ -36,8 +38,9 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
 
     public void startGetCountryTask() {
         final CountryEntity countryEntity = mRegistrationPrefHelper.getCountry();
-        if (countryEntity != null)
-            getView().showCurrency(countryEntity);
+        setCurrency(countryEntity.getCurrency());
+        setCountryCode(countryEntity.getCountryCode());
+        getView().showCurrency(countryEntity);
     }
 
     public void setAvatar(final String avatar) {

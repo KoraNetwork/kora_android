@@ -234,7 +234,7 @@ public class UserEntity implements Parcelable {
         this.mERC20Token = mERC20Token;
     }
 
-    public String gemFlag() {
+    public String getFlag() {
         return mFlag;
     }
 

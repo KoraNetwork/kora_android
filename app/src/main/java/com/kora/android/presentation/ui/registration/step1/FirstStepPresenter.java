@@ -16,10 +16,13 @@ import javax.inject.Inject;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Action;
 
+import static com.kora.android.common.Keys.DefaultCountry.DEFAULT_COUNTRY_CODE;
 import static com.kora.android.common.Keys.DefaultCountry.DEFAULT_COUNTRY_CURRENCY;
 import static com.kora.android.common.Keys.DefaultCountry.DEFAULT_COUNTRY_FLAG;
 import static com.kora.android.common.Keys.DefaultCountry.DEFAULT_COUNTRY_NAME;
 import static com.kora.android.common.Keys.DefaultCountry.DEFAULT_COUNTRY_PHONE_CODE;
+import static com.kora.android.common.Keys.DefaultCountry.DEFAULT_CURRENCY_NAME_FULL;
+import static com.kora.android.common.Keys.DefaultCountry.DEFAULT_ERC_20_TOKEN;
 
 public class FirstStepPresenter extends BasePresenter<FirstStepView> {
 
@@ -38,8 +41,11 @@ public class FirstStepPresenter extends BasePresenter<FirstStepView> {
         mDeleteWalletsUseCase = deleteWalletsUseCase;
         mSendPhoneNumberUseCase = sendPhoneNumberUseCase;
         mCountryEntity = new CountryEntity()
+                .addCountryCode(DEFAULT_COUNTRY_CODE)
                 .addName(DEFAULT_COUNTRY_NAME)
                 .addCurrency(DEFAULT_COUNTRY_CURRENCY)
+                .addCurrencyNameFull(DEFAULT_CURRENCY_NAME_FULL)
+                .addERC20Token(DEFAULT_ERC_20_TOKEN)
                 .addPhoneCode(DEFAULT_COUNTRY_PHONE_CODE)
                 .addFlag(DEFAULT_COUNTRY_FLAG);
     }

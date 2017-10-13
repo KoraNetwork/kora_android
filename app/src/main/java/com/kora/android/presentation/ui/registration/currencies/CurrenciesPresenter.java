@@ -51,6 +51,12 @@ public class CurrenciesPresenter extends BasePresenter<CurrenciesView> {
         }
 
         @Override
+        public void onComplete() {
+            super.onComplete();
+            getView().showProgress(false);
+        }
+
+        @Override
         public void onError(@NonNull Throwable throwable) {
             super.onError(throwable);
             if (!isViewAttached()) return;
