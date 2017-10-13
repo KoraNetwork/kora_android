@@ -1,44 +1,40 @@
 package com.kora.android.presentation.ui.main;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.Toolbar;
-import android.widget.TextView;
+import android.support.design.internal.NavigationMenuView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.DividerItemDecoration;
+import android.view.View;
 
 import com.kora.android.R;
-import com.kora.android.common.permission.PermissionChecker;
-import com.kora.android.common.permission.PermissionException;
+import com.kora.android.common.Keys;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 
-import javax.inject.Inject;
-
-import butterknife.BindView;
-import butterknife.OnClick;
-
-import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-import static com.kora.android.common.Keys.PermissionChecker.PERMISSION_REQUEST_CODE_WRITE_EXTERNAL_STORAGE;
-
 public class MainActivity extends BaseActivity<MainPresenter> implements MainView {
 
-    @BindView(R.id.toolbar)
-    Toolbar mToolbar;
-    @BindView(R.id.text_view_main_screen)
-    TextView mTvMainScreen;
+    public static final int TAB_INVALID_POSITION = -1;
+    public static final int TAB_HOME_POSITION = 0;
+    public static final int TAB_SEND_MONEY_POSITION = 1;
+    public static final int TAB_REQUEST_MONEY_POSITION = 2;
+    public static final int TAB_BORROW_MONEY_POSITION = 3;
+    public static final int TAB_DEPOSIT_POSITION = 4;
+    public static final int TAB_WITHDRAWAL_POSITION = 5;
+    public static final int TAB_TRANSACTIONS_HISTORY_POSITION = 6;
+    public static final int TAB_USER_PROFILE_POSITION = 7;
+    public static final int TAB_SEND_A_FEEDBACK_POSITION = 8;
 
-    @Inject
-    PermissionChecker mPermissionChecker;
-
-    public static Intent getLaunchIntent(BaseActivity baseActivity) {
-        final Intent intent = new Intent(baseActivity, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        return intent;
+    public static Intent getLaunchIntent(final Context context) {
+        return getLaunchIntent(context, TAB_HOME_POSITION);
     }
 
-    @Override
-    public void injectToComponent(ActivityComponent activityComponent) {
-        activityComponent.inject(this);
+    public static Intent getLaunchIntent(final Context context,
+                                         final int currentTab) {
+        final Intent intent = new Intent(context, MainActivity.class);
+        intent.putExtra(Keys.Extras.EXTRA_CURRENT_TAB, currentTab);
+        return intent;
     }
 
     @Override
@@ -47,71 +43,33 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainVie
     }
 
     @Override
-    protected void onViewReady(Bundle savedInstanceState) {
-        setToolbar(mToolbar, R.drawable.ic_back_grey);
-
-        final String password = "123456789";
-        final String privateKey = "29984ecd73f5e4f9e2fc5ce49dfe61a5b13571ab34c0d427ca066a170cc4e851";
-//        final String privateKey = "fc0c329808e37c81fa441809f648f091c14c530177083fec386b7a220fb460e5";
-
-        // create new wallet
-//        getPresenter().generateWallet(password, null);
-
-        // import wallet
-//        getPresenter().generateWallet(password, privateKey);
-
-//        getPresenter().getWalletList();
-
-//        exportWallet();
-
-//        getPresenter().sendTransaction(
-//                "5c3D13b00F0fdE8dE60C45aB62EC0125C6b0F890".toLowerCase(),
-//                "123456789",
-//                "0x5c3D13b00F0fdE8dE60C45aB62EC0125C6b0F890".toLowerCase(),
-//                "0x97bb2587B02715e2936b95f36892a457966757FF".toLowerCase(),
-//                new BigInteger("100000000000000000"));
-
-//        getPresenter().createIdentity();
-
-//        final TelephonyManager telephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-//        final String phoneNumber = telephonyManager.getLine1Number();
-//
-//        if (phoneNumber == null)
-//            Log.e("_____", "NULL");
-//        else if (phoneNumber.isEmpty())
-//            Log.e("_____", "EMPTY");
-//        else if (!phoneNumber.isEmpty())
-//            Log.e("_____", phoneNumber);
+    public void injectToComponent(ActivityComponent activityComponent) {
+        activityComponent.inject(this);
     }
 
-    @OnClick(R.id.text_view_main_screen)
-    public void onClickMainScreen() {
-        getPresenter().startGetCountriesTask();
-    }
-
-    public void exportWallet() {
-        final String walletFileName = "5c3d13b00f0fde8de60c45ab62ec0125c6b0f890";
-        try {
-            mPermissionChecker.verifyPermissions(WRITE_EXTERNAL_STORAGE);
-            getPresenter().exportWallet(walletFileName);
-        } catch (PermissionException e) {
-            mPermissionChecker.requestPermissions(PERMISSION_REQUEST_CODE_WRITE_EXTERNAL_STORAGE, e.getRequiredPermissions());
-        }
+    public static Intent getLaunchIntent(final BaseActivity context) {
+        return new Intent(context, MainActivity.class);
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case PERMISSION_REQUEST_CODE_WRITE_EXTERNAL_STORAGE:
-                if (mPermissionChecker.permissionsGranted(permissions, grantResults))
-                    exportWallet();
-                else
-                    showDialogMessage(R.string.dialog_permission_export_wallet_title, R.string.dialog_permission_export_wallet_message);
-                break;
-            default:
-                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
+    protected void onViewReady(Bundle savedInstanceState) {
+        setupDrawer();
+
+    }
+
+    private void setupDrawer() {
+
+        mNavigationView.setNavigationItemSelectedListener(this);
+
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, mFilterNavigationView);
+        mDrawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                getPresenter().loadCounters();
+            }
+        });
+
+        NavigationMenuView navMenuView = (NavigationMenuView) mNavigationView.getChildAt(0);
+        navMenuView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
     }
 }

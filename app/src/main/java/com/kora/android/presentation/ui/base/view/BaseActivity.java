@@ -23,11 +23,13 @@ import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.di.component.ConfigPersistentComponent;
 import com.kora.android.di.component.DaggerConfigPersistentComponent;
 import com.kora.android.di.module.ActivityModule;
+import com.kora.android.presentation.navigation.Navigation;
 import com.kora.android.presentation.ui.base.custom.MultiDialog;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -36,6 +38,8 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
 
     @Inject
     P mPresenter;
+
+    Navigation mNavigation;
 
     private ActivityComponent mActivityComponent;
     private ProgressDialog mProgressDialog;
@@ -256,7 +260,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     }
 
     @IdRes
-    protected int getFragmentContainer() {
+    public int getFragmentContainer() {
         return 0;
     }
 
@@ -326,5 +330,14 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         if (fragment != null) {
             getBaseFragmentManager().beginTransaction().remove(fragment).commit();
         }
+    }
+
+    @Inject
+    public void setNavigation(@Named("simple") final Navigation navigation) {
+        mNavigation = navigation;
+    }
+
+    public Navigation getNavigator() {
+        return mNavigation;
     }
 }
