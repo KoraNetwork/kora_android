@@ -8,7 +8,6 @@ import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.home.HomeActivity;
 import com.kora.android.presentation.ui.login.LoginActivity;
 import com.kora.android.presentation.ui.main.MainActivity;
-import com.kora.android.presentation.ui.registration.step4.FourthStepActivity;
 
 public class SplashActivity extends BaseActivity<SplashPresenter> implements SplashView {
 
@@ -32,7 +31,7 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
 //        if (isSessionTokenEmpty)
 //            startActivity(WelcomeActivity.getLaunchIntent(this));
 //        else
-//        startActivity(MainActivity.getLaunchIntent(this));
+//        startActivity(TestActivity.getLaunchIntent(this));
 
 //        startActivity(FirstStepActivity.getLaunchIntent(this));
 
@@ -41,7 +40,9 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
 //        startActivity(FourthStepActivity.getLaunchIntent(this));
 
         startActivity(LoginActivity.getLaunchIntent(this));
-
+//
 //        startActivity(HomeActivity.getLaunchIntent(this));
+
+//        startActivity(MainActivity.getLaunchIntent(this));
     }
 }

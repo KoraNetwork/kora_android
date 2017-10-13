@@ -63,4 +63,8 @@ public interface Keys {
         String TOKEN = "token";
         String USER = "user";
     }
+
+    interface Extras {
+        String EXTRA_CURRENT_TAB = "com.kora.android.extra_current_tab";
+    }
 }

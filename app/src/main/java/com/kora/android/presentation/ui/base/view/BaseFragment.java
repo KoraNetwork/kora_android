@@ -103,6 +103,16 @@ public abstract class BaseFragment<P extends Presenter> extends Fragment impleme
     }
 
     @Override
+    public void showProgress(boolean isVisible, boolean cancelable, @StringRes int stringId) {
+        getBaseActivity().showProgress(isVisible, cancelable, stringId);
+    }
+
+    @Override
+    public void showError(String error) {
+        getBaseActivity().showError(error);
+    }
+
+    @Override
     public void showErrorWithRetry(RetryAction retryAction) {
         getBaseActivity().showErrorWithRetry(retryAction);
     }
@@ -137,7 +147,7 @@ public abstract class BaseFragment<P extends Presenter> extends Fragment impleme
     public void showDialogMessage(@StringRes int title,
                                   @StringRes int message,
                                   final DialogInterface.OnClickListener onClickListener) {
-        getBaseActivity().showDialogMessage(title, message,onClickListener);
+        getBaseActivity().showDialogMessage(title, message, onClickListener);
     }
 
     @Override
