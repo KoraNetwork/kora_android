@@ -36,6 +36,11 @@ public abstract class DefaultInternetSubscriber<T> extends DefaultDisposableObse
             case 422:
                 parsedError = parseError(retrofitException);
                 if (parsedError == null) return;
+                if (parsedError.getAttributes() != null
+                        && parsedError.getAttributes().getAttributeName() != null
+                        && parsedError.getAttributes().getAttributeName().size() > 0) {
+                    parsedError.setError(parsedError.getAttributes().getAttributeName().get(0).getError());
+                }
                 handleUnprocessableEntity(parsedError);
                 break;
             case 500:

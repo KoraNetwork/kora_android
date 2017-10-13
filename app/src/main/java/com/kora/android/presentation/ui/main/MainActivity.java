@@ -3,17 +3,38 @@ package com.kora.android.presentation.ui.main;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.design.internal.NavigationMenuView;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.DividerItemDecoration;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.kora.android.R;
 import com.kora.android.common.Keys;
 import com.kora.android.di.component.ActivityComponent;
+import com.kora.android.presentation.model.UserEntity;
+import com.kora.android.presentation.ui.base.backstack.BackStackActivity;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
+import com.kora.android.presentation.ui.base.view.BaseFragment;
+import com.kora.android.presentation.ui.main.fragments.home.HomeFragment;
 
-public class MainActivity extends BaseActivity<MainPresenter> implements MainView {
+import butterknife.BindView;
+
+import static com.kora.android.data.network.Constants.API_BASE_URL;
+
+public class MainActivity extends BackStackActivity<MainPresenter> implements MainView,
+        NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     public static final int TAB_INVALID_POSITION = -1;
     public static final int TAB_HOME_POSITION = 0;
@@ -25,6 +46,20 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainVie
     public static final int TAB_TRANSACTIONS_HISTORY_POSITION = 6;
     public static final int TAB_USER_PROFILE_POSITION = 7;
     public static final int TAB_SEND_A_FEEDBACK_POSITION = 8;
+
+    @BindView(R.id.root_view) CoordinatorLayout mRootView;
+    @BindView(R.id.content_layout) LinearLayout mContentLayout;
+    @BindView(R.id.drawer_layout) DrawerLayout mDrawerLayout;
+    @BindView(R.id.nav_view) NavigationView mNavigationView;
+    @BindView(R.id.left_nav_view_base) NavigationView mNavigationViewBase;
+    @BindView(R.id.frame_layout) FrameLayout mFrameLayout;
+
+    ImageView mUserAvatar;
+    TextView mUserName;
+    TextView mUserEmail;
+
+    private int mSelectedItemPosition = TAB_HOME_POSITION;
+    private int mNotificationsCount = 0;
 
     public static Intent getLaunchIntent(final Context context) {
         return getLaunchIntent(context, TAB_HOME_POSITION);
@@ -42,6 +77,11 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainVie
         return R.layout.activity_main;
     }
 
+    @IdRes
+    public int getFragmentContainer() {
+        return R.id.frame_layout;
+    }
+
     @Override
     public void injectToComponent(ActivityComponent activityComponent) {
         activityComponent.inject(this);
@@ -54,6 +94,20 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainVie
     @Override
     protected void onViewReady(Bundle savedInstanceState) {
         setupDrawer();
+        getNavigator().showFragment(rootTabFragment(TAB_HOME_POSITION), TAB_HOME_POSITION);
+
+        View headerView = mNavigationView.getHeaderView(0);
+        mUserAvatar = headerView.findViewById(R.id.avatar_image);
+        mUserName = headerView.findViewById(R.id.user_name);
+        mUserEmail = headerView.findViewById(R.id.user_email);
+
+        getPresenter().loadUserData();
+
+        if (savedInstanceState == null) {
+            final MenuItem item = mNavigationView.getMenu().getItem(0);
+            mNavigationView.getMenu().performIdentifierAction(item.getItemId(), TAB_HOME_POSITION);
+            item.setChecked(true);
+        }
 
     }
 
@@ -61,15 +115,130 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainVie
 
         mNavigationView.setNavigationItemSelectedListener(this);
 
-        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, mFilterNavigationView);
-        mDrawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                getPresenter().loadCounters();
-            }
-        });
-
         NavigationMenuView navMenuView = (NavigationMenuView) mNavigationView.getChildAt(0);
         navMenuView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
     }
+
+    @NonNull
+    private BaseFragment rootTabFragment(final int tabId) {
+        switch (tabId) {
+            case TAB_HOME_POSITION:
+                return HomeFragment.getNewInstance();
+            case TAB_SEND_MONEY_POSITION:
+                return HomeFragment.getNewInstance();
+            case TAB_REQUEST_MONEY_POSITION:
+                return HomeFragment.getNewInstance();
+            case TAB_BORROW_MONEY_POSITION:
+                return HomeFragment.getNewInstance();
+            case TAB_DEPOSIT_POSITION:
+                return HomeFragment.getNewInstance();
+            case TAB_WITHDRAWAL_POSITION:
+                return HomeFragment.getNewInstance();
+            case TAB_TRANSACTIONS_HISTORY_POSITION:
+                return HomeFragment.getNewInstance();
+            case TAB_USER_PROFILE_POSITION:
+                return HomeFragment.getNewInstance();
+            case TAB_SEND_A_FEEDBACK_POSITION:
+                return HomeFragment.getNewInstance();
+
+            default:
+                throw new IllegalArgumentException("No such tab");
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        } else if (mDrawerLayout.isDrawerOpen(GravityCompat.END)) {
+            mDrawerLayout.closeDrawer(GravityCompat.END);
+        } else {
+            final boolean handled = getNavigator().handleBack(this);
+            if (!handled) super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int position = TAB_HOME_POSITION;
+
+        switch (item.getItemId()) {
+            case R.id.nav_send_money:
+                position = TAB_SEND_MONEY_POSITION;
+                break;
+            case R.id.nav_requests_money:
+                position = TAB_REQUEST_MONEY_POSITION;
+                break;
+            case R.id.nav_borrow_money:
+                position = TAB_BORROW_MONEY_POSITION;
+                break;
+            case R.id.nav_deposit:
+                position = TAB_DEPOSIT_POSITION;
+                break;
+            case R.id.nav_withdrawal:
+                position = TAB_WITHDRAWAL_POSITION;
+                break;
+            case R.id.nav_transactions_history:
+                position = TAB_TRANSACTIONS_HISTORY_POSITION;
+                break;
+            case R.id.nav_user_profile:
+                position = TAB_USER_PROFILE_POSITION;
+                break;
+            case R.id.nav_send_a_feedback:
+                position = TAB_SEND_A_FEEDBACK_POSITION;
+                break;
+        }
+
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+
+        if (position != mSelectedItemPosition)
+            getNavigator().showFragment(rootTabFragment(position), position);
+
+        mSelectedItemPosition = position;
+
+        return true;
+    }
+
+    @Override
+    public void onClick(final View v) {
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            mDrawerLayout.openDrawer(GravityCompat.START);
+        }
+    }
+
+    @Override
+    public void showFragmentByPosition(int position){
+        final MenuItem item = mNavigationView.getMenu().getItem(0);
+        mNavigationView.getMenu().performIdentifierAction(item.getItemId(), position);
+        item.setChecked(true);
+    }
+
+    @Override
+    public void showUserData(UserEntity userEntity) {
+
+        Glide.with(this)
+                .load(API_BASE_URL + userEntity.getAvatar())
+                .apply(RequestOptions.circleCropTransform())
+                .into(mUserAvatar);
+        mUserName.setText(userEntity.getLegalName());
+        mUserEmail.setText(userEntity.getEmail());
+
+    }
+
+    @Override
+    public void selectHostById(final int hostId) {
+        mNavigationView.getMenu().getItem(hostId).setChecked(true);
+    }
+
+    public DrawerLayout getDrawerLayout() {
+        return mDrawerLayout;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
 }

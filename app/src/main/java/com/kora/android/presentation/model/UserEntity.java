@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 public class UserEntity implements Parcelable {
 
+    private String mId;
     private String mAvatar;
     private String mPhoneNumber;
     private String mIdentity;
@@ -197,6 +198,14 @@ public class UserEntity implements Parcelable {
         this.mPassword = mPassword;
     }
 
+    public String getId() {
+        return mId;
+    }
+
+    public void setId(String id) {
+        mId = id;
+    }
+
     @Override
     public String toString() {
         return "UserEntity{" + "\n" +
@@ -224,6 +233,7 @@ public class UserEntity implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.mId);
         dest.writeString(this.mAvatar);
         dest.writeString(this.mPhoneNumber);
         dest.writeString(this.mIdentity);
@@ -245,6 +255,7 @@ public class UserEntity implements Parcelable {
     }
 
     protected UserEntity(Parcel in) {
+        this.mId = in.readString();
         this.mAvatar = in.readString();
         this.mPhoneNumber = in.readString();
         this.mIdentity = in.readString();
@@ -272,4 +283,5 @@ public class UserEntity implements Parcelable {
             return new UserEntity[size];
         }
     };
+
 }
