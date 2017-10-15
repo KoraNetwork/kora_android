@@ -9,6 +9,7 @@ import com.kora.android.R;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.home.HomeActivity;
+import com.kora.android.presentation.ui.main.MainActivity;
 import com.kora.android.presentation.ui.registration.step1.FirstStepActivity;
 
 import butterknife.BindView;
@@ -87,7 +88,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @Override
     public void showNextScreen() {
-        startActivity(HomeActivity.getLaunchIntent(this));
+        startActivity(MainActivity.getLaunchIntent(this));
     }
 
 

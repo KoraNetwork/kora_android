@@ -21,5 +21,5 @@ public interface BaseView<P extends Presenter> {
 
     void showErrorWithRetry(final RetryAction retryAction);
 
-    void showError(String error);
+    void showError(final String error);
 }

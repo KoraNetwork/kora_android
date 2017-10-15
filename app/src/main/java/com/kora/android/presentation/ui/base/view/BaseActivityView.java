@@ -3,11 +3,15 @@ package com.kora.android.presentation.ui.base.view;
 import android.app.Dialog;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
+import android.support.annotation.StyleRes;
 
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.ui.base.presenter.Presenter;
 
 public interface BaseActivityView<P extends Presenter> extends BaseView<P> {
+
+    @StyleRes
+    int getStyleResource();
 
     void injectToComponent(final ActivityComponent activityComponent);
 

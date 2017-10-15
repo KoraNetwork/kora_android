@@ -5,9 +5,11 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.annotation.StyleRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -49,6 +51,8 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setTheme(getStyleResource());
         setContentView(getLayoutResource());
         mUnbinder = ButterKnife.bind(this);
 
@@ -59,6 +63,11 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
             mPresenter.attachView(this);
 
         onViewReady(savedInstanceState);
+    }
+
+    @Override
+    public int getStyleResource() {
+        return R.style.AppTheme;
     }
 
     protected void createActivityComponent() {

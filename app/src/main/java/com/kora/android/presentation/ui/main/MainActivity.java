@@ -1,10 +1,10 @@
 package com.kora.android.presentation.ui.main;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.StyleRes;
 import android.support.design.internal.NavigationMenuView;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
@@ -27,7 +27,11 @@ import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.backstack.BackStackActivity;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
+import com.kora.android.presentation.ui.main.fragments.borrow.BorrowFragment;
 import com.kora.android.presentation.ui.main.fragments.home.HomeFragment;
+import com.kora.android.presentation.ui.main.fragments.request.RequestFragment;
+import com.kora.android.presentation.ui.main.fragments.send.SendFragment;
+import com.kora.android.presentation.ui.main.fragments.transactions.TransactionsFragment;
 
 import butterknife.BindView;
 
@@ -61,15 +65,20 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
     private int mSelectedItemPosition = TAB_HOME_POSITION;
     private int mNotificationsCount = 0;
 
-    public static Intent getLaunchIntent(final Context context) {
-        return getLaunchIntent(context, TAB_HOME_POSITION);
+    public static Intent getLaunchIntent(final BaseActivity baseActivity) {
+        return getLaunchIntent(baseActivity, TAB_HOME_POSITION);
     }
 
-    public static Intent getLaunchIntent(final Context context,
-                                         final int currentTab) {
-        final Intent intent = new Intent(context, MainActivity.class);
+    public static Intent getLaunchIntent(final BaseActivity baseActivity, final int currentTab) {
+        final Intent intent = new Intent(baseActivity, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra(Keys.Extras.EXTRA_CURRENT_TAB, currentTab);
         return intent;
+    }
+
+    @Override
+    public int getStyleResource() {
+        return R.style.AppThemeMain;
     }
 
     @Override
@@ -87,16 +96,12 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
         activityComponent.inject(this);
     }
 
-    public static Intent getLaunchIntent(final BaseActivity context) {
-        return new Intent(context, MainActivity.class);
-    }
-
     @Override
     protected void onViewReady(Bundle savedInstanceState) {
         setupDrawer();
         getNavigator().showFragment(rootTabFragment(TAB_HOME_POSITION), TAB_HOME_POSITION);
 
-        View headerView = mNavigationView.getHeaderView(0);
+        final View headerView = mNavigationView.getHeaderView(0);
         mUserAvatar = headerView.findViewById(R.id.avatar_image);
         mUserName = headerView.findViewById(R.id.user_name);
         mUserEmail = headerView.findViewById(R.id.user_email);
@@ -108,11 +113,9 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
             mNavigationView.getMenu().performIdentifierAction(item.getItemId(), TAB_HOME_POSITION);
             item.setChecked(true);
         }
-
     }
 
     private void setupDrawer() {
-
         mNavigationView.setNavigationItemSelectedListener(this);
 
         NavigationMenuView navMenuView = (NavigationMenuView) mNavigationView.getChildAt(0);
@@ -125,21 +128,21 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
             case TAB_HOME_POSITION:
                 return HomeFragment.getNewInstance();
             case TAB_SEND_MONEY_POSITION:
-                return HomeFragment.getNewInstance();
+                return SendFragment.getNewInstance();
             case TAB_REQUEST_MONEY_POSITION:
-                return HomeFragment.getNewInstance();
+                return RequestFragment.getNewInstance();
             case TAB_BORROW_MONEY_POSITION:
-                return HomeFragment.getNewInstance();
+                return BorrowFragment.getNewInstance();
             case TAB_DEPOSIT_POSITION:
-                return HomeFragment.getNewInstance();
+                return TransactionsFragment.getNewInstance();
             case TAB_WITHDRAWAL_POSITION:
-                return HomeFragment.getNewInstance();
+                return TransactionsFragment.getNewInstance();
             case TAB_TRANSACTIONS_HISTORY_POSITION:
-                return HomeFragment.getNewInstance();
+                return TransactionsFragment.getNewInstance();
             case TAB_USER_PROFILE_POSITION:
-                return HomeFragment.getNewInstance();
+                return TransactionsFragment.getNewInstance();
             case TAB_SEND_A_FEEDBACK_POSITION:
-                return HomeFragment.getNewInstance();
+                return TransactionsFragment.getNewInstance();
 
             default:
                 throw new IllegalArgumentException("No such tab");
@@ -217,14 +220,12 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
 
     @Override
     public void showUserData(UserEntity userEntity) {
-
         Glide.with(this)
                 .load(API_BASE_URL + userEntity.getAvatar())
                 .apply(RequestOptions.circleCropTransform())
                 .into(mUserAvatar);
         mUserName.setText(userEntity.getLegalName());
         mUserEmail.setText(userEntity.getEmail());
-
     }
 
     @Override
@@ -235,10 +236,4 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
     public DrawerLayout getDrawerLayout() {
         return mDrawerLayout;
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
 }

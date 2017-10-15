@@ -46,7 +46,7 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeVie
     protected void onViewReady(final Bundle savedInstanceState) {
         setToolbar(mToolbar, R.drawable.ic_menu_white);
 
-        getPresenter().startGetBalanceTask();
+        getPresenter().startGetUserTask();
     }
 
     @Override

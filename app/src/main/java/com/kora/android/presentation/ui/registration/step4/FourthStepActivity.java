@@ -20,6 +20,7 @@ import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.model.CountryEntity;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.home.HomeActivity;
+import com.kora.android.presentation.ui.main.MainActivity;
 import com.kora.android.presentation.ui.registration.currencies.CurrenciesActivity;
 import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo;
 import com.miguelbcr.ui.rx_paparazzo2.entities.Options;
@@ -260,7 +261,7 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
 
     @Override
     public void showNextScreen() {
-        startActivity(HomeActivity.getLaunchIntent(this));
+        startActivity(MainActivity.getLaunchIntent(this));
     }
 
     @Override
