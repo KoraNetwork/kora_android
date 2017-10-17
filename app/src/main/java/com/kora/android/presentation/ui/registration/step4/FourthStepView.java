@@ -8,6 +8,7 @@ import java.io.File;
 public interface FourthStepView extends BaseView<FourthStepPresenter> {
 
     void showCurrency(final CountryEntity countryEntity);
+    void showDateOfBirth(final String dateOfBirth);
 
     void showAvatar(final File file);
 
@@ -24,5 +25,4 @@ public interface FourthStepView extends BaseView<FourthStepPresenter> {
     void showIncorrectConfirmPassword();
 
     void showNextScreen();
-    void showServerError(final String message);
 }

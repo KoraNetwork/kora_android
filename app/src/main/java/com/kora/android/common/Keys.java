@@ -58,6 +58,10 @@ public interface Keys {
         String SELECT_CURRENCY_EXTRA = "SELECT_CURRENCY_EXTRA";
     }
 
+    interface SelectDate {
+        int SELECT_DATE_DIALOG_ID = 111;
+    }
+
     interface Shared {
         String NAME = "kora";
         String TOKEN = "token";

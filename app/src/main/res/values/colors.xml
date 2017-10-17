@@ -9,7 +9,7 @@
 
     <color name="color_white">#616161</color>
     <color name="color_black">#000000</color>
-    <color name="red">#D50000</color>
+    <color name="color_red">#D50000</color>
 
     <color name="color_text_title">#FF3B3D3D</color>
     <color name="color_text_text">#696a6b</color>

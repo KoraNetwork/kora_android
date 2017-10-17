@@ -14,6 +14,8 @@ import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
 
+import java.util.Calendar;
+
 import javax.inject.Inject;
 
 import io.reactivex.annotations.NonNull;
@@ -27,6 +29,9 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
 
     private UserEntity mUserEntity;
     private String mConfirmPassword;
+    private int mYear;
+    private int mMonth;
+    private int mDay;
 
     @Inject
     public FourthStepPresenter(final RegistrationPrefHelper registrationPrefHelper,
@@ -41,6 +46,15 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
         setCurrency(countryEntity.getCurrency());
         setCountryCode(countryEntity.getCountryCode());
         getView().showCurrency(countryEntity);
+    }
+
+    public void startGetDateOfBirthTask() {
+        final Calendar calendar = Calendar.getInstance();
+        mYear = calendar.get(Calendar.YEAR);
+        mMonth = calendar.get(Calendar.MONTH);
+        mDay = calendar.get(Calendar.DAY_OF_MONTH);
+        setDateOfBirth(mYear, mMonth, mDay);
+        getView().showDateOfBirth(mUserEntity.getDateOfBirth());
     }
 
     public void setAvatar(final String avatar) {
@@ -59,7 +73,8 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
         mUserEntity.setEmail(email);
     }
 
-    public void setDateOfBirth(final String dateOfBirth) {
+    public void setDateOfBirth(final int year, final int month, final int day) {
+        final String dateOfBirth = day + "/" + (month + 1) + "/" + year;
         mUserEntity.setDateOfBirth(dateOfBirth);
     }
 
@@ -85,6 +100,34 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
 
     public void setConfirmPassword(final String confirmPassword) {
         mConfirmPassword = confirmPassword;
+    }
+
+    public String getDateOfBirth() {
+        return mUserEntity.getDateOfBirth();
+    }
+
+    public void setYear(final int year) {
+        mYear = year;
+    }
+
+    public void setMonth(final int month) {
+        mMonth = month;
+    }
+
+    public void setDay(final int day) {
+        mDay = day;
+    }
+
+    public int getYear() {
+        return mYear;
+    }
+
+    public int getMonth() {
+        return mMonth;
+    }
+
+    public int getDay() {
+        return mDay;
     }
 
     public void startRegistrationTask() {

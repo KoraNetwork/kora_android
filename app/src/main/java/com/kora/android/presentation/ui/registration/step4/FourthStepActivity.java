@@ -1,5 +1,7 @@
 package com.kora.android.presentation.ui.registration.step4;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
@@ -7,6 +9,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -19,7 +22,6 @@ import com.kora.android.common.utils.ViewUtils;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.model.CountryEntity;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
-import com.kora.android.presentation.ui.home.HomeActivity;
 import com.kora.android.presentation.ui.main.MainActivity;
 import com.kora.android.presentation.ui.registration.currencies.CurrenciesActivity;
 import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo;
@@ -27,6 +29,7 @@ import com.miguelbcr.ui.rx_paparazzo2.entities.Options;
 import com.miguelbcr.ui.rx_paparazzo2.entities.size.CustomMaxSize;
 
 import java.io.File;
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -36,6 +39,7 @@ import io.reactivex.schedulers.Schedulers;
 
 import static com.kora.android.common.Keys.SelectCurrency.SELECT_CURRENCY_EXTRA;
 import static com.kora.android.common.Keys.SelectCurrency.SELECT_CURRENCY_REQUEST_CODE;
+import static com.kora.android.common.Keys.SelectDate.SELECT_DATE_DIALOG_ID;
 import static com.kora.android.data.network.Constants.API_BASE_URL;
 
 public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implements FourthStepView {
@@ -46,25 +50,20 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
     ImageView mIvAvatar;
     @BindView(R.id.text_view_upload_photo)
     TextView mTvUploadPhoto;
-
     @BindView(R.id.edit_layout_user_name)
     TextInputLayout mElUserName;
-    @BindView(R.id.edit_text_user_name)
-    TextInputEditText mEtPhoneNumber;
-
     @BindView(R.id.edit_layout_email)
     TextInputLayout mElEmail;
-
+    @BindView(R.id.text_view_date_of_birth)
+    TextView mTvDateOfBirth;
     @BindView(R.id.image_view_country_flag)
     ImageView mIvCountryFlag;
     @BindView(R.id.text_view_currency)
     TextView mTvCurrency;
-
     @BindView(R.id.edit_layout_password)
     TextInputLayout mElPassword;
     @BindView(R.id.edit_layout_confirm_password)
     TextInputLayout mElConfirmPassword;
-
     @BindView(R.id.scroll_view_container)
     ScrollView mSvContainer;
     @BindView(R.id.relative_layout_container)
@@ -91,6 +90,7 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
         setToolbar(mToolbar, R.drawable.ic_back_grey);
 
         getPresenter().startGetCountryTask();
+        getPresenter().startGetDateOfBirthTask();
     }
 
     @Override
@@ -110,7 +110,11 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
                 .load(API_BASE_URL + countryEntity.getFlag())
                 .into(mIvCountryFlag);
         mTvCurrency.setText(countryEntity.getCurrency());
-        getPresenter().setCurrency(countryEntity.getCurrency());
+    }
+
+    @Override
+    public void showDateOfBirth(final String dateOfBirth) {
+        mTvDateOfBirth.setText(dateOfBirth);
     }
 
     @OnClick({R.id.image_view_avatar, R.id.text_view_upload_photo})
@@ -187,9 +191,28 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
         ViewUtils.scrollToView(mSvContainer, mRlContainer, mElEmail);
     }
 
-    @OnTextChanged(R.id.edit_text_date_of_birth)
-    void onChangedDateOfBirth(final CharSequence dateOfBirth) {
-        getPresenter().setDateOfBirth(dateOfBirth.toString().trim());
+    @OnClick(R.id.linear_layout_select_date)
+    void onClickSelectDate() {
+        showDialog(SELECT_DATE_DIALOG_ID);
+    }
+
+    @Override
+    protected Dialog onCreateDialog(final int id) {
+        if (id == SELECT_DATE_DIALOG_ID) {
+            final int year = getPresenter().getYear();
+            final int month = getPresenter().getMonth();
+            final int day = getPresenter().getDay();
+            final DatePickerDialog.OnDateSetListener onDateSetListener =
+                    (arg0, arg1, arg2, arg3) -> {
+                        getPresenter().setDateOfBirth(arg1, arg2, arg3);
+                        getPresenter().setYear(arg1);
+                        getPresenter().setMonth(arg2);
+                        getPresenter().setDay(arg3);
+                        mTvDateOfBirth.setText(getPresenter().getDateOfBirth());
+                    };
+            return new DatePickerDialog(this, onDateSetListener, year, month, day);
+        }
+        return null;
     }
 
     @OnClick(R.id.relative_layout_select_currency)
@@ -262,10 +285,5 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
     @Override
     public void showNextScreen() {
         startActivity(MainActivity.getLaunchIntent(this));
-    }
-
-    @Override
-    public void showServerError(final String message) {
-        showDialogMessage(R.string.registration_dialog_title_server_error_validation, message);
     }
 }
