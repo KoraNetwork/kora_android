@@ -47,4 +47,8 @@
         <item name="itemTextColor">@color/menu_text_color</item>
     </style>
 
+    <style name="AppTheme.DatePicker" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/color_date_picker</item>
+    </style>
+
 </resources>

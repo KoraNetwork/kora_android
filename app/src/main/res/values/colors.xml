@@ -17,6 +17,7 @@
     <color name="color_text_blue">#2b74a5</color>
     <color name="color_text_black">#000000</color>
     <color name="color_text_grey">#9E9E9E</color>
+    <color name="color_text_red">#D32F2F</color>
 
     <color name="color_edit_text">#DE000000</color>
 
@@ -31,11 +32,13 @@
     <color name="color_dialog_text">#FF3B3D3D</color>
     <color name="color_dialog_button_text">#FF2B74A5</color>
 
-
     <color name="color_transparent">#00ffffff</color>
 
     <color name="color_cropping_background">#000000</color>
 
     <color name="mdtp_accent_color">#77cda4</color>
     <color name="mdtp_accent_color_dark">#77cda4</color>
+
+    <color name="color_date_picker">#77cda4</color>
+
 </resources>

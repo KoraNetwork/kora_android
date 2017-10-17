@@ -123,6 +123,18 @@
                     android:textSize="16sp" />
             </android.support.design.widget.TextInputLayout>
 
+            <TextView
+                android:id="@+id/text_view_required_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/edit_layout_email"
+                android:layout_marginEnd="25dp"
+                android:layout_marginRight="25dp"
+                android:text="@string/registration_required"
+                android:textColor="@color/color_text_blue"
+                android:textSize="20sp" />
+
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/edit_layout_email"
                 android:layout_width="match_parent"
@@ -169,7 +181,17 @@
                     android:layout_marginTop="4dp"
                     android:textColor="@color/color_text_black"
                     android:textSize="18sp"
-                    tools:text="01/01/1980" />
+                    tools:text="01 January 1980" />
+
+                <TextView
+                    android:id="@+id/text_view_date_of_birth_error"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/registration_date_of_birth_incorrect"
+                    android:textColor="@color/color_text_red"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <RelativeLayout
