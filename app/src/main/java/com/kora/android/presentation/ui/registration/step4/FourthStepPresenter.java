@@ -3,6 +3,7 @@ package com.kora.android.presentation.ui.registration.step4;
 import android.util.Log;
 
 import com.kora.android.common.helper.RegistrationPrefHelper;
+import com.kora.android.common.utils.DateUtils;
 import com.kora.android.common.utils.StringUtils;
 import com.kora.android.data.network.config.ErrorModel;
 import com.kora.android.data.network.exception.RetrofitException;
@@ -53,8 +54,10 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
         mYear = calendar.get(Calendar.YEAR);
         mMonth = calendar.get(Calendar.MONTH);
         mDay = calendar.get(Calendar.DAY_OF_MONTH);
-        setDateOfBirth(mYear, mMonth, mDay);
-        getView().showDateOfBirth(mUserEntity.getDateOfBirth());
+        final String formattedDate = DateUtils.getFormattedDate(mYear, mMonth, mDay);
+        setDateOfBirth(formattedDate);
+        final String prettyDate = DateUtils.getPrettyDate(mYear, mMonth, mDay);
+        getView().showDateOfBirth(prettyDate);
     }
 
     public void setAvatar(final String avatar) {
@@ -73,8 +76,7 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
         mUserEntity.setEmail(email);
     }
 
-    public void setDateOfBirth(final int year, final int month, final int day) {
-        final String dateOfBirth = day + "/" + (month + 1) + "/" + year;
+    public void setDateOfBirth(final String dateOfBirth) {
         mUserEntity.setDateOfBirth(dateOfBirth);
     }
 
@@ -143,11 +145,17 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
             getView().showTooShortUserName();
             return;
         }
-        if (mUserEntity.getEmail() != null && !mUserEntity.getEmail().isEmpty()) {
-            if (!StringUtils.isEmailValid(mUserEntity.getEmail())) {
-                getView().showIncorrectEmail();
-                return;
-            }
+        if (mUserEntity.getEmail() == null || mUserEntity.getEmail().isEmpty()) {
+            getView().showEmptyEmail();
+            return;
+        }
+        if (!StringUtils.isEmailValid(mUserEntity.getEmail())) {
+            getView().showIncorrectEmail();
+            return;
+        }
+        if (!DateUtils.isDateValid(mUserEntity.getDateOfBirth())) {
+            getView().showIncorrectDate();
+            return;
         }
         if (mUserEntity.getPassword() == null || mUserEntity.getPassword().isEmpty()) {
             getView().showEmptyPassword();

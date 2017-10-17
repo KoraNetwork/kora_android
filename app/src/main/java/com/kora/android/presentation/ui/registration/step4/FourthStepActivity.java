@@ -1,15 +1,13 @@
 package com.kora.android.presentation.ui.registration.step4;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.widget.DatePicker;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -18,6 +16,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.kora.android.R;
+import com.kora.android.common.utils.DateUtils;
 import com.kora.android.common.utils.ViewUtils;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.model.CountryEntity;
@@ -39,7 +38,6 @@ import io.reactivex.schedulers.Schedulers;
 
 import static com.kora.android.common.Keys.SelectCurrency.SELECT_CURRENCY_EXTRA;
 import static com.kora.android.common.Keys.SelectCurrency.SELECT_CURRENCY_REQUEST_CODE;
-import static com.kora.android.common.Keys.SelectDate.SELECT_DATE_DIALOG_ID;
 import static com.kora.android.data.network.Constants.API_BASE_URL;
 
 public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implements FourthStepView {
@@ -56,6 +54,8 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
     TextInputLayout mElEmail;
     @BindView(R.id.text_view_date_of_birth)
     TextView mTvDateOfBirth;
+    @BindView(R.id.text_view_date_of_birth_error)
+    TextView mTvDateOfBirthError;
     @BindView(R.id.image_view_country_flag)
     ImageView mIvCountryFlag;
     @BindView(R.id.text_view_currency)
@@ -89,7 +89,7 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
     protected void onViewReady(final Bundle savedInstanceState) {
         setToolbar(mToolbar, R.drawable.ic_back_grey);
 
-        getPresenter().startGetCountryTask();
+//        getPresenter().startGetCountryTask();
         getPresenter().startGetDateOfBirthTask();
     }
 
@@ -191,28 +191,31 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
         ViewUtils.scrollToView(mSvContainer, mRlContainer, mElEmail);
     }
 
+    @Override
+    public void showEmptyEmail() {
+        mElEmail.setError(getString(R.string.registration_email_empty));
+        ViewUtils.scrollToView(mSvContainer, mRlContainer, mElEmail);
+    }
+
     @OnClick(R.id.linear_layout_select_date)
     void onClickSelectDate() {
-        showDialog(SELECT_DATE_DIALOG_ID);
+        mTvDateOfBirthError.setVisibility(View.GONE);
+
+        final int year = getPresenter().getYear();
+        final int month = getPresenter().getMonth();
+        final int day = getPresenter().getDay();
+        new DatePickerDialog(this, R.style.AppTheme_DatePicker, (view, selectedYear, selectedMonth, selectedDay) -> {
+            getPresenter().setYear(selectedYear);
+            getPresenter().setMonth(selectedMonth);
+            getPresenter().setDay(selectedDay);
+            getPresenter().setDateOfBirth(DateUtils.getFormattedDate(selectedYear, selectedMonth, selectedDay));
+            mTvDateOfBirth.setText(DateUtils.getPrettyDate(selectedYear, selectedMonth, selectedDay));
+        }, year, month, day).show();
     }
 
     @Override
-    protected Dialog onCreateDialog(final int id) {
-        if (id == SELECT_DATE_DIALOG_ID) {
-            final int year = getPresenter().getYear();
-            final int month = getPresenter().getMonth();
-            final int day = getPresenter().getDay();
-            final DatePickerDialog.OnDateSetListener onDateSetListener =
-                    (arg0, arg1, arg2, arg3) -> {
-                        getPresenter().setDateOfBirth(arg1, arg2, arg3);
-                        getPresenter().setYear(arg1);
-                        getPresenter().setMonth(arg2);
-                        getPresenter().setDay(arg3);
-                        mTvDateOfBirth.setText(getPresenter().getDateOfBirth());
-                    };
-            return new DatePickerDialog(this, onDateSetListener, year, month, day);
-        }
-        return null;
+    public void showIncorrectDate() {
+        mTvDateOfBirthError.setVisibility(View.VISIBLE);
     }
 
     @OnClick(R.id.relative_layout_select_currency)

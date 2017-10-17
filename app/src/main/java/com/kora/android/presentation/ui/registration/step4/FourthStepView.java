@@ -16,7 +16,10 @@ public interface FourthStepView extends BaseView<FourthStepPresenter> {
     void showIncorrectUserName();
     void showTooShortUserName();
 
+    void showEmptyEmail();
     void showIncorrectEmail();
+
+    void  showIncorrectDate();
 
     void showEmptyPassword();
     void showTooShortPassword();

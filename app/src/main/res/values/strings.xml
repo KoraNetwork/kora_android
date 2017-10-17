@@ -73,7 +73,9 @@
     <string name="registration_user_name_empty">User name field is empty</string>
     <string name="registration_user_name_incorrect">User name is incorrect, e.g. John_99</string>
     <string name="registration_user_name_too_short">User name is too short</string>
+    <string name="registration_email_empty">Email field is empty</string>
     <string name="registration_email_incorrect">Email is incorrect, e.g. john99@mail.com</string>
+    <string name="registration_date_of_birth_incorrect">You are too young, must be at least 18 years old</string>
     <string name="registration_currency_usa">USD</string>
     <string name="registration_password_empty">Password field is empty</string>
     <string name="registration_password_too_short">Password is too short</string>
