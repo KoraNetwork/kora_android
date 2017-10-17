@@ -60,19 +60,35 @@ public abstract class StackFragment<P extends BasePresenter> extends BaseFragmen
         mDrawerToggle = new ActionBarDrawerToggle(getBaseActivity(), mDrawerLayout, mToolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
-        mDrawerToggle.setToolbarNavigationClickListener(v -> {
-            if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-                mDrawerLayout.closeDrawer(GravityCompat.START);
-            } else {
-                mDrawerLayout.openDrawer(GravityCompat.START);
-            }
-        });
+        setDrawerListener(false);
 
         mDrawerToggle.setDrawerIndicatorEnabled(false);
-        mDrawerToggle.setHomeAsUpIndicator(R.drawable.ic_menu_white);
         mDrawerLayout.addDrawerListener(mDrawerToggle);
 
         mDrawerToggle.syncState();
+    }
+
+    protected void setDrawerListener(final boolean isBackEnabled) {
+        if (isBackEnabled) {
+            mDrawerToggle.setToolbarNavigationClickListener(v -> onBackPressed());
+
+            mDrawerToggle.setHomeAsUpIndicator(R.drawable.ic_back);
+        } else {
+            mDrawerToggle.setToolbarNavigationClickListener(v -> {
+                if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    mDrawerLayout.closeDrawer(GravityCompat.START);
+                } else {
+                    mDrawerLayout.openDrawer(GravityCompat.START);
+                }
+            });
+
+            mDrawerToggle.setHomeAsUpIndicator(R.drawable.ic_menu_white);
+        }
+    }
+
+
+    protected void onBackPressed() {
+
     }
 
     @Override
