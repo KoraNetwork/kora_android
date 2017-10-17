@@ -9,26 +9,27 @@
 
     <ImageView
         android:id="@+id/avatar_image"
-        android:layout_width="85dp"
-        android:layout_height="85dp"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
         android:layout_marginTop="16dp"
-        android:src="@drawable/ic_kora_logo_small"/>
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/ic_user"/>
 
-    <com.kora.android.views.CustomTextView
+    <TextView
         android:id="@+id/user_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="User Name"
         android:textColor="@color/color_white"
-        app:font="@string/font_name_muli_semi_bold"/>
+        android:textSize="14sp"
+        android:textStyle="bold"/>
 
-    <com.kora.android.views.CustomTextView
+    <TextView
         android:id="@+id/user_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="user@email.com"
         android:textColor="@color/color_white"
-        android:textSize="14sp"
-        app:font="@string/font_name_muli" />
+        android:textSize="14sp"/>
 
 </LinearLayout>

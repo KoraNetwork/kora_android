@@ -28,6 +28,7 @@ import com.kora.android.presentation.ui.base.backstack.BackStackActivity;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
 import com.kora.android.presentation.ui.main.fragments.home.HomeFragment;
+import com.kora.android.presentation.ui.main.fragments.profile.ProfileFragment;
 
 import butterknife.BindView;
 
@@ -114,6 +115,7 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
     private void setupDrawer() {
 
         mNavigationView.setNavigationItemSelectedListener(this);
+        mNavigationView.setItemIconTintList(null);
 
         NavigationMenuView navMenuView = (NavigationMenuView) mNavigationView.getChildAt(0);
         navMenuView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
@@ -137,7 +139,7 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
             case TAB_TRANSACTIONS_HISTORY_POSITION:
                 return HomeFragment.getNewInstance();
             case TAB_USER_PROFILE_POSITION:
-                return HomeFragment.getNewInstance();
+                return ProfileFragment.getNewInstance();
             case TAB_SEND_A_FEEDBACK_POSITION:
                 return HomeFragment.getNewInstance();
 

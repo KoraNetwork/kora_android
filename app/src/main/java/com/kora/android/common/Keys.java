@@ -67,4 +67,10 @@ public interface Keys {
     interface Extras {
         String EXTRA_CURRENT_TAB = "com.kora.android.extra_current_tab";
     }
+
+    interface Args {
+
+        String USER_ENTITY = "user_entity_args";
+        String VIEW_MODE = "view_mode_args";
+    }
 }

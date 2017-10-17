@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <include
+        android:id="@+id/toolbar_container"
+        layout="@layout/toolbar"/>
+
+    <ScrollView
+        android:id="@+id/scroll_view_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar_container"
+        android:fillViewport="true">
+
+        <RelativeLayout
+            android:id="@+id/relative_layout_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/image_view_avatar"
+                android:layout_width="98dp"
+                android:layout_height="98dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/ic_user"/>
+
+            <com.kora.android.views.CustomTextView
+                android:id="@+id/text_view_upload_photo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/image_view_avatar"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="6dp"
+                android:text="@string/registration_upload_photo"
+                android:textColor="@color/color_text_blue"
+                android:visibility="invisible"
+                app:font="@string/font_name_muli_semi_bold"/>
+
+            <LinearLayout
+                android:id="@+id/returned_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/text_view_upload_photo"
+                android:orientation="horizontal"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/star"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="returned: 0"
+                    android:textColor="#62cd9a"
+                    android:textSize="12sp"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="25dp"
+                    android:text="not returned: 0"
+                    android:textColor="#62cd9a"
+                    android:textSize="12sp"
+                    />
+
+            </LinearLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/edit_layout_user_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/returned_container"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="24dp"
+                app:errorEnabled="true">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/edit_text_user_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:hint="@string/registration_user_name"
+                    android:inputType="text"
+                    android:maxLength="35"
+                    android:maxLines="1"
+                    android:textColor="@color/color_edit_text"
+                    android:textSize="16sp"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/edit_layout_legal_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edit_layout_user_name"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                app:errorEnabled="true">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/edit_text_legal_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:hint="@string/registration_legal_name"
+                    android:inputType="text"
+                    android:maxLength="35"
+                    android:maxLines="1"
+                    android:textColor="@color/color_edit_text"
+                    android:textSize="16sp"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/edit_layout_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edit_layout_legal_name"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                app:errorEnabled="true">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/edit_text_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:hint="@string/registration_email"
+                    android:inputType="text"
+                    android:maxLength="35"
+                    android:maxLines="1"
+                    android:textColor="@color/color_edit_text"
+                    android:textSize="16sp"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/edit_layout_date_of_birth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edit_layout_email"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                app:errorEnabled="true">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/edit_text_date_of_birth"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:hint="@string/registration_date_of_birth"
+                    android:inputType="date"
+                    android:maxLines="1"
+                    android:textColor="@color/color_edit_text"
+                    android:textSize="16sp"/>
+            </android.support.design.widget.TextInputLayout>
+
+
+            <com.kora.android.views.TextInputLayoutWithDrawable
+                android:id="@+id/edit_layout_currency"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edit_layout_date_of_birth"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                app:errorEnabled="true">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/edit_text_currency"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:hint="@string/registration_currency"
+                    android:inputType="text"
+                    android:maxLength="10"
+                    android:maxLines="1"
+                    android:textColor="@color/color_edit_text"
+                    android:textSize="16sp"/>
+            </com.kora.android.views.TextInputLayoutWithDrawable>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/edit_layout_phone_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edit_layout_currency"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                app:errorEnabled="true">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/edit_text_phone_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:hint="@string/registration_phone_number"
+                    android:inputType="text"
+                    android:maxLength="10"
+                    android:maxLines="1"
+                    android:textColor="@color/color_edit_text"
+                    android:textSize="16sp"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/edit_layout_postal_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edit_layout_phone_number"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                app:errorEnabled="true">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/edit_text_postal_code"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:hint="@string/registration_postal_code"
+                    android:inputType="text"
+                    android:maxLength="10"
+                    android:maxLines="1"
+                    android:textColor="@color/color_edit_text"
+                    android:textSize="16sp"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/edit_layout_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edit_layout_postal_code"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                app:errorEnabled="true">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/edit_text_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:hint="@string/registration_address"
+                    android:inputType="text"
+                    android:maxLength="35"
+                    android:maxLines="1"
+                    android:textColor="@color/color_edit_text"
+                    android:textSize="16sp"/>
+            </android.support.design.widget.TextInputLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
+</LinearLayout>

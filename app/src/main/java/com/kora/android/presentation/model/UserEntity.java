@@ -27,6 +27,11 @@ public class UserEntity implements Parcelable {
     private String mFlag;
     private String mCurrencyNameFull;
 
+    public UserEntity addId(String id) {
+        mId = id;
+        return this;
+    }
+
     public UserEntity addAvatar(final String avatar) {
         mAvatar = avatar;
         return this;

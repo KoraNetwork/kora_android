@@ -4,7 +4,7 @@ import com.kora.android.data.network.config.ErrorModel;
 import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
-import com.kora.android.domain.usecase.user.UserDataUseCase;
+import com.kora.android.domain.usecase.user.GetUserDataUseCase;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
@@ -17,22 +17,22 @@ import io.reactivex.functions.Action;
 @ConfigPersistent
 public class MainPresenter extends BasePresenter<MainView> {
 
-    private final UserDataUseCase mUserDataUseCase;
+    private final GetUserDataUseCase mGetUserDataUseCase;
 
     @Inject
-    public MainPresenter(final UserDataUseCase userDataUseCase) {
-        mUserDataUseCase = userDataUseCase;
+    public MainPresenter(final GetUserDataUseCase getUserDataUseCase) {
+        mGetUserDataUseCase = getUserDataUseCase;
     }
 
     public void loadUserData() {
-        mUserDataUseCase.setData(false);
-        mUserDataUseCase.execute(new GetUserSubscriber());
+        mGetUserDataUseCase.setData(false);
+        mGetUserDataUseCase.execute(new GetUserSubscriber());
     }
 
     private Action mGetUserAction = new Action() {
         @Override
         public void run() throws Exception {
-            mUserDataUseCase.execute(new GetUserSubscriber());
+            mGetUserDataUseCase.execute(new GetUserSubscriber());
         }
     };
 
@@ -78,6 +78,6 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     @Override
     public void onDetachView() {
-        mUserDataUseCase.dispose();
+        mGetUserDataUseCase.dispose();
     }
 }

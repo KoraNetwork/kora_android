@@ -1,0 +1,196 @@
+package com.kora.android.presentation.ui.main.fragments.profile;
+
+import com.kora.android.common.utils.StringUtils;
+import com.kora.android.data.network.config.ErrorModel;
+import com.kora.android.data.network.exception.RetrofitException;
+import com.kora.android.di.annotation.ConfigPersistent;
+import com.kora.android.domain.base.DefaultInternetSubscriber;
+import com.kora.android.domain.usecase.user.GetUserDataUseCase;
+import com.kora.android.domain.usecase.user.UpdateUserUseCase;
+import com.kora.android.presentation.model.CountryEntity;
+import com.kora.android.presentation.model.UserEntity;
+import com.kora.android.presentation.ui.base.custom.RetryAction;
+import com.kora.android.presentation.ui.base.presenter.BasePresenter;
+
+import javax.inject.Inject;
+
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Action;
+
+@ConfigPersistent
+public class ProfilePresenter extends BasePresenter<ProfileView> {
+
+    private final GetUserDataUseCase mGetUserDataUseCase;
+    private final UpdateUserUseCase mUpdateUserUseCase;
+
+    private UserEntity mUserEntity = new UserEntity();
+
+    @Inject
+    public ProfilePresenter(final GetUserDataUseCase getUserDataUseCase,
+                            final UpdateUserUseCase updateUserUseCase) {
+        mGetUserDataUseCase = getUserDataUseCase;
+        mUpdateUserUseCase = updateUserUseCase;
+    }
+
+    public void loadUserData() {
+        mGetUserDataUseCase.execute(new GetUserSubscriber());
+    }
+
+    public void setUserName(String userName) {
+        mUserEntity.setUserName(userName);
+    }
+
+    public void setLegalName(String legalName) {
+        mUserEntity.setLegalName(legalName);
+    }
+
+    public void setEmail(String email) {
+        mUserEntity.setLegalName(email);
+    }
+
+    public void setDateOfBirth(String dateOfBirth) {
+        mUserEntity.setDateOfBirth(dateOfBirth);
+    }
+
+    public void setPostalCode(String postalCode) {
+        mUserEntity.setPostalCode(postalCode);
+    }
+
+    public void setAddress(String address) {
+        mUserEntity.setAddress(address);
+    }
+
+    public void onSaveClicked() {
+        if (mUserEntity.getUserName() == null || mUserEntity.getUserName().isEmpty()) {
+            getView().showEmptyUserName();
+            return;
+        }
+        if (!StringUtils.isUserNameValid(mUserEntity.getUserName())) {
+            getView().showIncorrectUserName();
+            return;
+        }
+        if (!StringUtils.isUserNameLongEnough(mUserEntity.getUserName())) {
+            getView().showTooShortUserName();
+            return;
+        }
+        if (mUserEntity.getEmail() != null && !mUserEntity.getEmail().isEmpty()) {
+            if (!StringUtils.isEmailValid(mUserEntity.getEmail())) {
+                getView().showIncorrectEmail();
+                return;
+            }
+        }
+
+        mUpdateUserUseCase.setData(mUserEntity);
+        mUpdateUserUseCase.execute(new UpdateUserSubscriber());
+
+    }
+
+    public void setUserEntity(UserEntity user) {
+        mUserEntity = user;
+    }
+
+    public UserEntity getUserEntity() {
+        return mUserEntity;
+    }
+
+    private Action mGetUserAction = new Action() {
+        @Override
+        public void run() throws Exception {
+            mGetUserDataUseCase.execute(new GetUserSubscriber());
+        }
+    };
+
+    private Action mUpdateUserAction = new Action() {
+        @Override
+        public void run() throws Exception {
+            mUpdateUserUseCase.execute(new GetUserSubscriber());
+        }
+    };
+
+    public void setCurrency(CountryEntity country) {
+        mUserEntity.setCurrency(country.getCurrency());
+        mUserEntity.setFlag(country.getFlag());
+        mUserEntity.setCountryCode(country.getCountryCode());
+    }
+
+    private class GetUserSubscriber extends DefaultInternetSubscriber<UserEntity> {
+
+        @Override
+        protected void onStart() {
+            if (!isViewAttached()) return;
+            getView().showProgress(true);
+        }
+
+        @Override
+        public void onNext(UserEntity userEntity) {
+            if (!isViewAttached()) return;
+            getView().retrieveUserData(userEntity);
+        }
+
+        @Override
+        public void onComplete() {
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+        }
+
+        @Override
+        public void onError(@NonNull Throwable throwable) {
+            super.onError(throwable);
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+        }
+
+        @Override
+        public void handleUnprocessableEntity(ErrorModel errorModel) {
+            if (!isViewAttached()) return;
+            getView().showError(errorModel.getError());
+        }
+
+        @Override
+        public void handleNetworkError(RetrofitException retrofitException) {
+            if (!isViewAttached()) return;
+            getView().showErrorWithRetry(new RetryAction(mGetUserAction));
+        }
+    }
+
+    private class UpdateUserSubscriber extends DefaultInternetSubscriber<UserEntity> {
+
+        @Override
+        protected void onStart() {
+            if (!isViewAttached()) return;
+            getView().showProgress(true);
+        }
+
+        @Override
+        public void onComplete() {
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+            getView().onUserUpdated();
+        }
+
+        @Override
+        public void onError(@NonNull Throwable throwable) {
+            super.onError(throwable);
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+        }
+
+        @Override
+        public void handleUnprocessableEntity(ErrorModel errorModel) {
+            if (!isViewAttached()) return;
+            getView().showError(errorModel.getError());
+        }
+
+        @Override
+        public void handleNetworkError(RetrofitException retrofitException) {
+            if (!isViewAttached()) return;
+            getView().showErrorWithRetry(new RetryAction(mUpdateUserAction));
+        }
+    }
+
+    @Override
+    public void onDetachView() {
+        mGetUserDataUseCase.dispose();
+        mUpdateUserUseCase.dispose();
+    }
+}

@@ -34,11 +34,19 @@ public class UserRepositoryImpl implements UserRepository {
         UserEntity userEntity = mPreferenceHandler.remindObject(Keys.Shared.USER, UserEntity.class);
         if (userEntity == null) return null;
         if (fromNetwork)
-            return mUserService.getUserData(userEntity.getId())
+            return mUserService.getUserData()
                     .compose(mAuthMapper.transformResponseToEntityUser())
                     .compose(storeUser());
         else
             return Observable.just(userEntity);
+    }
+
+    @Override
+    public Observable<UserEntity> updateUser(UserEntity userEntity) {
+        return mAuthMapper.transformUserToFormData(userEntity)
+                .flatMap(userMap -> mUserService.updateUser(userMap)
+                        .compose(mAuthMapper.transformResponseToEntityUser())
+                        .compose(storeUser()));
     }
 
     public ObservableTransformer<UserEntity, UserEntity> storeUser() {

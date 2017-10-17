@@ -34,4 +34,7 @@
     <color name="color_transparent">#00ffffff</color>
 
     <color name="color_cropping_background">#000000</color>
+
+    <color name="mdtp_accent_color">#77cda4</color>
+    <color name="mdtp_accent_color_dark">#77cda4</color>
 </resources>
