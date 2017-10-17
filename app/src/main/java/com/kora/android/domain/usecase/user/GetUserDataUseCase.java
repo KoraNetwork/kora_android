@@ -9,13 +9,13 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 
 @ConfigPersistent
-public class UserDataUseCase extends AsyncUseCase {
+public class GetUserDataUseCase extends AsyncUseCase {
 
     private final UserRepository mUserRepository;
     private boolean mFromNetwork = true;
 
     @Inject
-    public UserDataUseCase(UserRepository userRepository) {
+    public GetUserDataUseCase(UserRepository userRepository) {
         mUserRepository = userRepository;
     }
 

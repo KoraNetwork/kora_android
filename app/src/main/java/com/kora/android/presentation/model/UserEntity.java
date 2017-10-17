@@ -261,7 +261,6 @@ public class UserEntity implements Parcelable {
     public void setCurrencyNameFull(String mCurrencyNameFull) {
         this.mCurrencyNameFull = mCurrencyNameFull;
     }
-
     @Override
     public String toString() {
         return "UserEntity{" + "\n" +

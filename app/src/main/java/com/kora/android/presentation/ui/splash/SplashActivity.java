@@ -1,11 +1,11 @@
 package com.kora.android.presentation.ui.splash;
 
+import android.app.Activity;
 import android.os.Bundle;
 
 import com.kora.android.R;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
-import com.kora.android.presentation.ui.home.HomeActivity;
 import com.kora.android.presentation.ui.login.LoginActivity;
 import com.kora.android.presentation.ui.main.MainActivity;
 import com.kora.android.presentation.ui.registration.step4.FourthStepActivity;
@@ -42,6 +42,8 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
 
         startActivity(LoginActivity.getLaunchIntent(this));
 
+//        startActivity(LoginActivity.getLaunchIntent(this));
+//
 //        startActivity(HomeActivity.getLaunchIntent(this));
 
 //        startActivity(MainActivity.getLaunchIntent(this));

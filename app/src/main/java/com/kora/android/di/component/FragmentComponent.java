@@ -7,6 +7,7 @@ import com.kora.android.presentation.ui.main.fragments.home.HomeFragment;
 import com.kora.android.presentation.ui.main.fragments.request.RequestFragment;
 import com.kora.android.presentation.ui.main.fragments.send.SendFragment;
 import com.kora.android.presentation.ui.main.fragments.transactions.TransactionsFragment;
+import com.kora.android.presentation.ui.main.fragments.profile.ProfileFragment;
 
 import dagger.Subcomponent;
 
@@ -19,4 +20,5 @@ public interface FragmentComponent {
     void inject(final BorrowFragment borrowFragment);
     void inject(final RequestFragment requestFragment);
     void inject(final TransactionsFragment transactionsFragment);
+    void inject(ProfileFragment profileFragment);
 }

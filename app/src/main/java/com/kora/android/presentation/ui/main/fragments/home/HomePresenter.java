@@ -5,7 +5,7 @@ import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.usecase.balance.GetBalanceUseCase;
-import com.kora.android.domain.usecase.user.UserDataUseCase;
+import com.kora.android.domain.usecase.user.GetUserDataUseCase;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
@@ -18,13 +18,13 @@ import io.reactivex.functions.Action;
 @ConfigPersistent
 public class HomePresenter extends BasePresenter<HomeView> {
 
-    private final UserDataUseCase mUserDataUseCase;
+    private final GetUserDataUseCase mUserDataUseCase;
     private final GetBalanceUseCase mGetBalanceUseCase;
 
     private UserEntity mUserEntity;
 
     @Inject
-    public HomePresenter(final UserDataUseCase userDataUseCase,
+    public HomePresenter(final GetUserDataUseCase userDataUseCase,
                          final GetBalanceUseCase getBalanceUseCase) {
         mUserDataUseCase = userDataUseCase;
         mGetBalanceUseCase = getBalanceUseCase;

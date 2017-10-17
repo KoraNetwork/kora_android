@@ -26,11 +26,20 @@
         <item name="colorControlActivated">@color/color_edit_text</item>
     </style>
 
+    <style name="AppTheme.MainTheme">
+        <item name="colorPrimary">#46a6e3</item>
+        <item name="colorPrimaryDark">#46a6e3</item>
+        <item name="android:statusBarColor">#46a6e3</item>
+    </style>
+
+    <style name="AppTheme.MainTheme.ActionBar.TitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/color_white</item>
+    </style>
+
     <style name="AppTheme.NavDrawerItem">
         <item name="itemBackground">@color/color_white</item>
         <item name="android:textSize">12.9sp</item>
-        <item name="itemTextColor">@color/menu_item_color</item>
-        <item name="itemIconTint">@color/menu_item_color</item>
+        <item name="itemTextColor">@color/menu_text_color</item>
     </style>
 
 </resources>

@@ -32,6 +32,7 @@ import com.kora.android.presentation.ui.main.fragments.home.HomeFragment;
 import com.kora.android.presentation.ui.main.fragments.request.RequestFragment;
 import com.kora.android.presentation.ui.main.fragments.send.SendFragment;
 import com.kora.android.presentation.ui.main.fragments.transactions.TransactionsFragment;
+import com.kora.android.presentation.ui.main.fragments.profile.ProfileFragment;
 
 import butterknife.BindView;
 
@@ -117,6 +118,7 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
 
     private void setupDrawer() {
         mNavigationView.setNavigationItemSelectedListener(this);
+        mNavigationView.setItemIconTintList(null);
 
         NavigationMenuView navMenuView = (NavigationMenuView) mNavigationView.getChildAt(0);
         navMenuView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
@@ -140,7 +142,7 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
             case TAB_TRANSACTIONS_HISTORY_POSITION:
                 return TransactionsFragment.getNewInstance();
             case TAB_USER_PROFILE_POSITION:
-                return TransactionsFragment.getNewInstance();
+                return ProfileFragment.getNewInstance();
             case TAB_SEND_A_FEEDBACK_POSITION:
                 return TransactionsFragment.getNewInstance();
 
