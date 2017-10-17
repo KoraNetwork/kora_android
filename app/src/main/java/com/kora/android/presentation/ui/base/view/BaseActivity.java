@@ -52,7 +52,6 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setTheme(getStyleResource());
         setContentView(getLayoutResource());
         mUnbinder = ButterKnife.bind(this);
 
@@ -63,11 +62,6 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
             mPresenter.attachView(this);
 
         onViewReady(savedInstanceState);
-    }
-
-    @Override
-    public int getStyleResource() {
-        return R.style.AppTheme;
     }
 
     protected void createActivityComponent() {

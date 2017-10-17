@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
-import android.support.annotation.StyleRes;
 import android.support.design.internal.NavigationMenuView;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
@@ -29,10 +28,10 @@ import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
 import com.kora.android.presentation.ui.main.fragments.borrow.BorrowFragment;
 import com.kora.android.presentation.ui.main.fragments.home.HomeFragment;
+import com.kora.android.presentation.ui.main.fragments.profile.ProfileFragment;
 import com.kora.android.presentation.ui.main.fragments.request.RequestFragment;
 import com.kora.android.presentation.ui.main.fragments.send.SendFragment;
 import com.kora.android.presentation.ui.main.fragments.transactions.TransactionsFragment;
-import com.kora.android.presentation.ui.main.fragments.profile.ProfileFragment;
 
 import butterknife.BindView;
 
@@ -75,11 +74,6 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra(Keys.Extras.EXTRA_CURRENT_TAB, currentTab);
         return intent;
-    }
-
-    @Override
-    public int getStyleResource() {
-        return R.style.AppThemeMain;
     }
 
     @Override

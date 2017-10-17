@@ -6,10 +6,15 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/color_white</item>
     </style>
 
-    <style name="AppThemeMain" parent="AppTheme">
-        <item name="colorPrimaryDark">@color/color_status_bar</item>
+    <style name="AppTheme.Light">
+        <item name="android:statusBarColor">@color/color_black</item>
+    </style>
+    
+    <style name="AppTheme.Light.Fullscreen">
+        <item name="android:windowFullscreen">true</item>
     </style>
 
     <style name="AppTheme.Dialog" parent="Theme.AppCompat.Light.Dialog.Alert">
@@ -28,7 +33,7 @@
 
     <style name="AppTheme.MainTheme">
         <item name="colorPrimary">#46a6e3</item>
-        <item name="colorPrimaryDark">#46a6e3</item>
+        <item name="colorPrimaryDark">@color/color_status_bar</item>
         <item name="android:statusBarColor">#46a6e3</item>
     </style>
 

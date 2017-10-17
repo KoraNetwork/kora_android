@@ -25,7 +25,8 @@
 
         <activity
             android:name=".presentation.ui.splash.SplashActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Light.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -38,37 +39,44 @@
 
         <activity
             android:name=".presentation.ui.registration.step1.FirstStepActivity"
+            android:theme="@style/AppTheme.Light"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"/>
 
         <activity
             android:name=".presentation.ui.registration.step2.SecondStepActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Light"
             android:windowSoftInputMode="stateHidden"/>
 
         <activity
             android:name=".presentation.ui.registration.step3.ThirdStepActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Light"
             android:windowSoftInputMode="stateHidden"/>
 
         <activity
             android:name=".presentation.ui.registration.step4.FourthStepActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Light"
             android:windowSoftInputMode="stateHidden"/>
 
         <activity
             android:name=".presentation.ui.registration.countries.CountriesActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Light"
             android:windowSoftInputMode="stateHidden"/>
 
         <activity
             android:name=".presentation.ui.registration.currencies.CurrenciesActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Light"
             android:windowSoftInputMode="stateHidden"/>
 
         <activity
             android:name=".presentation.ui.login.LoginActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Light"
             android:windowSoftInputMode="stateHidden"/>
 
         <activity
