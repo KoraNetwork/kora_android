@@ -199,6 +199,7 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
             mLlContainer.setVisibility(View.INVISIBLE);
             mTvUploadPhoto.setVisibility(View.VISIBLE);
             setTitle(R.string.title_edit_profile);
+            setDrawerListener(true);
         } else {
             mEtUserName.setEnabled(false);
             mEtEmail.setEnabled(false);
@@ -211,6 +212,7 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
             mLlContainer.setVisibility(View.VISIBLE);
             mTvUploadPhoto.setVisibility(View.INVISIBLE);
             setTitle(R.string.title_profile);
+            setDrawerListener(false);
         }
     }
 
@@ -354,5 +356,10 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
         super.onSaveInstanceState(outState);
         outState.putSerializable(Keys.Args.VIEW_MODE, mViewMode);
         outState.putParcelable(Keys.Args.USER_ENTITY, getPresenter().getUserEntity());
+    }
+
+    @Override
+    protected void onBackPressed() {
+        changeMode(ViewMode.VIEW_MODE);
     }
 }
