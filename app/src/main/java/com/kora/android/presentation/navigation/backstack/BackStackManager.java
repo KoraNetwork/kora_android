@@ -15,25 +15,15 @@ public class BackStackManager {
     private static final int FIRST_INDEX = 0;
     private static final int UNDEFINED_INDEX = -1;
 
-    protected final LinkedList<BackStack> mBackStacks = new LinkedList<>();
+    protected final LinkedList<BackStack> backStacks = new LinkedList<>();
 
     public void push(int hostId, @NonNull BackStackEntry entry) {
         BackStack backStack = peekBackStack(hostId);
         if (backStack == null) {
             backStack = new BackStack(hostId);
-            mBackStacks.push(backStack);
+            backStacks.push(backStack);
         }
         backStack.push(entry);
-    }
-
-    @NonNull
-    protected BackStackEntry pop(@NonNull BackStack backStack) {
-        BackStackEntry entry = backStack.pop();
-        assert entry != null;
-        if (backStack.empty()) {
-            mBackStacks.remove(backStack);
-        }
-        return entry;
     }
 
     @Nullable
@@ -51,7 +41,17 @@ public class BackStackManager {
         if (backStack == null) {
             return null;
         }
-        return Pair.create(backStack.mHostId, pop(backStack));
+        return Pair.create(backStack.hostId, pop(backStack));
+    }
+
+    @NonNull
+    protected BackStackEntry pop(@NonNull BackStack backStack) {
+        BackStackEntry entry = backStack.pop();
+        assert entry != null;
+        if (backStack.empty()) {
+            backStacks.remove(backStack);
+        }
+        return entry;
     }
 
     public boolean clear(int hostId) {
@@ -59,8 +59,13 @@ public class BackStackManager {
         if (backStack == null) {
             return false;
         }
-        mBackStacks.remove(backStack);
+        backStacks.remove(backStack);
         return true;
+    }
+
+    public int backStackSize(int hostId) {
+        BackStack backStack = getBackStack(hostId);
+        return backStack!= null ? backStack.size() : 0;
     }
 
     public boolean resetToRoot(int hostId) {
@@ -89,17 +94,17 @@ public class BackStackManager {
         if (index == UNDEFINED_INDEX) {
             return null;
         }
-        BackStack backStack = mBackStacks.get(index);
+        BackStack backStack = backStacks.get(index);
         if (index != FIRST_INDEX) {
-            mBackStacks.remove(index);
-            mBackStacks.push(backStack);
+            backStacks.remove(index);
+            backStacks.push(backStack);
         }
         return backStack;
     }
 
     @Nullable
     protected BackStack peekBackStack() {
-        return mBackStacks.peek();
+        return backStacks.peek();
     }
 
     @Nullable
@@ -108,13 +113,13 @@ public class BackStackManager {
         if (index == UNDEFINED_INDEX) {
             return null;
         }
-        return mBackStacks.get(index);
+        return backStacks.get(index);
     }
 
     protected int indexOfBackStack(int hostId) {
-        int size = mBackStacks.size();
+        int size = backStacks.size();
         for (int i = 0; i < size; i++) {
-            if (mBackStacks.get(i).mHostId == hostId) {
+            if (backStacks.get(i).hostId == hostId) {
                 return i;
             }
         }
@@ -123,13 +128,13 @@ public class BackStackManager {
 
     @NonNull
     public Parcelable saveState() {
-        return new SavedState(mBackStacks);
+        return new SavedState(backStacks);
     }
 
     public void restoreState(@Nullable Parcelable state) {
         if (state != null) {
             SavedState savedState = (SavedState) state;
-            mBackStacks.addAll(savedState.backStacks);
+            backStacks.addAll(savedState.backStacks);
         }
     }
 

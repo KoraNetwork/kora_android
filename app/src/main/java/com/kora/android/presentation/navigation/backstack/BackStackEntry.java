@@ -9,66 +9,32 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
-import com.kora.android.presentation.ui.base.view.BaseFragment;
-
 public class BackStackEntry implements Parcelable {
 
-    private static final int NO_STATE = -1;
-    private static final int SAVED_STATE = 0;
-    private static final int PARCELABLE_STATE = 1;
+    public final String fname;
+    public final Fragment.SavedState state;
+    public final Bundle args;
 
-    public final String mFragmentName;
-    public final Fragment.SavedState mState;
-    public final Bundle mArgs;
-
-    public BackStackEntry(@NonNull String mFragmentName,
-                          @Nullable Fragment.SavedState mState,
-                          @Nullable Bundle mArgs) {
-        this.mFragmentName = mFragmentName;
-        this.mState = mState;
-        this.mArgs = mArgs;
-    }
-
-    private BackStackEntry(Parcel in) {
-        final ClassLoader loader = getClass().getClassLoader();
-        mFragmentName = in.readString();
-        mArgs = in.readBundle(loader);
-
-        switch (in.readInt()) {
-            case NO_STATE:
-                mState = null;
-                break;
-            case SAVED_STATE:
-                mState = Fragment.SavedState.CREATOR.createFromParcel(in);
-                break;
-            case PARCELABLE_STATE:
-                mState = in.readParcelable(loader);
-                break;
-            default:
-                throw new IllegalStateException();
-        }
+    public BackStackEntry(@NonNull String fname, @Nullable Fragment.SavedState state, @Nullable Bundle args) {
+        this.fname = fname;
+        this.state = state;
+        this.args = args;
     }
 
     @NonNull
-    public static BackStackEntry create(@NonNull final FragmentManager fm,
-                                        final BaseFragment fragment) {
-        String fname = fragment.getClass().getName();
-        Fragment.SavedState state = null;
-        try {
-            state = fm.saveFragmentInstanceState(fragment);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Bundle args = fragment.getArguments();
+    public static BackStackEntry create(@NonNull FragmentManager fm, @NonNull Fragment f) {
+        String fname = f.getClass().getName();
+        Fragment.SavedState state = fm.saveFragmentInstanceState(f);
+        Bundle args = f.getArguments();
         return new BackStackEntry(fname, state, args);
     }
 
     @NonNull
-    public BaseFragment toFragment(@NonNull final Context context) {
-        final BaseFragment fragment = (BaseFragment) Fragment.instantiate(context, mFragmentName);
-        fragment.setInitialSavedState(mState);
-        fragment.setArguments(mArgs);
-        return fragment;
+    public Fragment toFragment(@NonNull Context context) {
+        Fragment f = Fragment.instantiate(context, fname);
+        f.setInitialSavedState(state);
+        f.setArguments(args);
+        return f;
     }
 
     @Override
@@ -78,19 +44,43 @@ public class BackStackEntry implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel out, int flags) {
-        out.writeString(mFragmentName);
-        out.writeBundle(mArgs);
+        out.writeString(fname);
+        out.writeBundle(args);
 
-        if (mState == null) {
+        if (state == null) {
             out.writeInt(NO_STATE);
-        } else if (mState.getClass() == Fragment.SavedState.class) {
+        } else if (state.getClass() == Fragment.SavedState.class) {
             out.writeInt(SAVED_STATE);
-            mState.writeToParcel(out, flags);
+            state.writeToParcel(out, flags);
         } else {
             out.writeInt(PARCELABLE_STATE);
-            out.writeParcelable(mState, flags);
+            out.writeParcelable(state, flags);
         }
     }
+
+    private BackStackEntry(Parcel in) {
+        final ClassLoader loader = getClass().getClassLoader();
+        fname = in.readString();
+        args = in.readBundle(loader);
+
+        switch (in.readInt()) {
+            case NO_STATE:
+                state = null;
+                break;
+            case SAVED_STATE:
+                state = Fragment.SavedState.CREATOR.createFromParcel(in);
+                break;
+            case PARCELABLE_STATE:
+                state = in.readParcelable(loader);
+                break;
+            default:
+                throw new IllegalStateException();
+        }
+    }
+
+    private static final int NO_STATE = -1;
+    private static final int SAVED_STATE = 0;
+    private static final int PARCELABLE_STATE = 1;
 
     public static final Creator<BackStackEntry> CREATOR = new Creator<BackStackEntry>() {
 
