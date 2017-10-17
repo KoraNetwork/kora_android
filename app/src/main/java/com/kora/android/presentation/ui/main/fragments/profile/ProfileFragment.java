@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -47,6 +48,8 @@ import static android.app.Activity.RESULT_OK;
 import static com.kora.android.common.Keys.SelectCurrency.SELECT_CURRENCY_EXTRA;
 import static com.kora.android.common.Keys.SelectCurrency.SELECT_CURRENCY_REQUEST_CODE;
 import static com.kora.android.data.network.Constants.API_BASE_URL;
+import static com.kora.android.presentation.enums.ViewMode.EDIT_MODE;
+import static com.kora.android.presentation.enums.ViewMode.VIEW_MODE;
 
 public class ProfileFragment extends StackFragment<ProfilePresenter> implements ProfileView, DatePickerDialog.OnDateSetListener {
 
@@ -72,7 +75,7 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
     @BindView(R.id.relative_layout_container) RelativeLayout mRlContainer;
     @BindView(R.id.returned_container) LinearLayout mLlContainer;
 
-    private ViewMode mViewMode = ViewMode.VIEW_MODE;
+    private ViewMode mViewMode = VIEW_MODE;
 
     public static BaseFragment getNewInstance() {
         return new ProfileFragment();
@@ -112,7 +115,7 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
 //        mEtEmail.setHint(
 //                TextUtils.concat(
 //                        mEtEmail.getHint(),
-//                        Html.fromHtml(getContext().getString(R.string.required_asterisk)))
+//                        getContext().getString(R.string.required_asterisk))
 //        );
 //
 //        mEtUserName.setHint(
@@ -144,7 +147,7 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
         MenuItem edit = menu.findItem(R.id.action_edit);
         MenuItem save = menu.findItem(R.id.action_save);
 
-        if (mViewMode == ViewMode.VIEW_MODE) {
+        if (mViewMode == VIEW_MODE) {
             save.setVisible(false);
             edit.setVisible(true);
         } else {
@@ -159,7 +162,7 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
         MenuItem edit = menu.findItem(R.id.action_edit);
         MenuItem save = menu.findItem(R.id.action_save);
 
-        if (mViewMode == ViewMode.VIEW_MODE) {
+        if (mViewMode == VIEW_MODE) {
             save.setVisible(false);
             edit.setVisible(true);
         } else {
@@ -172,7 +175,7 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_edit:
-                changeMode(ViewMode.EDIT_MODE);
+                changeMode(EDIT_MODE);
                 return true;
 
             case R.id.action_save:
@@ -187,7 +190,7 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
         mViewMode = viewMode;
         getActivity().invalidateOptionsMenu();
 
-        if (mViewMode == ViewMode.EDIT_MODE) {
+        if (mViewMode == EDIT_MODE) {
             mEtUserName.setEnabled(true);
             mEtEmail.setEnabled(true);
             mEtPhoneNumber.setEnabled(true);
@@ -291,7 +294,7 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
 
     @Override
     public void onUserUpdated() {
-        changeMode(ViewMode.VIEW_MODE);
+        changeMode(VIEW_MODE);
         Toast.makeText(getContext(), R.string.update_profile_success_message, Toast.LENGTH_SHORT).show();
     }
 
@@ -360,6 +363,7 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
 
     @Override
     protected void onBackPressed() {
-        changeMode(ViewMode.VIEW_MODE);
+        changeMode(VIEW_MODE);
+        getPresenter().onChangeMode(VIEW_MODE);
     }
 }

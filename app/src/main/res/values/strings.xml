@@ -145,6 +145,6 @@
     <string name="title_profile">Profile</string>
     <string name="update_profile_success_message">User Updated Success</string>
     <string name="title_edit_profile">Edit Profile</string>
-    <string name = "required_asterisk"><![CDATA[<font color=\'#cc0029\'>&nbsp*</font>]]></string>
+    <string name = "required_asterisk">*</string>
 
 </resources>

@@ -7,6 +7,7 @@ import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.usecase.user.GetUserDataUseCase;
 import com.kora.android.domain.usecase.user.UpdateUserUseCase;
+import com.kora.android.presentation.enums.ViewMode;
 import com.kora.android.presentation.model.CountryEntity;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
@@ -23,6 +24,7 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
     private final GetUserDataUseCase mGetUserDataUseCase;
     private final UpdateUserUseCase mUpdateUserUseCase;
 
+    private UserEntity mUpdatedUserEntity = new UserEntity();
     private UserEntity mUserEntity = new UserEntity();
 
     @Inject
@@ -37,50 +39,50 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
     }
 
     public void setUserName(String userName) {
-        mUserEntity.setUserName(userName);
+        mUpdatedUserEntity.setUserName(userName);
     }
 
     public void setLegalName(String legalName) {
-        mUserEntity.setLegalName(legalName);
+        mUpdatedUserEntity.setLegalName(legalName);
     }
 
     public void setEmail(String email) {
-        mUserEntity.setLegalName(email);
+        mUpdatedUserEntity.setLegalName(email);
     }
 
     public void setDateOfBirth(String dateOfBirth) {
-        mUserEntity.setDateOfBirth(dateOfBirth);
+        mUpdatedUserEntity.setDateOfBirth(dateOfBirth);
     }
 
     public void setPostalCode(String postalCode) {
-        mUserEntity.setPostalCode(postalCode);
+        mUpdatedUserEntity.setPostalCode(postalCode);
     }
 
     public void setAddress(String address) {
-        mUserEntity.setAddress(address);
+        mUpdatedUserEntity.setAddress(address);
     }
 
     public void onSaveClicked() {
-        if (mUserEntity.getUserName() == null || mUserEntity.getUserName().isEmpty()) {
+        if (mUpdatedUserEntity.getUserName() == null || mUpdatedUserEntity.getUserName().isEmpty()) {
             getView().showEmptyUserName();
             return;
         }
-        if (!StringUtils.isUserNameValid(mUserEntity.getUserName())) {
+        if (!StringUtils.isUserNameValid(mUpdatedUserEntity.getUserName())) {
             getView().showIncorrectUserName();
             return;
         }
-        if (!StringUtils.isUserNameLongEnough(mUserEntity.getUserName())) {
+        if (!StringUtils.isUserNameLongEnough(mUpdatedUserEntity.getUserName())) {
             getView().showTooShortUserName();
             return;
         }
-        if (mUserEntity.getEmail() != null && !mUserEntity.getEmail().isEmpty()) {
-            if (!StringUtils.isEmailValid(mUserEntity.getEmail())) {
+        if (mUpdatedUserEntity.getEmail() != null && !mUpdatedUserEntity.getEmail().isEmpty()) {
+            if (!StringUtils.isEmailValid(mUpdatedUserEntity.getEmail())) {
                 getView().showIncorrectEmail();
                 return;
             }
         }
 
-        mUpdateUserUseCase.setData(mUserEntity);
+        mUpdateUserUseCase.setData(mUpdatedUserEntity);
         mUpdateUserUseCase.execute(new UpdateUserSubscriber());
 
     }
@@ -108,9 +110,23 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
     };
 
     public void setCurrency(CountryEntity country) {
-        mUserEntity.setCurrency(country.getCurrency());
-        mUserEntity.setFlag(country.getFlag());
-        mUserEntity.setCountryCode(country.getCountryCode());
+        mUpdatedUserEntity.setCurrency(country.getCurrency());
+        mUpdatedUserEntity.setFlag(country.getFlag());
+        mUpdatedUserEntity.setCountryCode(country.getCountryCode());
+    }
+
+    public void onChangeMode(ViewMode viewMode) {
+        switch (viewMode) {
+            case EDIT_MODE:
+
+                break;
+
+            case VIEW_MODE:
+                mUpdatedUserEntity = mUserEntity;
+                if (!isViewAttached()) return;
+                getView().retrieveUserData(mUserEntity);
+                break;
+        }
     }
 
     private class GetUserSubscriber extends DefaultInternetSubscriber<UserEntity> {
@@ -159,6 +175,11 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
         protected void onStart() {
             if (!isViewAttached()) return;
             getView().showProgress(true);
+        }
+
+        @Override
+        public void onNext(UserEntity userEntity) {
+            mUserEntity = userEntity;
         }
 
         @Override
