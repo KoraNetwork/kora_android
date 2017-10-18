@@ -1,6 +1,5 @@
 package com.kora.android.data.repository.impl;
 
-import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import com.kora.android.common.Keys;
@@ -13,7 +12,7 @@ import com.kora.android.data.network.model.response.LoginResponse;
 import com.kora.android.data.network.model.response.UserResponse;
 import com.kora.android.data.network.service.AuthService;
 import com.kora.android.data.repository.AuthRepository;
-import com.kora.android.data.repository.mapper.AuthMapper;
+import com.kora.android.data.repository.mapper.UserMapper;
 import com.kora.android.presentation.model.CountryEntity;
 import com.kora.android.presentation.model.UserEntity;
 
@@ -34,15 +33,15 @@ public class AuthRepositoryImpl implements AuthRepository {
 
     private final AuthService mAuthService;
     private final PreferenceHandler mPreferenceHandler;
-    private final AuthMapper mAuthMapper;
+    private final UserMapper mUserMapper;
 
     @Inject
     public AuthRepositoryImpl(final AuthService authService,
                               final PreferenceHandler preferenceHandler,
-                              final AuthMapper authMapper) {
+                              final UserMapper userMapper) {
         mAuthService = authService;
         mPreferenceHandler = preferenceHandler;
-        mAuthMapper = authMapper;
+        mUserMapper = userMapper;
     }
 
     @Override
@@ -52,7 +51,7 @@ public class AuthRepositoryImpl implements AuthRepository {
                 .addPassword(password);
         return mAuthService.login(loginRequest)
                 .compose(saveToken())
-                .compose(mAuthMapper.transformResponseToEntityUser())
+                .compose(mUserMapper.transformResponseToEntityUser())
                 .compose(storeUser());
     }
 
@@ -60,7 +59,7 @@ public class AuthRepositoryImpl implements AuthRepository {
     public Observable<List<CountryEntity>> getCountries() {
         return mAuthService.getCountries()
                 .flatMap(countryResponses -> Observable.fromIterable(countryResponses)
-                        .compose(mAuthMapper.transformResponseToEntityCountry())
+                        .compose(mUserMapper.transformResponseToEntityCountry())
                 ).toList().toObservable();
     }
 
@@ -82,10 +81,10 @@ public class AuthRepositoryImpl implements AuthRepository {
 
     @Override
     public Observable<UserEntity> register(final UserEntity userEntity) {
-        return mAuthMapper.transformUserToFormData(userEntity)
+        return mUserMapper.transformUserToFormData(userEntity)
                 .flatMap(userMap -> mAuthService.register(userMap, getFile(userEntity.getAvatar(), "avatar"))
                         .compose(saveToken())
-                        .compose(mAuthMapper.transformResponseToEntityUser())
+                        .compose(mUserMapper.transformResponseToEntityUser())
                         .compose(storeUser()));
     }
 

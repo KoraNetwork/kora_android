@@ -4,12 +4,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Rect;
+import android.support.design.widget.TextInputLayout;
 import android.text.InputFilter;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ScrollView;
+
+import com.kora.android.R;
 
 public class ViewUtils {
 
@@ -45,5 +49,15 @@ public class ViewUtils {
         DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
         float px = dp * (metrics.densityDpi / 160f);
         return Math.round(px);
+    }
+
+    public static void setRequired(TextInputLayout view, String hint, boolean isRequired) {
+        Context context = view.getContext();
+        view.setHint(isRequired ?
+                TextUtils.concat(
+                        hint, " ",
+                        context.getString(R.string.required_asterisk))
+                : hint
+        );
     }
 }
