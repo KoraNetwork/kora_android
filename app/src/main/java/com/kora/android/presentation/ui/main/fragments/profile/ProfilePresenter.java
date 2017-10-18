@@ -6,6 +6,7 @@ import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.usecase.user.GetUserDataUseCase;
+import com.kora.android.domain.usecase.user.UpdateAvatarUseCase;
 import com.kora.android.domain.usecase.user.UpdateUserUseCase;
 import com.kora.android.presentation.enums.ViewMode;
 import com.kora.android.presentation.model.CountryEntity;
@@ -23,15 +24,18 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
 
     private final GetUserDataUseCase mGetUserDataUseCase;
     private final UpdateUserUseCase mUpdateUserUseCase;
+    private final UpdateAvatarUseCase mUpdateAvatarUseCase;
 
     private UserEntity mUpdatedUserEntity = new UserEntity();
     private UserEntity mUserEntity = new UserEntity();
 
     @Inject
     public ProfilePresenter(final GetUserDataUseCase getUserDataUseCase,
-                            final UpdateUserUseCase updateUserUseCase) {
+                            final UpdateUserUseCase updateUserUseCase,
+                            UpdateAvatarUseCase updateAvatarUseCase) {
         mGetUserDataUseCase = getUserDataUseCase;
         mUpdateUserUseCase = updateUserUseCase;
+        mUpdateAvatarUseCase = updateAvatarUseCase;
     }
 
     public void loadUserData() {
@@ -95,20 +99,6 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
         return mUserEntity;
     }
 
-    private Action mGetUserAction = new Action() {
-        @Override
-        public void run() throws Exception {
-            mGetUserDataUseCase.execute(new GetUserSubscriber());
-        }
-    };
-
-    private Action mUpdateUserAction = new Action() {
-        @Override
-        public void run() throws Exception {
-            mUpdateUserUseCase.execute(new GetUserSubscriber());
-        }
-    };
-
     public void setCurrency(CountryEntity country) {
         mUpdatedUserEntity.setCurrency(country.getCurrency());
         mUpdatedUserEntity.setFlag(country.getFlag());
@@ -128,6 +118,32 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
                 break;
         }
     }
+
+    public void updateAvatar(String absolutePath) {
+        mUpdateAvatarUseCase.setData(absolutePath);
+        mUpdateAvatarUseCase.execute(new UpdateAvatarSubscriber());
+    }
+
+    private Action mGetUserAction = new Action() {
+        @Override
+        public void run() throws Exception {
+            mGetUserDataUseCase.execute(new GetUserSubscriber());
+        }
+    };
+
+    private Action mUpdateUserAction = new Action() {
+        @Override
+        public void run() throws Exception {
+            mUpdateUserUseCase.execute(new GetUserSubscriber());
+        }
+    };
+
+    private Action mUpdateAvatarAction = new Action() {
+        @Override
+        public void run() throws Exception {
+            mUpdateAvatarUseCase.execute(new UpdateAvatarSubscriber());
+        }
+    };
 
     private class GetUserSubscriber extends DefaultInternetSubscriber<UserEntity> {
 
@@ -210,9 +226,50 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
         }
     }
 
+    private class UpdateAvatarSubscriber extends DefaultInternetSubscriber<String> {
+
+        @Override
+        protected void onStart() {
+            if (!isViewAttached()) return;
+            getView().showProgress(true);
+        }
+
+        @Override
+        public void onNext(String avatar) {
+            mUserEntity.setAvatar(avatar);
+        }
+
+        @Override
+        public void onComplete() {
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+            getView().onUserUpdated();
+        }
+
+        @Override
+        public void onError(@NonNull Throwable throwable) {
+            super.onError(throwable);
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+        }
+
+        @Override
+        public void handleUnprocessableEntity(ErrorModel errorModel) {
+            if (!isViewAttached()) return;
+            getView().showError(errorModel.getError());
+        }
+
+        @Override
+        public void handleNetworkError(RetrofitException retrofitException) {
+            if (!isViewAttached()) return;
+            getView().showErrorWithRetry(new RetryAction(mUpdateAvatarAction));
+        }
+    }
+
     @Override
     public void onDetachView() {
         mGetUserDataUseCase.dispose();
         mUpdateUserUseCase.dispose();
+        mUpdateAvatarUseCase.dispose();
     }
 }

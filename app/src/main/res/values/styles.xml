@@ -51,4 +51,19 @@
         <item name="colorAccent">@color/color_date_picker</item>
     </style>
 
+    <style name="AppTheme.TransparentButton" parent="Base.Widget.AppCompat.Button.Borderless">
+        <item name="textAllCaps">true</item>
+        <item name="android:paddingTop">15dp</item>
+        <item name="android:paddingBottom">15dp</item>
+        <item name="android:drawablePadding">8dp</item>
+        <item name="android:drawableRight">@drawable/ic_back_bl</item>
+        <item name="android:textSize">16sp</item>
+        <item name="font">@string/font_name_muli_semi_bold</item>
+        <item name="android:textColor">@color/color_text_blue</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:gravity">left|center_vertical</item>
+    </style>
+
 </resources>

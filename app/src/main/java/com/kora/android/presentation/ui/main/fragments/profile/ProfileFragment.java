@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,6 +35,9 @@ import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.backstack.StackFragment;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
 import com.kora.android.presentation.ui.registration.currencies.CurrenciesActivity;
+import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo;
+import com.miguelbcr.ui.rx_paparazzo2.entities.Options;
+import com.miguelbcr.ui.rx_paparazzo2.entities.size.CustomMaxSize;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.util.Calendar;
@@ -42,6 +46,8 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnFocusChange;
 import butterknife.OnTextChanged;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 import static android.app.Activity.RESULT_OK;
 import static com.kora.android.common.Keys.SelectCurrency.SELECT_CURRENCY_EXTRA;
@@ -50,7 +56,8 @@ import static com.kora.android.data.network.Constants.API_BASE_URL;
 import static com.kora.android.presentation.enums.ViewMode.EDIT_MODE;
 import static com.kora.android.presentation.enums.ViewMode.VIEW_MODE;
 
-public class ProfileFragment extends StackFragment<ProfilePresenter> implements ProfileView, DatePickerDialog.OnDateSetListener {
+public class ProfileFragment extends StackFragment<ProfilePresenter>
+        implements ProfileView, DatePickerDialog.OnDateSetListener {
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
 
@@ -59,6 +66,7 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
 
     @BindView(R.id.edit_layout_user_name) TextInputLayout mElUserName;
     @BindView(R.id.edit_text_user_name) TextInputEditText mEtUserName;
+    @BindView(R.id.edit_layout_phone_number) TextInputLayout mElPhoneNumber;
     @BindView(R.id.edit_text_phone_number) TextInputEditText mEtPhoneNumber;
 
     @BindView(R.id.edit_layout_email) TextInputLayout mElEmail;
@@ -111,23 +119,7 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
         mEtCurrency.setKeyListener(null);
         mEtDateOfBirth.setKeyListener(null);
 
-//        mEtEmail.setHint(
-//                TextUtils.concat(
-//                        mEtEmail.getHint(),
-//                        getContext().getString(R.string.required_asterisk))
-//        );
-//
-//        mEtUserName.setHint(
-//                TextUtils.concat(
-//                        mEtUserName.getHint(),
-//                        Html.fromHtml(getContext().getString(R.string.required_asterisk)))
-//        );
-//
-//        mEtPhoneNumber.setHint(
-//                TextUtils.concat(
-//                        mEtPhoneNumber.getHint(),
-//                        Html.fromHtml(getContext().getString(R.string.required_asterisk)))
-//        );
+        setRequirements(false);
 
         if (savedInstanceState == null) {
             getPresenter().loadUserData();
@@ -137,6 +129,12 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
             changeMode(mode);
             getPresenter().setUserEntity(user);
         }
+    }
+
+    private void setRequirements(boolean required) {
+        ViewUtils.setRequired(mElEmail, getContext().getString(R.string.registration_email), required);
+        ViewUtils.setRequired(mElUserName, getContext().getString(R.string.registration_user_name), required);
+        ViewUtils.setRequired(mElPhoneNumber, getContext().getString(R.string.registration_phone_number), required);
     }
 
     @Override
@@ -202,6 +200,7 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
             mTvUploadPhoto.setVisibility(View.VISIBLE);
             setTitle(R.string.title_edit_profile);
             setDrawerListener(true);
+            setRequirements(true);
         } else {
             mEtUserName.setEnabled(false);
             mEtEmail.setEnabled(false);
@@ -215,6 +214,7 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
             mTvUploadPhoto.setVisibility(View.INVISIBLE);
             setTitle(R.string.title_profile);
             setDrawerListener(false);
+            setRequirements(false);
         }
     }
 
@@ -365,4 +365,27 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
         changeMode(VIEW_MODE);
         getPresenter().onChangeMode(VIEW_MODE);
     }
+
+    @OnClick({R.id.image_view_avatar, R.id.text_view_upload_photo})
+    public void onClickUploadPhoto() {
+
+        final Options options = new Options();
+        options.setToolbarColor(ContextCompat.getColor(getContext(), R.color.color_cropping_background));
+        options.setStatusBarColor(ContextCompat.getColor(getContext(), R.color.color_cropping_background));
+        options.setAspectRatio(1, 1);
+
+        RxPaparazzo.single(this)
+                .crop(options)
+                .size(new CustomMaxSize())
+                .usingGallery()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    if (response.resultCode() == RESULT_OK) {
+//                        response.targetUI().showAvatar(response.data().getFile());
+                        getPresenter().updateAvatar(response.data().getFile().getAbsolutePath());
+                    }
+                }, Throwable::printStackTrace);
+    }
+
 }

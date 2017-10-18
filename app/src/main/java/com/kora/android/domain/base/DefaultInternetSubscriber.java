@@ -24,6 +24,8 @@ public abstract class DefaultInternetSubscriber<T> extends DefaultDisposableObse
             } else if (retrofitException.getKind() == Kind.UNEXPECTED) {
                 handleUnexpectedError(retrofitException);
             }
+        } else {
+            throwable.printStackTrace();
         }
     }
 

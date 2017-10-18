@@ -1,6 +1,10 @@
 package com.kora.android.common;
 
+import android.support.annotation.IntDef;
+
 public interface Keys {
+
+    int ITEMS_PER_PAGE = 10;
 
     interface ProxyHelperKeys {
         String PROXY_HELPER_FILE_NAME = "com_kora_android_proxy_helper_file_name";
@@ -76,5 +80,17 @@ public interface Keys {
 
         String USER_ENTITY = "user_entity_args";
         String VIEW_MODE = "view_mode_args";
+        String USER_LIST = "user_list_args";
+    }
+
+    interface Users {
+
+        int MODE_SIMPLE = 0;
+        int MODE_CHOOSE = 1;
+
+        @IntDef({MODE_SIMPLE, MODE_CHOOSE})
+        @interface UserMode {
+        }
+
     }
 }

@@ -5,7 +5,8 @@ import android.os.Bundle;
 import com.kora.android.R;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
-import com.kora.android.presentation.ui.send.add_contact.AddContactActivity;
+import com.kora.android.presentation.ui.login.LoginActivity;
+import com.kora.android.presentation.ui.main.MainActivity;
 
 public class SplashActivity extends BaseActivity<SplashPresenter> implements SplashView {
 
@@ -39,11 +40,9 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
 
 //        startActivity(MainActivity.getLaunchIntent(this));
 
-//        if (isSessionTokenEmpty)
-//            startActivity(LoginActivity.getLaunchIntent(this));
-//        else
-//            startActivity(MainActivity.getLaunchIntent(this));
-
-        startActivity(AddContactActivity.getLaunchIntent(this));
+        if (isSessionTokenEmpty)
+            startActivity(LoginActivity.getLaunchIntent(this));
+        else
+            startActivity(MainActivity.getLaunchIntent(this));
     }
 }

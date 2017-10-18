@@ -18,4 +18,8 @@ public interface UserRepository {
                                                          final int limit,
                                                          final int skip,
                                                          final String sort);
+
+    Observable<String> updateAvatar(final String avatar);
+
+    Observable<List<UserEntity>> getRecentUsers();
 }
