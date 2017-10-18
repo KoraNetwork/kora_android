@@ -8,7 +8,7 @@ import java.util.Locale;
 
 public class DateUtils {
 
-    private static final String PRETTY_DATE_PATTERN = "dd MMMM yyyy";
+    private static final String PRETTY_DATE_PATTERN = "dd MMM yyyy";
     private static final String FORMATTED_DATE_PATTERN = "yyyy-MM-dd";
 
     public static Date getDate(String date) {
@@ -32,20 +32,46 @@ public class DateUtils {
         return mFormat.format(date1);
     }
 
-    public static Calendar getCalendarByDatePattern(String dateString, String pattern) {
-        SimpleDateFormat mFormat = new SimpleDateFormat(pattern, Locale.ENGLISH);
+
+
+    public static String getPrettyDateFromFormatted(final String formattedDateString) {
+        Date date;
+        try {
+            date = new SimpleDateFormat(FORMATTED_DATE_PATTERN, Locale.ENGLISH).parse(formattedDateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+
+        if (date == null) return "";
+        return new SimpleDateFormat(PRETTY_DATE_PATTERN, Locale.ENGLISH).format(date);
+    }
+
+
+
+    public static Calendar getCalendarFromFormattedDate(final String dateString) {
+        return getCalendarByDatePattern(dateString, FORMATTED_DATE_PATTERN);
+    }
+
+    public static Calendar getCalendarFromPrettyDate(final String dateString) {
+        return getCalendarByDatePattern(dateString, PRETTY_DATE_PATTERN);
+    }
+
+    public static Calendar getCalendarByDatePattern(final String dateString, final String pattern) {
         Date date = null;
         try {
-           date =  mFormat.parse(dateString);
+           date =  new SimpleDateFormat(pattern, Locale.ENGLISH).parse(dateString);
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
         if (date == null) return null;
-        Calendar calendar = Calendar.getInstance();
+        final Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         return calendar;
     }
+
+
 
     public static String getPrettyDate(final int year, final int month, final int day) {
         return getDate(PRETTY_DATE_PATTERN, year, month, day);

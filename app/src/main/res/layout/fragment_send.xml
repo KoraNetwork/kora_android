@@ -21,7 +21,6 @@
             android:paddingTop="16dp">
 
             <com.kora.android.views.CustomTextView
-                android:id="@+id/text_view_currency_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -32,6 +31,7 @@
                 tools:text="Contacts"/>
 
             <com.kora.android.views.CustomTextView
+                android:id="@+id/text_add_new_contact"
                 style="@style/AppTheme.TransparentButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -42,9 +42,9 @@
                 android:id="@+id/user_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:paddingBottom="16dp"
                 android:scrollbars="none"
                 tools:listitem="@layout/item_contact"
-                android:paddingBottom="16dp"
                 />
 
         </LinearLayout>

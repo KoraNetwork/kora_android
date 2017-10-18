@@ -15,6 +15,7 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.PartMap;
+import retrofit2.http.Query;
 
 public interface UserService {
 
@@ -31,4 +32,11 @@ public interface UserService {
 
     @GET("recents")
     Observable<List<UserResponse>> getRecentUsers();
+
+    @GET("contacts")
+    Observable<List<UserResponse>> getUsers(@Query("search") String search,
+                                            @Query("limit") int limit,
+                                            @Query("skip") int skip,
+                                            @Query("sort") String sort);
+
 }

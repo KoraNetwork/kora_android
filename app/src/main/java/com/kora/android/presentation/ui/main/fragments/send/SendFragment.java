@@ -6,6 +6,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.widget.TextView;
 
 import com.kora.android.R;
 import com.kora.android.common.Keys;
@@ -14,6 +15,7 @@ import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.adapter.UserAdapter;
 import com.kora.android.presentation.ui.base.backstack.StackFragment;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
+import com.kora.android.presentation.ui.send.add_contact.AddContactActivity;
 import com.kora.android.views.fastscroll.FastScrollRecyclerView;
 import com.kora.android.views.fastscroll.FastScrollRecyclerViewItemDecoration;
 
@@ -22,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class SendFragment extends StackFragment<SendPresenter> implements SendView,
         UserAdapter.OnUserClickListener, SwipeRefreshLayout.OnRefreshListener {
@@ -30,6 +33,7 @@ public class SendFragment extends StackFragment<SendPresenter> implements SendVi
 
     @BindView(R.id.user_list) FastScrollRecyclerView mUserList;
     @BindView(R.id.swipe_layout) SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.text_add_new_contact) TextView mAddContactButton;
 
     private UserAdapter mUserAdapter;
 
@@ -97,6 +101,11 @@ public class SendFragment extends StackFragment<SendPresenter> implements SendVi
     @Override
     public void onUserClicked(int position) {
 
+    }
+
+    @OnClick(R.id.text_add_new_contact)
+    public void onAddContactClicked() {
+        startActivity(AddContactActivity.getLaunchIntent(getBaseActivity()));
     }
 
     @Override

@@ -64,6 +64,17 @@ public class UserRepositoryImpl implements UserRepository {
                 .compose(mUserMapper.transformUserListResponseToEntityUserList());
     }
 
+    @Override
+    public Observable<List<UserEntity>> getUsers(final String search,
+                                                 final int limit,
+                                                 final int skip,
+                                                 final String sort) {
+        return mUserService.getUsers(search, limit, skip, sort)
+                .flatMap(userResponses -> Observable.fromIterable(userResponses)
+                        .compose(mUserMapper.transformResponseToEntityUser())
+                ).toList().toObservable();
+    }
+
     public ObservableTransformer<UserEntity, UserEntity> storeUser() {
         return observable -> observable.map(user -> {
             mPreferenceHandler.rememberObject(Keys.Shared.USER, user);

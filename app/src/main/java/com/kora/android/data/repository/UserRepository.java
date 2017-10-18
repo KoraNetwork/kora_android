@@ -11,6 +11,12 @@ public interface UserRepository {
 
     Observable<UserEntity> updateUser(UserEntity userEntity);
 
+    Observable<List<UserEntity>> getUsers(final String search,
+                                          final int limit,
+                                          final int skip,
+                                          final String sort);
+
+
     Observable<String> updateAvatar(String avatar);
 
     Observable<List<UserEntity>> getRecentUsers();

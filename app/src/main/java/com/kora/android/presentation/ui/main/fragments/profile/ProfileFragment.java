@@ -231,7 +231,7 @@ public class ProfileFragment extends StackFragment<ProfilePresenter>
         mEtPhoneNumber.setText(userEntity.getPhoneNumber());
         mEtLegalName.setText(userEntity.getLegalName());
         mEtPostalCode.setText(userEntity.getPostalCode());
-        mEtDateOfBirth.setText(DateUtils.getPrettyDate(userEntity.getDateOfBirth()));
+        mEtDateOfBirth.setText(DateUtils.getPrettyDateFromFormatted(userEntity.getDateOfBirth()));
         mEtAddress.setText(userEntity.getAddress());
 
     }
@@ -299,7 +299,7 @@ public class ProfileFragment extends StackFragment<ProfilePresenter>
 
     @OnClick(R.id.edit_text_date_of_birth)
     void onDateOfBirthClicked() {
-        Calendar cal = DateUtils.getCalendarByDatePattern(mEtDateOfBirth.getText().toString().trim(), "dd MMM YYYY");
+        Calendar cal = DateUtils.getCalendarFromPrettyDate(mEtDateOfBirth.getText().toString().trim());
         if (cal == null) return;
         DatePickerDialog dpd = DatePickerDialog.newInstance(this, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
         dpd.setAccentColor("#77cda4");
@@ -336,11 +336,11 @@ public class ProfileFragment extends StackFragment<ProfilePresenter>
     }
 
     @Override
-    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        String prettyDate = DateUtils.getPrettyDate(year, monthOfYear, dayOfMonth);
+    public void onDateSet(DatePickerDialog view, int year, int month, int day) {
+        final String prettyDate = DateUtils.getPrettyDate(year, month, day);
         mEtDateOfBirth.setText(prettyDate);
-
-        getPresenter().setDateOfBirth(prettyDate);
+        final String formattedDate = DateUtils.getFormattedDate(year, month, day);
+        getPresenter().setDateOfBirth(formattedDate);
     }
 
     @Override

@@ -72,7 +72,7 @@ public abstract class StackFragment<P extends BasePresenter> extends BaseFragmen
         if (isBackEnabled) {
             mDrawerToggle.setToolbarNavigationClickListener(v -> onBackPressed());
 
-            mDrawerToggle.setHomeAsUpIndicator(R.drawable.ic_back);
+            mDrawerToggle.setHomeAsUpIndicator(R.drawable.ic_back_white);
         } else {
             mDrawerToggle.setToolbarNavigationClickListener(v -> {
                 if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
