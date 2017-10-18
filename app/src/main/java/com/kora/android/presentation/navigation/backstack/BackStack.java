@@ -8,30 +8,28 @@ import android.support.annotation.Nullable;
 import java.util.Stack;
 
 public class BackStack implements Parcelable {
-    public final int mHostId;
-    private final Stack<BackStackEntry> mEntriesStack = new Stack<>();
+    public final int hostId;
+    private final Stack<BackStackEntry> entriesStack = new Stack<>();
 
     public BackStack(int hostId) {
-        this.mHostId = hostId;
+        this.hostId = hostId;
     }
 
-    private BackStack(final Parcel in) {
-        mHostId = in.readInt();
-        int size = in.readInt();
-        for (int i = 0; i < size; i++) {
-            mEntriesStack.push(BackStackEntry.CREATOR.createFromParcel(in));
-        }
-
+    public void push(@NonNull BackStackEntry entry) {
+        entriesStack.push(entry);
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(mHostId);
-        int size = mEntriesStack.size();
-        dest.writeInt(size);
-        for (int i = 0; i < size; i++) {
-            mEntriesStack.get(i).writeToParcel(dest, flags);
-        }
+    @Nullable
+    public BackStackEntry pop() {
+        return empty() ? null : entriesStack.pop();
+    }
+
+    public boolean empty() {
+        return entriesStack.empty();
+    }
+
+    public int size() {
+        return entriesStack.size();
     }
 
     @Override
@@ -39,20 +37,26 @@ public class BackStack implements Parcelable {
         return 0;
     }
 
-    public void push(@NonNull final BackStackEntry entry) {
-        mEntriesStack.push(entry);
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeInt(hostId);
+        int size = entriesStack.size();
+        out.writeInt(size);
+        for (int i = 0; i < size; i++) {
+            entriesStack.get(i).writeToParcel(out, flags);
+        }
     }
 
-    @Nullable
-    public BackStackEntry pop() {
-        return empty() ? null : mEntriesStack.pop();
-    }
-
-    public boolean empty() {
-        return mEntriesStack.empty();
+    private BackStack(Parcel in) {
+        hostId = in.readInt();
+        int size = in.readInt();
+        for (int i = 0; i < size; i++) {
+            entriesStack.push(BackStackEntry.CREATOR.createFromParcel(in));
+        }
     }
 
     public static final Creator<BackStack> CREATOR = new Creator<BackStack>() {
+
         @Override
         public BackStack createFromParcel(Parcel in) {
             return new BackStack(in);
@@ -63,5 +67,4 @@ public class BackStack implements Parcelable {
             return new BackStack[size];
         }
     };
-
 }

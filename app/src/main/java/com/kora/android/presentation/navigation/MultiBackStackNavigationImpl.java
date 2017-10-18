@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.util.Pair;
@@ -73,7 +74,8 @@ public class MultiBackStackNavigationImpl implements MultiBackStackNavigation {
     @Nullable
     @Override
     public BaseFragment getFragmentByHostId(final int hostId) {
-        return null; //TODO need to implement
+        return (BaseFragment) mBaseActivity.getSupportFragmentManager()
+                .findFragmentById(hostId);
     }
 
     protected boolean pushFragmentToBackStack(final int hostId,
@@ -89,13 +91,13 @@ public class MultiBackStackNavigationImpl implements MultiBackStackNavigation {
     }
 
     @Nullable
-    protected BaseFragment popFragmentFromBackStack(final int hostId) {
+    protected Fragment popFragmentFromBackStack(final int hostId) {
         BackStackEntry entry = mBackStackManager.pop(hostId);
         return entry != null ? entry.toFragment(mBaseActivity) : null;
     }
 
     @Nullable
-    protected Pair<Integer, BaseFragment> popFragmentFromBackStack() {
+    protected Pair<Integer, Fragment> popFragmentFromBackStack() {
         Pair<Integer, BackStackEntry> pair = mBackStackManager.pop();
         return pair != null ? Pair.create(pair.first, pair.second.toFragment(mBaseActivity)) : null;
     }
@@ -107,12 +109,12 @@ public class MultiBackStackNavigationImpl implements MultiBackStackNavigation {
         return mBackStackManager.clear(hostId);
     }
 
-    private void replaceFragment(@NonNull final BaseFragment fragment) {
+    private void replaceFragment(@NonNull final Fragment fragment) {
         final FragmentManager fm = mBaseActivity.getSupportFragmentManager();
         final FragmentTransaction tr = fm.beginTransaction();
         tr.replace(mBaseActivity.getFragmentContainer(), fragment);
         tr.commitAllowingStateLoss();
-        mCurrentFragment = fragment;
+        mCurrentFragment = (BaseFragment) fragment;
     }
 
     @Override
@@ -162,10 +164,11 @@ public class MultiBackStackNavigationImpl implements MultiBackStackNavigation {
 
     @Override
     public void showFragment(final BaseFragment fragment, final int hostId, final boolean addToBackStack) {
-        if (mCurrentFragment != null && addToBackStack) {
+        if (mCurrentFragment != null) {
             pushFragmentToBackStack(mCurrentHostId, mCurrentFragment);
         }
         mCurrentHostId = hostId;
+        popFragmentFromBackStack(mCurrentHostId);
         replaceFragment(fragment);
     }
 
@@ -176,7 +179,7 @@ public class MultiBackStackNavigationImpl implements MultiBackStackNavigation {
      */
     @Override
     public boolean handleBack(final BaseView baseView) {
-        final Pair<Integer, BaseFragment> pair = popFragmentFromBackStack();
+        final Pair<Integer, Fragment> pair = popFragmentFromBackStack();
         if (pair != null) {
             backTo(pair.first, pair.second);
             return true;
@@ -185,7 +188,7 @@ public class MultiBackStackNavigationImpl implements MultiBackStackNavigation {
         }
     }
 
-    private void backTo(final int hostId, @NonNull final BaseFragment fragment) {
+    private void backTo(final int hostId, @NonNull final Fragment fragment) {
         if (hostId != mCurrentHostId) {
             mCurrentHostId = hostId;
             mBackStackView.selectHostById(mCurrentHostId);
