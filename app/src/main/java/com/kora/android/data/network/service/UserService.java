@@ -1,5 +1,6 @@
 package com.kora.android.data.network.service;
 
+import com.kora.android.data.network.model.response.UserListResponse;
 import com.kora.android.data.network.model.response.UserResponse;
 
 import java.util.List;
@@ -24,8 +25,8 @@ public interface UserService {
     Observable<UserResponse> updateUser(@PartMap final Map<String, RequestBody> userMap);
 
     @GET("contacts")
-    Observable<List<UserResponse>> getUsers(@Query("search") String search,
-                                            @Query("limit") int limit,
-                                            @Query("skip") int skip,
-                                            @Query("sort") String sort);
+    Observable<UserListResponse> getUsers(@Query("search") String search,
+                                          @Query("limit") int limit,
+                                          @Query("skip") int skip,
+                                          @Query("sort") String sort);
 }

@@ -10,7 +10,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.kora.android.GlideApp;
 import com.kora.android.R;
 import com.kora.android.common.utils.StringUtils;
 import com.kora.android.presentation.model.UserEntity;
@@ -57,7 +59,17 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
 
     public void addAll(final List<UserEntity> userEntityList) {
         mUserEntityList.addAll(userEntityList);
-        notifyDataSetChanged();
+//        notifyDataSetChanged();
+        notifyItemRangeInserted(mUserEntityList.size() - userEntityList.size(), mUserEntityList.size());
+    }
+
+    public void clearAll() {
+        int size = mUserEntityList.size();
+        if (size > 0) {
+            for (int i = 0; i < size; i++)
+                this.mUserEntityList.remove(0);
+            notifyItemRangeRemoved(0, size);
+        }
     }
 
     public class UserViewHolder extends RecyclerView.ViewHolder {
@@ -78,15 +90,18 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
 
         public void setData(final UserEntity userEntity, final int position) {
             final Context context = mCvContainer.getContext();
+
             mCvContainer.setOnClickListener(v ->
                     mOnItemClickListener.onClickSelectUser(userEntity, position));
+
             mTvUserName.setText(userEntity.getUserName());
+
             final String phoneNumber = StringUtils.addPlusIfNeeded(userEntity.getPhoneNumber());
             mTvPhoneNumber.setText(phoneNumber);
-            if (userEntity.getAvatar() == null || userEntity.getAvatar().isEmpty())
-                return;
-            Glide.with(context)
+
+            GlideApp.with(context)
                     .load(API_BASE_URL + userEntity.getAvatar())
+                    .placeholder(R.drawable.ic_user_default)
                     .apply(RequestOptions.circleCropTransform())
                     .into(mIvAvatar);
         }

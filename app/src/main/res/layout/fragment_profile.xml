@@ -27,7 +27,7 @@
                 android:layout_height="98dp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
-                android:src="@drawable/ic_user"/>
+                android:src="@drawable/ic_user_default"/>
 
             <com.kora.android.views.CustomTextView
                 android:id="@+id/text_view_upload_photo"
