@@ -35,6 +35,13 @@ public class StringUtils {
             return phoneNumber;
     }
 
+    public static String addPlusIfNeeded(final String phoneNumber) {
+        if (phoneNumber.startsWith("+"))
+            return phoneNumber;
+        else
+            return "+" + phoneNumber;
+    }
+
     public static boolean isConfirmationCodeValid(final String confirmationCode) {
         final Pattern pattern = Pattern.compile("^(\\d{4})$");
         final Matcher matcher = pattern.matcher(confirmationCode);

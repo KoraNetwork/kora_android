@@ -149,4 +149,8 @@
     <string name="title_edit_profile">Edit Profile</string>
     <string name = "required_asterisk">*</string>
 
+    <!-- Add contact activity -->
+    <string name="add_contact_add_contact">Add your contact</string>
+    <string name="add_contact_name_phone_email">user name or mobile phone or email</string>
+
 </resources>

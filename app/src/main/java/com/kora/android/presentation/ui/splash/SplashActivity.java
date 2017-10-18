@@ -5,8 +5,7 @@ import android.os.Bundle;
 import com.kora.android.R;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
-import com.kora.android.presentation.ui.login.LoginActivity;
-import com.kora.android.presentation.ui.main.MainActivity;
+import com.kora.android.presentation.ui.send.add_contact.AddContactActivity;
 
 public class SplashActivity extends BaseActivity<SplashPresenter> implements SplashView {
 
@@ -27,25 +26,24 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
 
     @Override
     public void showNextScreen(final boolean isSessionTokenEmpty) {
-//        if (isSessionTokenEmpty)
-//            startActivity(WelcomeActivity.getLaunchIntent(this));
-//        else
-//        startActivity(TestActivity.getLaunchIntent(this));
 
 //        startActivity(FirstStepActivity.getLaunchIntent(this));
 
 //        startActivity(ThirdStepActivity.getLaunchIntent(this));
 
 //        startActivity(FourthStepActivity.getLaunchIntent(this));
+
 //        startActivity(LoginActivity.getLaunchIntent(this));
 //
 //        startActivity(HomeActivity.getLaunchIntent(this));
 
 //        startActivity(MainActivity.getLaunchIntent(this));
 
-        if (isSessionTokenEmpty)
-            startActivity(LoginActivity.getLaunchIntent(this));
-        else
-            startActivity(MainActivity.getLaunchIntent(this));
+//        if (isSessionTokenEmpty)
+//            startActivity(LoginActivity.getLaunchIntent(this));
+//        else
+//            startActivity(MainActivity.getLaunchIntent(this));
+
+        startActivity(AddContactActivity.getLaunchIntent(this));
     }
 }

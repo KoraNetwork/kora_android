@@ -69,8 +69,6 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
     @BindView(R.id.relative_layout_container)
     RelativeLayout mRlContainer;
 
-
-
     public static Intent getLaunchIntent(final BaseActivity baseActivity) {
         return new Intent(baseActivity, FourthStepActivity.class);
     }
@@ -89,8 +87,8 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
     protected void onViewReady(final Bundle savedInstanceState) {
         setToolbar(mToolbar, R.drawable.ic_back_grey);
 
-//        getPresenter().startGetCountryTask();
-        getPresenter().startGetDateOfBirthTask();
+        initDate();
+        getPresenter().startGetCountryTask();
     }
 
     @Override
@@ -102,6 +100,20 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
                 (dialogInterface, i) -> super.onBackPressed(),
                 R.string.registration_dialog_negative_back_pressed,
                 (dialogInterface, i) -> dialogInterface.dismiss());
+    }
+
+    private void initDate() {
+        final Calendar calendar = Calendar.getInstance();
+        final String formattedDate = DateUtils.getFormattedDate(
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH));
+        getPresenter().setDateOfBirth(formattedDate);
+        final String prettyDate = DateUtils.getPrettyDate(
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH));
+        mTvDateOfBirth.setText(prettyDate);
     }
 
     @Override
@@ -200,17 +212,12 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
     @OnClick(R.id.linear_layout_select_date)
     void onClickSelectDate() {
         mTvDateOfBirthError.setVisibility(View.GONE);
-
-        final int year = getPresenter().getYear();
-        final int month = getPresenter().getMonth();
-        final int day = getPresenter().getDay();
+        final String prettyDate = mTvDateOfBirth.getText().toString().trim();
+        final Calendar calendar = DateUtils.getCalendarFromPrettyDate(prettyDate);
         new DatePickerDialog(this, R.style.AppTheme_DatePicker, (view, selectedYear, selectedMonth, selectedDay) -> {
-            getPresenter().setYear(selectedYear);
-            getPresenter().setMonth(selectedMonth);
-            getPresenter().setDay(selectedDay);
             getPresenter().setDateOfBirth(DateUtils.getFormattedDate(selectedYear, selectedMonth, selectedDay));
             mTvDateOfBirth.setText(DateUtils.getPrettyDate(selectedYear, selectedMonth, selectedDay));
-        }, year, month, day).show();
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
     @Override

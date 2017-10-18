@@ -7,6 +7,8 @@ import com.kora.android.data.repository.UserRepository;
 import com.kora.android.data.repository.mapper.AuthMapper;
 import com.kora.android.presentation.model.UserEntity;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -47,6 +49,17 @@ public class UserRepositoryImpl implements UserRepository {
                 .flatMap(userMap -> mUserService.updateUser(userMap)
                         .compose(mAuthMapper.transformResponseToEntityUser())
                         .compose(storeUser()));
+    }
+
+    @Override
+    public Observable<List<UserEntity>> getUsers(final String search,
+                                                 final int limit,
+                                                 final int skip,
+                                                 final String sort) {
+        return mUserService.getUsers(search, limit, skip, sort)
+                .flatMap(userResponses -> Observable.fromIterable(userResponses)
+                        .compose(mAuthMapper.transformResponseToEntityUser())
+                ).toList().toObservable();
     }
 
     public ObservableTransformer<UserEntity, UserEntity> storeUser() {
