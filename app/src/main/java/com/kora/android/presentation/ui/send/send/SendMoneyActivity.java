@@ -83,7 +83,7 @@ public class SendMoneyActivity extends BaseActivity<SendMoneyPresenter> implemen
                 .load(API_BASE_URL + user.getAvatar())
                 .apply(RequestOptions.circleCropTransform())
                 .thumbnail(Glide.with(this)
-                        .load(R.drawable.ic_user))
+                        .load(R.drawable.ic_user_default))
                 .into(mUserImage);
 
         Glide.with(this)
