@@ -16,7 +16,7 @@
         android:id="@+id/user_image"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        tools:src="@drawable/ic_user"/>
+        tools:src="@drawable/ic_user_default"/>
 
     <LinearLayout
         android:layout_width="match_parent"

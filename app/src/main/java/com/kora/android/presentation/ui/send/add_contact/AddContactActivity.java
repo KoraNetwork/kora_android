@@ -3,37 +3,36 @@ package com.kora.android.presentation.ui.send.add_contact;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.widget.EditText;
 
 import com.kora.android.R;
+import com.kora.android.common.Keys;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.model.UserEntity;
+import com.kora.android.presentation.ui.adapter.UserAdapter;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.send.add_contact.adapter.RecyclerViewScrollListener;
-import com.kora.android.presentation.ui.send.add_contact.adapter.UserAdapter;
+import com.kora.android.views.fastscroll.FastScrollRecyclerView;
+import com.kora.android.views.fastscroll.FastScrollRecyclerViewItemDecoration;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import butterknife.BindView;
+import butterknife.OnTextChanged;
 
-public class AddContactActivity extends BaseActivity<AddContactPresenter> implements AddContactView, UserAdapter.OnItemClickListener {
+public class AddContactActivity extends BaseActivity<AddContactPresenter> implements AddContactView, UserAdapter.OnUserClickListener {
 
-    @BindView(R.id.toolbar)
-    Toolbar mToolbar;
-    @BindView(R.id.edit_text_search)
-    EditText mEtSearch;
-    @BindView(R.id.recycler_view_users)
-    RecyclerView mRvUsers;
+    @BindView(R.id.toolbar) Toolbar mToolbar;
+    @BindView(R.id.edit_text_search) AppCompatEditText mEtSearch;
+    @BindView(R.id.recycler_view_users) FastScrollRecyclerView mRvUsers;
+    @BindView(R.id.swipe_layout) SwipeRefreshLayout swipeRefreshLayout;
 
-    @Inject
     public UserAdapter mUserAdapter;
 
     public static Intent getLaunchIntent(final BaseActivity baseActivity) {
@@ -42,7 +41,7 @@ public class AddContactActivity extends BaseActivity<AddContactPresenter> implem
 
     @Override
     public int getLayoutResource() {
-        return R.layout.activity_add_contact ;
+        return R.layout.activity_add_contact;
     }
 
     @Override
@@ -53,43 +52,46 @@ public class AddContactActivity extends BaseActivity<AddContactPresenter> implem
     @Override
     protected void onViewReady(final Bundle savedInstanceState) {
         setToolbar(mToolbar, R.drawable.ic_back_white);
+        mToolbar.setTitle(R.string.add_contact_add_contact);
+
+        mUserAdapter = new UserAdapter();
 
         initUI();
-        getPresenter().startGetUsersTask(mUserAdapter.getItemCount(), true);
+
+        if (savedInstanceState == null) {
+            getPresenter().startGetUsersTask(0, true);
+        } else {
+            ArrayList<UserEntity> users = savedInstanceState.getParcelableArrayList(Keys.Args.USER_LIST);
+            mUserAdapter.addUsers(users);
+        }
     }
 
     private void initUI() {
-        mRvUsers.setHasFixedSize(true);
+
         mRvUsers.setLayoutManager(new LinearLayoutManager(this));
         mRvUsers.setAdapter(mUserAdapter);
-
-        mUserAdapter.setOnItemClickListener(this);
-
-        mEtSearch.addTextChangedListener(mTextWatcher);
+        mRvUsers.addItemDecoration(new FastScrollRecyclerViewItemDecoration(this));
+        mRvUsers.setItemAnimator(new DefaultItemAnimator());
     }
 
     @Override
     public void showUsers(final List<UserEntity> userEntityList, final boolean clearList) {
         if (clearList)
             mUserAdapter.clearAll();
-        mUserAdapter.addAll(userEntityList);
-    }
-
-    @Override
-    public void onClickSelectUser(final UserEntity userEntity, final int position) {
-        Log.e("_____", userEntity.toString());
+        mUserAdapter.addUsers(userEntityList);
+        mRvUsers.invalidate();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mRvUsers.setOnScrollListener(mRecyclerViewScrollListener);
+        mRvUsers.addOnScrollListener(mRecyclerViewScrollListener);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mRvUsers.setOnScrollListener(null);
+        mRvUsers.removeOnScrollListener(mRecyclerViewScrollListener);
     }
 
     private final RecyclerViewScrollListener mRecyclerViewScrollListener = new RecyclerViewScrollListener() {
@@ -105,30 +107,29 @@ public class AddContactActivity extends BaseActivity<AddContactPresenter> implem
         }
     };
 
-    private TextWatcher mTextWatcher = new TextWatcher() {
+    private Handler handler = new Handler();
 
-        private Handler handler = new Handler();
-        private Runnable runnable;
+    @OnTextChanged(R.id.edit_text_search)
+    public void onSearchKeyChanged() {
+        handler.removeCallbacks(runnable);
+        handler.postDelayed(runnable, 500);
+    }
 
-        @Override
-        public void beforeTextChanged(final CharSequence s, final int start, final int count, final int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(final CharSequence s, final int start, final int before, final int count) {
-            handler.removeCallbacks(runnable);
-        }
-
-        @Override
-        public void afterTextChanged(final Editable editable) {
-            runnable = () -> {
-                mRecyclerViewScrollListener.resetParams();
-                final String search = editable.toString().trim();
-                getPresenter().setSearch(search);
-                getPresenter().startGetUsersTask(mUserAdapter.getItemCount(), false);
-            };
-            handler.postDelayed(runnable, 500);
-        }
+    Runnable runnable = () -> {
+        mRecyclerViewScrollListener.resetParams();
+        final String search = mEtSearch.getText().toString().trim();
+        getPresenter().setSearch(search);
+        getPresenter().startGetUsersTask(mUserAdapter.getItemCount(), false);
     };
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(Keys.Args.USER_LIST, (ArrayList<UserEntity>) mUserAdapter.getItems());
+    }
+
+    @Override
+    public void onUserClicked(int position) {
+
+    }
 }

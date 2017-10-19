@@ -153,7 +153,6 @@
     <string name="send_money_title">New Send Money</string>
     <string name="send_money_contacts_label">Contacts</string>
     <string name="send_money_add_contact_label">Add your contacts</string>
-    <string name="add_contact_name_phone_email">receiver name or mobile phone or email</string>
 
     <!-- Send Money Send Form-->
     <string name="send_money_send_title">Send for %s</string>
@@ -166,7 +165,8 @@
     <string name="empty_receiver_amount_error">Receiver amount should be not empty</string>
 
     <!-- Add contact activity -->
-    <string name="add_contact_add_contact">Add your contact</string>
+    <string name="add_contact_add_contact">Add your contacts</string>
+    <string name="add_contact_name_phone_email">Enter username, phone number, or email</string>
 
 
 </resources>

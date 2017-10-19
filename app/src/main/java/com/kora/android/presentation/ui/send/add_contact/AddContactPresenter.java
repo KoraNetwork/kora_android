@@ -74,6 +74,7 @@ public class AddContactPresenter extends BasePresenter<AddContactView> {
                 getView().showUsers(pair.second, true);
             else
                 getView().showUsers(pair.second, false);
+
         }
 
         @Override

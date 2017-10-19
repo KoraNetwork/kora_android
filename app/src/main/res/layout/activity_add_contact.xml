@@ -2,72 +2,53 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusableInTouchMode="true">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/color_toolbar"
-        android:contentInsetLeft="0dp"
-        android:contentInsetStart="0dp"
-        app:contentInsetLeft="0dp"
-        app:contentInsetStart="0dp">
+    <include
+        android:id="@+id/toolbar_container"
+        layout="@layout/toolbar"/>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <com.kora.android.views.CustomTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="@string/add_contact_add_contact"
-                android:textColor="@color/color_button_text_white"
-                android:textSize="20sp"
-                app:font="@string/font_name_muli_bold" />
-        </RelativeLayout>
-
-    </android.support.v7.widget.Toolbar>
-
-    <LinearLayout
-        android:id="@+id/linear_layout_search"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar"
-        android:gravity="center_vertical"
-        android:paddingBottom="10dp"
-        android:paddingLeft="24dp"
-        android:paddingRight="24dp"
-        android:paddingTop="10dp">
-
-        <ImageView
-            android:id="@+id/image_view_search"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_search" />
-
-        <EditText
-            android:id="@+id/edit_text_search"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:hint="@string/add_contact_name_phone_email"
-            android:inputType="text"
-            android:maxLength="35"
-            android:maxLines="1"
-            android:src="@drawable/ic_search"
-            android:textColor="@color/color_text_title"
-            android:textSize="14sp" />
-    </LinearLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view_users"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/linear_layout_search"/>
+        android:layout_below="@+id/toolbar_container"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/edit_text_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#f7fafd"
+                android:drawableLeft="@drawable/ic_search"
+                android:drawablePadding="12dp"
+                android:hint="@string/add_contact_name_phone_email"
+                android:inputType="text"
+                android:maxLength="35"
+                android:maxLines="1"
+                android:padding="19dp"
+                android:src="@drawable/ic_search"
+                android:textColor="@color/color_text_title"
+                android:textSize="14sp"/>
+
+            <com.kora.android.views.fastscroll.FastScrollRecyclerView
+                android:id="@+id/recycler_view_users"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/edit_text_search"
+                android:scrollbars="none"
+                tools:listitem="@layout/item_contact"
+                />
+        </LinearLayout>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

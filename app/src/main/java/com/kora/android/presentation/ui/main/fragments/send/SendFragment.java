@@ -73,18 +73,18 @@ public class SendFragment extends StackFragment<SendPresenter> implements SendVi
 
     @Override
     protected void onViewReady(final Bundle savedInstanceState) {
-//        if (savedInstanceState == null) {
             mUserList.setLayoutManager(new LinearLayoutManager(getActivity()));
             mUserList.setAdapter(mUserAdapter);
             mUserList.addItemDecoration(new FastScrollRecyclerViewItemDecoration(getActivity()));
             mUserList.setItemAnimator(new DefaultItemAnimator());
             swipeRefreshLayout.setOnRefreshListener(this);
 
+        if (savedInstanceState == null) {
             getPresenter().getUserList();
-//        } else {
-//            ArrayList<UserEntity> users = savedInstanceState.getParcelableArrayList(Keys.Args.USER_LIST);
-//            mUserAdapter.addUsers(users);
-//        }
+        } else {
+            ArrayList<UserEntity> users = savedInstanceState.getParcelableArrayList(Keys.Args.USER_LIST);
+            mUserAdapter.addUsers(users);
+        }
 
     }
 
