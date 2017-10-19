@@ -42,7 +42,7 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
                                          final double receiverAmount) {
         final Intent intent = new Intent(baseActivity, EnterPinActivity.class);
         intent.putExtra(USER_ENTITY, userEntity);
-        intent.putExtra(Keys.Args.SENDER_AMOUNT, senderAmount);
+        intent.putExtra(SENDER_AMOUNT, senderAmount);
         intent.putExtra(RECEIVER_AMOUNT, receiverAmount);
         return intent;
     }
@@ -62,17 +62,14 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
     protected void onViewReady(final Bundle savedInstanceState) {
         setToolbar(mToolbar, R.drawable.ic_back_white);
 
-        initArguments(savedInstanceState);
+        initArguments();
     }
 
-    private void initArguments(final Bundle bundle) {
-        if (bundle != null) {
-            if (bundle.containsKey(USER_ENTITY))
-                getPresenter().setUserEntity(bundle.getParcelable(USER_ENTITY));
-            if (bundle.containsKey(SENDER_AMOUNT))
-                getPresenter().setSenderAmount(bundle.getInt(SENDER_AMOUNT));
-            if (bundle.containsKey(RECEIVER_AMOUNT))
-                getPresenter().setReceiverAmount(bundle.getInt(RECEIVER_AMOUNT));
+    private void initArguments() {
+        if (getIntent() != null) {
+                getPresenter().setUserEntity(getIntent().getParcelableExtra(USER_ENTITY));
+                getPresenter().setSenderAmount(getIntent().getDoubleExtra(SENDER_AMOUNT, 0));
+                getPresenter().setReceiverAmount(getIntent().getDoubleExtra(RECEIVER_AMOUNT, 0));
         }
     }
 

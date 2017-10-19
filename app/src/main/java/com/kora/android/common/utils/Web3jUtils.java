@@ -24,6 +24,6 @@ public class Web3jUtils {
     }
 
     public static String convertDoubleToString(final double d) {
-        return new DecimalFormat(".##").format(d);
+        return new DecimalFormat("#.##").format(d);
     }
 }
