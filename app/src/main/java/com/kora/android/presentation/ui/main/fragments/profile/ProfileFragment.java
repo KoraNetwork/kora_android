@@ -123,11 +123,6 @@ public class ProfileFragment extends StackFragment<ProfilePresenter>
 
         if (savedInstanceState == null) {
             getPresenter().loadUserData();
-        } else {
-            UserEntity user = savedInstanceState.getParcelable(Keys.Args.USER_ENTITY);
-            ViewMode mode = (ViewMode) savedInstanceState.getSerializable(Keys.Args.VIEW_MODE);
-            changeMode(mode);
-            getPresenter().setUserEntity(user);
         }
     }
 
@@ -388,4 +383,14 @@ public class ProfileFragment extends StackFragment<ProfilePresenter>
                 }, Throwable::printStackTrace);
     }
 
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            UserEntity user = savedInstanceState.getParcelable(Keys.Args.USER_ENTITY);
+            ViewMode mode = (ViewMode) savedInstanceState.getSerializable(Keys.Args.VIEW_MODE);
+            changeMode(mode);
+            getPresenter().setUserEntity(user);
+        }
+    }
 }

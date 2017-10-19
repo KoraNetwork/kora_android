@@ -208,7 +208,7 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
     }
 
     @Override
-    public void showFragmentByPosition(int position){
+    public void showFragmentByPosition(int position) {
         final MenuItem item = mNavigationView.getMenu().getItem(0);
         mNavigationView.getMenu().performIdentifierAction(item.getItemId(), position);
         item.setChecked(true);
@@ -226,10 +226,25 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
 
     @Override
     public void selectHostById(final int hostId) {
-        mNavigationView.getMenu().getItem(hostId).setChecked(true);
+        final MenuItem item = mNavigationView.getMenu().getItem(hostId);
+        mNavigationView.getMenu().performIdentifierAction(item.getItemId(), hostId);
+        item.setChecked(true);
     }
 
     public DrawerLayout getDrawerLayout() {
         return mDrawerLayout;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        getNavigator().saveState(outState);
+
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        getNavigator().restoreState(savedInstanceState);
     }
 }
