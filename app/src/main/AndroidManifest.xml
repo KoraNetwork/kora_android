@@ -102,6 +102,12 @@
             android:theme="@style/AppTheme.MainTheme"
             android:windowSoftInputMode="stateHidden"/>
 
+        <activity
+            android:name=".presentation.ui.send.send.SendMoneyActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.MainTheme"
+            android:windowSoftInputMode="stateHidden"/>
+
         <service
             android:name=".presentation.service.IncomingSmsService"
             android:exported="false"/>

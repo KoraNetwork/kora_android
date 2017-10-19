@@ -5,10 +5,13 @@ import android.content.Context;
 import com.kora.android.common.preferences.PreferenceHandler;
 import com.kora.android.common.preferences.PreferenceHandlerImpl;
 import com.kora.android.data.network.service.AuthService;
+import com.kora.android.data.network.service.CurrencyConverterService;
 import com.kora.android.data.network.service.UserService;
 import com.kora.android.data.repository.AuthRepository;
+import com.kora.android.data.repository.CurrencyConverterRepository;
 import com.kora.android.data.repository.UserRepository;
 import com.kora.android.data.repository.impl.AuthRepositoryImpl;
+import com.kora.android.data.repository.impl.CurrencyConverterRepositoryImpl;
 import com.kora.android.data.repository.impl.UserRepositoryImpl;
 import com.kora.android.data.repository.mapper.UserMapper;
 
@@ -40,5 +43,11 @@ public class RepositoryModule {
                                                 final UserMapper userMapper,
                                                 final PreferenceHandler preferenceHandler) {
         return new UserRepositoryImpl(userService, userMapper, preferenceHandler);
+    }
+
+    @Singleton
+    @Provides
+    public CurrencyConverterRepository provideCurrencyConverterRepositoryRepository(final CurrencyConverterService currencyConverterService) {
+        return new CurrencyConverterRepositoryImpl(currencyConverterService);
     }
 }

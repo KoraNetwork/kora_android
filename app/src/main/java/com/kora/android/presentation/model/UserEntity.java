@@ -351,4 +351,10 @@ public class UserEntity implements Parcelable {
             return new UserEntity[size];
         }
     };
+
+    public String getFullName() {
+        return this.getLegalName() == null || this.getLegalName().length() == 0
+                ? this.getUserName() == null || this.getUserName().length() == 0
+                ? "" : this.getUserName() : this.getLegalName();
+    }
 }

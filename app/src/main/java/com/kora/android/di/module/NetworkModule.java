@@ -4,6 +4,7 @@ import com.github.aurae.retrofit2.LoganSquareConverterFactory;
 import com.kora.android.data.network.config.NetworkConfigImpl;
 import com.kora.android.data.network.factory.RxErrorHandlingCallAdapterFactory;
 import com.kora.android.data.network.service.AuthService;
+import com.kora.android.data.network.service.CurrencyConverterService;
 import com.kora.android.data.network.service.UserService;
 
 import java.util.concurrent.TimeUnit;
@@ -52,5 +53,11 @@ public class NetworkModule {
     @Provides
     UserService provideUserService(final Retrofit retrofit) {
         return retrofit.create(UserService.class);
+    }
+
+    @Singleton
+    @Provides
+    CurrencyConverterService provideCurrencyConverterService(final Retrofit retrofit) {
+        return retrofit.create(CurrencyConverterService.class);
     }
 }

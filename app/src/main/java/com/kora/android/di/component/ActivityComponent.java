@@ -14,7 +14,10 @@ import com.kora.android.presentation.ui.registration.step1.FirstStepActivity;
 import com.kora.android.presentation.ui.registration.step2.SecondStepActivity;
 import com.kora.android.presentation.ui.registration.step3.ThirdStepActivity;
 import com.kora.android.presentation.ui.registration.step4.FourthStepActivity;
+import com.kora.android.presentation.ui.send.add_contact.AddContactActivity;
+import com.kora.android.presentation.ui.send.send.SendMoneyActivity;
 import com.kora.android.presentation.ui.splash.SplashActivity;
+import com.kora.android.presentation.ui.test.TestActivity;
 
 import dagger.Subcomponent;
 
@@ -40,4 +43,5 @@ public interface ActivityComponent {
 
     void inject(AddContactActivity addContactActivity);
     void inject(EnterPinActivity enterPinActivity);
+    void inject(SendMoneyActivity sendMoneyActivity);
 }
