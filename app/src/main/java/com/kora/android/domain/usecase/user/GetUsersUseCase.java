@@ -23,12 +23,10 @@ public class GetUsersUseCase extends AsyncUseCase {
         mUserRepository = userRepository;
     }
 
-    public void setData(final String search) {
-        mSearch = search;
-    }
-
-    public void setData(final int limit,
+    public void setData(final String search,
+                        final int limit,
                         final int skip) {
+        mSearch = search;
         mLimit = limit;
         mSkip = skip;
     }

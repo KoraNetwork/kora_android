@@ -39,7 +39,7 @@ public final class UserViewHolder extends RecyclerView.ViewHolder {
                 .load(API_BASE_URL + user.getAvatar())
                 .apply(RequestOptions.circleCropTransform())
                 .thumbnail(Glide.with(context)
-                        .load(R.drawable.ic_user))
+                        .load(R.drawable.ic_user_default))
                 .into(userImage);
 
         userName.setText(user.getFullName());

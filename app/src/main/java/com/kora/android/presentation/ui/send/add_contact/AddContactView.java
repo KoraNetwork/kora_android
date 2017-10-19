@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface AddContactView extends BaseView<AddContactPresenter> {
 
-    void showUsers(final List<UserEntity> userEntityList);
+    void showUsers(final List<UserEntity> userEntityList, final boolean clearList);
 }
