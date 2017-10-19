@@ -17,5 +17,9 @@ public interface Constants {
     String KORA_WALLET_PRIVATE_KEY = "29984ecd73f5e4f9e2fc5ce49dfe61a5b13571ab34c0d427ca066a170cc4e851";
     String KORA_WALLET_PASSWORD = "123456789";
 
-    String ETH_CALL_GET_BALANCE = "balanceOf";
+    double MIN_OWNER_BALANCE = 0.1;
+
+    String FUNCTION_GET_BALANCE = "balanceOf";
+
+    String FUNCTION_TRANSFER = "transfer";
 }

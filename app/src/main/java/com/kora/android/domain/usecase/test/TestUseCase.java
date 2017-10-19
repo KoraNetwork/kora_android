@@ -92,7 +92,7 @@ public class TestUseCase extends AsyncUseCase {
 
             // LOAD TOKEN SMART CONTRACT AND CALL FUNCTIONS
             final HumanStandardToken humanStandardToken = HumanStandardToken.load(
-                    "0x1d29e459f353901e5200db56ef5d6e7ccf772f4d",
+                    "0x545053968018bff704408dacf69bb8f9cacf161f",
                     web3j,
                     credentials,
                     mWeb3jConnection.getGasPrice(),
@@ -108,8 +108,8 @@ public class TestUseCase extends AsyncUseCase {
 //            Log.e("_____", "balance:" + String.valueOf(balanceBigDecimal));
 //
             final TransactionReceipt transactionReceipt = humanStandardToken.transfer(
-                    new Address("0x090a78d89c92b74e08e0169acdedd50195f57944"),
-                    new Uint256(new BigInteger("10000"))
+                    new Address("0x1a915f115ee5bda716759c969f9078c650feaa96"),
+                    new Uint256(new BigInteger("7575"))
             ).get();
             Log.e("_____", "transactionHash:" + transactionReceipt.getTransactionHash());
 

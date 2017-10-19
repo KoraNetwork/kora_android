@@ -36,16 +36,16 @@ public class EtherWallet implements Serializable {
         return new EtherWallet(walletFileName, KORA_WALLET_TYPE);
     }
 
-    public boolean isOwnerWallet(final EtherWallet etherWallet) {
-        return etherWallet.getWalletType().equals(OWNER_WALLET_TYPE);
+    public boolean isOwnerWallet() {
+        return this.getWalletType().equals(OWNER_WALLET_TYPE);
     }
 
-    public boolean isRecoveryWallet(final EtherWallet etherWallet) {
-        return etherWallet.getWalletType().equals(RECOVERY_WALLET_TYPE);
+    public boolean isRecoveryWallet() {
+        return this.getWalletType().equals(RECOVERY_WALLET_TYPE);
     }
 
-    public boolean isKoraWallet(final EtherWallet etherWallet) {
-        return etherWallet.getWalletType().equals(KORA_WALLET_TYPE);
+    public boolean isKoraWallet() {
+        return this.getWalletType().equals(KORA_WALLET_TYPE);
     }
 
     public String getAddress() {

@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.kora.android.data.web3j.model.EtherWallet;
 
+import org.web3j.crypto.CipherException;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.WalletUtils;
 
@@ -15,6 +16,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.channels.FileChannel;
@@ -158,15 +160,8 @@ public class EtherWalletStorage {
         }
     }
 
-    public Credentials getCredentials(final String walletFileName, final String password) {
+    public Credentials getCredentials(final String walletFileName, final String password) throws IOException, CipherException {
         final File file = new File(mContext.getFilesDir(), walletFileName);
-        Credentials credentials = null;
-        try {
-            credentials = WalletUtils.loadCredentials(password, file);
-        } catch (Exception e) {
-            Log.e("_____", e.toString());
-            e.printStackTrace();
-        }
-        return credentials;
+        return WalletUtils.loadCredentials(password, file);
     }
 }

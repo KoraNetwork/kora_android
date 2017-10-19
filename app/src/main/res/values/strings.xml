@@ -169,4 +169,17 @@
     <string name="add_contact_name_phone_email">Enter username, phone number, or email</string>
 
 
+    <!-- Enter pin activity -->
+    <string name="enter_pin_enter_pin">"Enter PIN code</string>
+    <string name="enter_pin_to_confirm">To confirm transaction please enter your PIN code. You will be charged $ 1 per transaction.</string>
+    <string name="enter_pin_finish">FINISH</string>
+    <string name="enter_pin_pin_empty">Pin code fields are empty</string>
+    <string name="enter_pin_pin_too_short">Pin code is too short</string>
+
+    <!-- Web3j error messages -->
+    <string name="web3j_error_messgae_network">The Internet connection appears to be offline.</string>
+    <string name="web3j_error_messgae_owner_balance" formatted="false">You need to have at least %s ETH to make transactions. Owner balance is %s.</string>
+    <string name="web3j_error_messgae_identity_balance" formatted="false">You can not send %s eFiats. Proxy balance is %s.</string>
+
+
 </resources>

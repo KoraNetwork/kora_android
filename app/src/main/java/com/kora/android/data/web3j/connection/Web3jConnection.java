@@ -1,16 +1,16 @@
 package com.kora.android.data.web3j.connection;
 
-import android.content.Context;
-
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jFactory;
 import org.web3j.protocol.infura.InfuraHttpService;
 
 import java.math.BigInteger;
 
-import static com.kora.android.data.web3j.Constants.ETH_CALL_GET_BALANCE;
+import static com.kora.android.data.web3j.Constants.FUNCTION_GET_BALANCE;
+import static com.kora.android.data.web3j.Constants.FUNCTION_TRANSFER;
 import static com.kora.android.data.web3j.Constants.KORA_WALLET_PASSWORD;
 import static com.kora.android.data.web3j.Constants.KORA_WALLET_PRIVATE_KEY;
+import static com.kora.android.data.web3j.Constants.MIN_OWNER_BALANCE;
 import static com.kora.android.data.web3j.Constants.RINKEBY_IDENTITY_MANAGER_ADDRESS;
 import static com.kora.android.data.web3j.Constants.RINKEBY_META_IDENTITY_MANAGER_ADDRESS;
 import static com.kora.android.data.web3j.Constants.ROPSTEN_TESTNET_CLIENT;
@@ -62,7 +62,15 @@ public class Web3jConnection {
         return KORA_WALLET_PASSWORD;
     }
 
-    public String getEthCallGetBalabce() {
-        return ETH_CALL_GET_BALANCE;
+    public double getMinOwnerBalance() {
+        return MIN_OWNER_BALANCE;
+    }
+
+    public String getGetBalabceFunction() {
+        return FUNCTION_GET_BALANCE;
+    }
+
+    public String getGetTransferFunction() {
+        return FUNCTION_TRANSFER;
     }
 }

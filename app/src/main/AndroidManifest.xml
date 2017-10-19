@@ -97,6 +97,12 @@
             android:windowSoftInputMode="stateHidden"/>
 
         <activity
+            android:name=".presentation.ui.send.enter_pin.EnterPinActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.MainTheme"
+            android:windowSoftInputMode="stateHidden"/>
+
+        <activity
             android:name=".presentation.ui.send.send.SendMoneyActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.MainTheme"
