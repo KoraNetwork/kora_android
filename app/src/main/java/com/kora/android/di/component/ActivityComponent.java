@@ -6,6 +6,7 @@ import com.kora.android.presentation.ui.home.HomeActivity;
 import com.kora.android.presentation.ui.login.LoginActivity;
 import com.kora.android.presentation.ui.main.MainActivity;
 import com.kora.android.presentation.ui.send.add_contact.AddContactActivity;
+import com.kora.android.presentation.ui.send.enter_pin.EnterPinActivity;
 import com.kora.android.presentation.ui.test.TestActivity;
 import com.kora.android.presentation.ui.registration.countries.CountriesActivity;
 import com.kora.android.presentation.ui.registration.currencies.CurrenciesActivity;
@@ -38,4 +39,5 @@ public interface ActivityComponent {
     void inject(HomeActivity homeActivity);
 
     void inject(AddContactActivity addContactActivity);
+    void inject(EnterPinActivity enterPinActivity);
 }

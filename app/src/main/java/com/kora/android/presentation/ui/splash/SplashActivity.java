@@ -7,6 +7,8 @@ import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.login.LoginActivity;
 import com.kora.android.presentation.ui.main.MainActivity;
+import com.kora.android.presentation.ui.send.enter_pin.EnterPinActivity;
+import com.kora.android.presentation.ui.test.TestActivity;
 
 public class SplashActivity extends BaseActivity<SplashPresenter> implements SplashView {
 
@@ -40,9 +42,13 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
 
 //        startActivity(MainActivity.getLaunchIntent(this));
 
-        if (isSessionTokenEmpty)
-            startActivity(LoginActivity.getLaunchIntent(this));
-        else
-            startActivity(MainActivity.getLaunchIntent(this));
+        startActivity(EnterPinActivity.getLaunchIntent(this, null, 0, 0));
+
+//        startActivity(TestActivity.getLaunchIntent(this));
+
+//        if (isSessionTokenEmpty)
+//            startActivity(LoginActivity.getLaunchIntent(this));
+//        else
+//            startActivity(MainActivity.getLaunchIntent(this));
     }
 }

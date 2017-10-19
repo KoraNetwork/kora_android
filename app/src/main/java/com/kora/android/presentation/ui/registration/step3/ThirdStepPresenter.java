@@ -7,6 +7,7 @@ import com.kora.android.data.network.config.ErrorModel;
 import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.data.web3j.model.response.IdentityCreatedResponse;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
+import com.kora.android.domain.base.DefaultWeb3jSubscriber;
 import com.kora.android.domain.usecase.identity.CreateIdentityUseCase;
 import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
@@ -51,7 +52,7 @@ public class ThirdStepPresenter  extends BasePresenter<ThirdStepView> {
         }
     };
 
-    private class CreateIdentityUseCaseObserver extends DefaultInternetSubscriber<IdentityCreatedResponse> {
+    private class CreateIdentityUseCaseObserver extends DefaultWeb3jSubscriber<IdentityCreatedResponse> {
 
         @Override
         protected void onStart() {
@@ -85,9 +86,9 @@ public class ThirdStepPresenter  extends BasePresenter<ThirdStepView> {
         }
 
         @Override
-        public void handleNetworkError(final RetrofitException retrofitException) {
+        public void handleWeb3jError(final String message) {
             if(!isViewAttached()) return;
-            getView().showErrorWithRetry(new RetryAction(mCreateIdentityAction));
+            getView().showError(message);
         }
     }
 

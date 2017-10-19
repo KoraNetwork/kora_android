@@ -24,8 +24,7 @@ public class AddContactPresenter extends BasePresenter<AddContactView> {
 
     private String mSearch;
     private int mLimit = 10;
-    private int mSkip = 0;
-
+    private int mSkip;
     private int mTotal;
 
     @Inject
@@ -52,10 +51,6 @@ public class AddContactPresenter extends BasePresenter<AddContactView> {
 
     public void setSearch(final String search) {
         mSearch = search;
-    }
-
-    public void setSkip(int skip) {
-        mSkip = skip;
     }
 
     private class GetUsersSubscriber extends DefaultInternetSubscriber<Pair<Integer, List<UserEntity>>> {
@@ -93,5 +88,10 @@ public class AddContactPresenter extends BasePresenter<AddContactView> {
         public void handleNetworkError(final RetrofitException retrofitException) {
             getView().showErrorWithRetry(new RetryAction(mSearchUsersAction));
         }
+    }
+
+    @Override
+    public void onDetachView() {
+        mGetUsersUseCase.dispose();
     }
 }

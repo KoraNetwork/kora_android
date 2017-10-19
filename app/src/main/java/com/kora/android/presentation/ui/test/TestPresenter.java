@@ -10,8 +10,8 @@ import com.kora.android.domain.usecase.registration.GetCountriesUseCase;
 import com.kora.android.domain.usecase.test.ExportWalletUseCase;
 import com.kora.android.domain.usecase.test.GenerateWalletUseCase;
 import com.kora.android.domain.usecase.test.GetWalletListUseCase;
+import com.kora.android.domain.usecase.test.SendTransactionUseCaseTest;
 import com.kora.android.domain.usecase.test.TestUseCase;
-import com.kora.android.domain.usecase.transaction.SendTransactionUseCase;
 import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.presentation.model.CountryEntity;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
@@ -30,7 +30,7 @@ public class TestPresenter extends BasePresenter<TestView> {
     private final GenerateWalletUseCase mGenerateWalletUseCase;
     private final GetWalletListUseCase mGetWalletListUseCase;
     private final ExportWalletUseCase mExportWalletUseCase;
-    private final SendTransactionUseCase mSendTransactionUseCase;
+    private final SendTransactionUseCaseTest mSendTransactionUseCaseTest;
     private final TestUseCase mTestUseCase;
     private final GetCountriesUseCase mGetCountriesUseCase;
 
@@ -38,13 +38,13 @@ public class TestPresenter extends BasePresenter<TestView> {
     public TestPresenter(final GenerateWalletUseCase generateWalletUseCase,
                          final GetWalletListUseCase getWalletListUseCase,
                          final ExportWalletUseCase exportWalletUseCase,
-                         final SendTransactionUseCase sendTransactionUseCase,
+                         final SendTransactionUseCaseTest sendTransactionUseCaseTest,
                          final TestUseCase testUseCase,
                          final GetCountriesUseCase getCountriesUseCase) {
         mGenerateWalletUseCase = generateWalletUseCase;
         mGetWalletListUseCase = getWalletListUseCase;
         mExportWalletUseCase = exportWalletUseCase;
-        mSendTransactionUseCase = sendTransactionUseCase;
+        mSendTransactionUseCaseTest = sendTransactionUseCaseTest;
         mTestUseCase = testUseCase;
         mGetCountriesUseCase = getCountriesUseCase;
     }
@@ -72,13 +72,13 @@ public class TestPresenter extends BasePresenter<TestView> {
                                 final String addressFrom,
                                 final String addressTo,
                                 final BigInteger amount) {
-        mSendTransactionUseCase.setData(
+        mSendTransactionUseCaseTest.setData(
                 walletFileName,
                 password,
                 addressFrom,
                 addressTo,
                 amount);
-        mSendTransactionUseCase.execute(new SendTransactionObserver());
+        mSendTransactionUseCaseTest.execute(new SendTransactionObserver());
     }
 
     public void createIdentity() {
@@ -314,7 +314,7 @@ public class TestPresenter extends BasePresenter<TestView> {
         mGenerateWalletUseCase.dispose();
         mGetWalletListUseCase.dispose();
         mExportWalletUseCase.dispose();
-        mSendTransactionUseCase.dispose();
+        mSendTransactionUseCaseTest.dispose();
         mTestUseCase.dispose();
         mGetCountriesUseCase.dispose();
     }

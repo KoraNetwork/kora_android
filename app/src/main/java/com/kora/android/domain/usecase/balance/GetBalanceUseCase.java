@@ -1,11 +1,10 @@
 package com.kora.android.domain.usecase.balance;
 
 import android.content.Context;
-import android.util.Log;
 
+import com.kora.android.R;
 import com.kora.android.common.utils.CommonUtils;
-import com.kora.android.data.network.enumclass.Kind;
-import com.kora.android.data.network.exception.RetrofitException;
+import com.kora.android.common.utils.Web3jUtils;
 import com.kora.android.data.web3j.connection.Web3jConnection;
 import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.AsyncUseCase;
@@ -22,6 +21,7 @@ import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthCall;
 
+import java.math.BigInteger;
 import java.util.Collections;
 import java.util.List;
 
@@ -54,14 +54,13 @@ public class GetBalanceUseCase extends AsyncUseCase {
     @Override
     protected Observable buildObservableTask() {
         return Observable.just(true).map(a -> {
-
             if (!CommonUtils.isNetworkConnected(mContext))
-                throw new RetrofitException("Network is offline.", null, null, Kind.NETWORK, null, null);
+                throw new Exception(mContext.getString(R.string.web3j_error_messgae_network));
 
             final Web3j web3j = mWeb3jConnection.getWeb3jRinkeby();
 
             final Function function = new Function(
-                    mWeb3jConnection.getEthCallGetBalabce(),
+                    mWeb3jConnection.getGetBalabceFunction(),
                     Collections.singletonList(new Address(mProxyAddress)),
                     Collections.singletonList(new TypeReference<Uint256>() {
                     })
@@ -76,7 +75,10 @@ public class GetBalanceUseCase extends AsyncUseCase {
                     .get();
 
             final List<Type> someTypes = FunctionReturnDecoder.decode(response.getValue(), function.getOutputParameters());
-            return String.valueOf(someTypes.get(0).getValue());
+            final BigInteger balanceIdentityBigInteger = (BigInteger) someTypes.get(0).getValue();
+            final double balanceIdentityToken = Web3jUtils.convertBigIntegerToToken(balanceIdentityBigInteger);
+
+            return Web3jUtils.convertDoubleToString(balanceIdentityToken);
         });
     }
 }
