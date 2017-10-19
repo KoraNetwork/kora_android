@@ -42,11 +42,7 @@ public final class UserViewHolder extends RecyclerView.ViewHolder {
                         .load(R.drawable.ic_user))
                 .into(userImage);
 
-        String name = user.getLegalName() == null || user.getLegalName().length() == 0
-                ? user.getUserName() == null || user.getUserName().length() == 0
-                ? "" : user.getUserName() : user.getLegalName();
-
-        userName.setText(name);
+        userName.setText(user.getFullName());
         userPhone.setText(user.getPhoneNumber());
     }
 

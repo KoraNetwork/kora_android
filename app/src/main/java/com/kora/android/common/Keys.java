@@ -81,6 +81,10 @@ public interface Keys {
         String USER_ENTITY = "user_entity_args";
         String VIEW_MODE = "view_mode_args";
         String USER_LIST = "user_list_args";
+        String USER_SENDER = "user_sender_args";
+        String USER_RECEIVER = "user_receiver_args";
+        String SENDER_AMOUNT = "sender_amount_args";
+        String RECEIVER_AMOUNT = "receiver_amount_args";
     }
 
     interface Users {

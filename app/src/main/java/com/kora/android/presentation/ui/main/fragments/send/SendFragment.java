@@ -16,6 +16,7 @@ import com.kora.android.presentation.ui.adapter.UserAdapter;
 import com.kora.android.presentation.ui.base.backstack.StackFragment;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
 import com.kora.android.presentation.ui.send.add_contact.AddContactActivity;
+import com.kora.android.presentation.ui.send.send.SendMoneyActivity;
 import com.kora.android.views.fastscroll.FastScrollRecyclerView;
 import com.kora.android.views.fastscroll.FastScrollRecyclerViewItemDecoration;
 
@@ -72,7 +73,7 @@ public class SendFragment extends StackFragment<SendPresenter> implements SendVi
 
     @Override
     protected void onViewReady(final Bundle savedInstanceState) {
-        if (savedInstanceState == null) {
+//        if (savedInstanceState == null) {
             mUserList.setLayoutManager(new LinearLayoutManager(getActivity()));
             mUserList.setAdapter(mUserAdapter);
             mUserList.addItemDecoration(new FastScrollRecyclerViewItemDecoration(getActivity()));
@@ -80,27 +81,23 @@ public class SendFragment extends StackFragment<SendPresenter> implements SendVi
             swipeRefreshLayout.setOnRefreshListener(this);
 
             getPresenter().getUserList();
-        } else {
-            ArrayList<UserEntity> users = savedInstanceState.getParcelableArrayList(Keys.Args.USER_LIST);
-            mUserAdapter.addUsers(users);
-        }
+//        } else {
+//            ArrayList<UserEntity> users = savedInstanceState.getParcelableArrayList(Keys.Args.USER_LIST);
+//            mUserAdapter.addUsers(users);
+//        }
 
     }
 
     @Override
     public void showUserList(List<UserEntity> users) {
-        Collections.sort(users, (o1, o2) -> {
-            String n1 = o1.getLegalName() == null || o1.getLegalName().length() == 0 ? o1.getUserName() == null || o1.getUserName().length() == 0 ? "" : o1.getUserName() : o1.getLegalName();
-            String n2 = o2.getLegalName() == null || o2.getLegalName().length() == 0 ? o2.getUserName() == null || o2.getUserName().length() == 0 ? "" : o2.getUserName() : o2.getLegalName();
-            return n1.compareTo(n2);
-        });
+        Collections.sort(users, (o1, o2) -> o1.getFullName().compareTo(o2.getFullName()));
         mUserAdapter.addUsers(users);
         mUserList.invalidate();
     }
 
     @Override
     public void onUserClicked(int position) {
-
+        startActivity(SendMoneyActivity.getLaunchIntent(getBaseActivity(), mUserAdapter.getItem(position)));
     }
 
     @OnClick(R.id.text_add_new_contact)

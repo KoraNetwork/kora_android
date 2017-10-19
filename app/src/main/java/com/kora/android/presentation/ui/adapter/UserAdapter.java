@@ -99,6 +99,10 @@ public class UserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return mUsers;
     }
 
+    public UserEntity getItem(int position) {
+        return mUsers.get(position);
+    }
+
     public interface OnUserClickListener {
 
         void onUserClicked(int position);
