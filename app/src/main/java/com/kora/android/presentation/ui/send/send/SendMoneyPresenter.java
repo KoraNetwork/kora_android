@@ -4,9 +4,11 @@ import com.kora.android.common.utils.Validator;
 import com.kora.android.data.network.config.ErrorModel;
 import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.di.annotation.ConfigPersistent;
+import com.kora.android.domain.base.DefaultDisposableObserver;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.usecase.user.ConvertAmountUseCase;
 import com.kora.android.domain.usecase.user.GetUserDataUseCase;
+import com.kora.android.domain.usecase.user.SetAsRecentUseCase;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
@@ -21,15 +23,18 @@ public class SendMoneyPresenter extends BasePresenter<SendMoneyView> {
 
     final GetUserDataUseCase mGetUserDataUseCase;
     final ConvertAmountUseCase mConvertAmountUseCase;
+    final SetAsRecentUseCase mSetAsRecentUseCase;
 
     private UserEntity mSender;
     private UserEntity mReceiver;
 
     @Inject
     public SendMoneyPresenter(final GetUserDataUseCase getUserDataUseCase,
-                              final ConvertAmountUseCase convertAmountUseCase) {
+                              final ConvertAmountUseCase convertAmountUseCase,
+                              final SetAsRecentUseCase setAsRecentUseCase) {
         mGetUserDataUseCase = getUserDataUseCase;
         mConvertAmountUseCase = convertAmountUseCase;
+        mSetAsRecentUseCase = setAsRecentUseCase;
     }
 
     public void getCurrentUser() {
@@ -94,6 +99,11 @@ public class SendMoneyPresenter extends BasePresenter<SendMoneyView> {
 
     public UserEntity getSender() {
         return mSender;
+    }
+
+    public void setAsResent() {
+        mSetAsRecentUseCase.setData(mReceiver);
+        mSetAsRecentUseCase.execute(new DefaultDisposableObserver());
     }
 
     private class GetUserSubscriber extends DefaultInternetSubscriber<UserEntity> {

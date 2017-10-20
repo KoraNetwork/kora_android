@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.PersistableBundle;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
@@ -23,6 +24,8 @@ import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.send.enter_pin.EnterPinActivity;
 
+import java.util.Locale;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
@@ -38,7 +41,9 @@ public class SendMoneyActivity extends BaseActivity<SendMoneyPresenter> implemen
     @BindView(R.id.my_suffix) TextView mMySuffixText;
     @BindView(R.id.user_image) AppCompatImageView mUserImage;
     @BindView(R.id.edit_text_sender_amount) TextInputEditText mSenderAmount;
+    @BindView(R.id.edit_layout_amount) TextInputLayout mSenderAmountContainer;
     @BindView(R.id.edit_text_receiver_amount) TextInputEditText mReceiverAmount;
+    @BindView(R.id.edit_layout_converted_amount) TextInputLayout mReceiverAmountContainer;
 
     @Override
     public int getLayoutResource() {
@@ -63,6 +68,7 @@ public class SendMoneyActivity extends BaseActivity<SendMoneyPresenter> implemen
         if (savedInstanceState == null) {
             initArguments();
             getPresenter().getCurrentUser();
+            getPresenter().setAsResent();
         } else {
             getPresenter().setReceiver(savedInstanceState.getParcelable(Keys.Args.USER_RECEIVER));
             getPresenter().setSender(savedInstanceState.getParcelable(Keys.Args.USER_SENDER));
@@ -102,18 +108,18 @@ public class SendMoneyActivity extends BaseActivity<SendMoneyPresenter> implemen
 
     @Override
     public void showConvertedCurrency(Double amount, String currency) {
-        mReceiverAmount.setText(getString(R.string.converted_amount_value, amount));
+        mReceiverAmount.setText(String.format(Locale.ENGLISH, "%1$.2f", amount));
         mHisSuffixText.setText(currency);
     }
 
     @Override
     public void emptySenderAmountError() {
-        mSenderAmount.setError(getString(R.string.empty_sender_amount_error));
+        mSenderAmountContainer.setError(getString(R.string.empty_sender_amount_error));
     }
 
     @Override
     public void emptyReceiverAmountError() {
-        mSenderAmount.setError(getString(R.string.empty_receiver_amount_error));
+        mReceiverAmountContainer.setError(getString(R.string.empty_receiver_amount_error));
     }
 
     @Override
@@ -140,8 +146,8 @@ public class SendMoneyActivity extends BaseActivity<SendMoneyPresenter> implemen
 
     @OnTextChanged(R.id.edit_text_sender_amount)
     public void onAmountChanged() {
-        mSenderAmount.setError(null);
-        mReceiverAmount.setError(null);
+        mSenderAmountContainer.setError(null);
+        mReceiverAmountContainer.setError(null);
         timer.removeCallbacks(converter);
         timer.postDelayed(converter, 500);
     }

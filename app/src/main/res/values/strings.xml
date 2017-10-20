@@ -156,7 +156,7 @@
     <string name="send_money_add_contact_label">Add your contacts</string>
 
     <!-- Send Money Send Form-->
-    <string name="send_money_send_title">Send for %s</string>
+    <string name="send_money_send_title" formatted="false">Send to %s</string>
     <string name="send_money_amount_in_users_currency_label">Amount in users currency</string>
     <string name="converted_amount_value">%1$.2f</string>
     <string name="send_money_amount_label">Amount</string>

@@ -22,4 +22,6 @@ public interface UserRepository {
     Observable<String> updateAvatar(final String avatar);
 
     Observable<List<UserEntity>> getRecentUsers();
+
+    Observable addToRecent(UserEntity userEntity);
 }

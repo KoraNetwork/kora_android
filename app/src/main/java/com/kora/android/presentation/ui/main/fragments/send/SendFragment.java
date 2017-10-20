@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
@@ -17,8 +18,6 @@ import com.kora.android.presentation.ui.base.backstack.StackFragment;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
 import com.kora.android.presentation.ui.send.add_contact.AddContactActivity;
 import com.kora.android.presentation.ui.send.send.SendMoneyActivity;
-import com.kora.android.views.fastscroll.FastScrollRecyclerView;
-import com.kora.android.views.fastscroll.FastScrollRecyclerViewItemDecoration;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,7 +31,7 @@ public class SendFragment extends StackFragment<SendPresenter> implements SendVi
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
 
-    @BindView(R.id.user_list) FastScrollRecyclerView mUserList;
+    @BindView(R.id.user_list) RecyclerView mUserList;
     @BindView(R.id.swipe_layout) SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.text_add_new_contact) TextView mAddContactButton;
 
@@ -57,11 +56,10 @@ public class SendFragment extends StackFragment<SendPresenter> implements SendVi
         return mToolbar;
     }
 
-
-    @Override
-    protected int getTitle() {
-        return R.string.send_money_title;
-    }
+//    @Override
+//    protected int getTitle() {
+//        return R.string.send_money_title;
+//    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,18 +71,17 @@ public class SendFragment extends StackFragment<SendPresenter> implements SendVi
 
     @Override
     protected void onViewReady(final Bundle savedInstanceState) {
-//        if (savedInstanceState == null) {
             mUserList.setLayoutManager(new LinearLayoutManager(getActivity()));
             mUserList.setAdapter(mUserAdapter);
-            mUserList.addItemDecoration(new FastScrollRecyclerViewItemDecoration(getActivity()));
             mUserList.setItemAnimator(new DefaultItemAnimator());
             swipeRefreshLayout.setOnRefreshListener(this);
 
+        if (savedInstanceState == null) {
             getPresenter().getUserList();
-//        } else {
-//            ArrayList<UserEntity> users = savedInstanceState.getParcelableArrayList(Keys.Args.USER_LIST);
-//            mUserAdapter.addUsers(users);
-//        }
+        } else {
+            ArrayList<UserEntity> users = savedInstanceState.getParcelableArrayList(Keys.Args.USER_LIST);
+            mUserAdapter.addUsers(users);
+        }
 
     }
 
