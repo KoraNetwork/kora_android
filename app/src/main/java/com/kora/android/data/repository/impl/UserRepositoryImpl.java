@@ -10,6 +10,7 @@ import com.kora.android.data.repository.UserRepository;
 import com.kora.android.data.repository.mapper.UserMapper;
 import com.kora.android.presentation.model.UserEntity;
 
+import java.io.File;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -17,6 +18,11 @@ import javax.inject.Singleton;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+
+import static com.miguelbcr.ui.rx_paparazzo2.interactors.ImageUtils.getMimeType;
 
 @Singleton
 public class UserRepositoryImpl implements UserRepository {
@@ -55,10 +61,18 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Observable<String> updateAvatar(String avatar) {
-        return mUserMapper.transformAvatarToFormData(avatar)
-                .flatMap(mUserService::updateAvatar)
-                .map(o -> avatar);
+    public Observable<UserEntity> updateAvatar(String avatar) {
+        return mUserService.updateAvatar(getFile(avatar, "avatar"))
+                .compose(mUserMapper.transformResponseToEntityUser());
+    }
+
+    private MultipartBody.Part getFile(final String imagePath, final String key) {
+        if (imagePath == null)
+            return null;
+        final File file = new File(imagePath);
+        final RequestBody requestFile =
+                RequestBody.create(MediaType.parse(getMimeType(imagePath)), file);
+        return MultipartBody.Part.createFormData(key, file.getName(), requestFile);
     }
 
     @Override

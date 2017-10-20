@@ -218,6 +218,7 @@ public class ProfileFragment extends StackFragment<ProfilePresenter>
         Glide.with(this)
                 .load(API_BASE_URL + userEntity.getAvatar())
                 .apply(RequestOptions.circleCropTransform())
+                .thumbnail(Glide.with(this).load(R.drawable.ic_user_default))
                 .into(mIvAvatar);
 
         retrieveCurrency(userEntity.getFlag(), userEntity.getCurrency());
@@ -363,13 +364,13 @@ public class ProfileFragment extends StackFragment<ProfilePresenter>
 
     @OnClick({R.id.image_view_avatar, R.id.text_view_upload_photo})
     public void onClickUploadPhoto() {
-
+        if (mViewMode == VIEW_MODE) return;
         final Options options = new Options();
         options.setToolbarColor(ContextCompat.getColor(getContext(), R.color.color_cropping_background));
         options.setStatusBarColor(ContextCompat.getColor(getContext(), R.color.color_cropping_background));
         options.setAspectRatio(1, 1);
 
-        RxPaparazzo.single(this)
+        RxPaparazzo.single(getActivity())
                 .crop(options)
                 .size(new CustomMaxSize())
                 .usingGallery()

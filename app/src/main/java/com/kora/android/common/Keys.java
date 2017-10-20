@@ -84,6 +84,7 @@ public interface Keys {
         String RECEIVER_AMOUNT = "receiver_amount_args";
         String USER_SENDER = "user_sender_args";
         String USER_RECEIVER = "user_receiver_args";
+        String TRANSACTION_LIST = "transaction_list_args";
     }
 
     interface Users {

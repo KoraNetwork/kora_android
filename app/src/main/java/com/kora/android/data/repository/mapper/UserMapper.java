@@ -102,9 +102,14 @@ public class UserMapper {
                 );
     }
 
-    public Observable<MultipartBody.Part> transformAvatarToFormData(String avatar) {
+    public Observable<Map<String, RequestBody>> transformAvatarToFormData(String avatar) {
         return Observable.just(avatar)
-                .map(model -> getFile(model, "avatar"));
+                .map(model -> {
+                            final HashMap<String, RequestBody> map = new HashMap<>();
+                            map.put("test", createPartFromString("test"));
+                            return map;
+                        }
+                );
     }
 
     private MultipartBody.Part getFile(final String imagePath, final String key) {
@@ -129,6 +134,10 @@ public class UserMapper {
                 .flatMap(userResponses -> Observable.fromIterable(userResponses)
                         .compose(transformResponseToEntityUser())).toList().toObservable();
 
+    }
+
+    public Observable<UserEntity> transformResponseToEntityUser(UserResponse userResponse) {
+        return Observable.just(userResponse).compose(transformResponseToEntityUser());
     }
 }
 

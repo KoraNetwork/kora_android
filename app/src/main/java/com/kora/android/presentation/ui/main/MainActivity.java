@@ -219,6 +219,7 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
         Glide.with(this)
                 .load(API_BASE_URL + userEntity.getAvatar())
                 .apply(RequestOptions.circleCropTransform())
+                .thumbnail(Glide.with(this).load(R.drawable.ic_user_default))
                 .into(mUserAvatar);
         mUserName.setText(userEntity.getLegalName());
         mUserEmail.setText(userEntity.getEmail());

@@ -1,57 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:focusableInTouchMode="true">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:focusableInTouchMode="true"
+              android:orientation="vertical">
 
-    <ScrollView
+    <include layout="@layout/toolbar"/>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <RelativeLayout
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/transactions_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:paddingBottom="16dp"
+            android:scrollbars="none"
+            tools:listitem="@layout/item_transaction"/>
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/color_toolbar"
-                android:contentInsetLeft="0dp"
-                android:contentInsetStart="0dp"
-                app:contentInsetLeft="0dp"
-                app:contentInsetStart="0dp">
+    </android.support.v4.widget.SwipeRefreshLayout>
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
 
-                    <ImageView
-                        android:id="@+id/image_view_kora_logo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/ic_kora_logo_small" />
-                </RelativeLayout>
-
-            </android.support.v7.widget.Toolbar>
-
-            <com.kora.android.views.CustomTextView
-                android:id="@+id/text_view_transactions"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                android:text="TRANSACTIONS\nFRAGMENT"
-                android:gravity="center"
-                android:textColor="@color/color_text_blue"
-                android:textSize="30sp"
-                app:font="@string/font_name_muli_bold" />
-
-        </RelativeLayout>
-
-    </ScrollView>
-
-</RelativeLayout>
+</LinearLayout>

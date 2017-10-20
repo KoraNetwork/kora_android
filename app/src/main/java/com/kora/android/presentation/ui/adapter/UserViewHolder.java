@@ -46,7 +46,7 @@ public final class UserViewHolder extends RecyclerView.ViewHolder {
         userPhone.setText(user.getPhoneNumber());
     }
 
-    public void setOnUserClickListener(UserAdapter.OnUserClickListener onUserClickListener) {
-        rootLayout.setOnClickListener(v -> onUserClickListener.onUserClicked(getAdapterPosition()));
+    public void setOnUserClickListener(OnItemClickListener onUserClickListener) {
+        rootLayout.setOnClickListener(v -> onUserClickListener.onItemClicked(getAdapterPosition()));
     }
 }

@@ -19,7 +19,7 @@ public interface UserRepository {
                                                          final int skip,
                                                          final String sort);
 
-    Observable<String> updateAvatar(final String avatar);
+    Observable<UserEntity> updateAvatar(final String avatar);
 
     Observable<List<UserEntity>> getRecentUsers();
 

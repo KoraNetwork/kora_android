@@ -13,6 +13,7 @@ import com.kora.android.R;
 import com.kora.android.common.Keys;
 import com.kora.android.di.component.FragmentComponent;
 import com.kora.android.presentation.model.UserEntity;
+import com.kora.android.presentation.ui.adapter.OnItemClickListener;
 import com.kora.android.presentation.ui.adapter.UserAdapter;
 import com.kora.android.presentation.ui.base.backstack.StackFragment;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
@@ -27,7 +28,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class SendFragment extends StackFragment<SendPresenter> implements SendView,
-        UserAdapter.OnUserClickListener, SwipeRefreshLayout.OnRefreshListener {
+        OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
 
@@ -94,7 +95,7 @@ public class SendFragment extends StackFragment<SendPresenter> implements SendVi
     }
 
     @Override
-    public void onUserClicked(int position) {
+    public void onItemClicked(int position) {
         startActivity(SendMoneyActivity.getLaunchIntent(getBaseActivity(), mUserAdapter.getItem(position)));
     }
 

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/root_view"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="?attr/selectableItemBackground"
+              android:gravity="center_vertical"
+              android:orientation="horizontal"
+              android:padding="16dp">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/direction_icon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginRight="8dp"
+        tools:src="@drawable/ic_arrow_red"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:gravity="bottom">
+
+        <com.kora.android.views.CustomTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textColor="#3b3d3d"
+            android:textSize="14sp"
+            app:font="@string/font_name_muli_regular"
+            tools:text="Cash out: "/>
+
+        <com.kora.android.views.CustomTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#3b3d3d"
+            android:textSize="14sp"
+            app:font="@string/font_name_muli_bold"
+            tools:text="$320.20"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="bottom">
+
+        <com.kora.android.views.CustomTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#3b3d3d"
+            android:textSize="14sp"
+            android:layout_gravity="right"
+            app:font="@string/font_name_muli_bold"
+            tools:text="10 NGN"/>
+
+        <com.kora.android.views.CustomTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#afb1b3"
+            android:textSize="12sp"
+            android:layout_gravity="right"
+            app:font="@string/font_name_muli_regular"
+            tools:text="17.10.2017"/>
+
+
+    </LinearLayout>
+
+</LinearLayout>

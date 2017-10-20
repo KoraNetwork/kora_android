@@ -15,7 +15,7 @@ import java.util.List;
 public class UserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
 
     @Nullable
-    private OnUserClickListener mOnUserClickListener;
+    private OnItemClickListener mOnUserClickListener;
 
     private List<UserEntity> mUsers;
 
@@ -47,7 +47,7 @@ public class UserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  
         notifyItemRangeInserted(size, users.size());
     }
 
-    public void setOnUserClickListener(@Nullable OnUserClickListener onUserClickListener) {
+    public void setOnUserClickListener(@Nullable OnItemClickListener onUserClickListener) {
         mOnUserClickListener = onUserClickListener;
     }
 
@@ -86,11 +86,5 @@ public class UserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  
 
     public UserEntity getItem(int position) {
         return mUsers.get(position);
-    }
-
-    public interface OnUserClickListener {
-
-        void onUserClicked(int position);
-
     }
 }

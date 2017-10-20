@@ -8,8 +8,10 @@ import com.kora.android.common.helper.RegistrationPrefHelper;
 import com.kora.android.common.helper.SessionPrefHelper;
 import com.kora.android.common.preferences.PreferenceHandler;
 import com.kora.android.data.network.service.AuthService;
+import com.kora.android.data.network.service.TransactionService;
 import com.kora.android.data.repository.AuthRepository;
 import com.kora.android.data.repository.CurrencyConverterRepository;
+import com.kora.android.data.repository.TransactionRepository;
 import com.kora.android.data.repository.UserRepository;
 import com.kora.android.data.web3j.connection.Web3jConnection;
 import com.kora.android.data.web3j.storage.EtherWalletStorage;
@@ -47,10 +49,10 @@ public interface ApplicationComponent {
     Web3jConnection web3jConnection();
 
     AuthService authService();
+    TransactionService transactionService();
 
     AuthRepository authRepository();
-
     UserRepository userRepository();
-
     CurrencyConverterRepository currencyConverterRepository();
+    TransactionRepository transactionRepository();
 }

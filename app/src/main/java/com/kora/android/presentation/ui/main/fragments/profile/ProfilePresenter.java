@@ -226,7 +226,7 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
         }
     }
 
-    private class UpdateAvatarSubscriber extends DefaultInternetSubscriber<String> {
+    private class UpdateAvatarSubscriber extends DefaultInternetSubscriber<UserEntity> {
 
         @Override
         protected void onStart() {
@@ -235,8 +235,10 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
         }
 
         @Override
-        public void onNext(String avatar) {
-            mUserEntity.setAvatar(avatar);
+        public void onNext(UserEntity userEntity) {
+           mUserEntity = userEntity;
+            if (!isViewAttached()) return;
+            getView().retrieveUserData(userEntity);
         }
 
         @Override

@@ -14,6 +14,7 @@ import com.kora.android.R;
 import com.kora.android.common.Keys;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.model.UserEntity;
+import com.kora.android.presentation.ui.adapter.OnItemClickListener;
 import com.kora.android.presentation.ui.adapter.UserAdapter;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.send.add_contact.adapter.RecyclerViewScrollListener;
@@ -26,7 +27,7 @@ import butterknife.BindView;
 import butterknife.OnTextChanged;
 
 public class AddContactActivity extends BaseActivity<AddContactPresenter>
-        implements AddContactView, UserAdapter.OnUserClickListener, SwipeRefreshLayout.OnRefreshListener {
+        implements AddContactView, OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.edit_text_search) AppCompatEditText mEtSearch;
@@ -129,7 +130,7 @@ public class AddContactActivity extends BaseActivity<AddContactPresenter>
     }
 
     @Override
-    public void onUserClicked(int position) {
+    public void onItemClicked(int position) {
         startActivity(SendMoneyActivity.getLaunchIntent(this, mUserAdapter.getItem(position)));
     }
 

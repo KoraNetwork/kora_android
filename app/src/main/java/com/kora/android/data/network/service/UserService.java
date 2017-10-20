@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.http.Body;
@@ -31,7 +30,7 @@ public interface UserService {
 
     @Multipart
     @PUT("profile/avatar")
-    ObservableSource<Object> updateAvatar(@Part final MultipartBody.Part imageFile);
+    Observable<UserResponse> updateAvatar(@Part final MultipartBody.Part imageFile);
 
     @GET("recents")
     Observable<List<UserResponse>> getRecentUsers();
