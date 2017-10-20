@@ -38,7 +38,7 @@
                 android:drawableLeft="@drawable/ic_import_contacts"
                 android:text="@string/send_money_add_contact_label"/>
 
-            <com.kora.android.views.fastscroll.FastScrollRecyclerView
+            <android.support.v7.widget.RecyclerView
                 android:id="@+id/user_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

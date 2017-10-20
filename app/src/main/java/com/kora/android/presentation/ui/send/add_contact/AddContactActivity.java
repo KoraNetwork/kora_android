@@ -17,8 +17,7 @@ import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.adapter.UserAdapter;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.send.add_contact.adapter.RecyclerViewScrollListener;
-import com.kora.android.views.fastscroll.FastScrollRecyclerView;
-import com.kora.android.views.fastscroll.FastScrollRecyclerViewItemDecoration;
+import com.kora.android.presentation.ui.send.send.SendMoneyActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,11 +25,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnTextChanged;
 
-public class AddContactActivity extends BaseActivity<AddContactPresenter> implements AddContactView, UserAdapter.OnUserClickListener {
+public class AddContactActivity extends BaseActivity<AddContactPresenter>
+        implements AddContactView, UserAdapter.OnUserClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.edit_text_search) AppCompatEditText mEtSearch;
-    @BindView(R.id.recycler_view_users) FastScrollRecyclerView mRvUsers;
+    @BindView(R.id.recycler_view_users) RecyclerView mRvUsers;
     @BindView(R.id.swipe_layout) SwipeRefreshLayout swipeRefreshLayout;
 
     public UserAdapter mUserAdapter;
@@ -54,8 +54,6 @@ public class AddContactActivity extends BaseActivity<AddContactPresenter> implem
         setToolbar(mToolbar, R.drawable.ic_back_white);
         mToolbar.setTitle(R.string.add_contact_add_contact);
 
-        mUserAdapter = new UserAdapter();
-
         initUI();
 
         if (savedInstanceState == null) {
@@ -67,10 +65,12 @@ public class AddContactActivity extends BaseActivity<AddContactPresenter> implem
     }
 
     private void initUI() {
+        mUserAdapter = new UserAdapter();
+        mUserAdapter.setOnUserClickListener(this);
 
+        swipeRefreshLayout.setOnRefreshListener(this);
         mRvUsers.setLayoutManager(new LinearLayoutManager(this));
         mRvUsers.setAdapter(mUserAdapter);
-        mRvUsers.addItemDecoration(new FastScrollRecyclerViewItemDecoration(this));
         mRvUsers.setItemAnimator(new DefaultItemAnimator());
     }
 
@@ -130,6 +130,13 @@ public class AddContactActivity extends BaseActivity<AddContactPresenter> implem
 
     @Override
     public void onUserClicked(int position) {
+        startActivity(SendMoneyActivity.getLaunchIntent(this, mUserAdapter.getItem(position)));
+    }
 
+    @Override
+    public void onRefresh() {
+        swipeRefreshLayout.setRefreshing(false);
+        mUserAdapter.clearAll();
+        getPresenter().startGetUsersTask(0, false);
     }
 }

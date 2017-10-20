@@ -39,11 +39,10 @@
                 android:textColor="@color/color_text_title"
                 android:textSize="14sp"/>
 
-            <com.kora.android.views.fastscroll.FastScrollRecyclerView
+            <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_view_users"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/edit_text_search"
                 android:scrollbars="none"
                 tools:listitem="@layout/item_contact"
                 />
