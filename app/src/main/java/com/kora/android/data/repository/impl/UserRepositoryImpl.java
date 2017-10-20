@@ -4,6 +4,7 @@ import android.util.Pair;
 
 import com.kora.android.common.Keys;
 import com.kora.android.common.preferences.PreferenceHandler;
+import com.kora.android.data.network.model.request.UserIdRequest;
 import com.kora.android.data.network.service.UserService;
 import com.kora.android.data.repository.UserRepository;
 import com.kora.android.data.repository.mapper.UserMapper;
@@ -64,6 +65,11 @@ public class UserRepositoryImpl implements UserRepository {
     public Observable<List<UserEntity>> getRecentUsers() {
         return mUserService.getRecentUsers()
                 .compose(mUserMapper.transformUserListResponseToEntityUserList());
+    }
+
+    @Override
+    public Observable<Object> addToRecent(UserEntity userEntity) {
+        return mUserService.addToRecent(new UserIdRequest(userEntity.getId()));
     }
 
     @Override

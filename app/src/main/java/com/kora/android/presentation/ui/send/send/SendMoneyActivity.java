@@ -67,6 +67,7 @@ public class SendMoneyActivity extends BaseActivity<SendMoneyPresenter> implemen
         if (savedInstanceState == null) {
             initArguments();
             getPresenter().getCurrentUser();
+            getPresenter().setAsResent();
         } else {
             getPresenter().setReceiver(savedInstanceState.getParcelable(Keys.Args.USER_RECEIVER));
             getPresenter().setSender(savedInstanceState.getParcelable(Keys.Args.USER_SENDER));

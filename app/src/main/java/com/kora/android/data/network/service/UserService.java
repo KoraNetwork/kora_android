@@ -1,5 +1,6 @@
 package com.kora.android.data.network.service;
 
+import com.kora.android.data.network.model.request.UserIdRequest;
 import com.kora.android.data.network.model.response.UserListResponse;
 import com.kora.android.data.network.model.response.UserResponse;
 
@@ -10,6 +11,7 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
@@ -39,4 +41,8 @@ public interface UserService {
                                           @Query("limit") int limit,
                                           @Query("skip") int skip,
                                           @Query("sort") String sort);
+
+    @POST("recents/add")
+    Observable<Object> addToRecent(@Body UserIdRequest userIdRequest);
+
 }
