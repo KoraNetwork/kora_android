@@ -6,8 +6,11 @@ import org.web3j.protocol.infura.InfuraHttpService;
 
 import java.math.BigInteger;
 
+import static com.kora.android.data.web3j.Constants.DEFAULT_OWNER_BALANCE;
 import static com.kora.android.data.web3j.Constants.FUNCTION_GET_BALANCE;
 import static com.kora.android.data.web3j.Constants.FUNCTION_TRANSFER;
+import static com.kora.android.data.web3j.Constants.KORA_WALLET_ADDRESS;
+import static com.kora.android.data.web3j.Constants.KORA_WALLET_FILE_NAME;
 import static com.kora.android.data.web3j.Constants.KORA_WALLET_PASSWORD;
 import static com.kora.android.data.web3j.Constants.KORA_WALLET_PRIVATE_KEY;
 import static com.kora.android.data.web3j.Constants.MIN_OWNER_BALANCE;
@@ -58,8 +61,20 @@ public class Web3jConnection {
         return KORA_WALLET_PRIVATE_KEY;
     }
 
+    public String getKoraWalletAddress() {
+        return KORA_WALLET_ADDRESS;
+    }
+
+    public String getKoraWalletFileName() {
+        return KORA_WALLET_FILE_NAME;
+    }
+
     public String getKoraWalletPassword() {
         return KORA_WALLET_PASSWORD;
+    }
+
+    public double getDefaultOwnerBalance() {
+        return DEFAULT_OWNER_BALANCE;
     }
 
     public double getMinOwnerBalance() {

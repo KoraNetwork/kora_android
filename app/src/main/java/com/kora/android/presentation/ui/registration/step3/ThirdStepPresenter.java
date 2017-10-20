@@ -1,5 +1,7 @@
 package com.kora.android.presentation.ui.registration.step3;
 
+import android.util.Log;
+
 import com.kora.android.R;
 import com.kora.android.common.helper.RegistrationPrefHelper;
 import com.kora.android.common.utils.StringUtils;
@@ -83,6 +85,8 @@ public class ThirdStepPresenter  extends BasePresenter<ThirdStepView> {
             if (!isViewAttached()) return;
             getView().showProgress(false);
 
+            Log.e("_____", throwable.toString());
+            throwable.printStackTrace();
         }
 
         @Override

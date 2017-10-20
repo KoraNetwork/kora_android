@@ -9,6 +9,8 @@ import com.kora.android.domain.usecase.transaction.SendTransactionUseCase;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import io.reactivex.annotations.NonNull;
@@ -18,7 +20,7 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
 
     private final SendTransactionUseCase mSendTransactionUseCase;
 
-    private UserEntity mUserEntity;
+    private UserEntity mReceiver;
     private double mSenderAmount;
     private double mReceiverAmount;
 
@@ -37,12 +39,12 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
             return;
         }
 
-        mSendTransactionUseCase.setData(pinCode, mUserEntity, mSenderAmount, mReceiverAmount);
+        mSendTransactionUseCase.setData(pinCode, mReceiver, mSenderAmount, mReceiverAmount);
         mSendTransactionUseCase.execute(new SendTransactionSubscriber());
     }
 
-    public void setUserEntity(final UserEntity userEntity) {
-        mUserEntity = userEntity;
+    public void setReceiver(final UserEntity receiver) {
+        mReceiver = receiver;
     }
 
     public void setSenderAmount(final double senderAmount) {
@@ -53,8 +55,8 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         mReceiverAmount = receiverAmount;
     }
 
-    public UserEntity getUserEntity() {
-        return mUserEntity;
+    public UserEntity getReceiver() {
+        return mReceiver;
     }
 
     public double getSenderAmount() {
@@ -65,7 +67,7 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         return mReceiverAmount;
     }
 
-    private class SendTransactionSubscriber extends DefaultWeb3jSubscriber<String> {
+    private class SendTransactionSubscriber extends DefaultWeb3jSubscriber<List<String>> {
 
         @Override
         protected void onStart() {
@@ -74,9 +76,9 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         }
 
         @Override
-        public void onNext(@NonNull final String transactionHash) {
+        public void onNext(@NonNull final List<String> transactionHashList) {
             if(!isViewAttached()) return;
-            Log.e("_____", transactionHash);
+            Log.e("_____", transactionHashList.toString());
         }
 
         @Override
@@ -96,9 +98,14 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         }
 
         @Override
-        public void handleWeb3jError(String message) {
+        public void handleWeb3jError(final String message) {
             if(!isViewAttached()) return;
             getView().showError(message);
         }
+    }
+
+    @Override
+    public void onDetachView() {
+        mSendTransactionUseCase.dispose();
     }
 }

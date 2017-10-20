@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.widget.EditText;
 
 import com.kora.android.R;
@@ -17,6 +16,7 @@ import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.send.add_contact.adapter.RecyclerViewScrollListener;
 import com.kora.android.presentation.ui.send.add_contact.adapter.UserAdapter;
+import com.kora.android.presentation.ui.send.send.SendMoneyActivity;
 
 import java.util.List;
 
@@ -77,7 +77,7 @@ public class AddContactActivity extends BaseActivity<AddContactPresenter> implem
 
     @Override
     public void onClickSelectUser(final UserEntity userEntity, final int position) {
-        Log.e("_____", userEntity.toString());
+        startActivity(SendMoneyActivity.getLaunchIntent(this, userEntity));
     }
 
     @Override
