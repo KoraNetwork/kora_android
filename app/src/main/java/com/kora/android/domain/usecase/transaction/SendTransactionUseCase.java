@@ -7,7 +7,6 @@ import com.kora.android.common.preferences.PreferenceHandler;
 import com.kora.android.common.utils.CommonUtils;
 import com.kora.android.common.utils.Web3jUtils;
 import com.kora.android.data.web3j.connection.Web3jConnection;
-import com.kora.android.data.web3j.model.EtherWallet;
 import com.kora.android.data.web3j.smart_contracts.HumanStandardToken;
 import com.kora.android.data.web3j.smart_contracts.MetaIdentityManager;
 import com.kora.android.data.web3j.storage.EtherWalletStorage;
@@ -138,7 +137,8 @@ public class SendTransactionUseCase extends AsyncUseCase {
 
 
 
-            if (mSenderAmount == mReceiverAmount) {
+            if (sender.getCurrency().equals(mReceiver.getCurrency())) {
+
                 if (!CommonUtils.isNetworkConnected(mContext))
                     throw new Exception(mContext.getString(R.string.web3j_error_message_network));
 
@@ -173,6 +173,7 @@ public class SendTransactionUseCase extends AsyncUseCase {
 
 
             } else {
+
                 if (!CommonUtils.isNetworkConnected(mContext))
                     throw new Exception(mContext.getString(R.string.web3j_error_message_network));
 
@@ -217,7 +218,7 @@ public class SendTransactionUseCase extends AsyncUseCase {
                 );
 
                 final Future<TransactionReceipt> transferFuture = humanStandardToken.transfer(
-                        new Address(sender.getIdentity()),
+                        new Address(mReceiver.getIdentity()),
                         new Uint256(Web3jUtils.convertTokenToBigInteger(mReceiverAmount))
                 );
 
