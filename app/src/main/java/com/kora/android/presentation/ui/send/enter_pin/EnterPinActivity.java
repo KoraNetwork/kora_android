@@ -37,11 +37,11 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
     TextInputEditText mEtPinFourthDigit;
 
     public static Intent getLaunchIntent(final BaseActivity baseActivity,
-                                         final UserEntity userEntity,
+                                         final UserEntity receiver,
                                          final double senderAmount,
                                          final double receiverAmount) {
         final Intent intent = new Intent(baseActivity, EnterPinActivity.class);
-        intent.putExtra(USER_ENTITY, userEntity);
+        intent.putExtra(USER_ENTITY, receiver);
         intent.putExtra(SENDER_AMOUNT, senderAmount);
         intent.putExtra(RECEIVER_AMOUNT, receiverAmount);
         return intent;
@@ -62,12 +62,20 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
     protected void onViewReady(final Bundle savedInstanceState) {
         setToolbar(mToolbar, R.drawable.ic_back_white);
 
-        initArguments();
+        initArguments(savedInstanceState);
     }
 
-    private void initArguments() {
+    private void initArguments(final Bundle bundle) {
+        if (bundle != null) {
+            if (bundle.containsKey(USER_ENTITY))
+                getPresenter().setReceiver(bundle.getParcelable(USER_ENTITY));
+            if (bundle.containsKey(SENDER_AMOUNT))
+                getPresenter().setSenderAmount(bundle.getDouble(SENDER_AMOUNT));
+            if (bundle.containsKey(RECEIVER_AMOUNT))
+                getPresenter().setReceiverAmount(bundle.getDouble(RECEIVER_AMOUNT));
+        }
         if (getIntent() != null) {
-                getPresenter().setUserEntity(getIntent().getParcelableExtra(USER_ENTITY));
+                getPresenter().setReceiver(getIntent().getParcelableExtra(USER_ENTITY));
                 getPresenter().setSenderAmount(getIntent().getDoubleExtra(SENDER_AMOUNT, 0));
                 getPresenter().setReceiverAmount(getIntent().getDoubleExtra(RECEIVER_AMOUNT, 0));
         }
@@ -76,7 +84,7 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(USER_ENTITY, getPresenter().getUserEntity());
+        outState.putParcelable(USER_ENTITY, getPresenter().getReceiver());
         outState.putDouble(SENDER_AMOUNT, getPresenter().getSenderAmount());
         outState.putDouble(RECEIVER_AMOUNT, getPresenter().getReceiverAmount());
     }

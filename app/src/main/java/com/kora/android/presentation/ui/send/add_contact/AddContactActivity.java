@@ -29,10 +29,14 @@ import butterknife.OnTextChanged;
 public class AddContactActivity extends BaseActivity<AddContactPresenter>
         implements AddContactView, OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
-    @BindView(R.id.toolbar) Toolbar mToolbar;
-    @BindView(R.id.edit_text_search) AppCompatEditText mEtSearch;
-    @BindView(R.id.recycler_view_users) RecyclerView mRvUsers;
-    @BindView(R.id.swipe_layout) SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.edit_text_search)
+    AppCompatEditText mEtSearch;
+    @BindView(R.id.recycler_view_users)
+    RecyclerView mRvUsers;
+    @BindView(R.id.swipe_layout)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     public UserAdapter mUserAdapter;
 
@@ -53,7 +57,6 @@ public class AddContactActivity extends BaseActivity<AddContactPresenter>
     @Override
     protected void onViewReady(final Bundle savedInstanceState) {
         setToolbar(mToolbar, R.drawable.ic_back_white);
-        mToolbar.setTitle(R.string.add_contact_add_contact);
 
         initUI();
 
@@ -116,7 +119,7 @@ public class AddContactActivity extends BaseActivity<AddContactPresenter>
         handler.postDelayed(runnable, 500);
     }
 
-    Runnable runnable = () -> {
+    private Runnable runnable = () -> {
         mRecyclerViewScrollListener.resetParams();
         final String search = mEtSearch.getText().toString().trim();
         getPresenter().setSearch(search);
@@ -137,7 +140,6 @@ public class AddContactActivity extends BaseActivity<AddContactPresenter>
     @Override
     public void onRefresh() {
         swipeRefreshLayout.setRefreshing(false);
-        mUserAdapter.clearAll();
         getPresenter().startGetUsersTask(0, false);
     }
 }

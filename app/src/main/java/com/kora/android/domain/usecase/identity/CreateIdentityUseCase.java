@@ -53,7 +53,7 @@ public class CreateIdentityUseCase extends AsyncUseCase {
     protected Observable buildObservableTask() {
         return Observable.just(true).map(a -> {
             if (!CommonUtils.isNetworkConnected(mContext))
-                throw new Exception(mContext.getString(R.string.web3j_error_messgae_network));
+                throw new Exception(mContext.getString(R.string.web3j_error_message_network));
 
             final String ownerWalletFileName = mEtherWalletUtils.generateNewWalletFile(
                     mPinCode,
@@ -76,7 +76,7 @@ public class CreateIdentityUseCase extends AsyncUseCase {
             mEtherWalletStorage.addWallet(koraEtherWallet);
 
             if (!CommonUtils.isNetworkConnected(mContext))
-                throw new Exception(mContext.getString(R.string.web3j_error_messgae_network));
+                throw new Exception(mContext.getString(R.string.web3j_error_message_network));
 
             final Web3j web3j = mWeb3jConnection.getWeb3jRinkeby();
             final Credentials credentials = mEtherWalletStorage.getCredentials(

@@ -55,7 +55,7 @@ public class GetBalanceUseCase extends AsyncUseCase {
     protected Observable buildObservableTask() {
         return Observable.just(true).map(a -> {
             if (!CommonUtils.isNetworkConnected(mContext))
-                throw new Exception(mContext.getString(R.string.web3j_error_messgae_network));
+                throw new Exception(mContext.getString(R.string.web3j_error_message_network));
 
             final Web3j web3j = mWeb3jConnection.getWeb3jRinkeby();
 

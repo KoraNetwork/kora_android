@@ -87,6 +87,7 @@
     <string name="registration_dialog_positive_back_pressed">Return</string>
     <string name="registration_dialog_negative_back_pressed">Cancel</string>
     <string name="registration_dialog_message_verification_dode_was_sent">SMS message with verification code was send</string>
+    <string name="registration_increase_account_wait">Kora is sending money on your new account. Please wait for a while. Please do not exit the app.</string>
 
     <!-- Registration countries activity -->
     <string name="registration_select_country">Select countryEntity</string>
@@ -155,7 +156,7 @@
     <string name="send_money_add_contact_label">Add your contacts</string>
 
     <!-- Send Money Send Form-->
-    <string name="send_money_send_title">Send for %s</string>
+    <string name="send_money_send_title" formatted="false">Send to %s</string>
     <string name="send_money_amount_in_users_currency_label">Amount in users currency</string>
     <string name="converted_amount_value">%1$.2f</string>
     <string name="send_money_amount_label">Amount</string>
@@ -165,9 +166,8 @@
     <string name="empty_receiver_amount_error">Receiver amount should be not empty</string>
 
     <!-- Add contact activity -->
-    <string name="add_contact_add_contact">Add your contacts</string>
-    <string name="add_contact_name_phone_email">Enter username, phone number, or email</string>
-
+    <string name="add_contact_add_contact">Add your contact</string>
+    <string name="add_contact_name_phone_email">receiver name or mobile phone or email</string>
 
     <!-- Enter pin activity -->
     <string name="enter_pin_enter_pin">"Enter PIN code</string>
@@ -177,9 +177,9 @@
     <string name="enter_pin_pin_too_short">Pin code is too short</string>
 
     <!-- Web3j error messages -->
-    <string name="web3j_error_messgae_network">The Internet connection appears to be offline.</string>
-    <string name="web3j_error_messgae_owner_balance" formatted="false">You need to have at least %s ETH to make transactions. Owner balance is %s.</string>
-    <string name="web3j_error_messgae_identity_balance" formatted="false">You can not send %s eFiats. Proxy balance is %s.</string>
+    <string name="web3j_error_message_network">The Internet connection appears to be offline.</string>
+    <string name="web3j_error_message_owner_balance" formatted="false">You need to have at least %s ETH to make transactions. Owner balance is %s.</string>
+    <string name="web3j_error_message_identity_balance" formatted="false">You can not send %s eFiats. Proxy balance is %s.</string>
 
 
 </resources>

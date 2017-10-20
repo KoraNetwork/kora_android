@@ -22,6 +22,7 @@ import com.kora.android.common.utils.ViewUtils;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
+import com.kora.android.presentation.ui.send.enter_pin.EnterPinActivity;
 
 import java.util.Locale;
 
@@ -123,7 +124,7 @@ public class SendMoneyActivity extends BaseActivity<SendMoneyPresenter> implemen
 
     @Override
     public void openPinScreen(UserEntity receiver, Double sAmount, Double rAmount) {
-
+        startActivity(EnterPinActivity.getLaunchIntent(this, receiver, sAmount, rAmount));
     }
 
     @Override

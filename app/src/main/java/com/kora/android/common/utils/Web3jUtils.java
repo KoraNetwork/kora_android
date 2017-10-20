@@ -15,6 +15,10 @@ public class Web3jUtils {
         return bigInteger.divide(new BigInteger("10000000000000000")).longValue() / 100d;
     }
 
+    public static BigInteger convertEthToWei(final double d) {
+        return BigInteger.valueOf((long) (d*100)).multiply(new BigInteger("10000000000000000"));
+    }
+
     public static double convertBigIntegerToToken(final BigInteger bigInteger) {
         return bigInteger.longValue() / 100d;
     }
