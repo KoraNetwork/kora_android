@@ -1,13 +1,19 @@
 package com.kora.android.presentation.ui.main.fragments.transactions;
 
+import com.kora.android.common.preferences.PreferenceHandler;
 import com.kora.android.data.network.config.ErrorModel;
 import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.usecase.transaction.GetTransactionsUseCase;
+import com.kora.android.presentation.dto.TransactionFilterDto;
+import com.kora.android.presentation.enums.TransactionDirection;
+import com.kora.android.presentation.enums.TransactionType;
 import com.kora.android.presentation.model.TransactionEntity;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -18,14 +24,22 @@ import io.reactivex.annotations.NonNull;
 class TransactionsPresenter extends BasePresenter<TransactionsView> {
 
     private final GetTransactionsUseCase mGetTransactionsUseCase;
+    private final PreferenceHandler mPreferenceHandler;
+
+    TransactionDirection[] mDirections = {TransactionDirection.FROM};
+    TransactionType[] mTypes = {TransactionType.CASH, TransactionType.SEND, TransactionType.BORROW, TransactionType.REQUEST};
 
 
     @Inject
-    public TransactionsPresenter(final GetTransactionsUseCase getTransactionsUseCase) {
+    public TransactionsPresenter(final GetTransactionsUseCase getTransactionsUseCase,
+                                 final PreferenceHandler preferenceHandler) {
         mGetTransactionsUseCase = getTransactionsUseCase;
+        mPreferenceHandler = preferenceHandler;
     }
 
     public void retrieveTransactions() {
+        TransactionFilterDto transactionFilterDto = new TransactionFilterDto(new ArrayList<>(Arrays.asList(mDirections)), new ArrayList<>(Arrays.asList(mTypes)));
+        mGetTransactionsUseCase.setData(transactionFilterDto);
         mGetTransactionsUseCase.execute(new GetTransactionsSubscriber());
     }
 
