@@ -144,9 +144,6 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         @Override
         public void onNext(@NonNull final TransactionEntity transactionEntity) {
             if (!isViewAttached()) return;
-
-            Log.e("_____", transactionEntity.toString());
-
             getView().showNextScreen();
         }
 

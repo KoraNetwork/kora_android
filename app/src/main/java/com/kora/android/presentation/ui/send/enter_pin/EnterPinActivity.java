@@ -89,13 +89,26 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
         outState.putDouble(RECEIVER_AMOUNT, getPresenter().getReceiverAmount());
     }
 
-    @OnTextChanged({
-            R.id.edit_text_pin_first_digit,
-            R.id.edit_text_pin_second_digit,
-            R.id.edit_text_pin_third_digit,
-            R.id.edit_text_pin_fourth_digit
-    })
-    public void onChangedPinCode() {
+    @OnTextChanged(R.id.edit_text_pin_first_digit)
+    void onChangedPinFirstDigit() {
+        mElCreatePinCode.setError(null);
+        mEtPinSecondDigit.requestFocus();
+    }
+
+    @OnTextChanged(R.id.edit_text_pin_second_digit)
+    void onChangedPinSecondDigit() {
+        mElCreatePinCode.setError(null);
+        mEtPinThirdDigit.requestFocus();
+    }
+
+    @OnTextChanged(R.id.edit_text_pin_third_digit)
+    void onChangedPinThirdDigit() {
+        mElCreatePinCode.setError(null);
+        mEtPinFourthDigit.requestFocus();
+    }
+
+    @OnTextChanged(R.id.edit_text_pin_fourth_digit)
+    void onChangedPinFourthDigit() {
         mElCreatePinCode.setError(null);
     }
 
@@ -112,10 +125,10 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
     @OnClick(R.id.card_view_finish)
     public void onClickFinish() {
         final String pinCode =
-                        mEtPinFirstDigit.getText().toString() +
-                        mEtPinSecondDigit.getText().toString() +
-                        mEtPinThirdDigit.getText().toString() +
-                        mEtPinFourthDigit.getText().toString();
+                mEtPinFirstDigit.getText().toString().trim() +
+                        mEtPinSecondDigit.getText().toString().trim() +
+                        mEtPinThirdDigit.getText().toString().trim() +
+                        mEtPinFourthDigit.getText().toString().trim();
         getPresenter().startSendTransactionTask(pinCode);
     }
 

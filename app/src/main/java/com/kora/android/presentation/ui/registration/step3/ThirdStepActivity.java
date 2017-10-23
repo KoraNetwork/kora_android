@@ -6,7 +6,6 @@ import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
-import android.view.KeyEvent;
 
 import com.kora.android.R;
 import com.kora.android.di.component.ActivityComponent;
@@ -52,43 +51,28 @@ public class ThirdStepActivity extends BaseActivity<ThirdStepPresenter> implemen
     @Override
     protected void onViewReady(final Bundle savedInstanceState) {
         setToolbar(mToolbar, R.drawable.ic_back_grey);
-
-//        mEtPinFirstDigit.setOnKeyListener((v, keyCode, event) -> {
-//            if ((keyCode >= KeyEvent.KEYCODE_0 && keyCode <= KeyEvent.KEYCODE_9)) {
-//                mEtPinSecondDigit.requestFocus();
-//            }
-//            return false;
-//        });
-//
-//        mEtPinSecondDigit.setOnKeyListener((v, keyCode, event) -> {
-//            if ((keyCode >= KeyEvent.KEYCODE_0 && keyCode <= KeyEvent.KEYCODE_9)) {
-//                mEtPinThirdDigit.requestFocus();
-//            }
-//            return false;
-//        });
-//
-//        mEtPinThirdDigit.setOnKeyListener((v, keyCode, event) -> {
-//            if ((keyCode >= KeyEvent.KEYCODE_0 && keyCode <= KeyEvent.KEYCODE_9)) {
-//                mEtPinFourthDigit.requestFocus();
-//            }
-//            return false;
-//        });
-//
-//        mEtPinFourthDigit.setOnKeyListener((v, keyCode, event) -> {
-//            if ((keyCode >= KeyEvent.KEYCODE_0 && keyCode <= KeyEvent.KEYCODE_9)) {
-//                mNextButton.requestFocus();
-//            }
-//            return false;
-//        });
     }
 
-    @OnTextChanged({
-            R.id.edit_text_pin_first_digit,
-            R.id.edit_text_pin_second_digit,
-            R.id.edit_text_pin_third_digit,
-            R.id.edit_text_pin_fourth_digit
-    })
-    void onPinChanged() {
+    @OnTextChanged(R.id.edit_text_pin_first_digit)
+    void onChangedPinFirstDigit() {
+        mElCreatePinCode.setError(null);
+        mEtPinSecondDigit.requestFocus();
+    }
+
+    @OnTextChanged(R.id.edit_text_pin_second_digit)
+    void onChangedPinSecondDigit() {
+        mElCreatePinCode.setError(null);
+        mEtPinThirdDigit.requestFocus();
+    }
+
+    @OnTextChanged(R.id.edit_text_pin_third_digit)
+    void onChangedPinThirdDigit() {
+        mElCreatePinCode.setError(null);
+        mEtPinFourthDigit.requestFocus();
+    }
+
+    @OnTextChanged(R.id.edit_text_pin_fourth_digit)
+    void onChangedPinFourthDigit() {
         mElCreatePinCode.setError(null);
     }
 
@@ -105,10 +89,10 @@ public class ThirdStepActivity extends BaseActivity<ThirdStepPresenter> implemen
     @OnClick(R.id.card_view_next)
     public void onClickNext() {
         final String pinCode =
-                mEtPinFirstDigit.getText().toString() +
-                        mEtPinSecondDigit.getText().toString() +
-                        mEtPinThirdDigit.getText().toString() +
-                        mEtPinFourthDigit.getText().toString();
+                        mEtPinFirstDigit.getText().toString().trim() +
+                        mEtPinSecondDigit.getText().toString().trim() +
+                        mEtPinThirdDigit.getText().toString().trim() +
+                        mEtPinFourthDigit.getText().toString().trim();
         getPresenter().startCreateIdentityTask(pinCode);
     }
 
