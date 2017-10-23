@@ -11,6 +11,7 @@ import com.kora.android.R;
 import com.kora.android.common.Keys;
 import com.kora.android.di.component.FragmentComponent;
 import com.kora.android.presentation.model.TransactionEntity;
+import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.adapter.OnItemClickListener;
 import com.kora.android.presentation.ui.base.backstack.StackFragment;
 import com.kora.android.presentation.ui.base.view.BaseFragment;

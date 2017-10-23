@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'com.github.triplet.play'
+apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 26
@@ -18,7 +19,7 @@ android {
         List<String> runTasks = gradle.startParameter.getTaskNames();
         def value = 0
         for (String item : runTasks)
-            if (item.contains("assembleProdRelease")) {
+            if (item.contains("assembleProdRelease") || item.contains("crashlyticsUpload")) {
                 value = 1;
             }
         code = Integer.parseInt(versionProps['VERSION_CODE']).intValue() + value
@@ -70,8 +71,7 @@ android {
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
-            ext.betaDistributionReleaseNotesFilePath =
-                    file('../crashlytics_release_notes.txt').absolutePath
+            ext.betaDistributionEmailsFilePath = "app/beta_distribution_emails.txt"
         }
 
         debug {
@@ -159,6 +159,11 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.2'
     // date picker
     compile "com.wdullaer:materialdatetimepicker:3.1.1"
+
+    // Fabric
+    compile('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
+        transitive = true;
+    }
 
     // test
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {

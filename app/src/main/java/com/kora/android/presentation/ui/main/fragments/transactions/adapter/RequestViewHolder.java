@@ -19,6 +19,7 @@ public final class RequestViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.direction_icon) ImageView mDirectionIcon;
     @BindView(R.id.sender_name) TextView mSenderName;
+    @BindView(R.id.receiver_name) TextView mReceiverName;
 
     private OnItemClickListener mOnItemClickListener;
 
@@ -37,11 +38,14 @@ public final class RequestViewHolder extends RecyclerView.ViewHolder {
         switch (transactionEntity.getTransactionType()) {
             case SEND:
                 mDirectionIcon.setImageResource(R.drawable.ic_arrow_red);
-                mSenderName.setText(transactionEntity.getReceiver().getUserName());
+                mSenderName.setText(mContext.getString(R.string.transaction_history_from_me));
+                mReceiverName.setText(mContext.getString(R.string.transaction_history_to, transactionEntity.getReceiver().getUserName()));
                 break;
             case BORROW:
                 mDirectionIcon.setImageResource(R.drawable.ic_arrow_gr);
-                mSenderName.setText(transactionEntity.getSender().getUserName());
+                mSenderName.setText(mContext.getString(R.string.transaction_history_from, transactionEntity.getSender().getUserName()));
+                mReceiverName.setText(mContext.getString(R.string.transaction_history_to_me));
+
                 break;
         }
     }

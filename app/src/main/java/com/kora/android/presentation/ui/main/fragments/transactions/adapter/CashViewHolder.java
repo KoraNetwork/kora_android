@@ -5,10 +5,13 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.kora.android.R;
 import com.kora.android.presentation.model.TransactionEntity;
 import com.kora.android.presentation.ui.adapter.OnItemClickListener;
+
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,6 +23,8 @@ public final class CashViewHolder extends RecyclerView.ViewHolder {
     private OnItemClickListener mOnItemClickListener;
 
     @BindView(R.id.direction_icon) ImageView mDirectionIcon;
+    @BindView(R.id.cash_type) TextView mCashType;
+    @BindView(R.id.cash_amount) TextView mCashAmount;
 
     private final Unbinder mUnbinder;
     private Context mContext;
@@ -32,13 +37,9 @@ public final class CashViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(TransactionEntity transactionEntity) {
-        switch (transactionEntity.getTransactionType()) {
-            case CASH:
-//                Glide.with(mContext)
-//                        .load(R.drawable.ic_arrow_red)
-//                        .into(mDirectionIcon);
-                break;
+        mDirectionIcon.setImageResource(R.drawable.ic_arrow_red);
+        mCashType.setText(mContext.getString(R.string.transaction_history_cash_out));
+        mCashAmount.setText(String.format(Locale.ENGLISH, "%1$.2f %2$s", transactionEntity.getFromAmount(), transactionEntity.getSender().getCurrency()));
 
-        }
     }
 }

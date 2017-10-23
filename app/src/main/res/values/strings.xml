@@ -183,5 +183,14 @@
     <string name="web3j_error_message_owner_balance" formatted="false">You need to have at least %s ETH to make transactions. Owner balance is %s.</string>
     <string name="web3j_error_message_identity_balance" formatted="false">You can not send %s eFiats. Proxy balance is %s.</string>
 
+    <!-- Transaction History -->
+    <string name="transaction_history_to">To: %s</string>
+    <string name="transaction_history_to_me">To: You</string>
+    <string name="transaction_history_from_me">From: You</string>
+    <string name="transaction_history_from">From: %s</string>
+    <string name="transaction_history_cash_in">Cash in:</string>
+    <string name="transaction_history_cash_out">Cash out:</string>
+
+
 
 </resources>

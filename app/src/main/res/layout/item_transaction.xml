@@ -58,6 +58,7 @@
             android:gravity="bottom">
 
             <com.kora.android.views.CustomTextView
+                android:id="@+id/receiver_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

@@ -122,6 +122,11 @@
                 android:resource="@xml/file_provider_paths"/>
         </provider>
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="27f3ca19f7ac5f5753fe4042dc1eae707f652d3e"
+            />
+
     </application>
 
 </manifest>

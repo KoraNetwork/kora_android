@@ -25,6 +25,7 @@
         android:gravity="bottom">
 
         <com.kora.android.views.CustomTextView
+            android:id="@+id/cash_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
@@ -32,14 +33,16 @@
             android:textColor="#3b3d3d"
             android:textSize="14sp"
             app:font="@string/font_name_muli_regular"
-            tools:text="Cash out: "/>
+            tools:text="Cash out:"/>
 
         <com.kora.android.views.CustomTextView
+            android:id="@+id/cash_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#3b3d3d"
             android:textSize="14sp"
             app:font="@string/font_name_muli_bold"
+            android:layout_marginLeft="7dp"
             tools:text="$320.20"/>
 
     </LinearLayout>
