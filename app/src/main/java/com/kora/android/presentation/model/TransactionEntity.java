@@ -7,13 +7,14 @@ import com.kora.android.presentation.enums.TransactionDirection;
 import com.kora.android.presentation.enums.TransactionType;
 
 import java.util.Date;
+import java.util.List;
 
 public class TransactionEntity implements Parcelable {
 
     private String id;
     private double fromAmount;
     private double toAmount;
-    private String transactionHash;
+    private List<String> transactionHash;
     private UserEntity sender;
     private UserEntity receiver;
     private TransactionType transactionType;
@@ -21,7 +22,7 @@ public class TransactionEntity implements Parcelable {
     private Date createdAt = new Date();
 
     public TransactionEntity(String id, double fromAmount, double toAmount,
-                             String transactionHash, UserEntity sender, UserEntity receiver,
+                             List<String> transactionHash, UserEntity sender, UserEntity receiver,
                              TransactionType transactionType, TransactionDirection transactionDirection,
                              Date createdAt) {
         this.id = id;
@@ -39,7 +40,7 @@ public class TransactionEntity implements Parcelable {
         id = in.readString();
         fromAmount = in.readDouble();
         toAmount = in.readDouble();
-        transactionHash = in.readString();
+        transactionHash = in.readArrayList(String.class.getClassLoader());
         sender = (UserEntity) in.readValue(UserEntity.class.getClassLoader());
         receiver = (UserEntity) in.readValue(UserEntity.class.getClassLoader());
         transactionType = TransactionType.valueOf(in.readString());
@@ -83,11 +84,11 @@ public class TransactionEntity implements Parcelable {
         this.toAmount = toAmount;
     }
 
-    public String getTransactionHash() {
+    public List<String> getTransactionHash() {
         return transactionHash;
     }
 
-    public void setTransactionHash(String transactionHash) {
+    public void setTransactionHash(List<String> transactionHash) {
         this.transactionHash = transactionHash;
     }
 
@@ -141,7 +142,7 @@ public class TransactionEntity implements Parcelable {
         dest.writeString(id);
         dest.writeDouble(fromAmount);
         dest.writeDouble(toAmount);
-        dest.writeString(transactionHash);
+        dest.writeList(transactionHash);
         dest.writeValue(sender);
         dest.writeValue(receiver);
         dest.writeString(transactionType.name());

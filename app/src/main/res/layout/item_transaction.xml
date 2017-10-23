@@ -41,6 +41,7 @@
                 tools:text="From: Michael Jerreford"/>
 
             <com.kora.android.views.CustomTextView
+                android:id="@+id/amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#3b3d3d"
@@ -68,6 +69,7 @@
                 tools:text="To: You"/>
 
             <com.kora.android.views.CustomTextView
+                android:id="@+id/date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#afb1b3"

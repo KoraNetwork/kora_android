@@ -92,6 +92,15 @@ public class DateUtils {
         return simpleDateFormat.format(calendar.getTime());
     }
 
+    public static String getFormattedDate(final String pattern, final Date date) {
+        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.ENGLISH);
+
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        return simpleDateFormat.format(calendar.getTime());
+    }
+
     public static boolean isDateValid(final String date) {
 
         final Calendar calendar = Calendar.getInstance();

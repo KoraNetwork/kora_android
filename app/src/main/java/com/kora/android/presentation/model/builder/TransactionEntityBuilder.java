@@ -6,12 +6,13 @@ import com.kora.android.presentation.model.TransactionEntity;
 import com.kora.android.presentation.model.UserEntity;
 
 import java.util.Date;
+import java.util.List;
 
 public class TransactionEntityBuilder {
     private String mId;
     private double mFromAmount;
     private double mToAmount;
-    private String mTransactionHash;
+    private List<String> mTransactionHash;
     private UserEntity mSender;
     private UserEntity mReceiver;
     private TransactionType mTransactionType;
@@ -33,7 +34,7 @@ public class TransactionEntityBuilder {
         return this;
     }
 
-    public TransactionEntityBuilder setTransactionHash(String transactionHash) {
+    public TransactionEntityBuilder setTransactionHash(List<String> transactionHash) {
         mTransactionHash = transactionHash;
         return this;
     }

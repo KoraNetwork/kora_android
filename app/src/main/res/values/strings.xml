@@ -86,7 +86,7 @@
     <string name="registration_dialog_message_back_pressed">If you will return on previous screen, you will need to create identity again. It will take time. Are you sure you want to go back?</string>
     <string name="registration_dialog_positive_back_pressed">Return</string>
     <string name="registration_dialog_negative_back_pressed">Cancel</string>
-    <string name="registration_dialog_message_verification_dode_was_sent">SMS message with verification code was send</string>
+    <string name="registration_dialog_message_verification_dode_was_sent">SMS message with verification code was sent</string>
     <string name="registration_increase_account_wait">Kora is sending money on your new account. Please wait for a while. Please do not exit the app.</string>
 
     <!-- Registration countries activity -->
@@ -175,6 +175,8 @@
     <string name="enter_pin_finish">FINISH</string>
     <string name="enter_pin_pin_empty">Pin code fields are empty</string>
     <string name="enter_pin_pin_too_short">Pin code is too short</string>
+    <string name="enter_pin_sending_transaction_wait">App is sending transaction. Please wait for a while. Please do not exit the app.</string>
+    <string name="enter_pin_transaction_is_sent">Transaction is sent</string>
 
     <!-- Web3j error messages -->
     <string name="web3j_error_message_network">The Internet connection appears to be offline.</string>
@@ -189,6 +191,7 @@
     <string name="transaction_history_cash_in">Cash in:</string>
     <string name="transaction_history_cash_out">Cash out:</string>
     <string name="transactions_title">Transactions</string>
+    <string name="transactions_amount">%1$.2f %2$s</string>
 
     <!-- Transaction filter -->
     <string name="filter_show_label">Show:</string>

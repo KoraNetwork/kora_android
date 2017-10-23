@@ -6,4 +6,6 @@ public interface EnterPinView extends BaseView<EnterPinPresenter> {
 
     void showEmptyPinCode();
     void showTooShortPinCode();
+
+    void showNextScreen();
 }

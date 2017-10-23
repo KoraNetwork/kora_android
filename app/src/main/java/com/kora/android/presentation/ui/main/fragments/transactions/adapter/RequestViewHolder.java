@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kora.android.R;
+import com.kora.android.common.utils.DateUtils;
 import com.kora.android.presentation.enums.TransactionType;
 import com.kora.android.presentation.model.TransactionEntity;
 import com.kora.android.presentation.ui.adapter.OnItemClickListener;
@@ -22,7 +23,9 @@ public final class RequestViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.direction_icon) ImageView mDirectionIcon;
     @BindView(R.id.sender_name) TextView mSenderName;
     @BindView(R.id.receiver_name) TextView mReceiverName;
+    @BindView(R.id.date) TextView mDate;
     @BindView(R.id.type) TextView mType;
+    @BindView(R.id.amount) TextView mAmount;
 
     private OnItemClickListener mOnItemClickListener;
 
@@ -43,16 +46,18 @@ public final class RequestViewHolder extends RecyclerView.ViewHolder {
                 mDirectionIcon.setImageResource(R.drawable.ic_arrow_red);
                 mSenderName.setText(mContext.getString(R.string.transaction_history_from_me));
                 mReceiverName.setText(mContext.getString(R.string.transaction_history_to, transactionEntity.getReceiver().getUserName()));
+                mAmount.setText(mContext.getString(R.string.transactions_amount, transactionEntity.getFromAmount(), transactionEntity.getSender().getCurrency()));
                 break;
             case TO:
                 mDirectionIcon.setImageResource(R.drawable.ic_arrow_gr);
                 mSenderName.setText(mContext.getString(R.string.transaction_history_from, transactionEntity.getSender().getUserName()));
                 mReceiverName.setText(mContext.getString(R.string.transaction_history_to_me));
-
+                mAmount.setText(mContext.getString(R.string.transactions_amount, transactionEntity.getToAmount(), transactionEntity.getReceiver().getCurrency()));
                 break;
         }
 
         mType.setText(getTypeResource(transactionEntity.getTransactionType()));
+        mDate.setText(DateUtils.getFormattedDate("dd.MM.YYYY", transactionEntity.getCreatedAt()));
     }
 
     @StringRes
