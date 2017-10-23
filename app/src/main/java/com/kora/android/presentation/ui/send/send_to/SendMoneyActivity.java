@@ -1,4 +1,4 @@
-package com.kora.android.presentation.ui.send.send;
+package com.kora.android.presentation.ui.send.send_to;
 
 import android.content.Intent;
 import android.graphics.Bitmap;

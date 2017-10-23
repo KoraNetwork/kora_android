@@ -28,12 +28,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <ImageView
-                        android:id="@+id/image_view_kora_logo"
+                    <com.kora.android.views.CustomTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/ic_kora_logo_small" />
+                        android:text="@string/request_money_request_money"
+                        android:textColor="@color/color_button_text_white"
+                        android:textSize="20sp"
+                        app:font="@string/font_name_muli_bold" />
                 </RelativeLayout>
 
             </android.support.v7.widget.Toolbar>
@@ -49,6 +51,21 @@
                 android:textColor="@color/color_text_blue"
                 android:textSize="30sp"
                 app:font="@string/font_name_muli_bold" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/floating_button_create_request"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="28dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginRight="24dp"
+                android:clickable="true"
+                android:src="@drawable/ic_add_white"
+                app:backgroundTint="@color/color_floating_button"
+                app:fabSize="normal" />
 
         </RelativeLayout>
 

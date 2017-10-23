@@ -1,4 +1,4 @@
-package com.kora.android.presentation.ui.send.send;
+package com.kora.android.presentation.ui.send.send_to;
 
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.view.BaseView;

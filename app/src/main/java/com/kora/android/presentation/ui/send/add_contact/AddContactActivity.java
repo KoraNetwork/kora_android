@@ -18,7 +18,7 @@ import com.kora.android.presentation.ui.adapter.OnItemClickListener;
 import com.kora.android.presentation.ui.adapter.UserAdapter;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.send.add_contact.adapter.RecyclerViewScrollListener;
-import com.kora.android.presentation.ui.send.send.SendMoneyActivity;
+import com.kora.android.presentation.ui.send.send_to.SendMoneyActivity;
 
 import java.util.ArrayList;
 import java.util.List;

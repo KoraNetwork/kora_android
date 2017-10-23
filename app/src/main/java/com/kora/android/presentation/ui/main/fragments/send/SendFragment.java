@@ -18,7 +18,7 @@ import com.kora.android.presentation.ui.adapter.UserAdapter;
 import com.kora.android.presentation.ui.base.backstack.StackFragment;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
 import com.kora.android.presentation.ui.send.add_contact.AddContactActivity;
-import com.kora.android.presentation.ui.send.send.SendMoneyActivity;
+import com.kora.android.presentation.ui.send.send_to.SendMoneyActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -151,7 +151,7 @@
     <string name = "required_asterisk"> *</string>
 
     <!-- Send Money -->
-    <string name="send_money_title">New Send Money</string>
+    <string name="send_money_title">Send Money</string>
     <string name="send_money_contacts_label">Contacts</string>
     <string name="send_money_add_contact_label">Add your contacts</string>
 
@@ -191,6 +191,7 @@
     <string name="transaction_history_cash_in">Cash in:</string>
     <string name="transaction_history_cash_out">Cash out:</string>
 
-
+    <!-- Request money fragment -->
+    <string name="request_money_request_money">Request money</string>
 
 </resources>
