@@ -171,7 +171,7 @@
 
     <!-- Enter pin activity -->
     <string name="enter_pin_enter_pin">"Enter PIN code</string>
-    <string name="enter_pin_to_confirm">To confirm transaction please enter your PIN code. You will be charged $ 1 per transaction.</string>
+    <string name="enter_pin_to_confirm">To confirm transaction please enter your PIN code.</string>
     <string name="enter_pin_finish">FINISH</string>
     <string name="enter_pin_pin_empty">Pin code fields are empty</string>
     <string name="enter_pin_pin_too_short">Pin code is too short</string>
