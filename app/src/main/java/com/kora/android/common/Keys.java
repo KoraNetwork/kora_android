@@ -85,6 +85,8 @@ public interface Keys {
         String USER_SENDER = "user_sender_args";
         String USER_RECEIVER = "user_receiver_args";
         String TRANSACTION_LIST = "transaction_list_args";
+        String ARG_TRANSACTION_FILTER_MODEL = "transaction_filter_model_arg";
+        String TRANSACTION_FILTER = "transaction_filter_arg";
     }
 
     interface Users {

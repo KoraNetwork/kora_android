@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:padding="16dp">
+
+    <com.kora.android.views.CustomTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="9dp"
+        android:paddingTop="16dp"
+        android:text="@string/filter_show_label"
+        android:textColor="#3b3d3d"
+        android:textSize="16sp"
+        app:font="@string/font_name_muli_bold"/>
+
+    <RadioGroup
+        android:id="@+id/show_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.AppCompatRadioButton
+            android:id="@+id/show_all_radio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:button="@null"
+            android:drawableRight="@drawable/btn_radio"
+            android:paddingBottom="14dp"
+            android:paddingTop="14dp"
+            android:text="@string/filter_show_all_label"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#14000000"/>
+
+        <android.support.v7.widget.AppCompatRadioButton
+            android:id="@+id/show_incoming_radio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:button="@null"
+            android:drawableRight="@drawable/btn_radio"
+            android:paddingBottom="14dp"
+            android:paddingTop="14dp"
+            android:text="@string/filter_show_incoming_label"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#14000000"/>
+
+        <android.support.v7.widget.AppCompatRadioButton
+            android:id="@+id/show_upcoming_radio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:button="@null"
+            android:drawableRight="@drawable/btn_radio"
+            android:paddingBottom="14dp"
+            android:paddingTop="14dp"
+            android:text="@string/filter_show_upcoming_label"/>
+
+    </RadioGroup>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#14000000"/>
+
+    <com.kora.android.views.CustomTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="9dp"
+        android:paddingTop="16dp"
+        android:text="@string/filter_type_label"
+        android:textColor="#3b3d3d"
+        android:textSize="16sp"
+        app:font="@string/font_name_muli_bold"/>
+
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/type_sent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:button="@null"
+        android:drawableRight="@drawable/btn_checkbox"
+        android:paddingBottom="14dp"
+        android:paddingTop="14dp"
+        android:text="@string/filter_type_sent_label"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#14000000"/>
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/type_requesed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:button="@null"
+        android:drawableRight="@drawable/btn_checkbox"
+        android:paddingBottom="14dp"
+        android:paddingTop="14dp"
+        android:text="@string/filter_type_requested_label"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#14000000"/>
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/type_borrowed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:button="@null"
+        android:drawableRight="@drawable/btn_checkbox"
+        android:paddingBottom="14dp"
+        android:paddingTop="14dp"
+        android:text="@string/filter_type_borrowed_label"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#14000000"/>
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/type_deposit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:button="@null"
+        android:drawableRight="@drawable/btn_checkbox"
+        android:paddingBottom="14dp"
+        android:paddingTop="14dp"
+        android:text="@string/filter_type_deposit_label"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#14000000"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <com.kora.android.views.CustomTextView
+            android:id="@+id/button_cancel"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/filter_cancel_label"
+            android:textColor="#e62f60"
+            android:textSize="16sp"
+            app:font="@string/font_name_muli_bold"/>
+
+        <com.kora.android.views.CustomTextView
+            android:id="@+id/button_done"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/filter_done_label"
+            android:textColor="#46a6e3"
+            android:textSize="16sp"
+            app:font="@string/font_name_muli_bold"/>
+
+    </LinearLayout>
+
+</LinearLayout>

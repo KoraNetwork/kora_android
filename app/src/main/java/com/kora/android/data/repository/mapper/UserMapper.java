@@ -137,6 +137,7 @@ public class UserMapper {
     }
 
     public Observable<UserEntity> transformResponseToEntityUser(UserResponse userResponse) {
+        if (userResponse == null) return null;
         return Observable.just(userResponse).compose(transformResponseToEntityUser());
     }
 }

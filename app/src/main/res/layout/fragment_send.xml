@@ -7,31 +7,7 @@
               android:orientation="vertical">
 
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/color_toolbar"
-        android:contentInsetLeft="0dp"
-        android:contentInsetStart="0dp"
-        app:contentInsetLeft="0dp"
-        app:contentInsetStart="0dp">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <com.kora.android.views.CustomTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="Send money"
-                android:textColor="@color/color_button_text_white"
-                android:textSize="20sp"
-                app:font="@string/font_name_muli_bold" />
-        </RelativeLayout>
-
-    </android.support.v7.widget.Toolbar>
+    <include layout="@layout/toolbar" />
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_layout"

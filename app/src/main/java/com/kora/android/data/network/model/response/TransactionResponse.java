@@ -2,14 +2,21 @@ package com.kora.android.data.network.model.response;
 
 import com.bluelinelabs.logansquare.annotation.JsonField;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
+import com.kora.android.data.network.model.converter.DateTypeCustomConverter;
+import com.kora.android.data.network.model.converter.TransactionDirectionConverter;
 import com.kora.android.data.network.model.converter.TransactionTypeConverter;
+import com.kora.android.presentation.enums.TransactionDirection;
 import com.kora.android.presentation.enums.TransactionType;
+
+import java.util.Date;
 
 @JsonObject
 public class TransactionResponse {
 
     @JsonField(name = "id") private String id;
     @JsonField(name = "type", typeConverter = TransactionTypeConverter.class) private TransactionType mType;
+    @JsonField(name = "direction", typeConverter = TransactionDirectionConverter.class) private TransactionDirection mDirection;
+    @JsonField(name = "createdAt", typeConverter = DateTypeCustomConverter.class) private Date mCreatedAt;
     @JsonField(name = "fromAmount") private double mFromAmount;
     @JsonField(name = "toAmount") private double mToAmount;
     @JsonField(name = "transactionHash") private String mTransactionHash;
@@ -70,5 +77,21 @@ public class TransactionResponse {
 
     public void setType(TransactionType type) {
         mType = type;
+    }
+
+    public TransactionDirection getDirection() {
+        return mDirection;
+    }
+
+    public void setDirection(TransactionDirection direction) {
+        mDirection = direction;
+    }
+
+    public Date getCreatedAt() {
+        return mCreatedAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        mCreatedAt = createdAt;
     }
 }

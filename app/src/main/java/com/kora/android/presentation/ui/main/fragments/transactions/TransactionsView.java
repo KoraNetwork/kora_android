@@ -8,4 +8,9 @@ import java.util.List;
 public interface TransactionsView extends BaseView<TransactionsPresenter> {
 
     void showTransactions(List<TransactionEntity> transactionEntities);
+
+    void openFilterDialog();
+
+    void enableAndShowRefreshIndicator(boolean enableIndicator, boolean showIndicator);
+
 }

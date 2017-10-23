@@ -23,6 +23,7 @@ public class TransactionMapper {
 
     public ObservableTransformer<TransactionResponse, TransactionEntity> transformResponseToTransactionEntity() {
         return transactionResponseObservable -> transactionResponseObservable
+                .filter(transactionResponse -> transactionResponse.getSender() != null && transactionResponse.getReceiver() != null)
                 .flatMap(transactionResponse ->
                         Observable.zip(mUserMapper.transformResponseToEntityUser(transactionResponse.getSender()),
                                 mUserMapper.transformResponseToEntityUser(transactionResponse.getReceiver()),
@@ -32,6 +33,8 @@ public class TransactionMapper {
                                         .setToAmount(transactionResponse.getToAmount())
                                         .setTransactionHash(transactionResponse.getTransactionHash())
                                         .setTransactionType(transactionResponse.getType())
+                                        .setTransactionDirection(transactionResponse.getDirection())
+                                        .setCreatedAt(transactionResponse.getCreatedAt())
                                         .setSender(sender)
                                         .setReceiver(receiver)
                                         .createTransactionEntity()));

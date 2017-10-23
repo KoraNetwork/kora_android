@@ -1,5 +1,5 @@
 package com.kora.android.presentation.enums;
 
 public enum  TransactionType {
-    SEND, BORROW, REQUEST, CASH
+    SEND, BORROW, REQUEST, DEPOSIT
 }
