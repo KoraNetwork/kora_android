@@ -4,14 +4,19 @@ import com.kora.android.presentation.enums.TransactionType;
 import com.kora.android.presentation.model.TransactionEntity;
 import com.kora.android.presentation.model.UserEntity;
 
+import java.util.Date;
+import java.util.List;
+
 public class TransactionEntityBuilder {
     private String mId;
     private double mFromAmount;
     private double mToAmount;
-    private String mTransactionHash;
+    private List<String> mTransactionHash;
     private UserEntity mSender;
     private UserEntity mReceiver;
     private TransactionType mTransactionType;
+    private Date mCreatedAt;
+    private Date mUpdatedAt;
 
     public TransactionEntityBuilder setId(String id) {
         mId = id;
@@ -28,7 +33,7 @@ public class TransactionEntityBuilder {
         return this;
     }
 
-    public TransactionEntityBuilder setTransactionHash(String transactionHash) {
+    public TransactionEntityBuilder setTransactionHash(List<String> transactionHash) {
         mTransactionHash = transactionHash;
         return this;
     }
@@ -48,7 +53,17 @@ public class TransactionEntityBuilder {
         return this;
     }
 
+    public TransactionEntityBuilder setCreatedAt(Date createdAt) {
+        mCreatedAt = createdAt;
+        return this;
+    }
+
+    public TransactionEntityBuilder setUpdatedAt(Date updatedAt) {
+        mUpdatedAt = updatedAt;
+        return this;
+    }
+
     public TransactionEntity createTransactionEntity() {
-        return new TransactionEntity(mId, mFromAmount, mToAmount, mTransactionHash, mSender, mReceiver, mTransactionType);
+        return new TransactionEntity(mId, mFromAmount, mToAmount, mTransactionHash, mSender, mReceiver, mTransactionType, mCreatedAt, mUpdatedAt);
     }
 }

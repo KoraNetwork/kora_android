@@ -4,14 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
 import com.kora.android.R;
-import com.kora.android.common.Keys;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
+import com.kora.android.presentation.ui.main.MainActivity;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -117,5 +117,11 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
                         mEtPinThirdDigit.getText().toString() +
                         mEtPinFourthDigit.getText().toString();
         getPresenter().startSendTransactionTask(pinCode);
+    }
+
+    @Override
+    public void showNextScreen() {
+        Toast.makeText(this, R.string.enter_pin_transaction_is_sent, Toast.LENGTH_SHORT).show();
+        startActivity(MainActivity.getLaunchIntent(this));
     }
 }

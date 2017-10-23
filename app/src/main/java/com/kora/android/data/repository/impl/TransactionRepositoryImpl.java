@@ -1,6 +1,7 @@
 package com.kora.android.data.repository.impl;
 
 import com.kora.android.common.Keys;
+import com.kora.android.data.network.model.request.TransactionRequest;
 import com.kora.android.data.network.service.TransactionService;
 import com.kora.android.data.repository.TransactionRepository;
 import com.kora.android.data.repository.mapper.TransactionMapper;
@@ -31,5 +32,21 @@ public class TransactionRepositoryImpl implements TransactionRepository {
     public Observable<List<TransactionEntity>> retrieveTransactions(TransactionFilterDto transactionFilter) {
         return mTransactionService.retrieveTransactionHistory(null, Keys.ITEMS_PER_PAGE, 0)
                 .compose(mTransactionMapper.transformTransactionListResponseToEntityList());
+    }
+
+    @Override
+    public Observable<TransactionEntity> addToTransactions(final String type,
+                                                           final String to,
+                                                           final double fromAmount,
+                                                           final double toAmount,
+                                                           final List<String> transactionHash) {
+        final TransactionRequest transactionRequest = new TransactionRequest()
+                .addType(type)
+                .addTo(to)
+                .addFromAmount(fromAmount)
+                .addToAmount(toAmount)
+                .addTransactionHash(transactionHash);
+        return mTransactionService.addToTransactions(transactionRequest)
+                .compose(mTransactionMapper.transformResponseToTransactionEntity());
     }
 }

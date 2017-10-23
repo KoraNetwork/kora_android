@@ -14,5 +14,4 @@ public class TransactionTypeConverter extends StringBasedTypeConverter<Transacti
     public String convertToString(TransactionType object) {
         return object.name().toLowerCase();
     }
-
 }
