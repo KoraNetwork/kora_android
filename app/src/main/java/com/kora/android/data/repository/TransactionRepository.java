@@ -9,8 +9,7 @@ import java.util.List;
 import io.reactivex.Observable;
 
 public interface TransactionRepository {
-
-    Observable<List<TransactionEntity>> retrieveTransactions(final TransactionFilterDto transactionFilter);
+    Observable<List<TransactionEntity>> retrieveTransactions(TransactionFilterDto transactionFilter, int skip);
 
     Observable<TransactionEntity> addToTransactions(final String type,
                                                       final String to,

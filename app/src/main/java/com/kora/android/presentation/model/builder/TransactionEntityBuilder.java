@@ -1,5 +1,6 @@
 package com.kora.android.presentation.model.builder;
 
+import com.kora.android.presentation.enums.TransactionDirection;
 import com.kora.android.presentation.enums.TransactionType;
 import com.kora.android.presentation.model.TransactionEntity;
 import com.kora.android.presentation.model.UserEntity;
@@ -15,8 +16,8 @@ public class TransactionEntityBuilder {
     private UserEntity mSender;
     private UserEntity mReceiver;
     private TransactionType mTransactionType;
+    private TransactionDirection mTransactionDirection;
     private Date mCreatedAt;
-    private Date mUpdatedAt;
 
     public TransactionEntityBuilder setId(String id) {
         mId = id;
@@ -53,17 +54,17 @@ public class TransactionEntityBuilder {
         return this;
     }
 
-    public TransactionEntityBuilder setCreatedAt(Date createdAt) {
+    public TransactionEntityBuilder setTransactionDirection (TransactionDirection transactionDirection) {
+        mTransactionDirection = transactionDirection;
+        return this;
+    }
+
+    public TransactionEntityBuilder setCreatedAt (Date createdAt) {
         mCreatedAt = createdAt;
         return this;
     }
 
-    public TransactionEntityBuilder setUpdatedAt(Date updatedAt) {
-        mUpdatedAt = updatedAt;
-        return this;
-    }
-
     public TransactionEntity createTransactionEntity() {
-        return new TransactionEntity(mId, mFromAmount, mToAmount, mTransactionHash, mSender, mReceiver, mTransactionType, mCreatedAt, mUpdatedAt);
+        return new TransactionEntity(mId, mFromAmount, mToAmount, mTransactionHash, mSender, mReceiver, mTransactionType, mTransactionDirection, mCreatedAt);
     }
 }

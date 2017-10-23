@@ -16,7 +16,7 @@ import java.util.List;
 public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int REQUEST_TYPE = 0;
-    private static final int CASH_TYPE = 1;
+    private static final int DEPOSIT_TYPE = 1;
 
     @Nullable
     private OnItemClickListener mOnItemClickListener;
@@ -35,7 +35,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             case REQUEST_TYPE:
                 itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_transaction, parent, false);
                 return new RequestViewHolder(itemView, mOnItemClickListener);
-            case CASH_TYPE:
+            case DEPOSIT_TYPE:
                 itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_transaction_cash, parent, false);
                 return new CashViewHolder(itemView, mOnItemClickListener);
         }
@@ -59,8 +59,8 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             case SEND:
             case REQUEST:
                 return REQUEST_TYPE;
-            case CASH:
-                return CASH_TYPE;
+            case DEPOSIT:
+                return DEPOSIT_TYPE;
             default:
                 return super.getItemViewType(position);
         }
@@ -85,5 +85,11 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public List<TransactionEntity> getItems() {
         return mTransactions;
+    }
+
+    public void clearAll() {
+        int size = mTransactions.size();
+        mTransactions.clear();
+        notifyItemRangeRemoved(0, size);
     }
 }

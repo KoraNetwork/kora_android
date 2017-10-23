@@ -2,9 +2,10 @@ package com.kora.android.data.network.model.response;
 
 import com.bluelinelabs.logansquare.annotation.JsonField;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
-import com.bluelinelabs.logansquare.typeconverters.DateTypeConverter;
 import com.kora.android.data.network.model.converter.DateTypeCustomConverter;
+import com.kora.android.data.network.model.converter.TransactionDirectionConverter;
 import com.kora.android.data.network.model.converter.TransactionTypeConverter;
+import com.kora.android.presentation.enums.TransactionDirection;
 import com.kora.android.presentation.enums.TransactionType;
 
 import java.util.Date;
@@ -13,25 +14,17 @@ import java.util.List;
 @JsonObject
 public class TransactionResponse {
 
-    @JsonField(name = "id")
-    private String mId;
-    @JsonField(name = "type", typeConverter = TransactionTypeConverter.class)
-    private TransactionType mType;
-    @JsonField(name = "fromAmount")
-    private double mFromAmount;
-    @JsonField(name = "toAmount")
-    private double mToAmount;
-    @JsonField(name = "transactionHash")
-    private List<String> mTransactionHash;
-    @JsonField(name = "from")
-    private UserResponse mSender;
-    @JsonField(name = "to")
-    private UserResponse mReceiver;
+    @JsonField(name = "id") private String mId;
+    @JsonField(name = "type", typeConverter = TransactionTypeConverter.class) private TransactionType mType;
+    @JsonField(name = "direction", typeConverter = TransactionDirectionConverter.class) private TransactionDirection mDirection;
+    @JsonField(name = "fromAmount") private double mFromAmount;
+    @JsonField(name = "toAmount") private double mToAmount;
+    @JsonField(name = "transactionHash") private List<String> mTransactionHash;
+    @JsonField(name = "from") private UserResponse mSender;
+    @JsonField(name = "to") private UserResponse mReceiver;
 
-    @JsonField(name = "createdAt", typeConverter = DateTypeCustomConverter.class)
-    private Date mCreatedAt;
-    @JsonField(name = "updatedAt", typeConverter = DateTypeCustomConverter.class)
-    private Date mUpdatedAt;
+    @JsonField(name = "createdAt", typeConverter = DateTypeCustomConverter.class) private Date mCreatedAt;
+    @JsonField(name = "updatedAt", typeConverter = DateTypeCustomConverter.class) private Date mUpdatedAt;
 
     public String getId() {
         return mId;
@@ -105,17 +98,11 @@ public class TransactionResponse {
         mUpdatedAt = updatedAt;
     }
 
-    @Override
-    public String toString() {
-        return "TransactionResponse{" +
-                "mId=" + mId + "\n" +
-                "mType=" + mType + "\n" +
-                "mFromAmount=" + mFromAmount + "\n" +
-                "mToAmount=" + mToAmount + "\n" +
-                "mTransactionHash=" + mTransactionHash + "\n" +
-                "mSender=" + mSender + "\n" +
-                "mCreatedAt=" + mCreatedAt + "\n" +
-                "mUpdatedAt=" + mUpdatedAt + "\n" +
-                "}";
+    public TransactionDirection getDirection() {
+        return mDirection;
+    }
+
+    public void setDirection(TransactionDirection direction) {
+        mDirection = direction;
     }
 }

@@ -190,6 +190,25 @@
     <string name="transaction_history_from">From: %s</string>
     <string name="transaction_history_cash_in">Cash in:</string>
     <string name="transaction_history_cash_out">Cash out:</string>
+    <string name="transactions_title">Transactions</string>
+    <string name="transactions_amount">%1$.2f %2$s</string>
+
+    <!-- Transaction filter -->
+    <string name="filter_show_label">Show:</string>
+    <string name="filter_show_all_label">Show All</string>
+    <string name="filter_show_incoming_label">Incoming</string>
+    <string name="filter_show_upcoming_label">Upcoming</string>
+    <string name="filter_type_label">Type:</string>
+    <string name="filter_type_sent_label">Sent</string>
+    <string name="filter_type_requested_label">Requesed</string>
+    <string name="filter_type_borrowed_label">Borrowed</string>
+    <string name="filter_type_deposit_label">Deposit</string>
+    <string name="filter_cancel_label">Cancel</string>
+    <string name="filter_done_label">Done</string>
+    <string name="transaction_history_type_borrow">Borrowed</string>
+    <string name="transaction_history_type_send">Sent</string>
+    <string name="transaction_history_type_request">Requested</string>
+    <string name="transaction_history_type_deposit">Deposit</string>
 
     <!-- Request money fragment -->
     <string name="request_money_request_money">Request money</string>

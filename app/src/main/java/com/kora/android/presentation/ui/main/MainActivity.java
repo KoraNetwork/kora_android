@@ -9,7 +9,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.DividerItemDecoration;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -32,6 +31,7 @@ import com.kora.android.presentation.ui.main.fragments.profile.ProfileFragment;
 import com.kora.android.presentation.ui.main.fragments.request.RequestFragment;
 import com.kora.android.presentation.ui.main.fragments.send.SendFragment;
 import com.kora.android.presentation.ui.main.fragments.transactions.TransactionsFragment;
+import com.kora.android.views.DividerItemDecoration;
 
 import butterknife.BindView;
 
@@ -113,9 +113,8 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
     private void setupDrawer() {
         mNavigationView.setNavigationItemSelectedListener(this);
         mNavigationView.setItemIconTintList(null);
-
         NavigationMenuView navMenuView = (NavigationMenuView) mNavigationView.getChildAt(0);
-        navMenuView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        navMenuView.addItemDecoration(new DividerItemDecoration(this, R.drawable.list_divider_transparent));
     }
 
     @NonNull

@@ -3,6 +3,7 @@ package com.kora.android.presentation.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.kora.android.presentation.enums.TransactionDirection;
 import com.kora.android.presentation.enums.TransactionType;
 
 import java.util.Date;
@@ -10,123 +11,126 @@ import java.util.List;
 
 public class TransactionEntity implements Parcelable {
 
-    private String mId;
-    private double mFromAmount;
-    private double mToAmount;
-    private List<String> mTransactionHash;
-    private UserEntity mSender;
-    private UserEntity mReceiver;
-    private TransactionType mTransactionType;
-    private Date mCreatedAt;
-    private Date mUpdatedAt;
+    private String id;
+    private double fromAmount;
+    private double toAmount;
+    private List<String> transactionHash;
+    private UserEntity sender;
+    private UserEntity receiver;
+    private TransactionType transactionType;
+    private TransactionDirection transactionDirection;
+    private Date createdAt = new Date();
 
-    public TransactionEntity(String id,
-                             double fromAmount,
-                             double toAmount,
-                             List<String> transactionHash,
-                             UserEntity sender,
-                             UserEntity receiver,
-                             TransactionType transactionType,
-                             Date createdAt,
-                             Date updatedAt) {
-        this.mId = id;
-        this.mFromAmount = fromAmount;
-        this.mToAmount = toAmount;
-        this.mTransactionHash = transactionHash;
-        this.mSender = sender;
-        this.mReceiver = receiver;
-        this.mTransactionType = transactionType;
-        this.mCreatedAt = createdAt;
-        this.mUpdatedAt = updatedAt;
+    public TransactionEntity(String id, double fromAmount, double toAmount,
+                             List<String> transactionHash, UserEntity sender, UserEntity receiver,
+                             TransactionType transactionType, TransactionDirection transactionDirection,
+                             Date createdAt) {
+        this.id = id;
+        this.fromAmount = fromAmount;
+        this.toAmount = toAmount;
+        this.transactionHash = transactionHash;
+        this.sender = sender;
+        this.receiver = receiver;
+        this.transactionType = transactionType;
+        this.transactionDirection = transactionDirection;
+        this.createdAt = createdAt;
     }
 
-    @Override
-    public String toString() {
-        return "TransactionEntity{" + "\n" +
-                "mId=" + mId + "\n" +
-                "mTransactionType=" + mTransactionType + "\n" +
-                "mFromAmount=" + mFromAmount + "\n" +
-                "mToAmount=" + mToAmount + "\n" +
-                "mTransactionHash=" + mTransactionHash + "\n" +
-                "mSender=" + mSender + "\n" +
-                "mReceiver=" + mReceiver + "\n" +
-                "mCreatedAt=" + mCreatedAt + "\n" +
-                "mUpdatedAt=" + mUpdatedAt + "\n" +
-                "}";
+    protected TransactionEntity(Parcel in) {
+        id = in.readString();
+        fromAmount = in.readDouble();
+        toAmount = in.readDouble();
+        transactionHash = in.readArrayList(String.class.getClassLoader());
+        sender = (UserEntity) in.readValue(UserEntity.class.getClassLoader());
+        receiver = (UserEntity) in.readValue(UserEntity.class.getClassLoader());
+        transactionType = TransactionType.valueOf(in.readString());
+        transactionDirection = TransactionDirection.valueOf(in.readString());
+        createdAt.setTime(in.readLong());
     }
+
+    public static final Creator<TransactionEntity> CREATOR = new Creator<TransactionEntity>() {
+        @Override
+        public TransactionEntity createFromParcel(Parcel in) {
+            return new TransactionEntity(in);
+        }
+
+        @Override
+        public TransactionEntity[] newArray(int size) {
+            return new TransactionEntity[size];
+        }
+    };
 
     public String getId() {
-        return mId;
+        return id;
     }
 
     public void setId(String id) {
-        this.mId = id;
+        this.id = id;
     }
 
     public double getFromAmount() {
-        return mFromAmount;
+        return fromAmount;
     }
 
     public void setFromAmount(double fromAmount) {
-        this.mFromAmount = fromAmount;
+        this.fromAmount = fromAmount;
     }
 
     public double getToAmount() {
-        return mToAmount;
+        return toAmount;
     }
 
     public void setToAmount(double toAmount) {
-        this.mToAmount = toAmount;
+        this.toAmount = toAmount;
     }
 
     public List<String> getTransactionHash() {
-        return mTransactionHash;
+        return transactionHash;
     }
 
     public void setTransactionHash(List<String> transactionHash) {
-        this.mTransactionHash = transactionHash;
+        this.transactionHash = transactionHash;
     }
 
     public UserEntity getSender() {
-        return mSender;
+        return sender;
     }
 
     public void setSender(UserEntity sender) {
-        this.mSender = sender;
+        this.sender = sender;
     }
 
     public UserEntity getReceiver() {
-        return mReceiver;
+        return receiver;
     }
 
     public void setReceiver(UserEntity receiver) {
-        this.mReceiver = receiver;
+        this.receiver = receiver;
     }
 
     public TransactionType getTransactionType() {
-        return mTransactionType;
+        return transactionType;
     }
 
     public void setTransactionType(TransactionType transactionType) {
-        this.mTransactionType = transactionType;
+        this.transactionType = transactionType;
+    }
+
+    public TransactionDirection getTransactionDirection() {
+        return transactionDirection;
+    }
+
+    public void setTransactionDirection(TransactionDirection transactionDirection) {
+        this.transactionDirection = transactionDirection;
     }
 
     public Date getCreatedAt() {
-        return mCreatedAt;
+        return createdAt;
     }
 
-    public void setCreatedAt(Date mCreatedAt) {
-        this.mCreatedAt = mCreatedAt;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
-
-    public Date getUpdatedAt() {
-        return mUpdatedAt;
-    }
-
-    public void setUpdatedAt(Date mUpdatedAt) {
-        this.mUpdatedAt = mUpdatedAt;
-    }
-
 
     @Override
     public int describeContents() {
@@ -135,41 +139,15 @@ public class TransactionEntity implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.mId);
-        dest.writeDouble(this.mFromAmount);
-        dest.writeDouble(this.mToAmount);
-        dest.writeStringList(this.mTransactionHash);
-        dest.writeParcelable(this.mSender, flags);
-        dest.writeParcelable(this.mReceiver, flags);
-        dest.writeInt(this.mTransactionType == null ? -1 : this.mTransactionType.ordinal());
-        dest.writeLong(this.mCreatedAt != null ? this.mCreatedAt.getTime() : -1);
-        dest.writeLong(this.mUpdatedAt != null ? this.mUpdatedAt.getTime() : -1);
+        dest.writeString(id);
+        dest.writeDouble(fromAmount);
+        dest.writeDouble(toAmount);
+        dest.writeList(transactionHash);
+        dest.writeValue(sender);
+        dest.writeValue(receiver);
+        dest.writeString(transactionType.name());
+        dest.writeString(transactionDirection.name());
+        dest.writeLong(createdAt.getTime());
     }
 
-    protected TransactionEntity(Parcel in) {
-        this.mId = in.readString();
-        this.mFromAmount = in.readDouble();
-        this.mToAmount = in.readDouble();
-        this.mTransactionHash = in.createStringArrayList();
-        this.mSender = in.readParcelable(UserEntity.class.getClassLoader());
-        this.mReceiver = in.readParcelable(UserEntity.class.getClassLoader());
-        int tmpMTransactionType = in.readInt();
-        this.mTransactionType = tmpMTransactionType == -1 ? null : TransactionType.values()[tmpMTransactionType];
-        long tmpMCreatedAt = in.readLong();
-        this.mCreatedAt = tmpMCreatedAt == -1 ? null : new Date(tmpMCreatedAt);
-        long tmpMUpdatedAt = in.readLong();
-        this.mUpdatedAt = tmpMUpdatedAt == -1 ? null : new Date(tmpMUpdatedAt);
-    }
-
-    public static final Creator<TransactionEntity> CREATOR = new Creator<TransactionEntity>() {
-        @Override
-        public TransactionEntity createFromParcel(Parcel source) {
-            return new TransactionEntity(source);
-        }
-
-        @Override
-        public TransactionEntity[] newArray(int size) {
-            return new TransactionEntity[size];
-        }
-    };
 }

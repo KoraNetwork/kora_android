@@ -1,19 +1,14 @@
 package com.kora.android.presentation.ui.main.fragments.transactions;
 
-import com.kora.android.common.preferences.PreferenceHandler;
 import com.kora.android.data.network.config.ErrorModel;
 import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.usecase.transaction.GetTransactionsUseCase;
 import com.kora.android.presentation.dto.TransactionFilterDto;
-import com.kora.android.presentation.enums.TransactionDirection;
-import com.kora.android.presentation.enums.TransactionType;
 import com.kora.android.presentation.model.TransactionEntity;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -24,23 +19,35 @@ import io.reactivex.annotations.NonNull;
 class TransactionsPresenter extends BasePresenter<TransactionsView> {
 
     private final GetTransactionsUseCase mGetTransactionsUseCase;
-    private final PreferenceHandler mPreferenceHandler;
 
-    TransactionDirection[] mDirections = {TransactionDirection.FROM};
-    TransactionType[] mTypes = {TransactionType.CASH, TransactionType.SEND, TransactionType.BORROW, TransactionType.REQUEST};
-
+    private TransactionFilterDto mTransactionFilterDto = new TransactionFilterDto();
 
     @Inject
-    public TransactionsPresenter(final GetTransactionsUseCase getTransactionsUseCase,
-                                 final PreferenceHandler preferenceHandler) {
+    public TransactionsPresenter(final GetTransactionsUseCase getTransactionsUseCase) {
         mGetTransactionsUseCase = getTransactionsUseCase;
-        mPreferenceHandler = preferenceHandler;
     }
 
-    public void retrieveTransactions() {
-        TransactionFilterDto transactionFilterDto = new TransactionFilterDto(new ArrayList<>(Arrays.asList(mDirections)), new ArrayList<>(Arrays.asList(mTypes)));
-        mGetTransactionsUseCase.setData(transactionFilterDto);
+    public void retrieveTransactions(final TransactionFilterDto transactionFilterDto, int itemCount) {
+        mTransactionFilterDto = transactionFilterDto;
+        mGetTransactionsUseCase.setData(transactionFilterDto, itemCount);
         mGetTransactionsUseCase.execute(new GetTransactionsSubscriber());
+    }
+
+    public void onFilterClicked() {
+        if (!isViewAttached()) return;
+        getView().openFilterDialog();
+    }
+
+    public void retrieveTransactionsWithFilter(int itemCount) {
+        retrieveTransactions(mTransactionFilterDto, itemCount);
+    }
+
+    public TransactionFilterDto getFilter() {
+        return mTransactionFilterDto;
+    }
+
+    public void setFilter(TransactionFilterDto filter) {
+        mTransactionFilterDto = filter;
     }
 
     private class GetTransactionsSubscriber extends DefaultInternetSubscriber<List<TransactionEntity>> {
@@ -49,6 +56,7 @@ class TransactionsPresenter extends BasePresenter<TransactionsView> {
         protected void onStart() {
             if (!isViewAttached()) return;
             getView().showProgress(true);
+            getView().enableAndShowRefreshIndicator(true, false);
         }
 
         @Override
@@ -61,6 +69,7 @@ class TransactionsPresenter extends BasePresenter<TransactionsView> {
         public void onComplete() {
             if (!isViewAttached()) return;
             getView().showProgress(false);
+            getView().enableAndShowRefreshIndicator(true, false);
         }
 
         @Override
@@ -68,6 +77,7 @@ class TransactionsPresenter extends BasePresenter<TransactionsView> {
             super.onError(throwable);
             if (!isViewAttached()) return;
             getView().showProgress(false);
+            getView().enableAndShowRefreshIndicator(true, false);
         }
 
         @Override

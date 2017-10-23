@@ -9,7 +9,14 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:elevation="3dp"
-        app:titleTextAppearance="@style/AppTheme.MainTheme.ActionBar.TitleTextStyle"/>
+        app:elevation="3dp">
+
+        <com.kora.android.views.CustomTextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:font="@string/font_name_muli_semi_bold"
+            style="@style/AppTheme.MainTheme.ActionBar.TitleTextStyle"/>
+    </android.support.v7.widget.Toolbar>
 
 </android.support.design.widget.AppBarLayout>

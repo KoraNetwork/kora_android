@@ -29,10 +29,10 @@ public class TransactionRepositoryImpl implements TransactionRepository {
     }
 
     @Override
-    public Observable<List<TransactionEntity>> retrieveTransactions(TransactionFilterDto transactionFilter) {
+    public Observable<List<TransactionEntity>> retrieveTransactions(TransactionFilterDto transactionFilter, int skip) {
         return mTransactionService.retrieveTransactionHistory(transactionFilter.getTransactionDirectionsAsStrings(),
                 transactionFilter.getTransactionTypesAsStrings(),
-                Keys.ITEMS_PER_PAGE, 0)
+                Keys.ITEMS_PER_PAGE, skip)
                 .compose(mTransactionMapper.transformTransactionListResponseToEntityList());
     }
 

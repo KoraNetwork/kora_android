@@ -57,10 +57,10 @@ public class SendFragment extends StackFragment<SendPresenter> implements SendVi
         return mToolbar;
     }
 
-//    @Override
-//    protected int getTitle() {
-//        return R.string.send_money_title;
-//    }
+    @Override
+    protected int getTitle() {
+        return R.string.send_money_title;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
