@@ -3,10 +3,13 @@ package com.kora.android;
 import android.app.Application;
 import android.content.Context;
 
+import com.crashlytics.android.Crashlytics;
 import com.kora.android.di.component.ApplicationComponent;
 import com.kora.android.di.component.DaggerApplicationComponent;
 import com.kora.android.di.module.ApplicationModule;
 import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo;
+
+import io.fabric.sdk.android.Fabric;
 
 public class KoraApplication extends Application {
 
@@ -19,6 +22,10 @@ public class KoraApplication extends Application {
         RxPaparazzo.register(this);
 
         getComponent().inject(this);
+
+        if (!BuildConfig.DEBUG) {
+            Fabric.with(this, new Crashlytics());
+        }
     }
 
     public static KoraApplication get(final Context context) {
