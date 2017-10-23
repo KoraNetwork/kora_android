@@ -21,7 +21,8 @@ public class TransactionFilterDto implements Parcelable {
 
     protected TransactionFilterDto(Parcel in) {
         String s = in.readString();
-        TransactionDirection.valueOf(s);
+        if (!s.equals(""))
+            mTransactionDirections = TransactionDirection.valueOf(s);
         List<String> strings = new ArrayList<>();
         in.readList(strings, null);
         for (String str : strings) {
@@ -76,8 +77,8 @@ public class TransactionFilterDto implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mTransactionDirections.name());
-        List<String> strings = new ArrayList<String>();
+        dest.writeString(mTransactionDirections == null ? "" : mTransactionDirections.name());
+        List<String> strings = new ArrayList<>();
         for (TransactionType type : mTransactionTypes) {
             strings.add(type.name());
         }
