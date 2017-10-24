@@ -24,6 +24,7 @@ import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.enums.TransactionType;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
+import com.kora.android.presentation.ui.base.view.ToolbarActivity;
 import com.kora.android.presentation.ui.common.enter_pin.EnterPinActivity;
 
 import java.util.Locale;
@@ -35,10 +36,9 @@ import butterknife.OnTextChanged;
 import static com.kora.android.common.Keys.Args.TRANSACTION_TYPE;
 import static com.kora.android.data.network.Constants.API_BASE_URL;
 
-public class SendMoneyActivity extends BaseActivity<SendMoneyPresenter> implements SendMoneyView {
+public class SendMoneyActivity extends ToolbarActivity<SendMoneyPresenter> implements SendMoneyView {
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
-    @BindView(R.id.text_view_toolbar_title) TextView mTvToolbarTitle;
     @BindView(R.id.user_name) TextView mUserName;
     @BindView(R.id.user_phone) TextView mUserPhone;
     @BindView(R.id.his_suffix) TextView mHisSuffixText;
@@ -61,6 +61,16 @@ public class SendMoneyActivity extends BaseActivity<SendMoneyPresenter> implemen
         activityComponent.inject(this);
     }
 
+    @Override
+    public Toolbar getToolbar() {
+        return mToolbar;
+    }
+
+    @Override
+    protected int getTitleRes() {
+        return R.string.send_money_title;
+    }
+
     public static Intent getLaunchIntent(final BaseActivity baseActivity,
                                          final UserEntity userEntity,
                                          final TransactionType transactionType) {
@@ -72,8 +82,7 @@ public class SendMoneyActivity extends BaseActivity<SendMoneyPresenter> implemen
 
     @Override
     protected void onViewReady(Bundle savedInstanceState) {
-        setToolbar(mToolbar, R.drawable.ic_back_white);
-
+        super.onViewReady(savedInstanceState);
         initArguments(savedInstanceState);
 
         if (savedInstanceState == null) {
@@ -105,17 +114,17 @@ public class SendMoneyActivity extends BaseActivity<SendMoneyPresenter> implemen
 
     private void initUI() {
         if (getPresenter().getTransactionType().equals(TransactionType.SEND)) {
-            mTvToolbarTitle.setText(getString(R.string.send_money_send_title, getPresenter().getReceiver().getUserName()));
+            setTitle(getString(R.string.send_money_send_title, getPresenter().getReceiver().getUserName()));
             mTvSendRequest.setText(R.string.send_money_send_button_label);
         } else if (getPresenter().getTransactionType().equals(TransactionType.REQUEST)) {
-            mTvToolbarTitle.setText(getString(R.string.send_money_request_title, getPresenter().getReceiver().getUserName()));
+            setTitle(getString(R.string.send_money_request_title, getPresenter().getReceiver().getUserName()));
             mTvSendRequest.setText(R.string.send_money_request_button_label);
         }
     }
 
     public void retrieveReceiver(UserEntity user) {
 
-        mToolbar.setTitle(getString(R.string.send_money_send_title, user.getFullName()));
+        setTitle(getString(R.string.send_money_send_title, user.getFullName()));
         mUserName.setText(user.getFullName());
         mUserPhone.setText(user.getPhoneNumber());
 

@@ -1,1 +1,7 @@
-vmartynyuk@pettersonapps.com, volodymyr.mitso@pettersonapps.com, victoria.mygalko@pettersonapps.com, rkatsala@gmail.com
+vmartynyuk@pettersonapps.com,
+volodymyr.mitso@pettersonapps.com,
+victoria.mygalko@pettersonapps.com,
+rkatsala@gmail.com,
+dixon@kora.foundation,
+maomao@kora.foundation,
+fine.eugene@gmail.com

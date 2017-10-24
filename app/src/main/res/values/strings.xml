@@ -148,10 +148,10 @@
     <string name="title_profile">Profile</string>
     <string name="update_profile_success_message">User Updated Success</string>
     <string name="title_edit_profile">Edit Profile</string>
-    <string name = "required_asterisk"> *</string>
+    <string name="required_asterisk"> *</string>
 
     <!-- Send Money -->
-    <string name="send_money_title">Send Money</string>
+    <string name="send_money_title">Send money</string>
     <string name="send_money_contacts_label">Contacts</string>
     <string name="send_money_add_contact_label">Add your contacts</string>
 
@@ -168,7 +168,7 @@
     <string name="empty_receiver_amount_error">Receiver amount should be not empty</string>
 
     <!-- Add contact activity -->
-    <string name="add_contact_add_contact">Add your contact</string>
+    <string name="add_contact_add_contact">Add your contacts</string>
     <string name="add_contact_name_phone_email">receiver name or mobile phone or email</string>
 
     <!-- Enter pin activity -->
