@@ -30,7 +30,7 @@ public class ViewUtils {
 
     public static void setMaxLength(final EditText editText,
                                     final String countryPhoneCode) {
-        int maxLength = 13 - countryPhoneCode.length();
+        int maxLength = 14 - countryPhoneCode.length();
         final InputFilter[] inputFilters = new InputFilter[1];
         inputFilters[0] = new InputFilter.LengthFilter(maxLength);
         editText.setFilters(inputFilters);

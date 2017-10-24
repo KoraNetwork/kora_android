@@ -3,12 +3,10 @@ package com.kora.android.presentation.ui.login;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.widget.Toolbar;
 
 import com.kora.android.R;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
-import com.kora.android.presentation.ui.home.HomeActivity;
 import com.kora.android.presentation.ui.main.MainActivity;
 import com.kora.android.presentation.ui.registration.step1.FirstStepActivity;
 

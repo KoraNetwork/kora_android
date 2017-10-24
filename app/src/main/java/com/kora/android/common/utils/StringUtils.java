@@ -23,7 +23,7 @@ public class StringUtils {
     }
 
     public static boolean isPhoneNumberValid(final String phoneNumber) {
-        final Pattern pattern = Pattern.compile("(\\d{9,11})$");
+        final Pattern pattern = Pattern.compile("(\\d{9,12})$");
         final Matcher matcher = pattern.matcher(phoneNumber);
         return matcher.find();
     }
