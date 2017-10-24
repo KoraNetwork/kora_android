@@ -153,16 +153,13 @@ public class SendMoneyPresenter extends BasePresenter<SendMoneyView> {
 
         @Override
         public void onError(@NonNull final Throwable throwable) {
-            Log.e("_____", throwable.toString());
-            throwable.printStackTrace();
-
             super.onError(throwable);
             if (!isViewAttached()) return;
             getView().showProgress(false);
         }
 
         @Override
-        public void handleUnprocessableEntity(ErrorModel errorModel) {
+        public void handleUnprocessableEntity(final ErrorModel errorModel) {
             getView().showError(errorModel.getError());
         }
 
