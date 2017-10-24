@@ -1,4 +1,4 @@
-package com.kora.android.presentation.ui.send.add_contact;
+package com.kora.android.presentation.ui.common.add_contact;
 
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.view.BaseView;

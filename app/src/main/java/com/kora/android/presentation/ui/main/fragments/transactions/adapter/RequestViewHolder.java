@@ -57,7 +57,7 @@ public final class RequestViewHolder extends RecyclerView.ViewHolder {
         }
 
         mType.setText(getTypeResource(transactionEntity.getTransactionType()));
-        mDate.setText(DateUtils.getFormattedDate("dd.MM.YYYY", transactionEntity.getCreatedAt()));
+        mDate.setText(DateUtils.getFormattedDate("dd.MM.yyyy", transactionEntity.getCreatedAt()));
     }
 
     @StringRes

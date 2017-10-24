@@ -20,7 +20,7 @@ import com.kora.android.presentation.ui.base.backstack.StackFragment;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
 import com.kora.android.presentation.ui.main.fragments.transactions.adapter.TransactionAdapter;
 import com.kora.android.presentation.ui.main.fragments.transactions.filter.FilterDialog;
-import com.kora.android.presentation.ui.send.add_contact.adapter.RecyclerViewScrollListener;
+import com.kora.android.presentation.ui.adapter.RecyclerViewScrollListener;
 import com.kora.android.views.DividerItemDecoration;
 
 import java.util.ArrayList;

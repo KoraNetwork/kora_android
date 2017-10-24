@@ -1,4 +1,4 @@
-package com.kora.android.presentation.ui.send.enter_pin;
+package com.kora.android.presentation.ui.common.enter_pin;
 
 import com.kora.android.presentation.ui.base.view.BaseView;
 

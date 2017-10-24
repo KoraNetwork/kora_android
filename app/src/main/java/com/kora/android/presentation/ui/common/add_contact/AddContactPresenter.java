@@ -1,4 +1,4 @@
-package com.kora.android.presentation.ui.send.add_contact;
+package com.kora.android.presentation.ui.common.add_contact;
 
 import android.util.Pair;
 
@@ -6,6 +6,7 @@ import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.usecase.user.GetUsersUseCase;
+import com.kora.android.presentation.enums.TransactionType;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
@@ -21,6 +22,8 @@ import io.reactivex.functions.Action;
 public class AddContactPresenter extends BasePresenter<AddContactView> {
 
     private final GetUsersUseCase mGetUsersUseCase;
+
+    private TransactionType mTransactionType;
 
     private String mSearch;
     private int mLimit = 10;
@@ -53,6 +56,14 @@ public class AddContactPresenter extends BasePresenter<AddContactView> {
         mSearch = search;
     }
 
+    public void setTransactionType(final String transactionType) {
+        mTransactionType = TransactionType.valueOf(transactionType);
+    }
+
+    public TransactionType getTransactionType() {
+        return mTransactionType;
+    }
+
     private class GetUsersSubscriber extends DefaultInternetSubscriber<Pair<Integer, List<UserEntity>>> {
 
         @Override
@@ -69,7 +80,6 @@ public class AddContactPresenter extends BasePresenter<AddContactView> {
                 getView().showUsers(pair.second, true);
             else
                 getView().showUsers(pair.second, false);
-
         }
 
         @Override

@@ -1,15 +1,17 @@
-package com.kora.android.presentation.ui.send.enter_pin;
+package com.kora.android.presentation.ui.common.enter_pin;
 
 import android.util.Log;
 
 import com.kora.android.R;
 import com.kora.android.common.utils.StringUtils;
+import com.kora.android.data.network.config.ErrorModel;
 import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.base.DefaultWeb3jSubscriber;
 import com.kora.android.domain.usecase.transaction.AddToTransactionsUseCase;
 import com.kora.android.domain.usecase.transaction.SendTransactionUseCase;
+import com.kora.android.presentation.enums.TransactionType;
 import com.kora.android.presentation.model.TransactionEntity;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
@@ -30,6 +32,8 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
     private final SendTransactionUseCase mSendTransactionUseCase;
     private final AddToTransactionsUseCase mAddToTransactionsUseCase;
 
+    private TransactionType mTransactionType;
+
     private UserEntity mReceiver;
     private double mSenderAmount;
     private double mReceiverAmount;
@@ -39,6 +43,14 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
                              final AddToTransactionsUseCase addToTransactionsUseCase) {
         mSendTransactionUseCase = sendTransactionUseCase;
         mAddToTransactionsUseCase = addToTransactionsUseCase;
+    }
+
+    public void setTransactionType(final String transactionType) {
+        mTransactionType = TransactionType.valueOf(transactionType);
+    }
+
+    public TransactionType getTransactionType() {
+        return mTransactionType;
     }
 
     public void startSendTransactionTask(final String pinCode) {
@@ -118,7 +130,7 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
 
     public void startAddToTransactionsTask(final List<String> transactionHash) {
         mAddToTransactionsUseCase.setData(
-                SEND.toString().toLowerCase(),
+                mTransactionType.toString().toLowerCase(),
                 mReceiver.getId(),
                 mSenderAmount,
                 mReceiverAmount,
@@ -158,6 +170,11 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
             super.onError(throwable);
             if (!isViewAttached()) return;
             getView().showProgress(false);
+        }
+
+        @Override
+        public void handleUnprocessableEntity(ErrorModel errorModel) {
+            getView().showError(errorModel.getError());
         }
 
         @Override

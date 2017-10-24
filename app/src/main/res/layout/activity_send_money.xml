@@ -21,10 +21,11 @@
             android:layout_height="match_parent">
 
             <com.kora.android.views.CustomTextView
+                android:id="@+id/text_view_toolbar_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:text="Send to"
+                tools:text="Send to"
                 android:textColor="@color/color_button_text_white"
                 android:textSize="20sp"
                 app:font="@string/font_name_muli_bold" />
@@ -228,7 +229,7 @@
             </com.kora.android.views.TextInputLayoutWithDrawable>
 
             <android.support.v7.widget.CardView
-                android:id="@+id/card_view_send_now"
+                android:id="@+id/card_view_send_request"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
@@ -247,7 +248,7 @@
                     android:layout_height="match_parent">
 
                     <com.kora.android.views.CustomTextView
-                        android:id="@+id/text_view_show_all_transactions"
+                        android:id="@+id/text_view_send_request"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"

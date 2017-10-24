@@ -91,19 +91,25 @@
             android:windowSoftInputMode="stateHidden"/>
 
         <activity
-            android:name=".presentation.ui.send.add_contact.AddContactActivity"
+            android:name=".presentation.ui.common.add_contact.AddContactActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.MainTheme"
             android:windowSoftInputMode="stateHidden"/>
 
         <activity
-            android:name=".presentation.ui.send.enter_pin.EnterPinActivity"
+            android:name=".presentation.ui.common.enter_pin.EnterPinActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.MainTheme"
             android:windowSoftInputMode="stateHidden"/>
 
         <activity
-            android:name=".presentation.ui.send.send_to.SendMoneyActivity"
+            android:name=".presentation.ui.common.send_to.SendMoneyActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.MainTheme"
+            android:windowSoftInputMode="stateHidden"/>
+
+        <activity
+            android:name=".presentation.ui.common.recent.RecentActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.MainTheme"
             android:windowSoftInputMode="stateHidden"/>

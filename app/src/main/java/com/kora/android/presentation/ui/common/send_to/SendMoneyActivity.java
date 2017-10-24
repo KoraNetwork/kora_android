@@ -1,4 +1,4 @@
-package com.kora.android.presentation.ui.send.send_to;
+package com.kora.android.presentation.ui.common.send_to;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,6 +10,7 @@ import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.Toolbar;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -20,9 +21,10 @@ import com.kora.android.R;
 import com.kora.android.common.Keys;
 import com.kora.android.common.utils.ViewUtils;
 import com.kora.android.di.component.ActivityComponent;
+import com.kora.android.presentation.enums.TransactionType;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
-import com.kora.android.presentation.ui.send.enter_pin.EnterPinActivity;
+import com.kora.android.presentation.ui.common.enter_pin.EnterPinActivity;
 
 import java.util.Locale;
 
@@ -30,11 +32,13 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 
+import static com.kora.android.common.Keys.Args.TRANSACTION_TYPE;
 import static com.kora.android.data.network.Constants.API_BASE_URL;
 
 public class SendMoneyActivity extends BaseActivity<SendMoneyPresenter> implements SendMoneyView {
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
+    @BindView(R.id.text_view_toolbar_title) TextView mTvToolbarTitle;
     @BindView(R.id.user_name) TextView mUserName;
     @BindView(R.id.user_phone) TextView mUserPhone;
     @BindView(R.id.his_suffix) TextView mHisSuffixText;
@@ -44,6 +48,8 @@ public class SendMoneyActivity extends BaseActivity<SendMoneyPresenter> implemen
     @BindView(R.id.edit_layout_amount) TextInputLayout mSenderAmountContainer;
     @BindView(R.id.edit_text_receiver_amount) TextInputEditText mReceiverAmount;
     @BindView(R.id.edit_layout_converted_amount) TextInputLayout mReceiverAmountContainer;
+    @BindView(R.id.text_view_send_request) TextView mTvSendRequest;
+    @BindView(R.id.edit_text_additional) EditText mEtAdditional;
 
     @Override
     public int getLayoutResource() {
@@ -55,15 +61,20 @@ public class SendMoneyActivity extends BaseActivity<SendMoneyPresenter> implemen
         activityComponent.inject(this);
     }
 
-    public static Intent getLaunchIntent(final BaseActivity baseActivity, final UserEntity userEntity) {
+    public static Intent getLaunchIntent(final BaseActivity baseActivity,
+                                         final UserEntity userEntity,
+                                         final TransactionType transactionType) {
         final Intent intent = new Intent(baseActivity, SendMoneyActivity.class);
         intent.putExtra(Keys.Args.USER_ENTITY, userEntity);
+        intent.putExtra(TRANSACTION_TYPE, transactionType.toString());
         return intent;
     }
 
     @Override
     protected void onViewReady(Bundle savedInstanceState) {
         setToolbar(mToolbar, R.drawable.ic_back_white);
+
+        initArguments(savedInstanceState);
 
         if (savedInstanceState == null) {
             initArguments();
@@ -73,11 +84,33 @@ public class SendMoneyActivity extends BaseActivity<SendMoneyPresenter> implemen
             getPresenter().setReceiver(savedInstanceState.getParcelable(Keys.Args.USER_RECEIVER));
             getPresenter().setSender(savedInstanceState.getParcelable(Keys.Args.USER_SENDER));
         }
+
+        initUI();
+    }
+
+    private void initArguments(final Bundle bundle) {
+        if (bundle != null) {
+            if (bundle.containsKey(TRANSACTION_TYPE))
+                getPresenter().setTransactionType(bundle.getString(TRANSACTION_TYPE));
+        }
+        if (getIntent() != null) {
+            getPresenter().setTransactionType(getIntent().getStringExtra(TRANSACTION_TYPE));
+        }
     }
 
     private void initArguments() {
         UserEntity user = getIntent().getParcelableExtra(Keys.Args.USER_ENTITY);
         getPresenter().setReceiver(user);
+    }
+
+    private void initUI() {
+        if (getPresenter().getTransactionType().equals(TransactionType.SEND)) {
+            mTvToolbarTitle.setText(getString(R.string.send_money_send_title, getPresenter().getReceiver().getUserName()));
+            mTvSendRequest.setText(R.string.send_money_send_button_label);
+        } else if (getPresenter().getTransactionType().equals(TransactionType.REQUEST)) {
+            mTvToolbarTitle.setText(getString(R.string.send_money_request_title, getPresenter().getReceiver().getUserName()));
+            mTvSendRequest.setText(R.string.send_money_request_button_label);
+        }
     }
 
     public void retrieveReceiver(UserEntity user) {
@@ -124,7 +157,9 @@ public class SendMoneyActivity extends BaseActivity<SendMoneyPresenter> implemen
 
     @Override
     public void openPinScreen(UserEntity receiver, Double sAmount, Double rAmount) {
-        startActivity(EnterPinActivity.getLaunchIntent(this, receiver, sAmount, rAmount));
+        startActivity(EnterPinActivity.getLaunchIntent(this,
+                receiver, sAmount, rAmount,
+                getPresenter().getTransactionType()));
     }
 
     @Override
@@ -162,9 +197,12 @@ public class SendMoneyActivity extends BaseActivity<SendMoneyPresenter> implemen
         }
     };
 
-    @OnClick(R.id.card_view_send_now)
+    @OnClick(R.id.card_view_send_request)
     public void onSendClicked() {
-        getPresenter().send(mSenderAmount.getText().toString().trim(), mReceiverAmount.getText().toString().trim());
+        getPresenter().sendOrRequest(
+                mSenderAmount.getText().toString().trim(),
+                mReceiverAmount.getText().toString().trim(),
+                mEtAdditional.getText().toString().trim());
     }
 
     @Override
@@ -174,5 +212,7 @@ public class SendMoneyActivity extends BaseActivity<SendMoneyPresenter> implemen
         outState.putParcelable(Keys.Args.USER_SENDER, getPresenter().getSender());
         outState.putString(Keys.Args.SENDER_AMOUNT, mSenderAmount.getText().toString().trim());
         outState.putString(Keys.Args.RECEIVER_AMOUNT, mReceiverAmount.getText().toString().trim());
+
+        outState.putString(TRANSACTION_TYPE, getPresenter().getTransactionType().toString());
     }
 }

@@ -5,6 +5,7 @@ import com.kora.android.data.network.config.NetworkConfigImpl;
 import com.kora.android.data.network.factory.RxErrorHandlingCallAdapterFactory;
 import com.kora.android.data.network.service.AuthService;
 import com.kora.android.data.network.service.CurrencyConverterService;
+import com.kora.android.data.network.service.RequestService;
 import com.kora.android.data.network.service.TransactionService;
 import com.kora.android.data.network.service.UserService;
 
@@ -66,5 +67,11 @@ public class NetworkModule {
     @Provides
     TransactionService provideTransactionService(final Retrofit retrofit) {
         return retrofit.create(TransactionService.class);
+    }
+
+    @Singleton
+    @Provides
+    RequestService provideRequestService(final Retrofit retrofit) {
+        return retrofit.create(RequestService.class);
     }
 }

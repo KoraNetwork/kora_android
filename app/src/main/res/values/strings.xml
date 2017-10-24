@@ -155,13 +155,15 @@
     <string name="send_money_contacts_label">Contacts</string>
     <string name="send_money_add_contact_label">Add your contacts</string>
 
-    <!-- Send Money Send Form-->
+    <!-- Send To Request From -->
     <string name="send_money_send_title" formatted="false">Send to %s</string>
+    <string name="send_money_request_title" formatted="false">Request from %s</string>
     <string name="send_money_amount_in_users_currency_label">Amount in users currency</string>
     <string name="converted_amount_value">%1$.2f</string>
     <string name="send_money_amount_label">Amount</string>
     <string name="send_money_aditional_label">Additional Note</string>
     <string name="send_money_send_button_label">Send Now</string>
+    <string name="send_money_request_button_label">Request Now</string>
     <string name="empty_sender_amount_error">Amount should be not empty</string>
     <string name="empty_receiver_amount_error">Receiver amount should be not empty</string>
 

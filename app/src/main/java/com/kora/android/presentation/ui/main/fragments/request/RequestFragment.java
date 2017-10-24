@@ -2,12 +2,13 @@ package com.kora.android.presentation.ui.main.fragments.request;
 
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 
 import com.kora.android.R;
 import com.kora.android.di.component.FragmentComponent;
+import com.kora.android.presentation.enums.TransactionType;
 import com.kora.android.presentation.ui.base.backstack.StackFragment;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
+import com.kora.android.presentation.ui.common.recent.RecentActivity;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -43,6 +44,6 @@ public class RequestFragment extends StackFragment<RequestPresenter> implements 
 
     @OnClick(R.id.floating_button_create_request)
     public void onClickCreateRequest() {
-
+        startActivity(RecentActivity.getLaunchIntent(getBaseActivity(), TransactionType.REQUEST));
     }
 }
