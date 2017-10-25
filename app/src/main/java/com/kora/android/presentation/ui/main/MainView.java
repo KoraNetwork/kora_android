@@ -8,4 +8,6 @@ public interface MainView extends BaseView<MainPresenter> {
     void showFragmentByPosition(int position);
 
     void showUserData(UserEntity userEntity);
+
+    void showLoginScreen();
 }

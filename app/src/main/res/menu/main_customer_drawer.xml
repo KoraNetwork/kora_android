@@ -47,5 +47,10 @@
             android:title="@string/menu_sand_a_feedback"
             android:icon="@drawable/menu_send_a_feedback_icon"/>
 
+        <item
+            android:id="@+id/nav_log_out"
+            android:title="@string/menu_logout"
+            android:icon="@drawable/ic_exit_from_app"/>
+
     </group>
 </menu>

@@ -25,6 +25,7 @@ import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.backstack.BackStackActivity;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
+import com.kora.android.presentation.ui.login.LoginActivity;
 import com.kora.android.presentation.ui.main.fragments.borrow.BorrowFragment;
 import com.kora.android.presentation.ui.main.fragments.home.HomeFragment;
 import com.kora.android.presentation.ui.main.fragments.profile.ProfileFragment;
@@ -185,6 +186,10 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
             case R.id.nav_send_a_feedback:
                 position = TAB_SEND_A_FEEDBACK_POSITION;
                 break;
+
+            case R.id.nav_log_out:
+                getPresenter().logout();
+                break;
         }
 
         mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -222,6 +227,11 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
                 .into(mUserAvatar);
         mUserName.setText(userEntity.getLegalName());
         mUserEmail.setText(userEntity.getEmail());
+    }
+
+    @Override
+    public void showLoginScreen() {
+        startActivity(LoginActivity.getLaunchIntent(this));
     }
 
     @Override
