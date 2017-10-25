@@ -71,14 +71,15 @@
     <string name="registration_password">Password</string>
     <string name="registration_confirm_password">Confirm Password</string>
     <string name="registration_user_name_empty">User name field is empty</string>
-    <string name="registration_user_name_incorrect">User name is incorrect, e.g. John_99</string>
-    <string name="registration_user_name_too_short">User name is too short</string>
+    <string name="registration_user_name_incorrect">User name is incorrect, only uppers case letters, lower case letters, numbers and \"_\" symbol, length at least 3 symbols</string>
+    <string name="registration_user_name_too_short">User name is too short, at least 3 symbols</string>
     <string name="registration_email_empty">Email field is empty</string>
-    <string name="registration_email_incorrect">Email is incorrect, e.g. john99@mail.com</string>
+    <string name="registration_email_incorrect">Email is incorrect</string>
     <string name="registration_date_of_birth_incorrect">You are too young, must be at least 18 years old</string>
     <string name="registration_currency_usa">USD</string>
     <string name="registration_password_empty">Password field is empty</string>
-    <string name="registration_password_too_short">Password is too short</string>
+    <string name="registration_password_incorrect">Password is incorrect, at least one upper case letter, one lower case letter, one number, length at least 8 symbols</string>
+    <string name="registration_password_too_short">Password is too short, at least 8 symbols</string>
     <string name="registration_confirm_password_empty">Confirm password field is empty</string>
     <string name="registration_confirm_password_incorrect">Confirm password does not match</string>
     <string name="registration_dialog_title_server_error_validation">Error</string>
@@ -90,8 +91,8 @@
     <string name="registration_increase_account_wait">Kora is sending money on your new account. Please wait for a while. Please do not exit the app.</string>
 
     <!-- Registration countries activity -->
-    <string name="registration_select_country">Select countryEntity</string>
-    <string name="registration_enter_country">Enter countryEntity</string>
+    <string name="registration_select_country">Select country</string>
+    <string name="registration_enter_country">Enter country</string>
     <string name="registration_brackets" formatted="false">" (%s)"</string>
 
     <!-- Registration currencies activity -->

@@ -266,12 +266,6 @@ public class ProfileFragment extends StackFragment<ProfilePresenter>
         ViewUtils.scrollToView(mSvContainer, mRlContainer, mElUserName);
     }
 
-    @Override
-    public void showTooShortUserName() {
-        mElUserName.setError(getString(R.string.registration_user_name_too_short));
-        ViewUtils.scrollToView(mSvContainer, mRlContainer, mElUserName);
-    }
-
     @OnTextChanged(R.id.edit_text_legal_name)
     void onLegalNameChanged(final CharSequence legalName) {
         getPresenter().setLegalName(legalName.toString().trim());

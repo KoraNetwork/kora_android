@@ -80,10 +80,6 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
             getView().showIncorrectUserName();
             return;
         }
-        if (!StringUtils.isUserNameLongEnough(mUpdatedUserEntity.getUserName())) {
-            getView().showTooShortUserName();
-            return;
-        }
         if (mUpdatedUserEntity.getEmail() == null || mUpdatedUserEntity.getEmail().isEmpty()) {
             getView().showEmptyEmail();
             return;

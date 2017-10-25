@@ -87,7 +87,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/login_password"
                     android:inputType="textPassword"
-                    android:maxLength="10"
+                    android:maxLength="20"
                     android:maxLines="1"
                     android:textColor="@color/color_edit_text"
                     android:textSize="18sp" />

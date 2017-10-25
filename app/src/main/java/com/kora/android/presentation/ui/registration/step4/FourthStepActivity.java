@@ -180,12 +180,6 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
         ViewUtils.scrollToView(mSvContainer, mRlContainer, mElUserName);
     }
 
-    @Override
-    public void showTooShortUserName() {
-        mElUserName.setError(getString(R.string.registration_user_name_too_short));
-        ViewUtils.scrollToView(mSvContainer, mRlContainer, mElUserName);
-    }
-
     @OnTextChanged(R.id.edit_text_legal_name)
     void onChangedLegalName(final CharSequence legalName) {
         getPresenter().setLegalName(legalName.toString().trim());
@@ -267,8 +261,8 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
     }
 
     @Override
-    public void showTooShortPassword() {
-        mElPassword.setError(getString(R.string.registration_password_too_short));
+    public void showIncorrectPassword() {
+        mElPassword.setError(getString(R.string.registration_password_incorrect));
     }
 
     @OnTextChanged(R.id.edit_text_confirm_password)

@@ -10,8 +10,6 @@ public interface ProfileView extends BaseView<ProfilePresenter> {
 
     void showIncorrectUserName();
 
-    void showTooShortUserName();
-
     void showEmptyEmail();
 
     void showIncorrectEmail();
