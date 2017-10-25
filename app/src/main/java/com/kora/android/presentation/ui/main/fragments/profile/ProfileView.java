@@ -12,7 +12,11 @@ public interface ProfileView extends BaseView<ProfilePresenter> {
 
     void showTooShortUserName();
 
+    void showEmptyEmail();
+
     void showIncorrectEmail();
+
+    void showIncorrectDate();
 
     void onUserUpdated();
 }

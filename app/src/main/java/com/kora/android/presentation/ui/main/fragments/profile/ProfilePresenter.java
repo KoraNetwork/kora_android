@@ -1,5 +1,6 @@
 package com.kora.android.presentation.ui.main.fragments.profile;
 
+import com.kora.android.common.utils.DateUtils;
 import com.kora.android.common.utils.StringUtils;
 import com.kora.android.data.network.config.ErrorModel;
 import com.kora.android.data.network.exception.RetrofitException;
@@ -32,7 +33,7 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
     @Inject
     public ProfilePresenter(final GetUserDataUseCase getUserDataUseCase,
                             final UpdateUserUseCase updateUserUseCase,
-                            UpdateAvatarUseCase updateAvatarUseCase) {
+                            final UpdateAvatarUseCase updateAvatarUseCase) {
         mGetUserDataUseCase = getUserDataUseCase;
         mUpdateUserUseCase = updateUserUseCase;
         mUpdateAvatarUseCase = updateAvatarUseCase;
@@ -51,11 +52,15 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
     }
 
     public void setEmail(String email) {
-        mUpdatedUserEntity.setLegalName(email);
+        mUpdatedUserEntity.setEmail(email);
     }
 
     public void setDateOfBirth(String dateOfBirth) {
         mUpdatedUserEntity.setDateOfBirth(dateOfBirth);
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        mUpdatedUserEntity.setPhoneNumber(phoneNumber);
     }
 
     public void setPostalCode(String postalCode) {
@@ -79,16 +84,21 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
             getView().showTooShortUserName();
             return;
         }
-        if (mUpdatedUserEntity.getEmail() != null && !mUpdatedUserEntity.getEmail().isEmpty()) {
-            if (!StringUtils.isEmailValid(mUpdatedUserEntity.getEmail())) {
-                getView().showIncorrectEmail();
-                return;
-            }
+        if (mUpdatedUserEntity.getEmail() == null || mUpdatedUserEntity.getEmail().isEmpty()) {
+            getView().showEmptyEmail();
+            return;
+        }
+        if (!StringUtils.isEmailValid(mUpdatedUserEntity.getEmail())) {
+            getView().showIncorrectEmail();
+            return;
+        }
+        if (!DateUtils.isDateValid(mUpdatedUserEntity.getDateOfBirth())) {
+            getView().showIncorrectDate();
+            return;
         }
 
         mUpdateUserUseCase.setData(mUpdatedUserEntity);
         mUpdateUserUseCase.execute(new UpdateUserSubscriber());
-
     }
 
     public void setUserEntity(UserEntity user) {
@@ -156,6 +166,7 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
         @Override
         public void onNext(UserEntity userEntity) {
             mUserEntity = userEntity;
+            mUpdatedUserEntity = userEntity;
             if (!isViewAttached()) return;
             getView().retrieveUserData(userEntity);
         }
@@ -236,7 +247,7 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
 
         @Override
         public void onNext(UserEntity userEntity) {
-           mUserEntity = userEntity;
+            mUserEntity = userEntity;
             if (!isViewAttached()) return;
             getView().retrieveUserData(userEntity);
         }

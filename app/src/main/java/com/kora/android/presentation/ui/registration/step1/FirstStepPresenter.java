@@ -142,7 +142,6 @@ public class FirstStepPresenter extends BasePresenter<FirstStepView> {
             if (!isViewAttached()) return;
             getView().showProgress(false);
             getView().showNextScreen();
-
         }
 
         @Override

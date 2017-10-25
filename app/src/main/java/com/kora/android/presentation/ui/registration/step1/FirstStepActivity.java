@@ -66,7 +66,8 @@ public class FirstStepActivity extends BaseActivity<FirstStepPresenter> implemen
     protected void onViewReady(final Bundle savedInstanceState) {
         setToolbar(mToolbar, R.drawable.ic_back_grey);
 
-        getPresenter().startDeleteWalletsTask();
+//        getPresenter().startDeleteWalletsTask();
+        requestPermission();
     }
 
     @Override

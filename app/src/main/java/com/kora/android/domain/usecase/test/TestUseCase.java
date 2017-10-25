@@ -2,10 +2,8 @@ package com.kora.android.domain.usecase.test;
 
 import android.util.Log;
 
-import com.kora.android.common.helper.ProxyPrefHelper;
 import com.kora.android.data.web3j.connection.Web3jConnection;
 import com.kora.android.data.web3j.smart_contracts.HumanStandardToken;
-import com.kora.android.data.web3j.smart_contracts.MetaIdentityManager;
 import com.kora.android.data.web3j.storage.EtherWalletStorage;
 import com.kora.android.domain.base.AsyncUseCase;
 
@@ -13,7 +11,6 @@ import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.FunctionReturnDecoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Address;
-import org.web3j.abi.datatypes.DynamicBytes;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.generated.Uint256;
@@ -24,14 +21,11 @@ import org.web3j.protocol.core.Response;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.web3j.utils.Numeric;
 
 import java.math.BigInteger;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 import javax.inject.Inject;
 
@@ -41,15 +35,12 @@ public class TestUseCase extends AsyncUseCase {
 
     private final Web3jConnection mWeb3jConnection;
     private final EtherWalletStorage mEtherWalletStorage;
-    private final ProxyPrefHelper mProxyPrefHelper;
 
     private Response.Error mError;
 
     @Inject
     public TestUseCase(final Web3jConnection web3jConnection,
-                       final EtherWalletStorage etherWalletStorage,
-                       final ProxyPrefHelper proxyPrefHelper) {
-        this.mProxyPrefHelper = proxyPrefHelper;
+                       final EtherWalletStorage etherWalletStorage) {
         this.mWeb3jConnection = web3jConnection;
         this.mEtherWalletStorage = etherWalletStorage;
     }

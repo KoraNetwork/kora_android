@@ -35,6 +35,7 @@ public class RequestMapper {
                                         .setToAmount(requestResponse.getToAmount())
                                         .setAdditionalNote(requestResponse.getAdditionalNote())
                                         .setState(requestResponse.getState())
+                                        .setDirection(requestResponse.getDirection())
                                         .setCreatedAt(requestResponse.getCreatedAt())
                                         .setDirection(requestResponse.getDirection())
                                         .createRequestEntity()));

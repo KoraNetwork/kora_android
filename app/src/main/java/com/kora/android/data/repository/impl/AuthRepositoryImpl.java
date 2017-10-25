@@ -64,6 +64,16 @@ public class AuthRepositoryImpl implements AuthRepository {
     }
 
     @Override
+    public Observable<Object> logout() {
+        return mAuthService.logout()
+                .map(o -> {
+                    mPreferenceHandler.forget(Keys.Shared.USER);
+                    mPreferenceHandler.forget(Keys.Shared.TOKEN);
+                    return o;
+                });
+    }
+
+    @Override
     public Observable<Object> sendPhoneNumber(final String phoneNumber) {
         final PhoneNumberRequest phoneNumberRequest = new PhoneNumberRequest()
                 .addPhoneNumber(phoneNumber);

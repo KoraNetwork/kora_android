@@ -19,4 +19,6 @@ public interface AuthRepository {
     Observable<UserEntity> register(final UserEntity user);
 
     Observable<List<CountryEntity>> getCountries();
+
+    Observable<Object> logout();
 }

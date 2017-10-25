@@ -3,12 +3,8 @@ package com.kora.android.di.component;
 import android.content.Context;
 
 import com.kora.android.KoraApplication;
-import com.kora.android.common.helper.ProxyPrefHelper;
 import com.kora.android.common.helper.RegistrationPrefHelper;
-import com.kora.android.common.helper.SessionPrefHelper;
 import com.kora.android.common.preferences.PreferenceHandler;
-import com.kora.android.data.network.service.AuthService;
-import com.kora.android.data.network.service.TransactionService;
 import com.kora.android.data.repository.AuthRepository;
 import com.kora.android.data.repository.CurrencyConverterRepository;
 import com.kora.android.data.repository.RequestRepository;
@@ -40,17 +36,11 @@ public interface ApplicationComponent {
     Context context();
 
     PreferenceHandler preferanceHandler();
-
     RegistrationPrefHelper registrationPrefHelper();
-    SessionPrefHelper authPrefHelper();
-    ProxyPrefHelper proxyPrefHelper();
 
     EtherWalletUtils etherWalletUtils();
     EtherWalletStorage etherWalletStorage();
     Web3jConnection web3jConnection();
-
-//    AuthService authService();
-//    TransactionService transactionService();
 
     AuthRepository authRepository();
     UserRepository userRepository();

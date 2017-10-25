@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 public class StringUtils {
 
     public static boolean isIdentifierValid(final String identifier) {
-        final Pattern phoneNumberPattern = Pattern.compile("(\\+?)(\\d{10,12})$");
+        final Pattern phoneNumberPattern = Pattern.compile("(\\+?)(\\d{10,13})$");
         final Matcher phoneNumberMatcher = phoneNumberPattern.matcher(identifier);
 
         final Pattern userNamePattern = Pattern.compile("^[a-zA-Z0-9_]*$");
@@ -23,7 +23,7 @@ public class StringUtils {
     }
 
     public static boolean isPhoneNumberValid(final String phoneNumber) {
-        final Pattern pattern = Pattern.compile("(\\d{9,11})$");
+        final Pattern pattern = Pattern.compile("(\\d{9,12})$");
         final Matcher matcher = pattern.matcher(phoneNumber);
         return matcher.find();
     }
