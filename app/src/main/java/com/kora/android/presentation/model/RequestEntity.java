@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.kora.android.presentation.enums.RequestState;
+import com.kora.android.presentation.enums.Direction;
 
 import java.util.Date;
 
@@ -16,6 +17,7 @@ public class RequestEntity implements Parcelable {
     private String mAdditionalNote;
     private RequestState mState;
     private Date mCreatedAt = new Date();
+    private Direction mDirection;
 
     public RequestEntity(UserEntity mFrom,
                          UserEntity mTo,
@@ -23,7 +25,8 @@ public class RequestEntity implements Parcelable {
                          double mToAmount,
                          String mAdditionalNote,
                          RequestState mState,
-                         Date mCreatedAt) {
+                         Date mCreatedAt,
+                         Direction direction) {
         this.mFrom = mFrom;
         this.mTo = mTo;
         this.mFromAmount = mFromAmount;
@@ -31,19 +34,7 @@ public class RequestEntity implements Parcelable {
         this.mAdditionalNote = mAdditionalNote;
         this.mState = mState;
         this.mCreatedAt = mCreatedAt;
-    }
-
-    @Override
-    public String toString() {
-        return "RequestEntity{" + "\n" +
-                "mFrom='" + mFrom + "\n" +
-                "mTo='" + mTo + "\n" +
-                "mFromAmount=" + mFromAmount + "\n" +
-                "mToAmount=" + mToAmount + "\n" +
-                "mAdditionalNote=" + mAdditionalNote + "\n" +
-                "mState=" + mState + "\n" +
-                "mCreatedAt=" + mCreatedAt + "\n" +
-                "}";
+        this.mDirection = direction;
     }
 
     public UserEntity getFrom() {
@@ -102,6 +93,13 @@ public class RequestEntity implements Parcelable {
         this.mCreatedAt = mCreatedAt;
     }
 
+    public Direction getDirection() {
+        return mDirection;
+    }
+
+    public void setDirection(Direction direction) {
+        mDirection = direction;
+    }
 
     @Override
     public int describeContents() {
@@ -117,6 +115,7 @@ public class RequestEntity implements Parcelable {
         dest.writeString(this.mAdditionalNote);
         dest.writeInt(this.mState == null ? -1 : this.mState.ordinal());
         dest.writeLong(this.mCreatedAt != null ? this.mCreatedAt.getTime() : -1);
+        dest.writeString(mDirection == null ? "" : mDirection.name());
     }
 
     protected RequestEntity(Parcel in) {
@@ -129,6 +128,8 @@ public class RequestEntity implements Parcelable {
         this.mState = tmpMState == -1 ? null : RequestState.values()[tmpMState];
         long tmpMCreatedAt = in.readLong();
         this.mCreatedAt = tmpMCreatedAt == -1 ? null : new Date(tmpMCreatedAt);
+        String d = in.readString();
+        mDirection = d.equals("") ? null : Direction.valueOf(d);
     }
 
     public static final Creator<RequestEntity> CREATOR = new Creator<RequestEntity>() {

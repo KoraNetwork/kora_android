@@ -3,7 +3,7 @@ package com.kora.android.presentation.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.kora.android.presentation.enums.TransactionDirection;
+import com.kora.android.presentation.enums.Direction;
 import com.kora.android.presentation.enums.TransactionType;
 
 import java.util.Date;
@@ -18,12 +18,12 @@ public class TransactionEntity implements Parcelable {
     private UserEntity sender;
     private UserEntity receiver;
     private TransactionType transactionType;
-    private TransactionDirection transactionDirection;
+    private Direction mDirection;
     private Date createdAt = new Date();
 
     public TransactionEntity(String id, double fromAmount, double toAmount,
                              List<String> transactionHash, UserEntity sender, UserEntity receiver,
-                             TransactionType transactionType, TransactionDirection transactionDirection,
+                             TransactionType transactionType, Direction direction,
                              Date createdAt) {
         this.id = id;
         this.fromAmount = fromAmount;
@@ -32,7 +32,7 @@ public class TransactionEntity implements Parcelable {
         this.sender = sender;
         this.receiver = receiver;
         this.transactionType = transactionType;
-        this.transactionDirection = transactionDirection;
+        this.mDirection = direction;
         this.createdAt = createdAt;
     }
 
@@ -44,7 +44,7 @@ public class TransactionEntity implements Parcelable {
         sender = (UserEntity) in.readValue(UserEntity.class.getClassLoader());
         receiver = (UserEntity) in.readValue(UserEntity.class.getClassLoader());
         transactionType = TransactionType.valueOf(in.readString());
-        transactionDirection = TransactionDirection.valueOf(in.readString());
+        mDirection = Direction.valueOf(in.readString());
         createdAt.setTime(in.readLong());
     }
 
@@ -116,12 +116,12 @@ public class TransactionEntity implements Parcelable {
         this.transactionType = transactionType;
     }
 
-    public TransactionDirection getTransactionDirection() {
-        return transactionDirection;
+    public Direction getDirection() {
+        return mDirection;
     }
 
-    public void setTransactionDirection(TransactionDirection transactionDirection) {
-        this.transactionDirection = transactionDirection;
+    public void setDirection(Direction direction) {
+        this.mDirection = direction;
     }
 
     public Date getCreatedAt() {
@@ -146,7 +146,7 @@ public class TransactionEntity implements Parcelable {
         dest.writeValue(sender);
         dest.writeValue(receiver);
         dest.writeString(transactionType.name());
-        dest.writeString(transactionDirection.name());
+        dest.writeString(mDirection.name());
         dest.writeLong(createdAt.getTime());
     }
 

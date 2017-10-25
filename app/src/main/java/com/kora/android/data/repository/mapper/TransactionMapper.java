@@ -33,7 +33,7 @@ public class TransactionMapper {
                                         .setToAmount(transactionResponse.getToAmount())
                                         .setTransactionHash(transactionResponse.getTransactionHash())
                                         .setTransactionType(transactionResponse.getType())
-                                        .setTransactionDirection(transactionResponse.getDirection())
+                                        .setDirection(transactionResponse.getDirection())
                                         .setCreatedAt(transactionResponse.getCreatedAt())
                                         .setSender(sender)
                                         .setReceiver(receiver)

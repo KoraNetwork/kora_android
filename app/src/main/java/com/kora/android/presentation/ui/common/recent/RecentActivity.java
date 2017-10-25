@@ -14,8 +14,8 @@ import com.kora.android.common.Keys;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.enums.TransactionType;
 import com.kora.android.presentation.model.UserEntity;
-import com.kora.android.presentation.ui.adapter.OnItemClickListener;
 import com.kora.android.presentation.ui.adapter.UserAdapter;
+import com.kora.android.presentation.ui.base.adapter.OnItemClickListener;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.common.add_contact.AddContactActivity;
 import com.kora.android.presentation.ui.common.send_to.SendMoneyActivity;
@@ -98,7 +98,7 @@ public class RecentActivity extends BaseActivity<RecentPresenter> implements Rec
 
     private void initUI() {
         if (getPresenter().getTransactionType().equals(REQUEST))
-            mTvToolbarTitle.setText(R.string.request_money_request_money);
+            mTvToolbarTitle.setText(R.string.request_money_title);
 
         mUserAdapter = new UserAdapter();
         mUserAdapter.setOnUserClickListener(this);

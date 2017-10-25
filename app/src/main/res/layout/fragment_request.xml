@@ -1,74 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:focusableInTouchMode="true">
+    android:layout_height="match_parent">
 
-    <ScrollView
+    <include
+        android:id="@+id/toolbar_container"
+        layout="@layout/toolbar"/>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:layout_marginTop="?attr/actionBarSize">
 
-        <RelativeLayout
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/request_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:scrollbars="none"
+            tools:listitem="@layout/item_request"/>
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/color_toolbar"
-                android:contentInsetLeft="0dp"
-                android:contentInsetStart="0dp"
-                app:contentInsetLeft="0dp"
-                app:contentInsetStart="0dp">
+    </android.support.v4.widget.SwipeRefreshLayout>
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floating_button_create_request"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="bottom|right|end"
+        android:layout_marginBottom="@dimen/action_button_margin"
+        android:layout_marginEnd="@dimen/action_button_margin"
+        android:layout_marginRight="@dimen/action_button_margin"
+        android:clickable="true"
+        android:src="@drawable/ic_add_white"
+        app:backgroundTint="@color/color_floating_button"
+        app:fabSize="normal"/>
 
-                    <com.kora.android.views.CustomTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:text="@string/request_money_request_money"
-                        android:textColor="@color/color_button_text_white"
-                        android:textSize="20sp"
-                        app:font="@string/font_name_muli_bold" />
-                </RelativeLayout>
-
-            </android.support.v7.widget.Toolbar>
-
-            <com.kora.android.views.CustomTextView
-                android:id="@+id/text_view_request"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                android:text="REQUEST\nFRAGMENT"
-                android:gravity="center"
-                android:textColor="@color/color_text_blue"
-                android:textSize="30sp"
-                app:font="@string/font_name_muli_bold" />
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/floating_button_create_request"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginBottom="28dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginRight="24dp"
-                android:clickable="true"
-                android:src="@drawable/ic_add_white"
-                app:backgroundTint="@color/color_floating_button"
-                app:fabSize="normal" />
-
-        </RelativeLayout>
-
-    </ScrollView>
-
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

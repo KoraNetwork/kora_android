@@ -12,7 +12,7 @@ import com.kora.android.R;
 import com.kora.android.common.utils.DateUtils;
 import com.kora.android.presentation.enums.TransactionType;
 import com.kora.android.presentation.model.TransactionEntity;
-import com.kora.android.presentation.ui.adapter.OnItemClickListener;
+import com.kora.android.presentation.ui.base.adapter.OnItemClickListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,7 +41,7 @@ public final class RequestViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(TransactionEntity transactionEntity) {
-        switch (transactionEntity.getTransactionDirection()) {
+        switch (transactionEntity.getDirection()) {
             case FROM:
                 mDirectionIcon.setImageResource(R.drawable.ic_arrow_red);
                 mSenderName.setText(mContext.getString(R.string.transaction_history_from_me));

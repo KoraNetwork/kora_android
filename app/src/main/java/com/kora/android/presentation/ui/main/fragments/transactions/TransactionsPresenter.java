@@ -5,8 +5,9 @@ import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.usecase.transaction.GetTransactionsUseCase;
-import com.kora.android.presentation.dto.TransactionFilterDto;
+import com.kora.android.presentation.ui.main.fragments.transactions.filter.TransactionFilterModel;
 import com.kora.android.presentation.model.TransactionEntity;
+import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
 
 import java.util.List;
@@ -14,22 +15,23 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Action;
 
 @ConfigPersistent
 class TransactionsPresenter extends BasePresenter<TransactionsView> {
 
     private final GetTransactionsUseCase mGetTransactionsUseCase;
 
-    private TransactionFilterDto mTransactionFilterDto = new TransactionFilterDto();
+    private TransactionFilterModel mTransactionFilterModel = new TransactionFilterModel();
 
     @Inject
     public TransactionsPresenter(final GetTransactionsUseCase getTransactionsUseCase) {
         mGetTransactionsUseCase = getTransactionsUseCase;
     }
 
-    public void retrieveTransactions(final TransactionFilterDto transactionFilterDto, int itemCount) {
-        mTransactionFilterDto = transactionFilterDto;
-        mGetTransactionsUseCase.setData(transactionFilterDto, itemCount);
+    public void retrieveTransactions(final TransactionFilterModel transactionFilterModel, int itemCount) {
+        mTransactionFilterModel = transactionFilterModel;
+        mGetTransactionsUseCase.setData(transactionFilterModel, itemCount);
         mGetTransactionsUseCase.execute(new GetTransactionsSubscriber());
     }
 
@@ -39,16 +41,23 @@ class TransactionsPresenter extends BasePresenter<TransactionsView> {
     }
 
     public void retrieveTransactionsWithFilter(int itemCount) {
-        retrieveTransactions(mTransactionFilterDto, itemCount);
+        retrieveTransactions(mTransactionFilterModel, itemCount);
     }
 
-    public TransactionFilterDto getFilter() {
-        return mTransactionFilterDto;
+    public TransactionFilterModel getFilter() {
+        return mTransactionFilterModel;
     }
 
-    public void setFilter(TransactionFilterDto filter) {
-        mTransactionFilterDto = filter;
+    public void setFilter(TransactionFilterModel filter) {
+        mTransactionFilterModel = filter;
     }
+
+    private Action mGetTransactionListAction = new Action() {
+        @Override
+        public void run() throws Exception {
+            mGetTransactionsUseCase.execute(new GetTransactionsSubscriber());
+        }
+    };
 
     private class GetTransactionsSubscriber extends DefaultInternetSubscriber<List<TransactionEntity>> {
 
@@ -89,7 +98,12 @@ class TransactionsPresenter extends BasePresenter<TransactionsView> {
         @Override
         public void handleNetworkError(RetrofitException retrofitException) {
             if (!isViewAttached()) return;
-//            getView().showErrorWithRetry(new RetryAction(mGetRecentUsersAction));
+            getView().showErrorWithRetry(new RetryAction(mGetTransactionListAction));
         }
+    }
+
+    @Override
+    public void onDetachView() {
+        mGetTransactionsUseCase.dispose();
     }
 }

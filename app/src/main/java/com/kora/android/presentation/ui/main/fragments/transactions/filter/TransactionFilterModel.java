@@ -1,28 +1,29 @@
-package com.kora.android.presentation.dto;
+package com.kora.android.presentation.ui.main.fragments.transactions.filter;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.kora.android.presentation.enums.TransactionDirection;
+import com.kora.android.presentation.enums.Direction;
 import com.kora.android.presentation.enums.TransactionType;
+import com.kora.android.presentation.ui.base.adapter.filter.FilterModel;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class TransactionFilterDto implements Parcelable {
+public class TransactionFilterModel extends FilterModel implements Parcelable {
 
-    private TransactionDirection mTransactionDirections;
+    private Direction mDirections;
     private Set<TransactionType> mTransactionTypes = new HashSet<>();
 
-    public TransactionFilterDto() {
+    public TransactionFilterModel() {
     }
 
-    protected TransactionFilterDto(Parcel in) {
+    protected TransactionFilterModel(Parcel in) {
         String s = in.readString();
         if (!s.equals(""))
-            mTransactionDirections = TransactionDirection.valueOf(s);
+            mDirections = Direction.valueOf(s);
         List<String> strings = new ArrayList<>();
         in.readList(strings, null);
         for (String str : strings) {
@@ -30,24 +31,24 @@ public class TransactionFilterDto implements Parcelable {
         }
     }
 
-    public static final Creator<TransactionFilterDto> CREATOR = new Creator<TransactionFilterDto>() {
+    public static final Creator<TransactionFilterModel> CREATOR = new Creator<TransactionFilterModel>() {
         @Override
-        public TransactionFilterDto createFromParcel(Parcel in) {
-            return new TransactionFilterDto(in);
+        public TransactionFilterModel createFromParcel(Parcel in) {
+            return new TransactionFilterModel(in);
         }
 
         @Override
-        public TransactionFilterDto[] newArray(int size) {
-            return new TransactionFilterDto[size];
+        public TransactionFilterModel[] newArray(int size) {
+            return new TransactionFilterModel[size];
         }
     };
 
-    public TransactionDirection getTransactionDirections() {
-        return mTransactionDirections;
+    public Direction getDirections() {
+        return mDirections;
     }
 
-    public void setTransactionDirections(TransactionDirection transactionDirections) {
-        mTransactionDirections = transactionDirections;
+    public void setDirections(Direction directions) {
+        mDirections = directions;
     }
 
     public Set<TransactionType> getTransactionTypes() {
@@ -59,7 +60,7 @@ public class TransactionFilterDto implements Parcelable {
     }
 
     public String getTransactionDirectionsAsStrings() {
-        return mTransactionDirections == null ? "" : mTransactionDirections.name().toLowerCase();
+        return mDirections == null ? "" : mDirections.name().toLowerCase();
     }
 
     public List<String> getTransactionTypesAsStrings() {
@@ -77,7 +78,7 @@ public class TransactionFilterDto implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mTransactionDirections == null ? "" : mTransactionDirections.name());
+        dest.writeString(mDirections == null ? "" : mDirections.name());
         List<String> strings = new ArrayList<>();
         for (TransactionType type : mTransactionTypes) {
             strings.add(type.name());

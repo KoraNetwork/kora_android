@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.kora.android.R;
 import com.kora.android.presentation.model.TransactionEntity;
-import com.kora.android.presentation.ui.adapter.OnItemClickListener;
+import com.kora.android.presentation.ui.base.adapter.OnItemClickListener;
 
 import java.util.Locale;
 
@@ -37,7 +37,7 @@ public final class CashViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(TransactionEntity transactionEntity) {
-        switch (transactionEntity.getTransactionDirection()) {
+        switch (transactionEntity.getDirection()) {
             case FROM:
                 mDirectionIcon.setImageResource(R.drawable.ic_arrow_red);
                 mCashType.setText(mContext.getString(R.string.transaction_history_cash_out));

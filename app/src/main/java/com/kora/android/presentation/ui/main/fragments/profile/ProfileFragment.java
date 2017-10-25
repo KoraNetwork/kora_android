@@ -378,7 +378,6 @@ public class ProfileFragment extends StackFragment<ProfilePresenter>
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                     if (response.resultCode() == RESULT_OK) {
-//                        response.targetUI().showAvatar(response.data().getFile());
                         getPresenter().updateAvatar(response.data().getFile().getAbsolutePath());
                     }
                 }, Throwable::printStackTrace);

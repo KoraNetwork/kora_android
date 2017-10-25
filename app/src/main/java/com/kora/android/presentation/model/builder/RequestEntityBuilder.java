@@ -1,5 +1,6 @@
 package com.kora.android.presentation.model.builder;
 
+import com.kora.android.presentation.enums.Direction;
 import com.kora.android.presentation.enums.RequestState;
 import com.kora.android.presentation.model.RequestEntity;
 import com.kora.android.presentation.model.UserEntity;
@@ -15,6 +16,7 @@ public class RequestEntityBuilder {
     private String mAdditionalNote;
     private RequestState mState;
     private Date mCreatedAt;
+    private Direction mDirection;
 
     public RequestEntityBuilder setFrom(final UserEntity from) {
         mFrom = from;
@@ -51,7 +53,12 @@ public class RequestEntityBuilder {
         return this;
     }
 
+    public RequestEntityBuilder setDirection (final Direction direction) {
+        mDirection = direction;
+        return this;
+    }
+
     public RequestEntity createRequestEntity() {
-        return new RequestEntity(mFrom, mTo, mFromAmount, mToAmount, mAdditionalNote, mState, mCreatedAt);
+        return new RequestEntity(mFrom, mTo, mFromAmount, mToAmount, mAdditionalNote, mState, mCreatedAt, mDirection);
     }
 }

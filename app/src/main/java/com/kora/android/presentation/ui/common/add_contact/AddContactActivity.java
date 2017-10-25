@@ -15,9 +15,9 @@ import com.kora.android.common.Keys;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.enums.TransactionType;
 import com.kora.android.presentation.model.UserEntity;
-import com.kora.android.presentation.ui.adapter.OnItemClickListener;
-import com.kora.android.presentation.ui.adapter.RecyclerViewScrollListener;
 import com.kora.android.presentation.ui.adapter.UserAdapter;
+import com.kora.android.presentation.ui.base.adapter.OnItemClickListener;
+import com.kora.android.presentation.ui.base.adapter.RecyclerViewScrollListener;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.base.view.ToolbarActivity;
 import com.kora.android.presentation.ui.common.send_to.SendMoneyActivity;
@@ -68,7 +68,7 @@ public class AddContactActivity extends ToolbarActivity<AddContactPresenter> imp
 
     @Override
     protected int getTitleRes() {
-        return R.string.add_contact_add_contact;
+        return R.string.add_contact_title;
     }
 
     @Override

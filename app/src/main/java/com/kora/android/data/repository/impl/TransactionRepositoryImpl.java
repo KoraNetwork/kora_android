@@ -5,7 +5,7 @@ import com.kora.android.data.network.model.request.TransactionRequest;
 import com.kora.android.data.network.service.TransactionService;
 import com.kora.android.data.repository.TransactionRepository;
 import com.kora.android.data.repository.mapper.TransactionMapper;
-import com.kora.android.presentation.dto.TransactionFilterDto;
+import com.kora.android.presentation.ui.main.fragments.transactions.filter.TransactionFilterModel;
 import com.kora.android.presentation.model.TransactionEntity;
 
 import java.util.List;
@@ -29,7 +29,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
     }
 
     @Override
-    public Observable<List<TransactionEntity>> retrieveTransactions(TransactionFilterDto transactionFilter, int skip) {
+    public Observable<List<TransactionEntity>> retrieveTransactions(TransactionFilterModel transactionFilter, int skip) {
         return mTransactionService.retrieveTransactionHistory(transactionFilter.getTransactionDirectionsAsStrings(),
                 transactionFilter.getTransactionTypesAsStrings(),
                 Keys.ITEMS_PER_PAGE, skip)
