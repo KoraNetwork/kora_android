@@ -78,6 +78,8 @@ public class ProfileFragment extends StackFragment<ProfilePresenter>
     @BindView(R.id.edit_text_legal_name) TextInputEditText mEtLegalName;
     @BindView(R.id.edit_text_email) TextInputEditText mEtEmail;
 
+    @BindView(R.id.edit_layout_date_of_birth) TextInputLayout mElDateOfBirth;
+
     @BindView(R.id.scroll_view_container) ScrollView mSvContainer;
     @BindView(R.id.relative_layout_container) RelativeLayout mRlContainer;
     @BindView(R.id.returned_container) LinearLayout mLlContainer;
@@ -184,10 +186,10 @@ public class ProfileFragment extends StackFragment<ProfilePresenter>
 
         if (mViewMode == EDIT_MODE) {
             mEtUserName.setEnabled(true);
-            mEtEmail.setEnabled(true);
-            mEtPhoneNumber.setEnabled(true);
+//            mEtEmail.setEnabled(true);
+//            mEtPhoneNumber.setEnabled(true);
             mEtLegalName.setEnabled(true);
-            mEtCurrency.setEnabled(true);
+//            mEtCurrency.setEnabled(true);
             mEtPostalCode.setEnabled(true);
             mEtDateOfBirth.setEnabled(true);
             mEtAddress.setEnabled(true);
@@ -282,6 +284,12 @@ public class ProfileFragment extends StackFragment<ProfilePresenter>
     }
 
     @Override
+    public void showEmptyEmail() {
+        mElEmail.setError(getString(R.string.registration_email_empty));
+        ViewUtils.scrollToView(mSvContainer, mRlContainer, mElEmail);
+    }
+
+    @Override
     public void showIncorrectEmail() {
         mElEmail.setError(getString(R.string.registration_email_incorrect));
         ViewUtils.scrollToView(mSvContainer, mRlContainer, mElEmail);
@@ -295,6 +303,8 @@ public class ProfileFragment extends StackFragment<ProfilePresenter>
 
     @OnClick(R.id.edit_text_date_of_birth)
     void onDateOfBirthClicked() {
+        mElDateOfBirth.setError(null);
+
         Calendar cal = DateUtils.getCalendarFromPrettyDate(mEtDateOfBirth.getText().toString().trim());
         if (cal == null) return;
         DatePickerDialog dpd = DatePickerDialog.newInstance(this, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
@@ -309,6 +319,11 @@ public class ProfileFragment extends StackFragment<ProfilePresenter>
         }
     }
 
+    @Override
+    public void showIncorrectDate() {
+        mElDateOfBirth.setError(getString(R.string.registration_date_of_birth_incorrect));
+    }
+
     @OnClick(R.id.edit_text_currency)
     void onCurrencyClicked() {
         startActivityForResult(CurrenciesActivity.getLaunchIntent(getBaseActivity()), SELECT_CURRENCY_REQUEST_CODE);
@@ -319,6 +334,11 @@ public class ProfileFragment extends StackFragment<ProfilePresenter>
         if (isFocused) {
             onCurrencyClicked();
         }
+    }
+
+    @OnTextChanged(R.id.edit_text_phone_number)
+    void onPhoneNumberChanged(final CharSequence phoneNumber) {
+        getPresenter().setPhoneNumber(phoneNumber.toString().trim());
     }
 
     @OnTextChanged(R.id.edit_text_postal_code)
