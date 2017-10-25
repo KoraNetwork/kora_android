@@ -5,6 +5,9 @@ import com.kora.android.data.network.service.RequestService;
 import com.kora.android.data.repository.RequestRepository;
 import com.kora.android.data.repository.mapper.RequestMapper;
 import com.kora.android.presentation.model.RequestEntity;
+import com.kora.android.presentation.ui.main.fragments.request.filter.RequestFilterModel;
+
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -36,5 +39,11 @@ public class RequestRepositoryImpl implements RequestRepository {
                 .addAdditionalNote(additionalNote);
         return mRequestService.addToRequests(requestRequest)
                 .compose(mRequestMapper.transformResponseToRequestEntity());
+    }
+
+    @Override
+    public Observable<List<RequestEntity>> getRequestList(RequestFilterModel requestFilterModel, int skip, int itemsPerPage) {
+        return mRequestService.getRequestList(requestFilterModel.getDirectionAsStrings(), requestFilterModel.getStateAsStrings(), skip, itemsPerPage)
+                .compose(mRequestMapper.transformRequestResponseListToEntityList());
     }
 }

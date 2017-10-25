@@ -15,11 +15,11 @@ import com.kora.android.common.Keys;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.enums.TransactionType;
 import com.kora.android.presentation.model.UserEntity;
-import com.kora.android.presentation.ui.adapter.OnItemClickListener;
 import com.kora.android.presentation.ui.adapter.UserAdapter;
+import com.kora.android.presentation.ui.base.adapter.OnItemClickListener;
+import com.kora.android.presentation.ui.base.adapter.RecyclerViewScrollListener;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
-import com.kora.android.presentation.ui.adapter.RecyclerViewScrollListener;
-import com.kora.android.presentation.ui.common.recent.RecentActivity;
+import com.kora.android.presentation.ui.base.view.ToolbarActivity;
 import com.kora.android.presentation.ui.common.send_to.SendMoneyActivity;
 
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ import butterknife.OnTextChanged;
 
 import static com.kora.android.common.Keys.Args.TRANSACTION_TYPE;
 
-public class AddContactActivity extends BaseActivity<AddContactPresenter> implements AddContactView,
+public class AddContactActivity extends ToolbarActivity<AddContactPresenter> implements AddContactView,
         OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     @BindView(R.id.toolbar)
@@ -62,8 +62,18 @@ public class AddContactActivity extends BaseActivity<AddContactPresenter> implem
     }
 
     @Override
+    public Toolbar getToolbar() {
+        return mToolbar;
+    }
+
+    @Override
+    protected int getTitleRes() {
+        return R.string.add_contact_title;
+    }
+
+    @Override
     protected void onViewReady(final Bundle savedInstanceState) {
-        setToolbar(mToolbar, R.drawable.ic_back_white);
+        super.onViewReady(savedInstanceState);
 
         initArguments(savedInstanceState);
         initUI();

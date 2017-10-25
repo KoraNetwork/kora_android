@@ -23,9 +23,9 @@ public class KoraApplication extends Application {
 
         getComponent().inject(this);
 
-        if (!BuildConfig.DEBUG) {
+//        if (!BuildConfig.DEBUG) {
             Fabric.with(this, new Crashlytics());
-        }
+//        }
     }
 
     public static KoraApplication get(final Context context) {

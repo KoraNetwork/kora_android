@@ -1,4 +1,4 @@
-package com.kora.android.presentation.ui.adapter;
+package com.kora.android.presentation.ui.base.adapter;
 
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;

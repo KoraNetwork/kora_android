@@ -3,9 +3,9 @@ package com.kora.android.data.network.model.response;
 import com.bluelinelabs.logansquare.annotation.JsonField;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
 import com.kora.android.data.network.model.converter.DateTypeCustomConverter;
-import com.kora.android.data.network.model.converter.TransactionDirectionConverter;
+import com.kora.android.data.network.model.converter.DirectionTypeConverter;
 import com.kora.android.data.network.model.converter.TransactionTypeConverter;
-import com.kora.android.presentation.enums.TransactionDirection;
+import com.kora.android.presentation.enums.Direction;
 import com.kora.android.presentation.enums.TransactionType;
 
 import java.util.Date;
@@ -16,7 +16,7 @@ public class TransactionResponse {
 
     @JsonField(name = "id") private String mId;
     @JsonField(name = "type", typeConverter = TransactionTypeConverter.class) private TransactionType mType;
-    @JsonField(name = "direction", typeConverter = TransactionDirectionConverter.class) private TransactionDirection mDirection;
+    @JsonField(name = "direction", typeConverter = DirectionTypeConverter.class) private Direction mDirection;
     @JsonField(name = "fromAmount") private double mFromAmount;
     @JsonField(name = "toAmount") private double mToAmount;
     @JsonField(name = "transactionHash") private List<String> mTransactionHash;
@@ -98,11 +98,11 @@ public class TransactionResponse {
         mUpdatedAt = updatedAt;
     }
 
-    public TransactionDirection getDirection() {
+    public Direction getDirection() {
         return mDirection;
     }
 
-    public void setDirection(TransactionDirection direction) {
+    public void setDirection(Direction direction) {
         mDirection = direction;
     }
 }

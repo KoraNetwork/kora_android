@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.kora.android.R;
 import com.kora.android.presentation.model.UserEntity;
+import com.kora.android.presentation.ui.base.adapter.OnItemClickListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

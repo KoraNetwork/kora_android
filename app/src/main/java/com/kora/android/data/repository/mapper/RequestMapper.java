@@ -1,8 +1,11 @@
 package com.kora.android.data.repository.mapper;
 
+import com.kora.android.data.network.model.response.RequestListResponse;
 import com.kora.android.data.network.model.response.RequestResponse;
 import com.kora.android.presentation.model.RequestEntity;
 import com.kora.android.presentation.model.builder.RequestEntityBuilder;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -34,7 +37,13 @@ public class RequestMapper {
                                         .setState(requestResponse.getState())
                                         .setDirection(requestResponse.getDirection())
                                         .setCreatedAt(requestResponse.getCreatedAt())
+                                        .setDirection(requestResponse.getDirection())
                                         .createRequestEntity()));
     }
 
+    public ObservableTransformer<RequestListResponse, List<RequestEntity>> transformRequestResponseListToEntityList() {
+        return responseListObservable -> responseListObservable
+                .flatMap(requestListResponse -> Observable.fromIterable(requestListResponse.getRequestResponses())
+                .compose(transformResponseToRequestEntity()).toList().toObservable());
+    }
 }

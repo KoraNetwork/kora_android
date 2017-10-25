@@ -25,7 +25,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:text="@string/request_money_request_money"
+                android:text="@string/request_money_title"
                 android:textColor="@color/color_button_text_white"
                 android:textSize="20sp"
                 app:font="@string/font_name_muli_bold" />

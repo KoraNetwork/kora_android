@@ -1,6 +1,6 @@
 package com.kora.android.presentation.enums;
 
-public enum  TransactionDirection {
+public enum Direction {
 
     FROM, TO
 }

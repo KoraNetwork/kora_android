@@ -150,10 +150,10 @@
     <string name="title_profile">Profile</string>
     <string name="update_profile_success_message">User Updated Success</string>
     <string name="title_edit_profile">Edit Profile</string>
-    <string name = "required_asterisk"> *</string>
+    <string name="required_asterisk"> *</string>
 
     <!-- Send Money -->
-    <string name="send_money_title">Send Money</string>
+    <string name="send_money_title">Send money</string>
     <string name="send_money_contacts_label">Contacts</string>
     <string name="send_money_add_contact_label">Add your contacts</string>
 
@@ -170,7 +170,7 @@
     <string name="empty_receiver_amount_error">Receiver amount should be not empty</string>
 
     <!-- Add contact activity -->
-    <string name="add_contact_add_contact">Add your contact</string>
+    <string name="add_contact_title">Add your contacts</string>
     <string name="add_contact_name_phone_email">receiver name or mobile phone or email</string>
 
     <!-- Enter pin activity -->
@@ -196,25 +196,43 @@
     <string name="transaction_history_cash_out">Cash out:</string>
     <string name="transactions_title">Transactions</string>
     <string name="transactions_amount">%1$.2f %2$s</string>
-
-    <!-- Transaction filter -->
-    <string name="filter_show_label">Show:</string>
-    <string name="filter_show_all_label">Show All</string>
-    <string name="filter_show_incoming_label">Incoming</string>
-    <string name="filter_show_upcoming_label">Upcoming</string>
-    <string name="filter_type_label">Type:</string>
-    <string name="filter_type_sent_label">Sent</string>
-    <string name="filter_type_requested_label">Requesed</string>
-    <string name="filter_type_borrowed_label">Borrowed</string>
-    <string name="filter_type_deposit_label">Deposit</string>
-    <string name="filter_cancel_label">Cancel</string>
-    <string name="filter_done_label">Done</string>
     <string name="transaction_history_type_borrow">Borrowed</string>
     <string name="transaction_history_type_send">Sent</string>
     <string name="transaction_history_type_request">Requested</string>
     <string name="transaction_history_type_deposit">Deposit</string>
 
+    <!-- Transaction filter -->
+    <string name="transaction_filter_show_label">Show:</string>
+    <string name="transaction_filter_show_all_label">Show All</string>
+    <string name="transaction_filter_show_incoming_label">Incoming</string>
+    <string name="transaction_filter_show_upcoming_label">Upcoming</string>
+    <string name="transaction_filter_type_label">Type:</string>
+    <string name="transaction_filter_type_sent_label">Sent</string>
+    <string name="transaction_filter_type_requested_label">Requesed</string>
+    <string name="transaction_filter_type_borrowed_label">Borrowed</string>
+    <string name="transaction_filter_type_deposit_label">Deposit</string>
+    <string name="transaction_filter_cancel_label">Cancel</string>
+    <string name="transaction_filter_done_label">Done</string>
+
     <!-- Request money fragment -->
-    <string name="request_money_request_money">Request money</string>
+    <string name="request_money_title">Request money</string>
+    <string name="request_money_from_my_label">From: Me</string>
+    <string name="request_money_from_label">From: %1$s</string>
+    <string name="request_money_ask_for_money_label">Ask for money</string>
+    <string name="request_money_ask_money_label">%1$s ask for money</string>
+    <string name="request_money_status_in_progress">In progress</string>
+    <string name="request_money_status_rejected">Reject</string>
+
+    <!-- Request filter -->
+    <string name="request_filter_show_label">Show:</string>
+    <string name="request_filter_show_all_label">Show All</string>
+    <string name="request_filter_show_incoming_label">Incoming</string>
+    <string name="request_filter_show_upcoming_label">Upcoming</string>
+    <string name="request_filter_type_label">Type:</string>
+    <string name="request_filter_type_all_label">Show All</string>
+    <string name="request_filter_type_in_progress_label">In progress</string>
+    <string name="request_filter_type_rejected_label">Reject</string>
+    <string name="request_filter_cancel_label">Cancel</string>
+    <string name="request_filter_done_label">Done</string>
 
 </resources>

@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import com.kora.android.R;
 import com.kora.android.presentation.model.TransactionEntity;
-import com.kora.android.presentation.ui.adapter.OnItemClickListener;
+import com.kora.android.presentation.ui.base.adapter.OnItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;

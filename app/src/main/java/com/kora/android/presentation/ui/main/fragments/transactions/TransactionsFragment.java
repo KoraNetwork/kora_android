@@ -14,13 +14,14 @@ import android.view.MenuItem;
 import com.kora.android.R;
 import com.kora.android.common.Keys;
 import com.kora.android.di.component.FragmentComponent;
-import com.kora.android.presentation.dto.TransactionFilterDto;
+import com.kora.android.presentation.ui.base.adapter.filter.OnFilterListener;
+import com.kora.android.presentation.ui.main.fragments.transactions.filter.TransactionFilterModel;
 import com.kora.android.presentation.model.TransactionEntity;
 import com.kora.android.presentation.ui.base.backstack.StackFragment;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
 import com.kora.android.presentation.ui.main.fragments.transactions.adapter.TransactionAdapter;
-import com.kora.android.presentation.ui.main.fragments.transactions.filter.FilterDialog;
-import com.kora.android.presentation.ui.adapter.RecyclerViewScrollListener;
+import com.kora.android.presentation.ui.main.fragments.transactions.filter.TransactionFilterDialog;
+import com.kora.android.presentation.ui.base.adapter.RecyclerViewScrollListener;
 import com.kora.android.views.DividerItemDecoration;
 
 import java.util.ArrayList;
@@ -30,14 +31,14 @@ import butterknife.BindView;
 
 public class TransactionsFragment extends StackFragment<TransactionsPresenter>
         implements TransactionsView, SwipeRefreshLayout.OnRefreshListener,
-        FilterDialog.OnClickListener {
+        OnFilterListener<TransactionFilterModel> {
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.transactions_list) RecyclerView mTransactionsList;
     @BindView(R.id.swipe_layout) SwipeRefreshLayout swipeRefreshLayout;
 
     private TransactionAdapter mTransactionAdapter;
-    private FilterDialog mFilterDialog;
+    private TransactionFilterDialog mTransactionFilterDialog;
 
     public static BaseFragment getNewInstance() {
         return new TransactionsFragment();
@@ -87,7 +88,7 @@ public class TransactionsFragment extends StackFragment<TransactionsPresenter>
         } else {
             ArrayList<TransactionEntity> transactions = savedInstanceState.getParcelableArrayList(Keys.Args.TRANSACTION_LIST);
             mTransactionAdapter.addItems(transactions);
-            TransactionFilterDto filter = savedInstanceState.getParcelable(Keys.Args.TRANSACTION_FILTER);
+            TransactionFilterModel filter = savedInstanceState.getParcelable(Keys.Args.TRANSACTION_FILTER);
             getPresenter().setFilter(filter);
         }
 
@@ -136,13 +137,13 @@ public class TransactionsFragment extends StackFragment<TransactionsPresenter>
 
     @Override
     public void openFilterDialog() {
-        if (mFilterDialog == null) {
-            mFilterDialog = FilterDialog.newInstance(new TransactionFilterDto());
-            mFilterDialog.setOnClickListener(this);
-        }  else if (mFilterDialog.isShowing()) {
-            mFilterDialog.dismiss();
+        if (mTransactionFilterDialog == null) {
+            mTransactionFilterDialog = TransactionFilterDialog.newInstance(new TransactionFilterModel());
+            mTransactionFilterDialog.setOnFilterListener(this);
+        }  else if (mTransactionFilterDialog.isShowing()) {
+            mTransactionFilterDialog.dismiss();
         }
-        mFilterDialog.show(getActivity().getSupportFragmentManager());
+        mTransactionFilterDialog.show(getActivity().getSupportFragmentManager());
 
     }
 
@@ -152,18 +153,12 @@ public class TransactionsFragment extends StackFragment<TransactionsPresenter>
     }
 
     @Override
-    public void onFilterChanged(TransactionFilterDto transactionFilterDto) {
+    public void onFilterChanged(TransactionFilterModel transactionFilterModel) {
         mTransactionAdapter.clearAll();
-        getPresenter().retrieveTransactions(transactionFilterDto, 0);
+        getPresenter().retrieveTransactions(transactionFilterModel, 0);
     }
 
     private final RecyclerViewScrollListener mScrollListener = new RecyclerViewScrollListener() {
-
-        @Override
-        public void onScrolled(final RecyclerView recyclerView, final int dx, final int dy) {
-            super.onScrolled(recyclerView, dx, dy);
-        }
-
         @Override
         public void onLoadMore(final int totalItemsCount) {
             getPresenter().retrieveTransactionsWithFilter(mTransactionAdapter.getItemCount());
