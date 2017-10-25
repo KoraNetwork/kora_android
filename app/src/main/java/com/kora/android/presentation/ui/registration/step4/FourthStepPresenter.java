@@ -105,10 +105,6 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
             getView().showIncorrectUserName();
             return;
         }
-        if (!StringUtils.isUserNameLongEnough(mUserEntity.getUserName())) {
-            getView().showTooShortUserName();
-            return;
-        }
         if (mUserEntity.getEmail() == null || mUserEntity.getEmail().isEmpty()) {
             getView().showEmptyEmail();
             return;
@@ -125,8 +121,8 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
             getView().showEmptyPassword();
             return;
         }
-        if (!StringUtils.isPasswordLongEnough(mUserEntity.getPassword())) {
-            getView().showTooShortPassword();
+        if (!StringUtils.isPasswordValid(mUserEntity.getPassword())) {
+            getView().showIncorrectPassword();
             return;
         }
         if (mConfirmPassword == null || mConfirmPassword.isEmpty()) {
@@ -216,8 +212,6 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
         public void onNext(@NonNull final List<String> transactionHashList) {
             if(!isViewAttached()) return;
             getView().showNextScreen();
-
-            Log.e("_____", transactionHashList.toString());
         }
 
         @Override

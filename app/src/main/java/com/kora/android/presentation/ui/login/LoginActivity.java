@@ -58,11 +58,6 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         mElIdentifier.setError(getString(R.string.login_identifier_incorrect));
     }
 
-    @Override
-    public void showTooShortIdentifier() {
-        mElIdentifier.setError(getString(R.string.login_identifier_too_short));
-    }
-
     @OnTextChanged(R.id.edit_text_password)
     void onChangedPassword(final CharSequence password) {
         mElPassword.setError(null);
@@ -72,11 +67,6 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     @Override
     public void showEmptyPassword() {
         mElPassword.setError(getString(R.string.login_password_empty));
-    }
-
-    @Override
-    public void showTooShortPassword() {
-        mElPassword.setError(getString(R.string.login_password_too_short));
     }
 
     @OnClick(R.id.card_view_login)

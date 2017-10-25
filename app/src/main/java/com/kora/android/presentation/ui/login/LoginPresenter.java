@@ -36,16 +36,8 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             getView().showIncorrectIdentifier();
             return;
         }
-        if (!StringUtils.isIdentifierLongEnough(mIdentifier)) {
-            getView().showTooShortIdentifier();
-            return;
-        }
         if (mPassword == null || mPassword.isEmpty()) {
             getView().showEmptyPassword();
-            return;
-        }
-        if (!StringUtils.isPasswordLongEnough(mPassword)) {
-            getView().showTooShortPassword();
             return;
         }
         mIdentifier = StringUtils.deletePlusIfNeeded(mIdentifier);
