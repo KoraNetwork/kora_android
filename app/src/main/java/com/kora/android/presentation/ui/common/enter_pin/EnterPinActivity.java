@@ -8,8 +8,9 @@ import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
 import com.kora.android.R;
+import com.kora.android.common.Keys;
 import com.kora.android.di.component.ActivityComponent;
-import com.kora.android.presentation.enums.TransactionType;
+import com.kora.android.presentation.enums.ActionType;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.main.MainActivity;
@@ -18,6 +19,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 
+import static com.kora.android.common.Keys.Args.ACTION_TYPE;
 import static com.kora.android.common.Keys.Args.RECEIVER_AMOUNT;
 import static com.kora.android.common.Keys.Args.SENDER_AMOUNT;
 import static com.kora.android.common.Keys.Args.TRANSACTION_TYPE;
@@ -38,16 +40,18 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
     @BindView(R.id.edit_text_pin_fourth_digit)
     TextInputEditText mEtPinFourthDigit;
 
+    private ActionType mActionType;
+
     public static Intent getLaunchIntent(final BaseActivity baseActivity,
                                          final UserEntity receiver,
                                          final double senderAmount,
                                          final double receiverAmount,
-                                         final TransactionType transactionType) {
+                                         final ActionType actionType) {
         final Intent intent = new Intent(baseActivity, EnterPinActivity.class);
         intent.putExtra(USER_ENTITY, receiver);
         intent.putExtra(SENDER_AMOUNT, senderAmount);
         intent.putExtra(RECEIVER_AMOUNT, receiverAmount);
-        intent.putExtra(TRANSACTION_TYPE, transactionType.toString());
+        intent.putExtra(Keys.Args.ACTION_TYPE, actionType);
         return intent;
     }
 
@@ -77,14 +81,14 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
                 getPresenter().setSenderAmount(bundle.getDouble(SENDER_AMOUNT));
             if (bundle.containsKey(RECEIVER_AMOUNT))
                 getPresenter().setReceiverAmount(bundle.getDouble(RECEIVER_AMOUNT));
-            if (bundle.containsKey(TRANSACTION_TYPE))
-                getPresenter().setTransactionType(bundle.getString(TRANSACTION_TYPE));
+            if (bundle.containsKey(ACTION_TYPE))
+                mActionType = (ActionType) bundle.getSerializable(ACTION_TYPE);
         }
         if (getIntent() != null) {
             getPresenter().setReceiver(getIntent().getParcelableExtra(USER_ENTITY));
             getPresenter().setSenderAmount(getIntent().getDoubleExtra(SENDER_AMOUNT, 0));
             getPresenter().setReceiverAmount(getIntent().getDoubleExtra(RECEIVER_AMOUNT, 0));
-            getPresenter().setTransactionType(getIntent().getStringExtra(TRANSACTION_TYPE));
+            mActionType = (ActionType) getIntent().getSerializableExtra(ACTION_TYPE);
         }
     }
 
@@ -94,7 +98,7 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
         outState.putParcelable(USER_ENTITY, getPresenter().getReceiver());
         outState.putDouble(SENDER_AMOUNT, getPresenter().getSenderAmount());
         outState.putDouble(RECEIVER_AMOUNT, getPresenter().getReceiverAmount());
-        outState.putString(TRANSACTION_TYPE, getPresenter().getTransactionType().toString());
+        outState.putSerializable(TRANSACTION_TYPE, mActionType);
     }
 
     @OnTextChanged(R.id.edit_text_pin_first_digit)
@@ -137,7 +141,7 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
                         mEtPinSecondDigit.getText().toString().trim() +
                         mEtPinThirdDigit.getText().toString().trim() +
                         mEtPinFourthDigit.getText().toString().trim();
-        getPresenter().startSendTransactionTask(pinCode);
+        getPresenter().startSendTransactionTask(pinCode, mActionType);
     }
 
     @Override

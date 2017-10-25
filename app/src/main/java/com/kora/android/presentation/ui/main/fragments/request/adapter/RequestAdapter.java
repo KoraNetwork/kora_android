@@ -58,6 +58,10 @@ public class RequestAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return mRequests;
     }
 
+    public RequestEntity getItemByPosition(int position) {
+        return mRequests.get(position);
+    }
+
     public void clearAll() {
         int size = mRequests.size();
         mRequests.clear();

@@ -12,11 +12,12 @@ import android.widget.TextView;
 import com.kora.android.R;
 import com.kora.android.common.Keys;
 import com.kora.android.di.component.ActivityComponent;
-import com.kora.android.presentation.enums.TransactionType;
+import com.kora.android.presentation.enums.ActionType;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.adapter.UserAdapter;
 import com.kora.android.presentation.ui.base.adapter.OnItemClickListener;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
+import com.kora.android.presentation.ui.base.view.ToolbarActivity;
 import com.kora.android.presentation.ui.common.add_contact.AddContactActivity;
 import com.kora.android.presentation.ui.common.send_to.SendMoneyActivity;
 
@@ -27,30 +28,35 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-import static com.kora.android.common.Keys.Args.TRANSACTION_TYPE;
-import static com.kora.android.presentation.enums.TransactionType.REQUEST;
+import static com.kora.android.common.Keys.Args.ACTION_TYPE;
 
-public class RecentActivity extends BaseActivity<RecentPresenter> implements RecentView,
+public class RecentActivity extends ToolbarActivity<RecentPresenter> implements RecentView,
         OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
-    @BindView(R.id.toolbar)
-    Toolbar mToolbar;
-    @BindView(R.id.text_view_toolbar_title)
-    TextView mTvToolbarTitle;
+    @BindView(R.id.toolbar) Toolbar mToolbar;
 
-    @BindView(R.id.user_list)
-    RecyclerView mUserList;
-    @BindView(R.id.swipe_layout)
-    SwipeRefreshLayout swipeRefreshLayout;
-    @BindView(R.id.text_add_new_contact)
-    TextView mAddContactButton;
+    @BindView(R.id.user_list) RecyclerView mUserList;
+    @BindView(R.id.swipe_layout) SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.text_add_new_contact) TextView mAddContactButton;
 
     private UserAdapter mUserAdapter;
 
+    private ActionType mActionType;
+
+    @Override
+    protected Toolbar getToolbar() {
+        return mToolbar;
+    }
+
+    @Override
+    protected int getTitleRes() {
+        return R.string.request_money_title;
+    }
+
     public static Intent getLaunchIntent(final BaseActivity baseActivity,
-                                         final TransactionType transactionType) {
+                                         final ActionType actionType) {
         final Intent intent = new Intent(baseActivity, RecentActivity.class);
-        intent.putExtra(TRANSACTION_TYPE, transactionType.toString());
+        intent.putExtra(ACTION_TYPE, actionType);
         return intent;
     }
 
@@ -66,7 +72,7 @@ public class RecentActivity extends BaseActivity<RecentPresenter> implements Rec
 
     @Override
     protected void onViewReady(final Bundle savedInstanceState) {
-        setToolbar(mToolbar, R.drawable.ic_back_white);
+        super.onViewReady(savedInstanceState);
 
         initArguments(savedInstanceState);
         initUI();
@@ -80,25 +86,24 @@ public class RecentActivity extends BaseActivity<RecentPresenter> implements Rec
     }
 
     private void initArguments(final Bundle bundle) {
-        if (bundle != null) {
-            if (bundle.containsKey(TRANSACTION_TYPE))
-                getPresenter().setTransactionType(bundle.getString(TRANSACTION_TYPE));
+        if (bundle != null && bundle.containsKey(ACTION_TYPE)) {
+            mActionType = (ActionType) bundle.getSerializable(ACTION_TYPE);
         }
         if (getIntent() != null) {
-            getPresenter().setTransactionType(getIntent().getStringExtra(TRANSACTION_TYPE));
+            mActionType = (ActionType) getIntent().getSerializableExtra(ACTION_TYPE);
         }
     }
 
     @Override
     protected void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(TRANSACTION_TYPE, getPresenter().getTransactionType().toString());
+        outState.putSerializable(ACTION_TYPE, mActionType);
         outState.putParcelableArrayList(Keys.Args.USER_LIST, (ArrayList<UserEntity>) mUserAdapter.getItems());
     }
 
     private void initUI() {
-        if (getPresenter().getTransactionType().equals(REQUEST))
-            mTvToolbarTitle.setText(R.string.request_money_title);
+        if (mActionType.equals(ActionType.CREATE_REQUEST))
+            setTitle(R.string.request_money_title);
 
         mUserAdapter = new UserAdapter();
         mUserAdapter.setOnUserClickListener(this);
@@ -120,12 +125,12 @@ public class RecentActivity extends BaseActivity<RecentPresenter> implements Rec
     public void onItemClicked(int position) {
         startActivity(SendMoneyActivity.getLaunchIntent(this,
                 mUserAdapter.getItem(position),
-                getPresenter().getTransactionType()));
+                mActionType));
     }
 
     @OnClick(R.id.text_add_new_contact)
     public void onAddContactClicked() {
-        startActivity(AddContactActivity.getLaunchIntent(this, getPresenter().getTransactionType()));
+        startActivity(AddContactActivity.getLaunchIntent(this, mActionType));
     }
 
     @Override

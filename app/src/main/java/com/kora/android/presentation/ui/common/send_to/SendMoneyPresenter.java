@@ -1,5 +1,6 @@
 package com.kora.android.presentation.ui.common.send_to;
 
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.kora.android.common.utils.Validator;
@@ -9,23 +10,21 @@ import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.DefaultDisposableObserver;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.usecase.request.AddToRequestsUseCase;
-import com.kora.android.domain.usecase.transaction.AddToTransactionsUseCase;
 import com.kora.android.domain.usecase.user.ConvertAmountUseCase;
 import com.kora.android.domain.usecase.user.GetUserDataUseCase;
 import com.kora.android.domain.usecase.user.SetAsRecentUseCase;
-import com.kora.android.presentation.enums.TransactionType;
+import com.kora.android.presentation.enums.Direction;
 import com.kora.android.presentation.model.RequestEntity;
-import com.kora.android.presentation.model.TransactionEntity;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
-import com.kora.android.presentation.ui.common.enter_pin.EnterPinPresenter;
 
 import javax.inject.Inject;
 
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Action;
-import io.reactivex.observers.DisposableObserver;
+
+import static com.kora.android.R.id.amount;
 
 @ConfigPersistent
 public class SendMoneyPresenter extends BasePresenter<SendMoneyView> {
@@ -37,8 +36,8 @@ public class SendMoneyPresenter extends BasePresenter<SendMoneyView> {
 
     private UserEntity mSender;
     private UserEntity mReceiver;
-
-    private TransactionType mTransactionType;
+    @Nullable
+    private RequestEntity mRequest;
 
     @Inject
     public SendMoneyPresenter(final GetUserDataUseCase getUserDataUseCase,
@@ -49,14 +48,6 @@ public class SendMoneyPresenter extends BasePresenter<SendMoneyView> {
         mConvertAmountUseCase = convertAmountUseCase;
         mSetAsRecentUseCase = setAsRecentUseCase;
         mAddToRequestsUseCase = addToRequestsUseCase;
-    }
-
-    public void setTransactionType(final String transactionType) {
-        mTransactionType = TransactionType.valueOf(transactionType);
-    }
-
-    public TransactionType getTransactionType() {
-        return mTransactionType;
     }
 
     public void getCurrentUser() {
@@ -74,6 +65,7 @@ public class SendMoneyPresenter extends BasePresenter<SendMoneyView> {
     public void setReceiver(UserEntity receiver) {
         mReceiver = receiver;
         if (!isViewAttached()) return;
+        if (receiver == null) return;
         getView().retrieveReceiver(receiver);
 
     }
@@ -81,10 +73,12 @@ public class SendMoneyPresenter extends BasePresenter<SendMoneyView> {
     public void setSender(UserEntity sender) {
         mSender = sender;
         if (!isViewAttached()) return;
+        if (sender == null) return;
         getView().retrieveSender(sender);
     }
 
     public void convertIfNeed(String amountString) {
+        if (mSender == null || mReceiver == null) return;
         double amount = Double.valueOf(amountString);
         if (mSender.getCurrency().equals(mReceiver.getCurrency())) {
             if (getView() == null) return;
@@ -95,32 +89,43 @@ public class SendMoneyPresenter extends BasePresenter<SendMoneyView> {
         mConvertAmountUseCase.execute(new ConvertSubscriber());
     }
 
-    public void sendOrRequest(String senderAmount, String receiverAmount, String additionalNote) {
+    public void sendMoney(String senderAmount, String receiverAmount, String additionalNote) {
 
-        if (Validator.isEmpty(senderAmount)) {
-            if (getView() == null) return;
-            getView().emptySenderAmountError();
-            return;
-        }
-        if (Validator.isEmpty(receiverAmount)) {
-            if (getView() == null) return;
-            getView().emptyReceiverAmountError();
-            return;
-        }
+        if (validateForm(senderAmount, receiverAmount)) return;
 
         Double sAmount = Double.valueOf(senderAmount);
         Double rAmount = Double.valueOf(receiverAmount);
 
-        if (mTransactionType.equals(TransactionType.SEND)) {
-            getView().openPinScreen(mReceiver, sAmount, rAmount);
-        } else if (mTransactionType.equals(TransactionType.REQUEST)) {
-            mAddToRequestsUseCase.setData(
-                    mReceiver.getId(),
-                    sAmount,
-                    rAmount,
-                    additionalNote);
-            mAddToRequestsUseCase.execute(new AddToRequestsSubscriber());
+        getView().openPinScreen(mReceiver, sAmount, rAmount);
+    }
+
+    private boolean validateForm(String senderAmount, String receiverAmount) {
+        if (Validator.isEmpty(senderAmount)) {
+            if (getView() == null) return true;
+            getView().emptySenderAmountError();
+            return true;
         }
+        if (Validator.isEmpty(receiverAmount)) {
+            if (getView() == null) return true;
+            getView().emptyReceiverAmountError();
+            return true;
+        }
+        return false;
+    }
+
+    public void sendRequest(String senderAmount, String receiverAmount, String additionalNote) {
+
+        if (validateForm(senderAmount, receiverAmount)) return;
+
+        Double sAmount = Double.valueOf(senderAmount);
+        Double rAmount = Double.valueOf(receiverAmount);
+
+        mAddToRequestsUseCase.setData(
+                mReceiver.getId(),
+                sAmount,
+                rAmount,
+                additionalNote);
+        mAddToRequestsUseCase.execute(new AddToRequestsSubscriber());
     }
 
     private Action mAddToRequestsAction = new Action() {
@@ -129,6 +134,23 @@ public class SendMoneyPresenter extends BasePresenter<SendMoneyView> {
             mAddToRequestsUseCase.execute(new AddToRequestsSubscriber());
         }
     };
+
+    public void setRequest(RequestEntity request) {
+        mRequest = request;
+        if (request == null) return;
+        if (mRequest.getDirection() == Direction.FROM) {
+            setReceiver(mRequest.getTo());
+            setSender(mRequest.getFrom());
+        } else {
+            setReceiver(mRequest.getFrom());
+            setSender(mRequest.getTo());
+        }
+
+    }
+
+    public RequestEntity getRequest() {
+        return mRequest;
+    }
 
     private class AddToRequestsSubscriber extends DefaultInternetSubscriber<RequestEntity> {
 
@@ -178,6 +200,7 @@ public class SendMoneyPresenter extends BasePresenter<SendMoneyView> {
     }
 
     public void setAsResent() {
+        if (mReceiver == null) return;
         mSetAsRecentUseCase.setData(mReceiver);
         mSetAsRecentUseCase.execute(new DefaultDisposableObserver());
     }

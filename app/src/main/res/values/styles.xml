@@ -67,4 +67,20 @@
         <item name="android:gravity">left|center_vertical</item>
     </style>
 
+    <style name="AppTheme.ActionButton" parent="Base.TextAppearance.AppCompat.Button">
+        <item name="android:layout_marginBottom">24dp</item>
+        <item name="android:layout_marginTop">24dp</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:textColor">@color/color_button_text_white</item>
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@string/font_name_muli_bold</item>
+    </style>
+
+    <style name="AppTheme.ActionButton.Blue">
+        <item name="android:background">@drawable/blue_button_background</item>
+    </style>
+
 </resources>

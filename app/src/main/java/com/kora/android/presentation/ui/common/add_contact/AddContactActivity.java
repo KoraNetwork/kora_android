@@ -13,7 +13,7 @@ import android.support.v7.widget.Toolbar;
 import com.kora.android.R;
 import com.kora.android.common.Keys;
 import com.kora.android.di.component.ActivityComponent;
-import com.kora.android.presentation.enums.TransactionType;
+import com.kora.android.presentation.enums.ActionType;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.adapter.UserAdapter;
 import com.kora.android.presentation.ui.base.adapter.OnItemClickListener;
@@ -28,7 +28,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnTextChanged;
 
-import static com.kora.android.common.Keys.Args.TRANSACTION_TYPE;
+import static com.kora.android.common.Keys.Args.ACTION_TYPE;
 
 public class AddContactActivity extends ToolbarActivity<AddContactPresenter> implements AddContactView,
         OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
@@ -44,10 +44,12 @@ public class AddContactActivity extends ToolbarActivity<AddContactPresenter> imp
 
     public UserAdapter mUserAdapter;
 
+    private ActionType mActionType;
+
     public static Intent getLaunchIntent(final BaseActivity baseActivity,
-                                         final TransactionType transactionType) {
+                                         final ActionType actionType) {
         final Intent intent = new Intent(baseActivity, AddContactActivity.class);
-        intent.putExtra(TRANSACTION_TYPE, transactionType.toString());
+        intent.putExtra(ACTION_TYPE, actionType);
         return intent;
     }
 
@@ -88,18 +90,18 @@ public class AddContactActivity extends ToolbarActivity<AddContactPresenter> imp
 
     private void initArguments(final Bundle bundle) {
         if (bundle != null) {
-            if (bundle.containsKey(TRANSACTION_TYPE))
-                getPresenter().setTransactionType(bundle.getString(TRANSACTION_TYPE));
+            if (bundle.containsKey(ACTION_TYPE))
+                mActionType = (ActionType) bundle.getSerializable(ACTION_TYPE);
         }
         if (getIntent() != null) {
-            getPresenter().setTransactionType(getIntent().getStringExtra(TRANSACTION_TYPE));
+            mActionType = (ActionType) getIntent().getSerializableExtra(ACTION_TYPE);
         }
     }
 
     @Override
     protected void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(TRANSACTION_TYPE, getPresenter().getTransactionType().toString());
+        outState.putSerializable(ACTION_TYPE, mActionType);
         outState.putParcelableArrayList(Keys.Args.USER_LIST, (ArrayList<UserEntity>) mUserAdapter.getItems());
     }
 
@@ -164,8 +166,7 @@ public class AddContactActivity extends ToolbarActivity<AddContactPresenter> imp
     @Override
     public void onItemClicked(int position) {
         startActivity(SendMoneyActivity.getLaunchIntent(this,
-                mUserAdapter.getItem(position),
-                getPresenter().getTransactionType()));
+                mUserAdapter.getItem(position), mActionType));
     }
 
     @Override

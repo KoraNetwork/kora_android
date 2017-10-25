@@ -11,6 +11,7 @@ import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.base.DefaultWeb3jSubscriber;
 import com.kora.android.domain.usecase.transaction.AddToTransactionsUseCase;
 import com.kora.android.domain.usecase.transaction.SendTransactionUseCase;
+import com.kora.android.presentation.enums.ActionType;
 import com.kora.android.presentation.enums.TransactionType;
 import com.kora.android.presentation.model.TransactionEntity;
 import com.kora.android.presentation.model.UserEntity;
@@ -24,15 +25,11 @@ import javax.inject.Inject;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Action;
 
-import static com.kora.android.presentation.enums.TransactionType.SEND;
-
 @ConfigPersistent
 public class EnterPinPresenter extends BasePresenter<EnterPinView> {
 
     private final SendTransactionUseCase mSendTransactionUseCase;
     private final AddToTransactionsUseCase mAddToTransactionsUseCase;
-
-    private TransactionType mTransactionType;
 
     private UserEntity mReceiver;
     private double mSenderAmount;
@@ -45,15 +42,7 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         mAddToTransactionsUseCase = addToTransactionsUseCase;
     }
 
-    public void setTransactionType(final String transactionType) {
-        mTransactionType = TransactionType.valueOf(transactionType);
-    }
-
-    public TransactionType getTransactionType() {
-        return mTransactionType;
-    }
-
-    public void startSendTransactionTask(final String pinCode) {
+    public void startSendTransactionTask(final String pinCode, ActionType actionType) {
         if (pinCode == null || pinCode.isEmpty()) {
             getView().showEmptyPinCode();
             return;
@@ -64,7 +53,7 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         }
 
         mSendTransactionUseCase.setData(pinCode, mReceiver, mSenderAmount, mReceiverAmount);
-        mSendTransactionUseCase.execute(new SendTransactionSubscriber());
+        mSendTransactionUseCase.execute(new SendTransactionSubscriber(actionType));
     }
 
     public void setReceiver(final UserEntity receiver) {
@@ -93,6 +82,12 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
 
     private class SendTransactionSubscriber extends DefaultWeb3jSubscriber<List<String>> {
 
+        private ActionType mActionType;
+
+        public SendTransactionSubscriber(ActionType actionType) {
+            mActionType = actionType;
+        }
+
         @Override
         protected void onStart() {
             if(!isViewAttached()) return;
@@ -102,7 +97,7 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         @Override
         public void onNext(@NonNull final List<String> transactionHashList) {
             if(!isViewAttached()) return;
-            startAddToTransactionsTask(transactionHashList);
+            startAddToTransactionsTask(transactionHashList, mActionType);
         }
 //
 //        @Override
@@ -128,14 +123,24 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         }
     }
 
-    public void startAddToTransactionsTask(final List<String> transactionHash) {
+    public void startAddToTransactionsTask(final List<String> transactionHash, ActionType actionType) {
         mAddToTransactionsUseCase.setData(
-                mTransactionType.toString().toLowerCase(),
+                getTransactionTypeByAction(actionType),
                 mReceiver.getId(),
                 mSenderAmount,
                 mReceiverAmount,
                 transactionHash);
         mAddToTransactionsUseCase.execute(new AddToTransactionsSubscriber());
+    }
+
+    private TransactionType getTransactionTypeByAction(ActionType actionType) {
+        switch (actionType) {
+            case CREATE_REQUEST:
+                return TransactionType.REQUEST;
+            case SEND_MONEY:
+                return TransactionType.SEND;
+        }
+        return null;
     }
 
     private Action mAddToTransactionsAction = new Action() {

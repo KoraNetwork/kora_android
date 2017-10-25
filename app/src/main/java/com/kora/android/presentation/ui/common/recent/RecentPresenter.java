@@ -5,7 +5,6 @@ import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.usecase.user.GetRecentUsersUseCase;
-import com.kora.android.presentation.enums.TransactionType;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
@@ -22,19 +21,9 @@ public class RecentPresenter extends BasePresenter<RecentView> {
 
     private final GetRecentUsersUseCase mGetRecentUsersUseCase;
 
-    private TransactionType mTransactionType;
-
     @Inject
     public RecentPresenter(final GetRecentUsersUseCase getRecentUsersUseCase) {
         mGetRecentUsersUseCase = getRecentUsersUseCase;
-    }
-
-    public void setTransactionType(final String transactionType) {
-        mTransactionType = TransactionType.valueOf(transactionType);
-    }
-
-    public TransactionType getTransactionType() {
-        return mTransactionType;
     }
 
     public void getUserList() {
