@@ -91,6 +91,7 @@ public interface Keys {
         String TRANSACTION_TYPE = "transaction_type_args";
         String REQUEST_LIST = "request_entity_args";
         String REQUEST_FILTER = "request_filter_args";
+        String ACTION_TYPE = "action_type_arg";
     }
 
     interface Users {

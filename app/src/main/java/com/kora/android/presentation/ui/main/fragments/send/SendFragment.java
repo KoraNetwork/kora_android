@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.kora.android.R;
 import com.kora.android.common.Keys;
 import com.kora.android.di.component.FragmentComponent;
-import com.kora.android.presentation.enums.TransactionType;
+import com.kora.android.presentation.enums.ActionType;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.adapter.UserAdapter;
 import com.kora.android.presentation.ui.base.adapter.OnItemClickListener;
@@ -73,10 +73,10 @@ public class SendFragment extends StackFragment<SendPresenter> implements SendVi
 
     @Override
     protected void onViewReady(final Bundle savedInstanceState) {
-            mUserList.setLayoutManager(new LinearLayoutManager(getActivity()));
-            mUserList.setAdapter(mUserAdapter);
-            mUserList.setItemAnimator(new DefaultItemAnimator());
-            swipeRefreshLayout.setOnRefreshListener(this);
+        mUserList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mUserList.setAdapter(mUserAdapter);
+        mUserList.setItemAnimator(new DefaultItemAnimator());
+        swipeRefreshLayout.setOnRefreshListener(this);
 
         if (savedInstanceState == null) {
             getPresenter().getUserList();
@@ -98,12 +98,12 @@ public class SendFragment extends StackFragment<SendPresenter> implements SendVi
     public void onItemClicked(int position) {
         startActivity(SendMoneyActivity.getLaunchIntent(getBaseActivity(),
                 mUserAdapter.getItem(position),
-                TransactionType.SEND));
+                ActionType.SEND_MONEY));
     }
 
     @OnClick(R.id.text_add_new_contact)
     public void onAddContactClicked() {
-        startActivity(AddContactActivity.getLaunchIntent(getBaseActivity(), TransactionType.SEND));
+        startActivity(AddContactActivity.getLaunchIntent(getBaseActivity(), ActionType.SEND_MONEY));
     }
 
     @Override

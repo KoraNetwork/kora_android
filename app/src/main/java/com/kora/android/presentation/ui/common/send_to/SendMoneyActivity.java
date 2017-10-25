@@ -9,7 +9,9 @@ import android.os.PersistableBundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -21,7 +23,7 @@ import com.kora.android.R;
 import com.kora.android.common.Keys;
 import com.kora.android.common.utils.ViewUtils;
 import com.kora.android.di.component.ActivityComponent;
-import com.kora.android.presentation.enums.TransactionType;
+import com.kora.android.presentation.enums.ActionType;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.base.view.ToolbarActivity;
@@ -33,7 +35,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 
-import static com.kora.android.common.Keys.Args.TRANSACTION_TYPE;
+import static com.kora.android.common.Keys.Args.ACTION_TYPE;
 import static com.kora.android.data.network.Constants.API_BASE_URL;
 
 public class SendMoneyActivity extends ToolbarActivity<SendMoneyPresenter> implements SendMoneyView {
@@ -48,8 +50,11 @@ public class SendMoneyActivity extends ToolbarActivity<SendMoneyPresenter> imple
     @BindView(R.id.edit_layout_amount) TextInputLayout mSenderAmountContainer;
     @BindView(R.id.edit_text_receiver_amount) TextInputEditText mReceiverAmount;
     @BindView(R.id.edit_layout_converted_amount) TextInputLayout mReceiverAmountContainer;
-    @BindView(R.id.text_view_send_request) TextView mTvSendRequest;
     @BindView(R.id.edit_text_additional) EditText mEtAdditional;
+    @BindView(R.id.card_view_send_money) CardView mSendMoneyButton;
+    @BindView(R.id.card_view_send_request) CardView mSendRequestButton;
+
+    private ActionType mActionType;
 
     @Override
     public int getLayoutResource() {
@@ -71,12 +76,10 @@ public class SendMoneyActivity extends ToolbarActivity<SendMoneyPresenter> imple
         return R.string.send_money_title;
     }
 
-    public static Intent getLaunchIntent(final BaseActivity baseActivity,
-                                         final UserEntity userEntity,
-                                         final TransactionType transactionType) {
+    public static Intent getLaunchIntent(final BaseActivity baseActivity, final UserEntity userEntity, final ActionType actionType) {
         final Intent intent = new Intent(baseActivity, SendMoneyActivity.class);
         intent.putExtra(Keys.Args.USER_ENTITY, userEntity);
-        intent.putExtra(TRANSACTION_TYPE, transactionType.toString());
+        intent.putExtra(ACTION_TYPE, actionType.name());
         return intent;
     }
 
@@ -98,12 +101,11 @@ public class SendMoneyActivity extends ToolbarActivity<SendMoneyPresenter> imple
     }
 
     private void initArguments(final Bundle bundle) {
-        if (bundle != null) {
-            if (bundle.containsKey(TRANSACTION_TYPE))
-                getPresenter().setTransactionType(bundle.getString(TRANSACTION_TYPE));
+        if (bundle != null && bundle.containsKey(ACTION_TYPE)) {
+            mActionType = ActionType.valueOf(bundle.getString(ACTION_TYPE));
         }
         if (getIntent() != null) {
-            getPresenter().setTransactionType(getIntent().getStringExtra(TRANSACTION_TYPE));
+            mActionType = ActionType.valueOf(getIntent().getStringExtra(ACTION_TYPE));
         }
     }
 
@@ -113,12 +115,20 @@ public class SendMoneyActivity extends ToolbarActivity<SendMoneyPresenter> imple
     }
 
     private void initUI() {
-        if (getPresenter().getTransactionType().equals(TransactionType.SEND)) {
-            setTitle(getString(R.string.send_money_send_title, getPresenter().getReceiver().getUserName()));
-            mTvSendRequest.setText(R.string.send_money_send_button_label);
-        } else if (getPresenter().getTransactionType().equals(TransactionType.REQUEST)) {
-            setTitle(getString(R.string.send_money_request_title, getPresenter().getReceiver().getUserName()));
-            mTvSendRequest.setText(R.string.send_money_request_button_label);
+        switch (mActionType) {
+            case CREATE_REQUEST:
+                setTitle(getString(R.string.send_money_request_title, getPresenter().getReceiver().getUserName()));
+                mSendMoneyButton.setVisibility(View.GONE);
+                mSendRequestButton.setVisibility(View.VISIBLE);
+                break;
+            case SEND_MONEY:
+                setTitle(getString(R.string.send_money_send_title, getPresenter().getReceiver().getUserName()));
+                mSendMoneyButton.setVisibility(View.VISIBLE);
+                mSendRequestButton.setVisibility(View.GONE);
+                break;
+            case SHOW_REQUEST:
+
+                break;
         }
     }
 
@@ -167,8 +177,7 @@ public class SendMoneyActivity extends ToolbarActivity<SendMoneyPresenter> imple
     @Override
     public void openPinScreen(UserEntity receiver, Double sAmount, Double rAmount) {
         startActivity(EnterPinActivity.getLaunchIntent(this,
-                receiver, sAmount, rAmount,
-                getPresenter().getTransactionType()));
+                receiver, sAmount, rAmount, mActionType));
     }
 
     @Override
@@ -206,9 +215,17 @@ public class SendMoneyActivity extends ToolbarActivity<SendMoneyPresenter> imple
         }
     };
 
+    @OnClick(R.id.card_view_send_money)
+    public void onSendMoneyClicked() {
+        getPresenter().sendMoney(
+                mSenderAmount.getText().toString().trim(),
+                mReceiverAmount.getText().toString().trim(),
+                mEtAdditional.getText().toString().trim());
+    }
+
     @OnClick(R.id.card_view_send_request)
-    public void onSendClicked() {
-        getPresenter().sendOrRequest(
+    public void onSendRequestClicked() {
+        getPresenter().sendRequest(
                 mSenderAmount.getText().toString().trim(),
                 mReceiverAmount.getText().toString().trim(),
                 mEtAdditional.getText().toString().trim());
@@ -222,6 +239,7 @@ public class SendMoneyActivity extends ToolbarActivity<SendMoneyPresenter> imple
         outState.putString(Keys.Args.SENDER_AMOUNT, mSenderAmount.getText().toString().trim());
         outState.putString(Keys.Args.RECEIVER_AMOUNT, mReceiverAmount.getText().toString().trim());
 
-        outState.putString(TRANSACTION_TYPE, getPresenter().getTransactionType().toString());
+        outState.putString(ACTION_TYPE, mActionType.toString());
     }
+
 }

@@ -13,14 +13,17 @@ import android.view.MenuItem;
 import com.kora.android.R;
 import com.kora.android.common.Keys;
 import com.kora.android.di.component.FragmentComponent;
-import com.kora.android.presentation.enums.TransactionType;
+import com.kora.android.presentation.enums.ActionType;
+import com.kora.android.presentation.enums.Direction;
 import com.kora.android.presentation.model.RequestEntity;
+import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.adapter.OnItemClickListener;
 import com.kora.android.presentation.ui.base.adapter.RecyclerViewScrollListener;
 import com.kora.android.presentation.ui.base.adapter.filter.OnFilterListener;
 import com.kora.android.presentation.ui.base.backstack.StackFragment;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
 import com.kora.android.presentation.ui.common.recent.RecentActivity;
+import com.kora.android.presentation.ui.common.send_to.SendMoneyActivity;
 import com.kora.android.presentation.ui.main.fragments.request.adapter.RequestAdapter;
 import com.kora.android.presentation.ui.main.fragments.request.filter.RequestFilterDialog;
 import com.kora.android.presentation.ui.main.fragments.request.filter.RequestFilterModel;
@@ -109,7 +112,7 @@ public class RequestFragment extends StackFragment<RequestPresenter> implements 
 
     @OnClick(R.id.floating_button_create_request)
     public void onClickCreateRequest() {
-        startActivity(RecentActivity.getLaunchIntent(getBaseActivity(), TransactionType.REQUEST));
+        startActivity(RecentActivity.getLaunchIntent(getBaseActivity(), ActionType.CREATE_REQUEST));
     }
 
     @Override
@@ -157,7 +160,9 @@ public class RequestFragment extends StackFragment<RequestPresenter> implements 
 
     @Override
     public void onItemClicked(int position) {
-
+        RequestEntity request = mRequestAdapter.getItemByPosition(position);
+        UserEntity userEntity = request.getDirection() == Direction.FROM ? request.getFrom() : request.getTo();
+        startActivity(SendMoneyActivity.getLaunchIntent(getBaseActivity(), userEntity, ActionType.SHOW_REQUEST));
     }
 
     @Override
