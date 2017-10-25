@@ -7,12 +7,13 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -59,15 +60,12 @@ public abstract class FilterDialog<T extends FilterModel> extends BottomSheetDia
 
         mUnbinder = ButterKnife.bind(this, contentView);
 
-        CoordinatorLayout.LayoutParams layoutParams =
-                (CoordinatorLayout.LayoutParams) ((View) contentView.getParent()).getLayoutParams();
-        CoordinatorLayout.Behavior behavior = layoutParams.getBehavior();
-        if (behavior != null && behavior instanceof BottomSheetBehavior) {
-            BottomSheetBehavior b = (BottomSheetBehavior) behavior;
-            b.setSkipCollapsed(true);
+        dialog.setOnShowListener(d -> {
+            BottomSheetDialog bottomSheetDialog = (BottomSheetDialog) d;
 
-            layoutParams.setBehavior(b);
-        }
+            FrameLayout bottomSheet = (FrameLayout) bottomSheetDialog.findViewById(android.support.design.R.id.design_bottom_sheet);
+            BottomSheetBehavior.from(bottomSheet).setState(BottomSheetBehavior.STATE_EXPANDED);
+        });
 
         onViewReady();
     }
