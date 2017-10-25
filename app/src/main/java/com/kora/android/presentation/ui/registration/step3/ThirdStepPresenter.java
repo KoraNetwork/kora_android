@@ -5,14 +5,10 @@ import android.util.Log;
 import com.kora.android.R;
 import com.kora.android.common.helper.RegistrationPrefHelper;
 import com.kora.android.common.utils.StringUtils;
-import com.kora.android.data.network.config.ErrorModel;
-import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.data.web3j.model.response.IdentityCreatedResponse;
-import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.base.DefaultWeb3jSubscriber;
 import com.kora.android.domain.usecase.identity.CreateIdentityUseCase;
 import com.kora.android.di.annotation.ConfigPersistent;
-import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
 
 import javax.inject.Inject;
@@ -20,11 +16,17 @@ import javax.inject.Inject;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Action;
 
+import static com.kora.android.presentation.ui.registration.step3.ThirdStepActivity.VIEW_MODE_CONFIRM;
+import static com.kora.android.presentation.ui.registration.step3.ThirdStepActivity.VIEW_MODE_ENTER;
+
 @ConfigPersistent
 public class ThirdStepPresenter  extends BasePresenter<ThirdStepView> {
 
     private final RegistrationPrefHelper mRegistrationPrefHelper;
     private final CreateIdentityUseCase mCreateIdentityUseCase;
+
+    private String mViewMode;
+    private String mPinCode;
 
     @Inject
     public ThirdStepPresenter(final RegistrationPrefHelper registrationPrefHelper,
@@ -42,9 +44,20 @@ public class ThirdStepPresenter  extends BasePresenter<ThirdStepView> {
             getView().showTooShortPinCode();
             return;
         }
-
-        mCreateIdentityUseCase.setData(pinCode);
-        mCreateIdentityUseCase.execute(new CreateIdentityUseCaseObserver());
+        switch (mViewMode) {
+            case VIEW_MODE_ENTER:
+                mPinCode = pinCode;
+                getView().showAnotherMode();
+                break;
+            case VIEW_MODE_CONFIRM:
+                if (!mPinCode.equals(pinCode)) {
+                    getView().showPinCodeDoesNotMatch();
+                    return;
+                }
+                mCreateIdentityUseCase.setData(pinCode);
+                mCreateIdentityUseCase.execute(new CreateIdentityUseCaseObserver());
+                break;
+        }
     }
 
     private Action mCreateIdentityAction = new Action() {
@@ -53,6 +66,14 @@ public class ThirdStepPresenter  extends BasePresenter<ThirdStepView> {
             mCreateIdentityUseCase.execute(new CreateIdentityUseCaseObserver());
         }
     };
+
+    public String getViewMode() {
+        return mViewMode;
+    }
+
+    public void setViewMode(String viewMode) {
+        mViewMode = viewMode;
+    }
 
     private class CreateIdentityUseCaseObserver extends DefaultWeb3jSubscriber<IdentityCreatedResponse> {
 

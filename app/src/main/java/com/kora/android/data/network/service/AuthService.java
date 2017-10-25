@@ -3,7 +3,6 @@ package com.kora.android.data.network.service;
 import com.kora.android.data.network.model.request.ConfirmationCodeRequest;
 import com.kora.android.data.network.model.request.LoginRequest;
 import com.kora.android.data.network.model.request.PhoneNumberRequest;
-import com.kora.android.data.network.model.response.ConfirmationCodeResponse;
 import com.kora.android.data.network.model.response.CountryResponse;
 import com.kora.android.data.network.model.response.LoginResponse;
 
@@ -30,7 +29,7 @@ public interface AuthService {
     Observable<Object> sendPhoneNumber(@Body final PhoneNumberRequest phoneNumberRequest);
 
     @POST("verificationCode/confirm/")
-    Observable<ConfirmationCodeResponse> sendConfirmationCode(@Body final ConfirmationCodeRequest confirmationCodeRequest);
+    Observable<Object> sendConfirmationCode(@Body final ConfirmationCodeRequest confirmationCodeRequest);
 
     @Multipart
     @POST("auth/register/")

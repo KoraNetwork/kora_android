@@ -11,7 +11,6 @@ import com.kora.android.common.utils.CommonUtils;
 import com.kora.android.common.utils.StringUtils;
 import com.kora.android.data.network.config.ErrorModel;
 import com.kora.android.data.network.exception.RetrofitException;
-import com.kora.android.data.network.model.response.ConfirmationCodeResponse;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.usecase.registration.SendConfirmationCodeUseCase;
 import com.kora.android.domain.usecase.registration.SendPhoneNumberUseCase;
@@ -113,7 +112,7 @@ public class SecondStepPresenter extends BasePresenter<SecondStepView> {
         this.mConfirmationCode = confirmationCode;
     }
 
-    private class SendConfirmationCodeObserver extends DefaultInternetSubscriber<ConfirmationCodeResponse> {
+    private class SendConfirmationCodeObserver extends DefaultInternetSubscriber<Object> {
 
         @Override
         protected void onStart() {
@@ -126,7 +125,6 @@ public class SecondStepPresenter extends BasePresenter<SecondStepView> {
             super.onError(e);
             if (!isViewAttached()) return;
             getView().showProgress(false);
-
         }
 
         @Override

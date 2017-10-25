@@ -7,7 +7,6 @@ import com.kora.android.common.preferences.PreferenceHandler;
 import com.kora.android.data.network.model.request.ConfirmationCodeRequest;
 import com.kora.android.data.network.model.request.LoginRequest;
 import com.kora.android.data.network.model.request.PhoneNumberRequest;
-import com.kora.android.data.network.model.response.ConfirmationCodeResponse;
 import com.kora.android.data.network.model.response.LoginResponse;
 import com.kora.android.data.network.model.response.UserResponse;
 import com.kora.android.data.network.service.AuthService;
@@ -81,7 +80,7 @@ public class AuthRepositoryImpl implements AuthRepository {
     }
 
     @Override
-    public Observable<ConfirmationCodeResponse> sendConfirmationCode(final String phoneNumber,
+    public Observable<Object> sendConfirmationCode(final String phoneNumber,
                                                                      final String confirmationCode) {
         final ConfirmationCodeRequest confirmationCodeRequest = new ConfirmationCodeRequest()
                 .addPhoneNumber(phoneNumber)

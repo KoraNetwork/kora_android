@@ -7,5 +7,9 @@ public interface ThirdStepView extends BaseView<ThirdStepPresenter> {
     void showEmptyPinCode();
     void showTooShortPinCode();
 
+    void showAnotherMode();
+
+    void showPinCodeDoesNotMatch();
+
     void showNextScreen();
 }

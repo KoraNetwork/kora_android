@@ -21,7 +21,7 @@
             android:layout_height="wrap_content">
 
             <com.kora.android.views.CustomTextView
-                android:id="@+id/text_view_create_pin_code"
+                android:id="@+id/text_view_create_confirm_pin_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -33,10 +33,10 @@
                 app:font="@string/font_name_muli_semi_bold" />
 
             <com.kora.android.views.CustomTextView
-                android:id="@+id/text_view_create_4_digit_pin_code"
+                android:id="@+id/text_view_create_confirm_4_digit_pin_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/text_view_create_pin_code"
+                android:layout_below="@+id/text_view_create_confirm_pin_code"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="6dp"
@@ -49,7 +49,7 @@
                 android:id="@+id/edit_layout_create_pin_code"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/text_view_create_4_digit_pin_code"
+                android:layout_below="@+id/text_view_create_confirm_4_digit_pin_code"
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
@@ -115,7 +115,7 @@
             </android.support.design.widget.TextInputLayout>
 
             <android.support.v7.widget.CardView
-                android:id="@+id/card_view_next"
+                android:id="@+id/card_view_next_finish"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edit_layout_create_pin_code"
@@ -136,7 +136,7 @@
                     android:layout_height="match_parent">
 
                     <com.kora.android.views.CustomTextView
-                        android:id="@+id/text_view_next"
+                        android:id="@+id/text_view_next_finish"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"

@@ -50,10 +50,14 @@
 
     <!-- Registration step 3 activity -->
     <string name="registration_create_pin_code">Create a PIN code</string>
+    <string name="registration_confirm_pin_code">Please confirm a PIN code</string>
     <string name="registration_create_4_digit_pin_code">Create a 4-digit PIN that you will use when making transactions</string>
+    <string name="registration_confirm_4_digit_pin_code">Confirm a 4-digit PIN that you will use when making transactions</string>
     <string name="registration_next">NEXT</string>
+    <string name="registration_finish">FINISH</string>
     <string name="registration_pin_code_empty">Pin code fields are empty</string>
     <string name="registration_pin_code_too_short">Pin code is too short</string>
+    <string name="registration_pin_code_does_not_match">Confirm pin code does not match to pin code</string>
     <string name="registration_creating_identity_wait">App is creating identity. Please wait for a while. Please do not exit the app.</string>
 
     <!-- Registration step 4 activity -->
