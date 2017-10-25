@@ -1,5 +1,6 @@
 package com.kora.android.presentation.ui.common.send_to;
 
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.kora.android.common.utils.Validator;
@@ -12,6 +13,7 @@ import com.kora.android.domain.usecase.request.AddToRequestsUseCase;
 import com.kora.android.domain.usecase.user.ConvertAmountUseCase;
 import com.kora.android.domain.usecase.user.GetUserDataUseCase;
 import com.kora.android.domain.usecase.user.SetAsRecentUseCase;
+import com.kora.android.presentation.enums.Direction;
 import com.kora.android.presentation.model.RequestEntity;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
@@ -21,6 +23,8 @@ import javax.inject.Inject;
 
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Action;
+
+import static com.kora.android.R.id.amount;
 
 @ConfigPersistent
 public class SendMoneyPresenter extends BasePresenter<SendMoneyView> {
@@ -32,6 +36,8 @@ public class SendMoneyPresenter extends BasePresenter<SendMoneyView> {
 
     private UserEntity mSender;
     private UserEntity mReceiver;
+    @Nullable
+    private RequestEntity mRequest;
 
     @Inject
     public SendMoneyPresenter(final GetUserDataUseCase getUserDataUseCase,
@@ -59,6 +65,7 @@ public class SendMoneyPresenter extends BasePresenter<SendMoneyView> {
     public void setReceiver(UserEntity receiver) {
         mReceiver = receiver;
         if (!isViewAttached()) return;
+        if (receiver == null) return;
         getView().retrieveReceiver(receiver);
 
     }
@@ -66,10 +73,12 @@ public class SendMoneyPresenter extends BasePresenter<SendMoneyView> {
     public void setSender(UserEntity sender) {
         mSender = sender;
         if (!isViewAttached()) return;
+        if (sender == null) return;
         getView().retrieveSender(sender);
     }
 
     public void convertIfNeed(String amountString) {
+        if (mSender == null || mReceiver == null) return;
         double amount = Double.valueOf(amountString);
         if (mSender.getCurrency().equals(mReceiver.getCurrency())) {
             if (getView() == null) return;
@@ -126,6 +135,23 @@ public class SendMoneyPresenter extends BasePresenter<SendMoneyView> {
         }
     };
 
+    public void setRequest(RequestEntity request) {
+        mRequest = request;
+        if (request == null) return;
+        if (mRequest.getDirection() == Direction.FROM) {
+            setReceiver(mRequest.getTo());
+            setSender(mRequest.getFrom());
+        } else {
+            setReceiver(mRequest.getFrom());
+            setSender(mRequest.getTo());
+        }
+
+    }
+
+    public RequestEntity getRequest() {
+        return mRequest;
+    }
+
     private class AddToRequestsSubscriber extends DefaultInternetSubscriber<RequestEntity> {
 
         @Override
@@ -174,6 +200,7 @@ public class SendMoneyPresenter extends BasePresenter<SendMoneyView> {
     }
 
     public void setAsResent() {
+        if (mReceiver == null) return;
         mSetAsRecentUseCase.setData(mReceiver);
         mSetAsRecentUseCase.execute(new DefaultDisposableObserver());
     }

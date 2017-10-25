@@ -158,6 +158,8 @@
 
     <!-- Send To Request From -->
     <string name="send_money_send_title" formatted="false">Send to %s</string>
+    <string name="send_money_request_from" formatted="false">Send for %s</string>
+    <string name="send_money_request_to" formatted="false">Ask for %s</string>
     <string name="send_money_request_title" formatted="false">Request from %s</string>
     <string name="send_money_amount_in_users_currency_label">Amount in users currency</string>
     <string name="converted_amount_value">%1$.2f</string>
@@ -167,6 +169,7 @@
     <string name="send_money_request_button_label">Request Now</string>
     <string name="empty_sender_amount_error">Amount should be not empty</string>
     <string name="empty_receiver_amount_error">Receiver amount should be not empty</string>
+    <string name="send_money_confirm_button_label">Confirm</string>
 
     <!-- Add contact activity -->
     <string name="add_contact_title">Add your contacts</string>

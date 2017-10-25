@@ -9,9 +9,8 @@ import android.os.PersistableBundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -24,6 +23,7 @@ import com.kora.android.common.Keys;
 import com.kora.android.common.utils.ViewUtils;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.enums.ActionType;
+import com.kora.android.presentation.model.RequestEntity;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.base.view.ToolbarActivity;
@@ -36,6 +36,7 @@ import butterknife.OnClick;
 import butterknife.OnTextChanged;
 
 import static com.kora.android.common.Keys.Args.ACTION_TYPE;
+import static com.kora.android.common.Keys.Args.REQUEST_ENTITY;
 import static com.kora.android.data.network.Constants.API_BASE_URL;
 
 public class SendMoneyActivity extends ToolbarActivity<SendMoneyPresenter> implements SendMoneyView {
@@ -51,8 +52,7 @@ public class SendMoneyActivity extends ToolbarActivity<SendMoneyPresenter> imple
     @BindView(R.id.edit_text_receiver_amount) TextInputEditText mReceiverAmount;
     @BindView(R.id.edit_layout_converted_amount) TextInputLayout mReceiverAmountContainer;
     @BindView(R.id.edit_text_additional) EditText mEtAdditional;
-    @BindView(R.id.card_view_send_money) CardView mSendMoneyButton;
-    @BindView(R.id.card_view_send_request) CardView mSendRequestButton;
+    @BindView(R.id.action_button) Button mActionButton;
 
     private ActionType mActionType;
 
@@ -79,7 +79,14 @@ public class SendMoneyActivity extends ToolbarActivity<SendMoneyPresenter> imple
     public static Intent getLaunchIntent(final BaseActivity baseActivity, final UserEntity userEntity, final ActionType actionType) {
         final Intent intent = new Intent(baseActivity, SendMoneyActivity.class);
         intent.putExtra(Keys.Args.USER_ENTITY, userEntity);
-        intent.putExtra(ACTION_TYPE, actionType.name());
+        intent.putExtra(ACTION_TYPE, actionType);
+        return intent;
+    }
+
+    public static Intent getLaunchIntent(final BaseActivity baseActivity, final RequestEntity requestEntity) {
+        final Intent intent = new Intent(baseActivity, SendMoneyActivity.class);
+        intent.putExtra(REQUEST_ENTITY, requestEntity);
+        intent.putExtra(ACTION_TYPE, ActionType.SHOW_REQUEST);
         return intent;
     }
 
@@ -89,12 +96,8 @@ public class SendMoneyActivity extends ToolbarActivity<SendMoneyPresenter> imple
         initArguments(savedInstanceState);
 
         if (savedInstanceState == null) {
-            initArguments();
             getPresenter().getCurrentUser();
             getPresenter().setAsResent();
-        } else {
-            getPresenter().setReceiver(savedInstanceState.getParcelable(Keys.Args.USER_RECEIVER));
-            getPresenter().setSender(savedInstanceState.getParcelable(Keys.Args.USER_SENDER));
         }
 
         initUI();
@@ -102,34 +105,68 @@ public class SendMoneyActivity extends ToolbarActivity<SendMoneyPresenter> imple
 
     private void initArguments(final Bundle bundle) {
         if (bundle != null && bundle.containsKey(ACTION_TYPE)) {
-            mActionType = ActionType.valueOf(bundle.getString(ACTION_TYPE));
+            mActionType = (ActionType) bundle.getSerializable(ACTION_TYPE);
         }
-        if (getIntent() != null) {
-            mActionType = ActionType.valueOf(getIntent().getStringExtra(ACTION_TYPE));
+        if (bundle != null && bundle.containsKey(REQUEST_ENTITY)) {
+            RequestEntity request = bundle.getParcelable(REQUEST_ENTITY);
+            getPresenter().setRequest(request);
+        } if (bundle != null && bundle.containsKey(Keys.Args.USER_RECEIVER)) {
+            getPresenter().setReceiver(bundle.getParcelable(Keys.Args.USER_RECEIVER));
+        }if (bundle != null && bundle.containsKey(Keys.Args.USER_SENDER)) {
+            getPresenter().setSender(bundle.getParcelable(Keys.Args.USER_SENDER));
         }
-    }
 
-    private void initArguments() {
-        UserEntity user = getIntent().getParcelableExtra(Keys.Args.USER_ENTITY);
-        getPresenter().setReceiver(user);
+        if (getIntent() != null) {
+            mActionType = (ActionType) getIntent().getSerializableExtra(ACTION_TYPE);
+            getPresenter().setRequest(getIntent().getParcelableExtra(REQUEST_ENTITY));
+            getPresenter().setReceiver(getIntent().getParcelableExtra(Keys.Args.USER_ENTITY));
+        }
     }
 
     private void initUI() {
         switch (mActionType) {
             case CREATE_REQUEST:
                 setTitle(getString(R.string.send_money_request_title, getPresenter().getReceiver().getUserName()));
-                mSendMoneyButton.setVisibility(View.GONE);
-                mSendRequestButton.setVisibility(View.VISIBLE);
+                mActionButton.setText(R.string.send_money_request_button_label);
                 break;
             case SEND_MONEY:
                 setTitle(getString(R.string.send_money_send_title, getPresenter().getReceiver().getUserName()));
-                mSendMoneyButton.setVisibility(View.VISIBLE);
-                mSendRequestButton.setVisibility(View.GONE);
+                mActionButton.setText(R.string.send_money_send_button_label);
                 break;
             case SHOW_REQUEST:
-
+                RequestEntity request = getPresenter().getRequest();
+                if (request == null) return;
+                switch (request.getDirection()) {
+                    case FROM:
+                        setTitle(getString(R.string.send_money_request_from, request.getTo().getFullName()));
+                        break;
+                    case TO:
+                        setTitle(getString(R.string.send_money_request_to, request.getFrom().getFullName()));
+                        break;
+                }
+                mEtAdditional.setEnabled(false);
+                mEtAdditional.setText(request.getAdditionalNote());
+                mReceiverAmount.setEnabled(false);
+//                mReceiverAmount.setText(String.format(Locale.ENGLISH, "%1$.2f", request.getToAmount()));
+//                mHisSuffixText.setText(request.getTo().getCurrency());
+                mSenderAmount.setEnabled(false);
+//                mSenderAmount.setText(String.format(Locale.ENGLISH, "%1$.2f", request.getFromAmount()));
+//                mActionButton.setText(R.string.send_money_confirm_button_label);
                 break;
         }
+    }
+
+    private void showReceiverCurrencyFlag(UserEntity userEntity) {
+        Glide.with(this)
+                .asBitmap()
+                .load(API_BASE_URL + userEntity.getFlag())
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                        mReceiverAmount.setCompoundDrawablesRelativeWithIntrinsicBounds(new BitmapDrawable(getResources(), resource), null, null, null);
+                        mReceiverAmount.setCompoundDrawablePadding(ViewUtils.convertDpToPixel(12));
+                    }
+                });
     }
 
     public void retrieveReceiver(UserEntity user) {
@@ -145,16 +182,7 @@ public class SendMoneyActivity extends ToolbarActivity<SendMoneyPresenter> imple
                         .load(R.drawable.ic_user_default))
                 .into(mUserImage);
 
-        Glide.with(this)
-                .asBitmap()
-                .load(API_BASE_URL + user.getFlag())
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                        mReceiverAmount.setCompoundDrawablesRelativeWithIntrinsicBounds(new BitmapDrawable(getResources(), resource), null, null, null);
-                        mReceiverAmount.setCompoundDrawablePadding(ViewUtils.convertDpToPixel(12));
-                    }
-                });
+        showReceiverCurrencyFlag(user);
 
     }
 
@@ -215,20 +243,26 @@ public class SendMoneyActivity extends ToolbarActivity<SendMoneyPresenter> imple
         }
     };
 
-    @OnClick(R.id.card_view_send_money)
-    public void onSendMoneyClicked() {
-        getPresenter().sendMoney(
-                mSenderAmount.getText().toString().trim(),
-                mReceiverAmount.getText().toString().trim(),
-                mEtAdditional.getText().toString().trim());
-    }
+    @OnClick(R.id.action_button)
+    public void onActionButtonClicked() {
+        switch (mActionType) {
+            case CREATE_REQUEST:
+                getPresenter().sendRequest(
+                        mSenderAmount.getText().toString().trim(),
+                        mReceiverAmount.getText().toString().trim(),
+                        mEtAdditional.getText().toString().trim());
+                break;
+            case SEND_MONEY:
+                getPresenter().sendMoney(
+                        mSenderAmount.getText().toString().trim(),
+                        mReceiverAmount.getText().toString().trim(),
+                        mEtAdditional.getText().toString().trim());
+                break;
+            case SHOW_REQUEST:
 
-    @OnClick(R.id.card_view_send_request)
-    public void onSendRequestClicked() {
-        getPresenter().sendRequest(
-                mSenderAmount.getText().toString().trim(),
-                mReceiverAmount.getText().toString().trim(),
-                mEtAdditional.getText().toString().trim());
+                break;
+        }
+
     }
 
     @Override
@@ -239,7 +273,8 @@ public class SendMoneyActivity extends ToolbarActivity<SendMoneyPresenter> imple
         outState.putString(Keys.Args.SENDER_AMOUNT, mSenderAmount.getText().toString().trim());
         outState.putString(Keys.Args.RECEIVER_AMOUNT, mReceiverAmount.getText().toString().trim());
 
-        outState.putString(ACTION_TYPE, mActionType.toString());
+        outState.putSerializable(ACTION_TYPE, mActionType);
+        outState.putParcelable(REQUEST_ENTITY, getPresenter().getRequest());
     }
 
 }

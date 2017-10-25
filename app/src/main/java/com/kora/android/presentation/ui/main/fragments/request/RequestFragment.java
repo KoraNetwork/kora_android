@@ -14,9 +14,7 @@ import com.kora.android.R;
 import com.kora.android.common.Keys;
 import com.kora.android.di.component.FragmentComponent;
 import com.kora.android.presentation.enums.ActionType;
-import com.kora.android.presentation.enums.Direction;
 import com.kora.android.presentation.model.RequestEntity;
-import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.adapter.OnItemClickListener;
 import com.kora.android.presentation.ui.base.adapter.RecyclerViewScrollListener;
 import com.kora.android.presentation.ui.base.adapter.filter.OnFilterListener;
@@ -161,8 +159,7 @@ public class RequestFragment extends StackFragment<RequestPresenter> implements 
     @Override
     public void onItemClicked(int position) {
         RequestEntity request = mRequestAdapter.getItemByPosition(position);
-        UserEntity userEntity = request.getDirection() == Direction.FROM ? request.getFrom() : request.getTo();
-        startActivity(SendMoneyActivity.getLaunchIntent(getBaseActivity(), userEntity, ActionType.SHOW_REQUEST));
+        startActivity(SendMoneyActivity.getLaunchIntent(getBaseActivity(), request));
     }
 
     @Override
