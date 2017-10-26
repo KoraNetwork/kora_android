@@ -1,13 +1,16 @@
 package com.kora.android.data.network.service;
 
+import com.kora.android.data.network.model.request.DeleteRequestRequest;
 import com.kora.android.data.network.model.request.RequestRequest;
 import com.kora.android.data.network.model.response.RequestListResponse;
 import com.kora.android.data.network.model.response.RequestResponse;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface RequestService {
@@ -20,4 +23,8 @@ public interface RequestService {
                                                    @Query("state") String state,
                                                    @Query("skip") int skip,
                                                    @Query("limit") int itemsPerPage);
+
+    @DELETE("requests/{requestId}")
+    Observable<Object> deleteRequest(@Path("requestId") String requestId,
+                                     @Body final DeleteRequestRequest deleteRequestRequest);
 }

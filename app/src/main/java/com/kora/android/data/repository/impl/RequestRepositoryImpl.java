@@ -1,5 +1,6 @@
 package com.kora.android.data.repository.impl;
 
+import com.kora.android.data.network.model.request.DeleteRequestRequest;
 import com.kora.android.data.network.model.request.RequestRequest;
 import com.kora.android.data.network.service.RequestService;
 import com.kora.android.data.repository.RequestRepository;
@@ -45,5 +46,17 @@ public class RequestRepositoryImpl implements RequestRepository {
     public Observable<List<RequestEntity>> getRequestList(RequestFilterModel requestFilterModel, int skip, int itemsPerPage) {
         return mRequestService.getRequestList(requestFilterModel.getDirectionAsStrings(), requestFilterModel.getStateAsStrings(), skip, itemsPerPage)
                 .compose(mRequestMapper.transformRequestResponseListToEntityList());
+    }
+
+    @Override
+    public Observable<Object> deleteRequest(final String requestId,
+                                            final double fromAmount,
+                                            final double toAmount,
+                                            final List<String> transactionHash) {
+        final DeleteRequestRequest deleteRequestRequest = new DeleteRequestRequest()
+                .addFromAmount(fromAmount)
+                .addToAmount(toAmount)
+                .addTransactionHash(transactionHash);
+        return mRequestService.deleteRequest(requestId, deleteRequestRequest);
     }
 }

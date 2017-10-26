@@ -15,4 +15,9 @@ public interface RequestRepository {
                                             final String additionalNote);
 
     Observable<List<RequestEntity>> getRequestList(RequestFilterModel requestFilterModel, int skip, int itemsPerPage);
+
+    Observable<Object> deleteRequest(final String requestId,
+                                     final double fromAmount,
+                                     final double toAmount,
+                                     final List<String> transactionHash);
 }

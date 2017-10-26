@@ -5,10 +5,10 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.widget.Toast;
 
 import com.kora.android.R;
-import com.kora.android.common.Keys;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.enums.ActionType;
 import com.kora.android.presentation.model.UserEntity;
@@ -21,6 +21,7 @@ import butterknife.OnTextChanged;
 
 import static com.kora.android.common.Keys.Args.ACTION_TYPE;
 import static com.kora.android.common.Keys.Args.RECEIVER_AMOUNT;
+import static com.kora.android.common.Keys.Args.REQUEST_ID;
 import static com.kora.android.common.Keys.Args.SENDER_AMOUNT;
 import static com.kora.android.common.Keys.Args.TRANSACTION_TYPE;
 import static com.kora.android.common.Keys.Args.USER_ENTITY;
@@ -51,7 +52,22 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
         intent.putExtra(USER_ENTITY, receiver);
         intent.putExtra(SENDER_AMOUNT, senderAmount);
         intent.putExtra(RECEIVER_AMOUNT, receiverAmount);
-        intent.putExtra(Keys.Args.ACTION_TYPE, actionType);
+        intent.putExtra(ACTION_TYPE, actionType);
+        return intent;
+    }
+
+    public static Intent getLaunchIntent(final BaseActivity baseActivity,
+                                         final UserEntity receiver,
+                                         final double senderAmount,
+                                         final double receiverAmount,
+                                         final ActionType actionType,
+                                         final String requestId) {
+        final Intent intent = new Intent(baseActivity, EnterPinActivity.class);
+        intent.putExtra(USER_ENTITY, receiver);
+        intent.putExtra(SENDER_AMOUNT, senderAmount);
+        intent.putExtra(RECEIVER_AMOUNT, receiverAmount);
+        intent.putExtra(ACTION_TYPE, actionType);
+        intent.putExtra(REQUEST_ID, requestId);
         return intent;
     }
 
@@ -83,12 +99,15 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
                 getPresenter().setReceiverAmount(bundle.getDouble(RECEIVER_AMOUNT));
             if (bundle.containsKey(ACTION_TYPE))
                 mActionType = (ActionType) bundle.getSerializable(ACTION_TYPE);
+            if (bundle.containsKey(REQUEST_ID))
+                getPresenter().setRequestId(bundle.getString(REQUEST_ID));
         }
         if (getIntent() != null) {
             getPresenter().setReceiver(getIntent().getParcelableExtra(USER_ENTITY));
             getPresenter().setSenderAmount(getIntent().getDoubleExtra(SENDER_AMOUNT, 0));
             getPresenter().setReceiverAmount(getIntent().getDoubleExtra(RECEIVER_AMOUNT, 0));
             mActionType = (ActionType) getIntent().getSerializableExtra(ACTION_TYPE);
+            getPresenter().setRequestId(getIntent().getStringExtra(REQUEST_ID));
         }
     }
 
@@ -99,24 +118,28 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
         outState.putDouble(SENDER_AMOUNT, getPresenter().getSenderAmount());
         outState.putDouble(RECEIVER_AMOUNT, getPresenter().getReceiverAmount());
         outState.putSerializable(TRANSACTION_TYPE, mActionType);
+        outState.putString(REQUEST_ID, getPresenter().getRequestId());
     }
 
     @OnTextChanged(R.id.edit_text_pin_first_digit)
-    void onChangedPinFirstDigit() {
+    void onChangedPinFirstDigit(final Editable editable) {
         mElCreatePinCode.setError(null);
-        mEtPinSecondDigit.requestFocus();
+        if (editable.toString().length() == 1)
+            mEtPinSecondDigit.requestFocus();
     }
 
     @OnTextChanged(R.id.edit_text_pin_second_digit)
-    void onChangedPinSecondDigit() {
+    void onChangedPinSecondDigit(final Editable editable) {
         mElCreatePinCode.setError(null);
-        mEtPinThirdDigit.requestFocus();
+        if (editable.toString().length() == 1)
+            mEtPinThirdDigit.requestFocus();
     }
 
     @OnTextChanged(R.id.edit_text_pin_third_digit)
-    void onChangedPinThirdDigit() {
+    void onChangedPinThirdDigit(final Editable editable) {
         mElCreatePinCode.setError(null);
-        mEtPinFourthDigit.requestFocus();
+        if (editable.toString().length() == 1)
+            mEtPinFourthDigit.requestFocus();
     }
 
     @OnTextChanged(R.id.edit_text_pin_fourth_digit)
