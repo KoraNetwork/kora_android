@@ -254,5 +254,7 @@
     <string name="borrow_borrow_amount_value">%s USD</string>
     <string name="borrow_borrow_start_date">Start date</string>
     <string name="borrow_borrow_maturity_date">Maturity date</string>
+    <string name="borrow_borrow_additional_note">Additional note</string>
+    <string name="borrow_borrow_borrow_now">BORROW NOW</string>
 
 </resources>
