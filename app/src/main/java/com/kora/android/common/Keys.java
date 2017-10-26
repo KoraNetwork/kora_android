@@ -76,6 +76,8 @@ public interface Keys {
         String EXTRA_CURRENT_TAB = "com.kora.android.extra_current_tab";
         String EXTRA_ACTION = "com.kora.android.extra_action";
         String EXTRA_REQUEST_ENTITY = "com.kora.android.extra_request_entity";
+        String EXTRA_USER = "com.kora.android.extra_user";
+        String TITLE = "com.kora.android.extra_title";
     }
 
     interface Args {

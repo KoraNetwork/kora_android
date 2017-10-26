@@ -79,4 +79,21 @@ public class RequestAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
         }
     }
+
+    public void deleteItemById(String id) {
+        for (RequestEntity entity : mRequests) {
+            if (Objects.equals(id, entity.getId())) {
+                int position = mRequests.indexOf(entity);
+               mRequests.remove(position);
+                notifyItemRemoved(position);
+                return;
+            }
+        }
+
+    }
+
+    public void addItem(RequestEntity request) {
+        mRequests.add(0, request);
+        notifyItemInserted(0);
+    }
 }

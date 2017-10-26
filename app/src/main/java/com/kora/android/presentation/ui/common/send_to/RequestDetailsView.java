@@ -20,4 +20,6 @@ public interface RequestDetailsView extends BaseView<RequestDetailsPresenter> {
     void onConfirmClicked();
 
     void onUserRejected(RequestEntity requestEntity);
+
+    void onRequestSend(RequestEntity requestEntity);
 }

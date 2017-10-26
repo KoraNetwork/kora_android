@@ -13,22 +13,19 @@ import android.support.v7.widget.Toolbar;
 import com.kora.android.R;
 import com.kora.android.common.Keys;
 import com.kora.android.di.component.ActivityComponent;
-import com.kora.android.presentation.enums.ActionType;
+import com.kora.android.presentation.enums.Action;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.adapter.UserAdapter;
 import com.kora.android.presentation.ui.base.adapter.OnItemClickListener;
 import com.kora.android.presentation.ui.base.adapter.RecyclerViewScrollListener;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.base.view.ToolbarActivity;
-import com.kora.android.presentation.ui.common.send_to.RequestDetailsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnTextChanged;
-
-import static com.kora.android.common.Keys.Args.ACTION_TYPE;
 
 public class AddContactActivity extends ToolbarActivity<AddContactPresenter> implements AddContactView,
         OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
@@ -44,12 +41,8 @@ public class AddContactActivity extends ToolbarActivity<AddContactPresenter> imp
 
     public UserAdapter mUserAdapter;
 
-    private ActionType mActionType;
-
-    public static Intent getLaunchIntent(final BaseActivity baseActivity,
-                                         final ActionType actionType) {
+    public static Intent getLaunchIntent(final BaseActivity baseActivity) {
         final Intent intent = new Intent(baseActivity, AddContactActivity.class);
-        intent.putExtra(ACTION_TYPE, actionType);
         return intent;
     }
 
@@ -89,19 +82,19 @@ public class AddContactActivity extends ToolbarActivity<AddContactPresenter> imp
     }
 
     private void initArguments(final Bundle bundle) {
-        if (bundle != null) {
-            if (bundle.containsKey(ACTION_TYPE))
-                mActionType = (ActionType) bundle.getSerializable(ACTION_TYPE);
-        }
-        if (getIntent() != null) {
-            mActionType = (ActionType) getIntent().getSerializableExtra(ACTION_TYPE);
-        }
+//        if (bundle != null) {
+//            if (bundle.containsKey(ACTION_TYPE))
+//                mActionType = (ActionType) bundle.getSerializable(ACTION_TYPE);
+//        }
+//        if (getIntent() != null) {
+//            mActionType = (ActionType) getIntent().getSerializableExtra(ACTION_TYPE);
+//        }
     }
 
     @Override
     protected void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(ACTION_TYPE, mActionType);
+//        outState.putSerializable(ACTION_TYPE, mActionType);
         outState.putParcelableArrayList(Keys.Args.USER_LIST, (ArrayList<UserEntity>) mUserAdapter.getItems());
     }
 
@@ -165,8 +158,11 @@ public class AddContactActivity extends ToolbarActivity<AddContactPresenter> imp
 
     @Override
     public void onItemClicked(int position) {
-        startActivity(RequestDetailsActivity.getLaunchIntent(this,
-                mUserAdapter.getItem(position), mActionType));
+        Intent intent = new Intent();
+        intent.putExtra(Keys.Extras.EXTRA_ACTION, Action.CREATE);
+        intent.putExtra(Keys.Extras.EXTRA_USER, mUserAdapter.getItem(position));
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     @Override

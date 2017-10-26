@@ -1,7 +1,6 @@
 package com.kora.android.presentation.ui.common.send_to;
 
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.kora.android.common.utils.Validator;
 import com.kora.android.data.network.config.ErrorModel;
@@ -191,8 +190,7 @@ public class RequestDetailsPresenter extends BasePresenter<RequestDetailsView> {
         @Override
         public void onNext(@NonNull final RequestEntity requestEntity) {
             if (!isViewAttached()) return;
-
-            Log.e("_____", requestEntity.toString());
+            getView().onRequestSend(requestEntity);
         }
 
         @Override

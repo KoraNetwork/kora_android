@@ -1,5 +1,6 @@
 package com.kora.android.presentation.ui.main.fragments.send;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -28,9 +29,13 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static android.app.Activity.RESULT_OK;
+
 public class SendFragment extends StackFragment<SendPresenter> implements SendView,
         OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
+    private static final int REQUEST_CREATE = 555;
+    private static final int REQUEST_GET_CONTACT = 556;
     @BindView(R.id.toolbar) Toolbar mToolbar;
 
     @BindView(R.id.user_list) RecyclerView mUserList;
@@ -96,14 +101,31 @@ public class SendFragment extends StackFragment<SendPresenter> implements SendVi
 
     @Override
     public void onItemClicked(int position) {
-        startActivity(RequestDetailsActivity.getLaunchIntent(getBaseActivity(),
-                mUserAdapter.getItem(position),
-                ActionType.SEND_MONEY));
+        startActivityForResult(RequestDetailsActivity.getLaunchIntent(getBaseActivity(),
+                mUserAdapter.getItem(position), ActionType.SEND_MONEY), REQUEST_CREATE);
     }
 
     @OnClick(R.id.text_add_new_contact)
     public void onAddContactClicked() {
-        startActivity(AddContactActivity.getLaunchIntent(getBaseActivity(), ActionType.SEND_MONEY));
+        startActivityForResult(AddContactActivity.getLaunchIntent(getBaseActivity()), REQUEST_GET_CONTACT);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_CREATE:
+
+                    break;
+
+                case REQUEST_GET_CONTACT:
+                    UserEntity user = data.getParcelableExtra(Keys.Extras.EXTRA_USER);
+                    startActivityForResult(RequestDetailsActivity.getLaunchIntent(getBaseActivity(),
+                            user, ActionType.SEND_MONEY), REQUEST_CREATE);
+                    break;
+            }
+        }
     }
 
     @Override

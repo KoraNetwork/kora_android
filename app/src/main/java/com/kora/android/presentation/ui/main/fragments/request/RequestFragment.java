@@ -16,7 +16,9 @@ import com.kora.android.common.Keys;
 import com.kora.android.di.component.FragmentComponent;
 import com.kora.android.presentation.enums.Action;
 import com.kora.android.presentation.enums.ActionType;
+import com.kora.android.presentation.enums.RequestState;
 import com.kora.android.presentation.model.RequestEntity;
+import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.adapter.OnItemClickListener;
 import com.kora.android.presentation.ui.base.adapter.RecyclerViewScrollListener;
 import com.kora.android.presentation.ui.base.adapter.filter.OnFilterListener;
@@ -40,7 +42,8 @@ import static android.app.Activity.RESULT_OK;
 public class RequestFragment extends StackFragment<RequestPresenter> implements RequestView,
         SwipeRefreshLayout.OnRefreshListener, OnItemClickListener, OnFilterListener<RequestFilterModel> {
 
-    private static final int RESULT_DETAILS = 521;
+    private static final int REQUEST_DETAILS = 521;
+    private static final int REQUEST_CREATE = 522;
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.request_list) RecyclerView mRequestList;
     @BindView(R.id.swipe_layout) SwipeRefreshLayout swipeRefreshLayout;
@@ -115,7 +118,7 @@ public class RequestFragment extends StackFragment<RequestPresenter> implements 
 
     @OnClick(R.id.floating_button_create_request)
     public void onClickCreateRequest() {
-        startActivity(RecentActivity.getLaunchIntent(getBaseActivity(), ActionType.CREATE_REQUEST));
+        startActivityForResult(RecentActivity.getLaunchIntent(getBaseActivity(), getString(R.string.request_money_title)), REQUEST_CREATE);
     }
 
     @Override
@@ -143,7 +146,7 @@ public class RequestFragment extends StackFragment<RequestPresenter> implements 
         if (mRequestFilterDialog == null) {
             mRequestFilterDialog = RequestFilterDialog.newInstance(new RequestFilterModel());
             mRequestFilterDialog.setOnFilterListener(this);
-        }  else if (mRequestFilterDialog.isShowing()) {
+        } else if (mRequestFilterDialog.isShowing()) {
             mRequestFilterDialog.dismiss();
         }
         mRequestFilterDialog.show(getActivity().getSupportFragmentManager());
@@ -164,20 +167,33 @@ public class RequestFragment extends StackFragment<RequestPresenter> implements 
     @Override
     public void onItemClicked(int position) {
         RequestEntity request = mRequestAdapter.getItemByPosition(position);
-        startActivityForResult(RequestDetailsActivity.getLaunchIntent(getBaseActivity(), request), RESULT_DETAILS);
+        startActivityForResult(RequestDetailsActivity.getLaunchIntent(getBaseActivity(), request), REQUEST_DETAILS);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RESULT_DETAILS && resultCode == RESULT_OK) {
-            Action action = (Action) data.getSerializableExtra(Keys.Extras.EXTRA_ACTION);
-            switch (action) {
-                case UPDATE:
+        if (resultCode != RESULT_OK) return;
+        Action action = (Action) data.getSerializableExtra(Keys.Extras.EXTRA_ACTION);
+        switch (requestCode) {
+            case REQUEST_DETAILS:
+                if (action == Action.UPDATE) {
                     RequestEntity request = data.getParcelableExtra(Keys.Extras.EXTRA_REQUEST_ENTITY);
                     mRequestAdapter.changeItemState(request);
-                    break;
+                } else if (action == Action.DELETE) {
+                    RequestEntity request = data.getParcelableExtra(Keys.Extras.EXTRA_REQUEST_ENTITY);
+                    request.setState(RequestState.INPROGRESS);
+                    mRequestAdapter.addItem(request);
+                    mRequestList.scrollToPosition(0);
+                }
+                break;
+
+            case REQUEST_CREATE:
+            if (action == Action.CREATE) {
+                UserEntity user = data.getParcelableExtra(Keys.Extras.EXTRA_USER);
+                startActivityForResult(RequestDetailsActivity.getLaunchIntent(getBaseActivity(), user, ActionType.CREATE_REQUEST), REQUEST_DETAILS);
             }
+                break;
         }
     }
 

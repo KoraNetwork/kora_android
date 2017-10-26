@@ -116,9 +116,11 @@ public class RequestDetailsActivity extends ToolbarActivity<RequestDetailsPresen
         if (bundle != null && bundle.containsKey(REQUEST_ENTITY)) {
             RequestEntity request = bundle.getParcelable(REQUEST_ENTITY);
             getPresenter().setRequest(request);
-        } if (bundle != null && bundle.containsKey(Keys.Args.USER_RECEIVER)) {
+        }
+        if (bundle != null && bundle.containsKey(Keys.Args.USER_RECEIVER)) {
             getPresenter().setReceiver(bundle.getParcelable(Keys.Args.USER_RECEIVER));
-        }if (bundle != null && bundle.containsKey(Keys.Args.USER_SENDER)) {
+        }
+        if (bundle != null && bundle.containsKey(Keys.Args.USER_SENDER)) {
             getPresenter().setSender(bundle.getParcelable(Keys.Args.USER_SENDER));
         }
 
@@ -249,6 +251,16 @@ public class RequestDetailsActivity extends ToolbarActivity<RequestDetailsPresen
         Toast.makeText(this, R.string.send_money_reject_success, Toast.LENGTH_SHORT).show();
         Intent intent = new Intent();
         intent.putExtra(Keys.Extras.EXTRA_ACTION, Action.UPDATE);
+        intent.putExtra(Keys.Extras.EXTRA_REQUEST_ENTITY, requestEntity);
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
+    @Override
+    public void onRequestSend(RequestEntity requestEntity) {
+        Toast.makeText(this, R.string.send_money_request_send_success, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent();
+        intent.putExtra(Keys.Extras.EXTRA_ACTION, Action.DELETE);
         intent.putExtra(Keys.Extras.EXTRA_REQUEST_ENTITY, requestEntity);
         setResult(RESULT_OK, intent);
         finish();

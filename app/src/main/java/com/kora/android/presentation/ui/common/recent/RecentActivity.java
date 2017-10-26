@@ -12,14 +12,13 @@ import android.widget.TextView;
 import com.kora.android.R;
 import com.kora.android.common.Keys;
 import com.kora.android.di.component.ActivityComponent;
-import com.kora.android.presentation.enums.ActionType;
+import com.kora.android.presentation.enums.Action;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.adapter.UserAdapter;
 import com.kora.android.presentation.ui.base.adapter.OnItemClickListener;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.base.view.ToolbarActivity;
 import com.kora.android.presentation.ui.common.add_contact.AddContactActivity;
-import com.kora.android.presentation.ui.common.send_to.RequestDetailsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +26,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-import static com.kora.android.common.Keys.Args.ACTION_TYPE;
+import static com.kora.android.common.Keys.Extras.TITLE;
 
 public class RecentActivity extends ToolbarActivity<RecentPresenter> implements RecentView,
         OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
@@ -40,7 +39,7 @@ public class RecentActivity extends ToolbarActivity<RecentPresenter> implements 
 
     private UserAdapter mUserAdapter;
 
-    private ActionType mActionType;
+    private String mTitle;
 
     @Override
     protected Toolbar getToolbar() {
@@ -53,9 +52,9 @@ public class RecentActivity extends ToolbarActivity<RecentPresenter> implements 
     }
 
     public static Intent getLaunchIntent(final BaseActivity baseActivity,
-                                         final ActionType actionType) {
+                                         final String title) {
         final Intent intent = new Intent(baseActivity, RecentActivity.class);
-        intent.putExtra(ACTION_TYPE, actionType);
+        intent.putExtra(TITLE, title);
         return intent;
     }
 
@@ -85,24 +84,25 @@ public class RecentActivity extends ToolbarActivity<RecentPresenter> implements 
     }
 
     private void initArguments(final Bundle bundle) {
-        if (bundle != null && bundle.containsKey(ACTION_TYPE)) {
-            mActionType = (ActionType) bundle.getSerializable(ACTION_TYPE);
+        if (bundle != null && bundle.containsKey(TITLE)) {
+//            setTitle(R.string.request_money_title);
+            mTitle = bundle.getString(TITLE);
         }
         if (getIntent() != null) {
-            mActionType = (ActionType) getIntent().getSerializableExtra(ACTION_TYPE);
+            mTitle = getIntent().getStringExtra(TITLE);
         }
     }
 
     @Override
     protected void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(ACTION_TYPE, mActionType);
+        outState.putSerializable(TITLE, mTitle);
         outState.putParcelableArrayList(Keys.Args.USER_LIST, (ArrayList<UserEntity>) mUserAdapter.getItems());
     }
 
     private void initUI() {
-        if (mActionType.equals(ActionType.CREATE_REQUEST))
-            setTitle(R.string.request_money_title);
+        setTitle(mTitle);
+
 
         mUserAdapter = new UserAdapter();
         mUserAdapter.setOnUserClickListener(this);
@@ -121,14 +121,25 @@ public class RecentActivity extends ToolbarActivity<RecentPresenter> implements 
 
     @Override
     public void onItemClicked(int position) {
-        startActivity(RequestDetailsActivity.getLaunchIntent(this,
-                mUserAdapter.getItem(position),
-                mActionType));
+        Intent intent = new Intent();
+        intent.putExtra(Keys.Extras.EXTRA_ACTION, Action.CREATE);
+        intent.putExtra(Keys.Extras.EXTRA_USER, mUserAdapter.getItem(position));
+        setResult(RESULT_OK, intent);
+        finish();
     }
+
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (resultCode == RESULT_OK) finish();
+//    }
 
     @OnClick(R.id.text_add_new_contact)
     public void onAddContactClicked() {
-        startActivity(AddContactActivity.getLaunchIntent(this, mActionType));
+        Intent launchIntent = AddContactActivity.getLaunchIntent(this);
+        launchIntent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
+        startActivity(launchIntent);
+        finish();
     }
 
     @Override

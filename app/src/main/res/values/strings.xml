@@ -178,6 +178,7 @@
     <string name="send_money_reject_label">Reject</string>
     <string name="send_money_confirm_success">Request confirmed</string>
     <string name="send_money_reject_success">Request rejected</string>
+    <string name="send_money_request_send_success">Request sent</string>
 
     <!-- Add contact activity -->
     <string name="add_contact_title">Add your contacts</string>
@@ -244,5 +245,6 @@
     <string name="request_filter_type_rejected_label">Reject</string>
     <string name="request_filter_cancel_label">Cancel</string>
     <string name="request_filter_done_label">Done</string>
+
 
 </resources>
