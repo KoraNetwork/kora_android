@@ -175,6 +175,9 @@
     <string name="empty_sender_amount_error">Amount should be not empty</string>
     <string name="empty_receiver_amount_error">Receiver amount should be not empty</string>
     <string name="send_money_confirm_button_label">Confirm</string>
+    <string name="send_money_reject_label">Reject</string>
+    <string name="send_money_confirm_success">Request confirmed</string>
+    <string name="send_money_reject_success">Request rejected</string>
 
     <!-- Add contact activity -->
     <string name="add_contact_title">Add your contacts</string>

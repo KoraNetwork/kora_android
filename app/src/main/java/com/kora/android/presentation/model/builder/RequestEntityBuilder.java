@@ -6,6 +6,7 @@ import com.kora.android.presentation.model.RequestEntity;
 import com.kora.android.presentation.model.UserEntity;
 
 import java.util.Date;
+import java.util.List;
 
 public class RequestEntityBuilder {
 
@@ -18,6 +19,7 @@ public class RequestEntityBuilder {
     private RequestState mState;
     private Date mCreatedAt;
     private Direction mDirection;
+    private List<String> mTransactions;
 
     public RequestEntityBuilder setId(final String id) {
         mId = id;
@@ -64,7 +66,12 @@ public class RequestEntityBuilder {
         return this;
     }
 
+    public RequestEntityBuilder setTransactions (final List<String> transactions) {
+        mTransactions = transactions;
+        return this;
+    }
+
     public RequestEntity createRequestEntity() {
-        return new RequestEntity(mId, mFrom, mTo, mFromAmount, mToAmount, mAdditionalNote, mState, mCreatedAt, mDirection);
+        return new RequestEntity(mId, mFrom, mTo, mFromAmount, mToAmount, mAdditionalNote, mState, mCreatedAt, mDirection, mTransactions);
     }
 }

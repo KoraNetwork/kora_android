@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -23,6 +24,7 @@ import com.kora.android.R;
 import com.kora.android.common.Keys;
 import com.kora.android.common.utils.ViewUtils;
 import com.kora.android.di.component.ActivityComponent;
+import com.kora.android.presentation.enums.Action;
 import com.kora.android.presentation.enums.ActionType;
 import com.kora.android.presentation.enums.RequestState;
 import com.kora.android.presentation.model.RequestEntity;
@@ -41,7 +43,7 @@ import static com.kora.android.common.Keys.Args.ACTION_TYPE;
 import static com.kora.android.common.Keys.Args.REQUEST_ENTITY;
 import static com.kora.android.data.network.Constants.API_BASE_URL;
 
-public class SendMoneyActivity extends ToolbarActivity<SendMoneyPresenter> implements SendMoneyView {
+public class RequestDetailsActivity extends ToolbarActivity<RequestDetailsPresenter> implements RequestDetailsView {
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.user_name) TextView mUserName;
@@ -56,12 +58,13 @@ public class SendMoneyActivity extends ToolbarActivity<SendMoneyPresenter> imple
     @BindView(R.id.edit_layout_converted_amount) TextInputLayout mReceiverAmountContainer;
     @BindView(R.id.edit_text_additional) EditText mEtAdditional;
     @BindView(R.id.action_button) Button mActionButton;
+    @BindView(R.id.reject_button) TextView mRejectButton;
 
     private ActionType mActionType;
 
     @Override
     public int getLayoutResource() {
-        return R.layout.activity_send_money;
+        return R.layout.activity_request_details;
     }
 
     @Override
@@ -80,14 +83,14 @@ public class SendMoneyActivity extends ToolbarActivity<SendMoneyPresenter> imple
     }
 
     public static Intent getLaunchIntent(final BaseActivity baseActivity, final UserEntity userEntity, final ActionType actionType) {
-        final Intent intent = new Intent(baseActivity, SendMoneyActivity.class);
+        final Intent intent = new Intent(baseActivity, RequestDetailsActivity.class);
         intent.putExtra(Keys.Args.USER_ENTITY, userEntity);
         intent.putExtra(ACTION_TYPE, actionType);
         return intent;
     }
 
     public static Intent getLaunchIntent(final BaseActivity baseActivity, final RequestEntity requestEntity) {
-        final Intent intent = new Intent(baseActivity, SendMoneyActivity.class);
+        final Intent intent = new Intent(baseActivity, RequestDetailsActivity.class);
         intent.putExtra(REQUEST_ENTITY, requestEntity);
         intent.putExtra(ACTION_TYPE, ActionType.SHOW_REQUEST);
         return intent;
@@ -157,10 +160,21 @@ public class SendMoneyActivity extends ToolbarActivity<SendMoneyPresenter> imple
                         break;
                     case TO:
                         setTitle(getString(R.string.send_money_request_to, request.getFrom().getFullName()));
-                        mActionButton.setText(R.string.send_money_confirm_button_label);
-                        mSenderAmount.setText(String.format(Locale.ENGLISH, "%1$.2f", request.getFromAmount()));
+                        mSenderAmount.setText(String.format(Locale.ENGLISH, "%1$.2f", request.getToAmount()));
                         mHisSuffixText.setText(request.getFrom().getCurrency());
-                        mReceiverAmount.setText(String.format(Locale.ENGLISH, "%1$.2f", request.getToAmount()));
+                        mReceiverAmount.setText(String.format(Locale.ENGLISH, "%1$.2f", request.getFromAmount()));
+
+                        if (request.getState() == RequestState.REJECTED) {
+                            mRequestStatus.setTextColor(getResources().getColor(R.color.color_text_red));
+                            mRequestStatus.setVisibility(View.VISIBLE);
+                            mRequestStatus.setText(request.getState().text());
+                            mActionButton.setVisibility(View.GONE);
+                            mRejectButton.setVisibility(View.GONE);
+                        } else {
+                            mActionButton.setText(R.string.send_money_confirm_button_label);
+                            mRejectButton.setVisibility(View.VISIBLE);
+                        }
+
                         break;
                 }
 
@@ -220,9 +234,24 @@ public class SendMoneyActivity extends ToolbarActivity<SendMoneyPresenter> imple
     }
 
     @Override
-    public void openPinScreen(UserEntity receiver, Double sAmount, Double rAmount) {
+    public void openPinScreen(UserEntity receiver, Double sAmount, Double rAmount, String requestId) {
         startActivity(EnterPinActivity.getLaunchIntent(this,
-                receiver, sAmount, rAmount, mActionType));
+                receiver, sAmount, rAmount, mActionType, requestId));
+    }
+
+    @Override
+    public void onConfirmClicked() {
+        Toast.makeText(this, R.string.send_money_confirm_success, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onUserRejected(RequestEntity requestEntity) {
+        Toast.makeText(this, R.string.send_money_reject_success, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent();
+        intent.putExtra(Keys.Extras.EXTRA_ACTION, Action.UPDATE);
+        intent.putExtra(Keys.Extras.EXTRA_REQUEST_ENTITY, requestEntity);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     @Override
@@ -276,10 +305,15 @@ public class SendMoneyActivity extends ToolbarActivity<SendMoneyPresenter> imple
                         mEtAdditional.getText().toString().trim());
                 break;
             case SHOW_REQUEST:
-
+                getPresenter().onConfirmClicked();
                 break;
         }
 
+    }
+
+    @OnClick(R.id.reject_button)
+    public void onRejectClicked() {
+        getPresenter().onRejectClicked();
     }
 
     @Override

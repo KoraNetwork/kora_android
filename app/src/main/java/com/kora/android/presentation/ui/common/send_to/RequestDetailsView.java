@@ -1,9 +1,10 @@
 package com.kora.android.presentation.ui.common.send_to;
 
+import com.kora.android.presentation.model.RequestEntity;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.view.BaseView;
 
-public interface SendMoneyView extends BaseView<SendMoneyPresenter> {
+public interface RequestDetailsView extends BaseView<RequestDetailsPresenter> {
     void retrieveSender(UserEntity userEntity);
 
     void retrieveReceiver(UserEntity user);
@@ -14,5 +15,9 @@ public interface SendMoneyView extends BaseView<SendMoneyPresenter> {
 
     void emptyReceiverAmountError();
 
-    void openPinScreen(UserEntity receiver, Double sAmount, Double rAmount);
+    void openPinScreen(UserEntity receiver, Double sAmount, Double rAmount, String requestId);
+
+    void onConfirmClicked();
+
+    void onUserRejected(RequestEntity requestEntity);
 }

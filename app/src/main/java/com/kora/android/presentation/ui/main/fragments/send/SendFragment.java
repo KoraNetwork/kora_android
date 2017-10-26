@@ -19,7 +19,7 @@ import com.kora.android.presentation.ui.base.adapter.OnItemClickListener;
 import com.kora.android.presentation.ui.base.backstack.StackFragment;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
 import com.kora.android.presentation.ui.common.add_contact.AddContactActivity;
-import com.kora.android.presentation.ui.common.send_to.SendMoneyActivity;
+import com.kora.android.presentation.ui.common.send_to.RequestDetailsActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -96,7 +96,7 @@ public class SendFragment extends StackFragment<SendPresenter> implements SendVi
 
     @Override
     public void onItemClicked(int position) {
-        startActivity(SendMoneyActivity.getLaunchIntent(getBaseActivity(),
+        startActivity(RequestDetailsActivity.getLaunchIntent(getBaseActivity(),
                 mUserAdapter.getItem(position),
                 ActionType.SEND_MONEY));
     }

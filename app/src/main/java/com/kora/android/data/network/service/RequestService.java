@@ -7,7 +7,6 @@ import com.kora.android.data.network.model.response.RequestResponse;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;
-import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -25,10 +24,10 @@ public interface RequestService {
                                                    @Query("skip") int skip,
                                                    @Query("limit") int itemsPerPage);
 
-    @DELETE("requests/{requestId}")
+    @POST("requests/{requestId}")
     Observable<Object> deleteRequest(@Path("requestId") String requestId,
                                      @Body final DeleteRequestRequest deleteRequestRequest);
 
-    @PUT("requests")
+    @PUT("requests/{requestId}")
     Observable<RequestResponse> updateRequest(@Path("requestId") String requestId);
 }

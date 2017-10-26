@@ -1,5 +1,6 @@
 package com.kora.android.presentation.ui.main.fragments.request;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 import com.kora.android.R;
 import com.kora.android.common.Keys;
 import com.kora.android.di.component.FragmentComponent;
+import com.kora.android.presentation.enums.Action;
 import com.kora.android.presentation.enums.ActionType;
 import com.kora.android.presentation.model.RequestEntity;
 import com.kora.android.presentation.ui.base.adapter.OnItemClickListener;
@@ -21,7 +23,7 @@ import com.kora.android.presentation.ui.base.adapter.filter.OnFilterListener;
 import com.kora.android.presentation.ui.base.backstack.StackFragment;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
 import com.kora.android.presentation.ui.common.recent.RecentActivity;
-import com.kora.android.presentation.ui.common.send_to.SendMoneyActivity;
+import com.kora.android.presentation.ui.common.send_to.RequestDetailsActivity;
 import com.kora.android.presentation.ui.main.fragments.request.adapter.RequestAdapter;
 import com.kora.android.presentation.ui.main.fragments.request.filter.RequestFilterDialog;
 import com.kora.android.presentation.ui.main.fragments.request.filter.RequestFilterModel;
@@ -33,9 +35,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static android.app.Activity.RESULT_OK;
+
 public class RequestFragment extends StackFragment<RequestPresenter> implements RequestView,
         SwipeRefreshLayout.OnRefreshListener, OnItemClickListener, OnFilterListener<RequestFilterModel> {
 
+    private static final int RESULT_DETAILS = 521;
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.request_list) RecyclerView mRequestList;
     @BindView(R.id.swipe_layout) SwipeRefreshLayout swipeRefreshLayout;
@@ -159,7 +164,21 @@ public class RequestFragment extends StackFragment<RequestPresenter> implements 
     @Override
     public void onItemClicked(int position) {
         RequestEntity request = mRequestAdapter.getItemByPosition(position);
-        startActivity(SendMoneyActivity.getLaunchIntent(getBaseActivity(), request));
+        startActivityForResult(RequestDetailsActivity.getLaunchIntent(getBaseActivity(), request), RESULT_DETAILS);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RESULT_DETAILS && resultCode == RESULT_OK) {
+            Action action = (Action) data.getSerializableExtra(Keys.Extras.EXTRA_ACTION);
+            switch (action) {
+                case UPDATE:
+                    RequestEntity request = data.getParcelableExtra(Keys.Extras.EXTRA_REQUEST_ENTITY);
+                    mRequestAdapter.changeItemState(request);
+                    break;
+            }
+        }
     }
 
     @Override

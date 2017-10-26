@@ -98,7 +98,7 @@
             android:windowSoftInputMode="stateHidden"/>
 
         <activity
-            android:name=".presentation.ui.common.send_to.SendMoneyActivity"
+            android:name=".presentation.ui.common.send_to.RequestDetailsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.MainTheme"
             android:windowSoftInputMode="stateHidden"/>

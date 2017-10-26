@@ -225,7 +225,21 @@
                 android:id="@+id/action_button"
                 style="@style/AppTheme.ActionButton.Blue"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"/>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/reject_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/color_text_blue"
+                android:textSize="16sp"
+                android:text="@string/send_money_reject_label"
+                android:clickable="true"
+                android:focusable="true"
+                android:visibility="gone"
+                style="@style/Widget.AppCompat.Button.Borderless"/>
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
