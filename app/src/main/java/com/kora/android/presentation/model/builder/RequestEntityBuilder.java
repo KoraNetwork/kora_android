@@ -9,6 +9,7 @@ import java.util.Date;
 
 public class RequestEntityBuilder {
 
+    private String mId;
     private UserEntity mFrom;
     private UserEntity mTo;
     private double mFromAmount;
@@ -17,6 +18,11 @@ public class RequestEntityBuilder {
     private RequestState mState;
     private Date mCreatedAt;
     private Direction mDirection;
+
+    public RequestEntityBuilder setId(final String id) {
+        mId = id;
+        return this;
+    }
 
     public RequestEntityBuilder setFrom(final UserEntity from) {
         mFrom = from;
@@ -59,6 +65,6 @@ public class RequestEntityBuilder {
     }
 
     public RequestEntity createRequestEntity() {
-        return new RequestEntity(mFrom, mTo, mFromAmount, mToAmount, mAdditionalNote, mState, mCreatedAt, mDirection);
+        return new RequestEntity(mId, mFrom, mTo, mFromAmount, mToAmount, mAdditionalNote, mState, mCreatedAt, mDirection);
     }
 }

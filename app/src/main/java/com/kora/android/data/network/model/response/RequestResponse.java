@@ -13,6 +13,8 @@ import java.util.Date;
 @JsonObject
 public class RequestResponse {
 
+    @JsonField(name = "id")
+    private String mId;
     @JsonField(name = "from")
     private UserResponse mFrom;
     @JsonField(name = "to")
@@ -31,6 +33,14 @@ public class RequestResponse {
     private Date mUpdatedAt;
     @JsonField(name = "direction", typeConverter = DirectionTypeConverter.class)
     private Direction mDirection;
+
+    public String getId() {
+        return mId;
+    }
+
+    public void setId(String mId) {
+        this.mId = mId;
+    }
 
     public UserResponse getFrom() {
         return mFrom;

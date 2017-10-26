@@ -10,6 +10,7 @@ import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.DefaultDisposableObserver;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.usecase.request.AddToRequestsUseCase;
+import com.kora.android.domain.usecase.request.UpdateRequestUseCase;
 import com.kora.android.domain.usecase.user.ConvertAmountUseCase;
 import com.kora.android.domain.usecase.user.GetUserDataUseCase;
 import com.kora.android.domain.usecase.user.SetAsRecentUseCase;
@@ -24,8 +25,6 @@ import javax.inject.Inject;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Action;
 
-import static com.kora.android.R.id.amount;
-
 @ConfigPersistent
 public class SendMoneyPresenter extends BasePresenter<SendMoneyView> {
 
@@ -33,6 +32,7 @@ public class SendMoneyPresenter extends BasePresenter<SendMoneyView> {
     private final ConvertAmountUseCase mConvertAmountUseCase;
     private final SetAsRecentUseCase mSetAsRecentUseCase;
     private final AddToRequestsUseCase mAddToRequestsUseCase;
+    private final UpdateRequestUseCase mUpdateRequestUseCase;
 
     private UserEntity mSender;
     private UserEntity mReceiver;
@@ -43,11 +43,13 @@ public class SendMoneyPresenter extends BasePresenter<SendMoneyView> {
     public SendMoneyPresenter(final GetUserDataUseCase getUserDataUseCase,
                               final ConvertAmountUseCase convertAmountUseCase,
                               final SetAsRecentUseCase setAsRecentUseCase,
-                              final AddToRequestsUseCase addToRequestsUseCase) {
+                              final AddToRequestsUseCase addToRequestsUseCase,
+                              final UpdateRequestUseCase updateRequestUseCase) {
         mGetUserDataUseCase = getUserDataUseCase;
         mConvertAmountUseCase = convertAmountUseCase;
         mSetAsRecentUseCase = setAsRecentUseCase;
         mAddToRequestsUseCase = addToRequestsUseCase;
+        mUpdateRequestUseCase = updateRequestUseCase;
     }
 
     public void getCurrentUser() {
@@ -262,11 +264,64 @@ public class SendMoneyPresenter extends BasePresenter<SendMoneyView> {
         }
     }
 
+    public void updateRequest(final String requestId) {
+        mUpdateRequestUseCase.setData(requestId);
+        mUpdateRequestUseCase.execute(new UpdateRequestSubscriber());
+    }
+
+    private Action mUpdateRequestAction = new Action() {
+        @Override
+        public void run() throws Exception {
+            mUpdateRequestUseCase.execute(new UpdateRequestSubscriber());
+        }
+    };
+
+    private class UpdateRequestSubscriber extends DefaultInternetSubscriber<RequestEntity> {
+
+        @Override
+        protected void onStart() {
+            if (!isViewAttached()) return;
+            getView().showProgress(true);
+        }
+
+        @Override
+        public void onNext(final RequestEntity requestEntity) {
+            if (!isViewAttached()) return;
+            Log.e("_____", requestEntity.toString());
+        }
+
+        @Override
+        public void onComplete() {
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+        }
+
+        @Override
+        public void onError(@NonNull Throwable throwable) {
+            super.onError(throwable);
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+        }
+
+        @Override
+        public void handleUnprocessableEntity(final ErrorModel errorModel) {
+            if (!isViewAttached()) return;
+            getView().showError(errorModel.getError());
+        }
+
+        @Override
+        public void handleNetworkError(RetrofitException retrofitException) {
+            if (!isViewAttached()) return;
+            getView().showErrorWithRetry(new RetryAction(mUpdateRequestAction));
+        }
+    }
+
     @Override
     public void onDetachView() {
         mGetUserDataUseCase.dispose();
         mConvertAmountUseCase.dispose();
         mSetAsRecentUseCase.dispose();
         mAddToRequestsUseCase.dispose();
+        mUpdateRequestUseCase.dispose();
     }
 }
