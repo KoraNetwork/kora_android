@@ -109,6 +109,12 @@
             android:theme="@style/AppTheme.MainTheme"
             android:windowSoftInputMode="stateHidden"/>
 
+        <activity
+            android:name=".presentation.ui.borrow.BorrowMoneyActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.MainTheme"
+            android:windowSoftInputMode="stateHidden"/>
+
         <service
             android:name=".presentation.service.IncomingSmsService"
             android:exported="false"/>
