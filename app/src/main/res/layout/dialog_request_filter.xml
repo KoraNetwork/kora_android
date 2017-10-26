@@ -6,7 +6,7 @@
               android:orientation="vertical"
               android:padding="16dp">
 
-    <com.kora.android.views.CustomTextView
+    <android.support.v7.widget.AppCompatTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="9dp"
@@ -14,7 +14,7 @@
         android:text="@string/request_filter_show_label"
         android:textColor="#3b3d3d"
         android:textSize="16sp"
-        app:font="@string/font_name_muli_bold"/>
+        app:fontFamily="@font/muli_bold"/>
 
     <RadioGroup
         android:id="@+id/show_group"
@@ -71,7 +71,7 @@
         android:layout_height="1dp"
         android:background="#14000000"/>
 
-    <com.kora.android.views.CustomTextView
+    <android.support.v7.widget.AppCompatTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="9dp"
@@ -79,7 +79,7 @@
         android:text="@string/request_filter_type_label"
         android:textColor="#3b3d3d"
         android:textSize="16sp"
-        app:font="@string/font_name_muli_bold"/>
+        app:fontFamily="@font/muli_bold"/>
 
 
     <RadioGroup
@@ -143,7 +143,7 @@
         android:gravity="center_horizontal"
         android:orientation="horizontal">
 
-        <com.kora.android.views.CustomTextView
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/button_cancel"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
@@ -151,9 +151,9 @@
             android:text="@string/transaction_filter_cancel_label"
             android:textColor="#e62f60"
             android:textSize="16sp"
-            app:font="@string/font_name_muli_bold"/>
+            app:fontFamily="@font/muli_bold"/>
 
-        <com.kora.android.views.CustomTextView
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/button_done"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
@@ -161,7 +161,7 @@
             android:text="@string/transaction_filter_done_label"
             android:textColor="#46a6e3"
             android:textSize="16sp"
-            app:font="@string/font_name_muli_bold"/>
+            app:fontFamily="@font/muli_bold"/>
 
     </LinearLayout>
 

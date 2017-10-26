@@ -25,7 +25,7 @@
             android:layout_centerVertical="true"
             android:src="@drawable/ic_flag_usa" />
 
-        <com.kora.android.views.CustomTextView
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/text_view_country_currency"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
             android:layout_toRightOf="@+id/image_view_country_flag"
             android:textColor="@color/color_text_title"
             android:textSize="18sp"
-            app:font="@string/font_name_muli"
+            app:fontFamily="@font/muli_normal"
             tools:text="USD" />
     </RelativeLayout>
 

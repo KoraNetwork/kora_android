@@ -38,7 +38,7 @@
 
             </android.support.v7.widget.Toolbar>
 
-            <com.kora.android.views.CustomTextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_view_borrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
                 android:gravity="center"
                 android:textColor="@color/color_text_blue"
                 android:textSize="30sp"
-                app:font="@string/font_name_muli_bold" />
+                app:fontFamily="@font/muli_bold" />
 
         </RelativeLayout>
 

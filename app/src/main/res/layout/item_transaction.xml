@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <com.kora.android.views.CustomTextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/sender_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -37,16 +37,16 @@
                 android:lines="1"
                 android:textColor="#3b3d3d"
                 android:textSize="14sp"
-                app:font="@string/font_name_muli_regular"
+                app:fontFamily="@font/muli_regular"
                 tools:text="From: Michael Jerreford"/>
 
-            <com.kora.android.views.CustomTextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#3b3d3d"
                 android:textSize="14sp"
-                app:font="@string/font_name_muli_bold"
+                app:fontFamily="@font/muli_bold"
                 tools:text="10 NGN"/>
 
         </LinearLayout>
@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <com.kora.android.views.CustomTextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/receiver_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -65,27 +65,27 @@
                 android:lines="1"
                 android:textColor="#3b3d3d"
                 android:textSize="14sp"
-                app:font="@string/font_name_muli_regular"
+                app:fontFamily="@font/muli_regular"
                 tools:text="To: You"/>
 
-            <com.kora.android.views.CustomTextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#afb1b3"
                 android:textSize="12sp"
-                app:font="@string/font_name_muli_regular"
+                app:fontFamily="@font/muli_regular"
                 tools:text="17.10.2017"/>
 
         </LinearLayout>
 
-        <com.kora.android.views.CustomTextView
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#3b3d3d"
             android:textSize="14sp"
-            app:font="@string/font_name_muli_bold"
+            app:fontFamily="@font/muli_bold"
             tools:text="Requested"/>
 
 

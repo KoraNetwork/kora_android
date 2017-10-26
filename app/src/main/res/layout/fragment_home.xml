@@ -39,7 +39,7 @@
 
             </android.support.v7.widget.Toolbar>
 
-            <com.kora.android.views.CustomTextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_view_balance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -50,7 +50,7 @@
                 android:text="@string/home_balance"
                 android:textColor="@color/color_text_blue"
                 android:textSize="16sp"
-                app:font="@string/font_name_muli_bold" />
+                app:fontFamily="@font/muli_bold" />
 
             <LinearLayout
                 android:id="@+id/linear_layout_deposit_withdraw"
@@ -78,7 +78,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
-                        <com.kora.android.views.CustomTextView
+                        <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/text_view_deposit"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -87,7 +87,7 @@
                             android:text="@string/home_deposit"
                             android:textColor="@color/color_button_text_white"
                             android:textSize="14sp"
-                            app:font="@string/font_name_muli_bold" />
+                            app:fontFamily="@font/muli_bold" />
                     </RelativeLayout>
 
                 </android.support.v7.widget.CardView>
@@ -111,7 +111,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
-                        <com.kora.android.views.CustomTextView
+                        <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/text_view_withdraw"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -120,7 +120,7 @@
                             android:text="@string/home_withdraw"
                             android:textColor="@color/color_button_text_white"
                             android:textSize="14sp"
-                            app:font="@string/font_name_muli_bold" />
+                            app:fontFamily="@font/muli_bold" />
                     </RelativeLayout>
 
                 </android.support.v7.widget.CardView>
@@ -137,7 +137,7 @@
                 android:layout_marginTop="16dp"
                 android:src="@drawable/ic_flag_usa" />
 
-            <com.kora.android.views.CustomTextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_view_currency_balance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -148,10 +148,10 @@
                 android:layout_toRightOf="@+id/image_view_flag"
                 android:textColor="@color/color_text_black"
                 android:textSize="14sp"
-                app:font="@string/font_name_muli_semi_bold"
+                app:fontFamily="@font/muli_semi_bold"
                 tools:text="100.00 USD" />
 
-            <com.kora.android.views.CustomTextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_view_currency_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -162,10 +162,10 @@
                 android:layout_toRightOf="@+id/image_view_flag"
                 android:textColor="@color/color_text_grey"
                 android:textSize="12sp"
-                app:font="@string/font_name_muli_regular"
+                app:fontFamily="@font/muli_regular"
                 tools:text="United States Dollar" />
 
-            <com.kora.android.views.CustomTextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_view_my_apps"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -176,7 +176,7 @@
                 android:text="@string/home_my_apps"
                 android:textColor="@color/color_text_blue"
                 android:textSize="16sp"
-                app:font="@string/font_name_muli_bold" />
+                app:fontFamily="@font/muli_bold" />
 
             <HorizontalScrollView
                 android:id="@+id/scroll_view_my_apps"
@@ -319,7 +319,7 @@
 
             </HorizontalScrollView>
 
-            <com.kora.android.views.CustomTextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_view_transactions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -330,7 +330,7 @@
                 android:text="@string/home_transactions"
                 android:textColor="@color/color_text_blue"
                 android:textSize="16sp"
-                app:font="@string/font_name_muli_bold" />
+                app:fontFamily="@font/muli_bold" />
 
             <android.support.v7.widget.CardView
                 android:id="@+id/card_view_show_all_transactions"
@@ -352,7 +352,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <com.kora.android.views.CustomTextView
+                    <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/text_view_show_all_transactions"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -361,7 +361,7 @@
                         android:text="@string/home_show_all_transactions"
                         android:textColor="@color/color_button_text_white"
                         android:textSize="14sp"
-                        app:font="@string/font_name_muli_bold" />
+                        app:fontFamily="@font/muli_bold"/>
                 </RelativeLayout>
 
             </android.support.v7.widget.CardView>

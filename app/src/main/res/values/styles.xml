@@ -59,7 +59,7 @@
         <item name="android:drawablePadding">8dp</item>
         <item name="android:drawableRight">@drawable/ic_back_bl</item>
         <item name="android:textSize">16sp</item>
-        <item name="font">@string/font_name_muli_semi_bold</item>
+        <item name="fontFamily">@font/muli_semi_bold</item>
         <item name="android:textColor">@color/color_text_blue</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
@@ -76,7 +76,7 @@
         <item name="android:padding">12dp</item>
         <item name="android:textColor">@color/color_button_text_white</item>
         <item name="android:textSize">14sp</item>
-        <item name="fontFamily">@string/font_name_muli_bold</item>
+        <item name="fontFamily">@font/muli_bold</item>
     </style>
 
     <style name="AppTheme.ActionButton.Blue">

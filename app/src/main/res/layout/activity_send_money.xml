@@ -6,7 +6,7 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <include layout="@layout/toolbar" />
+    <include layout="@layout/toolbar"/>
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -42,23 +42,40 @@
                     android:orientation="vertical"
                     android:paddingLeft="16dp">
 
-                    <com.kora.android.views.CustomTextView
+                    <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/user_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/color_black"
                         android:textSize="16sp"
-                        app:font="@string/font_name_muli_bold"
+                        app:fontFamily="@font/muli_bold"
                         tools:text="User Name"/>
 
-                    <com.kora.android.views.CustomTextView
-                        android:id="@+id/user_phone"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="#696a6b"
-                        android:textSize="14sp"
-                        app:font="@string/font_name_muli_regular"
-                        tools:text="631-270-2352"/>
+                        android:orientation="horizontal">
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/user_phone"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textColor="#696a6b"
+                            android:textSize="14sp"
+                            app:fontFamily="@font/muli_regular"
+                            tools:text="631-270-2352"/>
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:visibility="gone"
+                            app:fontFamily="@font/muli_regular"
+                            tools:text="In progres"/>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -204,11 +221,11 @@
             </com.kora.android.views.TextInputLayoutWithDrawable>
 
 
-            <com.kora.android.views.CustomButton
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/action_button"
+                style="@style/AppTheme.ActionButton.Blue"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/AppTheme.ActionButton.Blue"/>
+                android:layout_height="wrap_content"/>
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

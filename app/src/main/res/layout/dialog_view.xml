@@ -18,34 +18,34 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.kora.android.views.CustomTextView
-                app:font="@string/font_name_muli_semi_bold"
-                android:layout_marginTop="16dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginLeft="20dp"
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/color_dialog_title"
-                android:textSize="20sp"
-                tools:text="Dialog title" />
-
-            <com.kora.android.views.CustomTextView
-                app:font="@string/font_name_muli"
-                android:layout_marginTop="24dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/color_dialog_title"
+                android:textSize="20sp"
+                app:fontFamily="@font/muli_semi_bold"
+                tools:text="Dialog title"/>
+
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_view_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="24dp"
                 android:textColor="@color/color_dialog_text"
                 android:textSize="18sp"
-                tools:text="Dialog text" />
+                app:fontFamily="@font/muli_normal"
+                tools:text="Dialog text"/>
 
             <FrameLayout
-                android:layout_marginTop="24dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp">
 
                 <LinearLayout
                     android:id="@+id/btns_container"
@@ -54,8 +54,7 @@
                     android:orientation="horizontal"
                     android:visibility="visible">
 
-                    <com.kora.android.views.CustomTextView
-                        app:font="@string/font_name_muli_bold"
+                    <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/button_positive"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -68,15 +67,15 @@
                         android:text="CANCEL"
                         android:textColor="@color/color_dialog_button_text"
                         android:textSize="18sp"
+                        app:fontFamily="@font/muli_bold"
                         />
 
                     <!--<View-->
-                        <!--android:layout_width="1dp"-->
-                        <!--android:layout_height="match_parent"-->
-                        <!--android:background="@android:color/black" />-->
+                    <!--android:layout_width="1dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:background="@android:color/black" />-->
 
-                    <com.kora.android.views.CustomTextView
-                        app:font="@string/font_name_muli_bold"
+                    <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/button_negative"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -89,11 +88,11 @@
                         android:text="CANCEL"
                         android:textColor="@color/color_dialog_button_text"
                         android:textSize="18sp"
+                        app:fontFamily="@font/muli_bold"
                         />
                 </LinearLayout>
 
-                <com.kora.android.views.CustomTextView
-                    app:font="@string/font_name_muli_bold"
+                <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/text_btn_ok"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -105,8 +104,9 @@
                     android:text="OK"
                     android:textColor="@color/color_dialog_button_text"
                     android:textSize="18sp"
+                    android:visibility="visible"
 
-                    android:visibility="visible" />
+                    app:fontFamily="@font/muli_bold"/>
             </FrameLayout>
 
         </LinearLayout>

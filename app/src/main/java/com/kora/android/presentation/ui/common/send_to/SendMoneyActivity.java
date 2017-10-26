@@ -10,6 +10,7 @@ import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -23,6 +24,7 @@ import com.kora.android.common.Keys;
 import com.kora.android.common.utils.ViewUtils;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.enums.ActionType;
+import com.kora.android.presentation.enums.RequestState;
 import com.kora.android.presentation.model.RequestEntity;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
@@ -46,6 +48,7 @@ public class SendMoneyActivity extends ToolbarActivity<SendMoneyPresenter> imple
     @BindView(R.id.user_phone) TextView mUserPhone;
     @BindView(R.id.his_suffix) TextView mHisSuffixText;
     @BindView(R.id.my_suffix) TextView mMySuffixText;
+    @BindView(R.id.status) TextView mRequestStatus;
     @BindView(R.id.user_image) AppCompatImageView mUserImage;
     @BindView(R.id.edit_text_sender_amount) TextInputEditText mSenderAmount;
     @BindView(R.id.edit_layout_amount) TextInputLayout mSenderAmountContainer;
@@ -139,19 +142,33 @@ public class SendMoneyActivity extends ToolbarActivity<SendMoneyPresenter> imple
                 switch (request.getDirection()) {
                     case FROM:
                         setTitle(getString(R.string.send_money_request_from, request.getTo().getFullName()));
+                        mActionButton.setVisibility(View.GONE);
+                        mRequestStatus.setVisibility(View.VISIBLE);
+                        mRequestStatus.setText(request.getState().text());
+                        mReceiverAmount.setText(String.format(Locale.ENGLISH, "%1$.2f", request.getToAmount()));
+                        mHisSuffixText.setText(request.getTo().getCurrency());
+                        mSenderAmount.setText(String.format(Locale.ENGLISH, "%1$.2f", request.getFromAmount()));
+
+                        if (request.getState() == RequestState.REJECTED) {
+                            mRequestStatus.setTextColor(getResources().getColor(R.color.color_text_red));
+                        } else {
+                            mRequestStatus.setTextColor(getResources().getColor(R.color.color_text_blue));
+                        }
                         break;
                     case TO:
                         setTitle(getString(R.string.send_money_request_to, request.getFrom().getFullName()));
+                        mActionButton.setText(R.string.send_money_confirm_button_label);
+                        mSenderAmount.setText(String.format(Locale.ENGLISH, "%1$.2f", request.getFromAmount()));
+                        mHisSuffixText.setText(request.getFrom().getCurrency());
+                        mReceiverAmount.setText(String.format(Locale.ENGLISH, "%1$.2f", request.getToAmount()));
                         break;
                 }
-                mEtAdditional.setEnabled(false);
+
                 mEtAdditional.setText(request.getAdditionalNote());
-                mReceiverAmount.setEnabled(false);
-//                mReceiverAmount.setText(String.format(Locale.ENGLISH, "%1$.2f", request.getToAmount()));
-//                mHisSuffixText.setText(request.getTo().getCurrency());
                 mSenderAmount.setEnabled(false);
-//                mSenderAmount.setText(String.format(Locale.ENGLISH, "%1$.2f", request.getFromAmount()));
-//                mActionButton.setText(R.string.send_money_confirm_button_label);
+                mEtAdditional.setEnabled(false);
+                mReceiverAmount.setEnabled(false);
+
                 break;
         }
     }
