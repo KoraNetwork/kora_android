@@ -3,10 +3,12 @@ package com.kora.android.presentation.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.kora.android.presentation.enums.RequestState;
 import com.kora.android.presentation.enums.Direction;
+import com.kora.android.presentation.enums.RequestState;
 
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 public class RequestEntity implements Parcelable {
 
@@ -19,6 +21,7 @@ public class RequestEntity implements Parcelable {
     private RequestState mState;
     private Date mCreatedAt = new Date();
     private Direction mDirection;
+    private List<String> mTransactions;
 
     public RequestEntity(String mId,
                          UserEntity mFrom,
@@ -28,7 +31,8 @@ public class RequestEntity implements Parcelable {
                          String mAdditionalNote,
                          RequestState mState,
                          Date mCreatedAt,
-                         Direction mDirection) {
+                         Direction mDirection,
+                         List<String> transactions) {
         this.mId = mId;
         this.mFrom = mFrom;
         this.mTo = mTo;
@@ -38,21 +42,7 @@ public class RequestEntity implements Parcelable {
         this.mState = mState;
         this.mCreatedAt = mCreatedAt;
         this.mDirection = mDirection;
-    }
-
-    @Override
-    public String toString() {
-        return "RequestEntity{" + "\n" +
-                "mId=" + mId + "\n" +
-                "mFrom=" + mFrom + "\n" +
-                "mTo=" + mTo + "\n" +
-                "mFromAmount=" + mFromAmount + "\n" +
-                "mToAmount=" + mToAmount + "\n" +
-                "mAdditionalNote=" + mAdditionalNote + "\n" +
-                "mState=" + mState + "\n" +
-                "mCreatedAt=" + mCreatedAt + "\n" +
-                "mDirection=" + mDirection + "\n" +
-                "}";
+        mTransactions = transactions;
     }
 
     public String getId() {
@@ -128,6 +118,14 @@ public class RequestEntity implements Parcelable {
     }
 
 
+    public List<String> getTransactions() {
+        return mTransactions;
+    }
+
+    public void setTransactions(List<String> transactions) {
+        mTransactions = transactions;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -144,6 +142,7 @@ public class RequestEntity implements Parcelable {
         dest.writeInt(this.mState == null ? -1 : this.mState.ordinal());
         dest.writeLong(this.mCreatedAt != null ? this.mCreatedAt.getTime() : -1);
         dest.writeInt(this.mDirection == null ? -1 : this.mDirection.ordinal());
+        dest.writeList(mTransactions == null ? Collections.emptyList() : mTransactions);
     }
 
     protected RequestEntity(Parcel in) {
@@ -159,6 +158,7 @@ public class RequestEntity implements Parcelable {
         this.mCreatedAt = tmpMCreatedAt == -1 ? null : new Date(tmpMCreatedAt);
         int tmpMDirection = in.readInt();
         this.mDirection = tmpMDirection == -1 ? null : Direction.values()[tmpMDirection];
+        mTransactions = in.readArrayList(String.class.getClassLoader());
     }
 
     public static final Creator<RequestEntity> CREATOR = new Creator<RequestEntity>() {

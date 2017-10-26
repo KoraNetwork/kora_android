@@ -26,7 +26,7 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Action;
 
 @ConfigPersistent
-public class SendMoneyPresenter extends BasePresenter<SendMoneyView> {
+public class RequestDetailsPresenter extends BasePresenter<RequestDetailsView> {
 
     private final GetUserDataUseCase mGetUserDataUseCase;
     private final ConvertAmountUseCase mConvertAmountUseCase;
@@ -40,11 +40,11 @@ public class SendMoneyPresenter extends BasePresenter<SendMoneyView> {
     private RequestEntity mRequest;
 
     @Inject
-    public SendMoneyPresenter(final GetUserDataUseCase getUserDataUseCase,
-                              final ConvertAmountUseCase convertAmountUseCase,
-                              final SetAsRecentUseCase setAsRecentUseCase,
-                              final AddToRequestsUseCase addToRequestsUseCase,
-                              final UpdateRequestUseCase updateRequestUseCase) {
+    public RequestDetailsPresenter(final GetUserDataUseCase getUserDataUseCase,
+                                   final ConvertAmountUseCase convertAmountUseCase,
+                                   final SetAsRecentUseCase setAsRecentUseCase,
+                                   final AddToRequestsUseCase addToRequestsUseCase,
+                                   final UpdateRequestUseCase updateRequestUseCase) {
         mGetUserDataUseCase = getUserDataUseCase;
         mConvertAmountUseCase = convertAmountUseCase;
         mSetAsRecentUseCase = setAsRecentUseCase;
@@ -98,7 +98,7 @@ public class SendMoneyPresenter extends BasePresenter<SendMoneyView> {
         Double sAmount = Double.valueOf(senderAmount);
         Double rAmount = Double.valueOf(receiverAmount);
 
-        getView().openPinScreen(mReceiver, sAmount, rAmount);
+        getView().openPinScreen(mReceiver, sAmount, rAmount, null);
     }
 
     private boolean validateForm(String senderAmount, String receiverAmount) {
@@ -150,8 +150,34 @@ public class SendMoneyPresenter extends BasePresenter<SendMoneyView> {
 
     }
 
+    public UserEntity getReceiver() {
+        return mReceiver;
+    }
+
+    public UserEntity getSender() {
+        return mSender;
+    }
+
+    public void setAsResent() {
+        if (mReceiver == null) return;
+        mSetAsRecentUseCase.setData(mReceiver);
+        mSetAsRecentUseCase.execute(new DefaultDisposableObserver());
+    }
+
     public RequestEntity getRequest() {
         return mRequest;
+    }
+
+    public void onConfirmClicked() {
+        if (mRequest == null) return;
+      if (!isViewAttached()) return;
+      getView().openPinScreen(mRequest.getFrom(), mRequest.getFromAmount(), mRequest.getToAmount(), mRequest.getId());
+    }
+
+    public void onRejectClicked() {
+        if (mRequest == null) return;
+        mUpdateRequestUseCase.setData(mRequest.getId());
+        mUpdateRequestUseCase.execute(new UpdateRequestSubscriber());
     }
 
     private class AddToRequestsSubscriber extends DefaultInternetSubscriber<RequestEntity> {
@@ -191,20 +217,6 @@ public class SendMoneyPresenter extends BasePresenter<SendMoneyView> {
         public void handleNetworkError(final RetrofitException retrofitException) {
             getView().showErrorWithRetry(new RetryAction(mAddToRequestsAction));
         }
-    }
-
-    public UserEntity getReceiver() {
-        return mReceiver;
-    }
-
-    public UserEntity getSender() {
-        return mSender;
-    }
-
-    public void setAsResent() {
-        if (mReceiver == null) return;
-        mSetAsRecentUseCase.setData(mReceiver);
-        mSetAsRecentUseCase.execute(new DefaultDisposableObserver());
     }
 
     private class GetUserSubscriber extends DefaultInternetSubscriber<UserEntity> {
@@ -264,11 +276,6 @@ public class SendMoneyPresenter extends BasePresenter<SendMoneyView> {
         }
     }
 
-    public void updateRequest(final String requestId) {
-        mUpdateRequestUseCase.setData(requestId);
-        mUpdateRequestUseCase.execute(new UpdateRequestSubscriber());
-    }
-
     private Action mUpdateRequestAction = new Action() {
         @Override
         public void run() throws Exception {
@@ -287,7 +294,7 @@ public class SendMoneyPresenter extends BasePresenter<SendMoneyView> {
         @Override
         public void onNext(final RequestEntity requestEntity) {
             if (!isViewAttached()) return;
-            Log.e("_____", requestEntity.toString());
+            getView().onUserRejected(requestEntity);
         }
 
         @Override

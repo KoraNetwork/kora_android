@@ -12,6 +12,7 @@ import com.kora.android.presentation.ui.base.adapter.OnItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class RequestAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -66,5 +67,16 @@ public class RequestAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         int size = mRequests.size();
         mRequests.clear();
         notifyItemRangeRemoved(0, size);
+    }
+
+    public void changeItemState(RequestEntity request) {
+        for (RequestEntity entity : mRequests) {
+            if (Objects.equals(request.getId(), entity.getId())) {
+                int position = mRequests.indexOf(entity);
+                entity.setState(request.getState());
+                notifyItemChanged(position);
+                return;
+            }
+        }
     }
 }

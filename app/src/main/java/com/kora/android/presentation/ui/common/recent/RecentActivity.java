@@ -19,10 +19,9 @@ import com.kora.android.presentation.ui.base.adapter.OnItemClickListener;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.base.view.ToolbarActivity;
 import com.kora.android.presentation.ui.common.add_contact.AddContactActivity;
-import com.kora.android.presentation.ui.common.send_to.SendMoneyActivity;
+import com.kora.android.presentation.ui.common.send_to.RequestDetailsActivity;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -116,14 +115,13 @@ public class RecentActivity extends ToolbarActivity<RecentPresenter> implements 
 
     @Override
     public void showUserList(List<UserEntity> users) {
-        Collections.sort(users, (o1, o2) -> o1.getFullName().compareTo(o2.getFullName()));
         mUserAdapter.addUsers(users);
         mUserList.invalidate();
     }
 
     @Override
     public void onItemClicked(int position) {
-        startActivity(SendMoneyActivity.getLaunchIntent(this,
+        startActivity(RequestDetailsActivity.getLaunchIntent(this,
                 mUserAdapter.getItem(position),
                 mActionType));
     }

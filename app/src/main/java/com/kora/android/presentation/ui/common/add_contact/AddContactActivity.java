@@ -20,7 +20,7 @@ import com.kora.android.presentation.ui.base.adapter.OnItemClickListener;
 import com.kora.android.presentation.ui.base.adapter.RecyclerViewScrollListener;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.base.view.ToolbarActivity;
-import com.kora.android.presentation.ui.common.send_to.SendMoneyActivity;
+import com.kora.android.presentation.ui.common.send_to.RequestDetailsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -165,7 +165,7 @@ public class AddContactActivity extends ToolbarActivity<AddContactPresenter> imp
 
     @Override
     public void onItemClicked(int position) {
-        startActivity(SendMoneyActivity.getLaunchIntent(this,
+        startActivity(RequestDetailsActivity.getLaunchIntent(this,
                 mUserAdapter.getItem(position), mActionType));
     }
 
