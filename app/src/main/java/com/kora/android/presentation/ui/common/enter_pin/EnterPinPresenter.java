@@ -139,16 +139,6 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         }
     }
 
-    public void startAddToTransactionsTask(final List<String> transactionHash, ActionType actionType) {
-        mAddToTransactionsUseCase.setData(
-                getTransactionTypeByAction(actionType),
-                mReceiver.getId(),
-                mSenderAmount,
-                mReceiverAmount,
-                transactionHash);
-        mAddToTransactionsUseCase.execute(new AddToTransactionsSubscriber());
-    }
-
     private TransactionType getTransactionTypeByAction(ActionType actionType) {
         switch (actionType) {
             case CREATE_REQUEST:
@@ -157,6 +147,16 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
                 return TransactionType.SEND;
         }
         return null;
+    }
+
+    public void startAddToTransactionsTask(final List<String> transactionHash, ActionType actionType) {
+        mAddToTransactionsUseCase.setData(
+                getTransactionTypeByAction(actionType),
+                mReceiver.getId(),
+                mSenderAmount,
+                mReceiverAmount,
+                transactionHash);
+        mAddToTransactionsUseCase.execute(new AddToTransactionsSubscriber());
     }
 
     private Action mAddToTransactionsAction = new Action() {
@@ -213,6 +213,13 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         mDeleteRequestUseCase.execute(new DeleteRequestSubscriber());
     }
 
+    private Action mDeleteRequestAction = new Action() {
+        @Override
+        public void run() throws Exception {
+            mDeleteRequestUseCase.execute(new DeleteRequestSubscriber());
+        }
+    };
+
     private class DeleteRequestSubscriber extends DefaultInternetSubscriber<Object> {
 
 //        @Override
@@ -247,7 +254,7 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
 
         @Override
         public void handleNetworkError(final RetrofitException retrofitException) {
-            getView().showErrorWithRetry(new RetryAction(mAddToTransactionsAction));
+            getView().showErrorWithRetry(new RetryAction(mDeleteRequestAction));
         }
     }
 

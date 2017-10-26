@@ -10,6 +10,7 @@ import java.util.Date;
 
 public class RequestEntity implements Parcelable {
 
+    private String mId;
     private UserEntity mFrom;
     private UserEntity mTo;
     private double mFromAmount;
@@ -19,14 +20,16 @@ public class RequestEntity implements Parcelable {
     private Date mCreatedAt = new Date();
     private Direction mDirection;
 
-    public RequestEntity(UserEntity mFrom,
+    public RequestEntity(String mId,
+                         UserEntity mFrom,
                          UserEntity mTo,
                          double mFromAmount,
                          double mToAmount,
                          String mAdditionalNote,
                          RequestState mState,
                          Date mCreatedAt,
-                         Direction direction) {
+                         Direction mDirection) {
+        this.mId = mId;
         this.mFrom = mFrom;
         this.mTo = mTo;
         this.mFromAmount = mFromAmount;
@@ -34,7 +37,30 @@ public class RequestEntity implements Parcelable {
         this.mAdditionalNote = mAdditionalNote;
         this.mState = mState;
         this.mCreatedAt = mCreatedAt;
-        this.mDirection = direction;
+        this.mDirection = mDirection;
+    }
+
+    @Override
+    public String toString() {
+        return "RequestEntity{" + "\n" +
+                "mId=" + mId + "\n" +
+                "mFrom=" + mFrom + "\n" +
+                "mTo=" + mTo + "\n" +
+                "mFromAmount=" + mFromAmount + "\n" +
+                "mToAmount=" + mToAmount + "\n" +
+                "mAdditionalNote=" + mAdditionalNote + "\n" +
+                "mState=" + mState + "\n" +
+                "mCreatedAt=" + mCreatedAt + "\n" +
+                "mDirection=" + mDirection + "\n" +
+                "}";
+    }
+
+    public String getId() {
+        return mId;
+    }
+
+    public void setId(String mId) {
+        this.mId = mId;
     }
 
     public UserEntity getFrom() {
@@ -101,6 +127,7 @@ public class RequestEntity implements Parcelable {
         mDirection = direction;
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -108,6 +135,7 @@ public class RequestEntity implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.mId);
         dest.writeParcelable(this.mFrom, flags);
         dest.writeParcelable(this.mTo, flags);
         dest.writeDouble(this.mFromAmount);
@@ -115,10 +143,11 @@ public class RequestEntity implements Parcelable {
         dest.writeString(this.mAdditionalNote);
         dest.writeInt(this.mState == null ? -1 : this.mState.ordinal());
         dest.writeLong(this.mCreatedAt != null ? this.mCreatedAt.getTime() : -1);
-        dest.writeString(mDirection == null ? "" : mDirection.name());
+        dest.writeInt(this.mDirection == null ? -1 : this.mDirection.ordinal());
     }
 
     protected RequestEntity(Parcel in) {
+        this.mId = in.readString();
         this.mFrom = in.readParcelable(UserEntity.class.getClassLoader());
         this.mTo = in.readParcelable(UserEntity.class.getClassLoader());
         this.mFromAmount = in.readDouble();
@@ -128,8 +157,8 @@ public class RequestEntity implements Parcelable {
         this.mState = tmpMState == -1 ? null : RequestState.values()[tmpMState];
         long tmpMCreatedAt = in.readLong();
         this.mCreatedAt = tmpMCreatedAt == -1 ? null : new Date(tmpMCreatedAt);
-        String d = in.readString();
-        mDirection = d.equals("") ? null : Direction.valueOf(d);
+        int tmpMDirection = in.readInt();
+        this.mDirection = tmpMDirection == -1 ? null : Direction.values()[tmpMDirection];
     }
 
     public static final Creator<RequestEntity> CREATOR = new Creator<RequestEntity>() {

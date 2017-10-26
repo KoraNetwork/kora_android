@@ -29,6 +29,7 @@ public class RequestMapper {
                                 mUserMapper.transformResponseToEntityUser(requestResponse.getFrom()),
                                 mUserMapper.transformResponseToEntityUser(requestResponse.getTo()),
                                 (from, to) -> new RequestEntityBuilder()
+                                        .setId(requestResponse.getId())
                                         .setFrom(from)
                                         .setTo(to)
                                         .setFromAmount(requestResponse.getFromAmount())

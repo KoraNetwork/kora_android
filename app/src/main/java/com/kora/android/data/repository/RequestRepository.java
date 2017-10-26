@@ -20,4 +20,6 @@ public interface RequestRepository {
                                      final double fromAmount,
                                      final double toAmount,
                                      final List<String> transactionHash);
+
+    Observable<RequestEntity> updateRequest(final String requestId);
 }

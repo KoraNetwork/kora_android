@@ -59,4 +59,10 @@ public class RequestRepositoryImpl implements RequestRepository {
                 .addTransactionHash(transactionHash);
         return mRequestService.deleteRequest(requestId, deleteRequestRequest);
     }
+
+    @Override
+    public Observable<RequestEntity> updateRequest(final String requestId) {
+        return mRequestService.updateRequest(requestId)
+                .compose(mRequestMapper.transformResponseToRequestEntity());
+    }
 }
