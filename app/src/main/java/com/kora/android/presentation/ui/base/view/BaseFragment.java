@@ -19,6 +19,7 @@ import com.kora.android.di.component.ConfigPersistentComponent;
 import com.kora.android.di.component.DaggerConfigPersistentComponent;
 import com.kora.android.di.component.FragmentComponent;
 import com.kora.android.di.module.FragmentModule;
+import com.kora.android.presentation.navigation.Navigation;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.Presenter;
 
@@ -203,6 +204,10 @@ public abstract class BaseFragment<P extends Presenter> extends Fragment impleme
                 .beginTransaction()
                 .show(fragment)
                 .commitAllowingStateLoss();
+    }
+
+    public Navigation getNavigator() {
+        return ((BaseActivity) getActivity()).getNavigator();
     }
 
     @Override
