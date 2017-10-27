@@ -9,14 +9,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import com.kora.android.R;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
 import com.kora.android.presentation.ui.main.MainActivity;
-
-import butterknife.BindView;
 
 public abstract class StackFragment<P extends BasePresenter> extends BaseFragment<P> {
 
@@ -24,16 +21,12 @@ public abstract class StackFragment<P extends BasePresenter> extends BaseFragmen
     ActionBarDrawerToggle mDrawerToggle;
     DrawerLayout mDrawerLayout;
 
-    @Nullable
-    @BindView(R.id.title) TextView mTitle;
-
     @Override
     public void onActivityCreated(@Nullable final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         mToolbar = getToolbar();
         if (mToolbar != null) {
-            mToolbar.setTitle("");
             getBaseActivity().setTitle("");
             setTitle();
             if (getBaseActivity() instanceof MainActivity) {
@@ -46,15 +39,14 @@ public abstract class StackFragment<P extends BasePresenter> extends BaseFragmen
     private void setTitle() {
         int titleRes = getTitle();
         if (titleRes == -1) titleRes = R.string.empty_string;
-        if (mTitle != null)
-            mTitle.setText(titleRes);
-
+        setTitle(titleRes);
     }
 
     protected void setTitle(@StringRes int titleRes) {
         if (titleRes == -1) titleRes = R.string.empty_string;
-        if (mTitle != null)
-            mTitle.setText(titleRes);
+        if (mToolbar != null) {
+            mToolbar.setTitle(titleRes);
+        }
     }
 
     @StringRes

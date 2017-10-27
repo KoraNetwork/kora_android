@@ -26,7 +26,7 @@ import com.kora.android.presentation.ui.base.backstack.BackStackActivity;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
 import com.kora.android.presentation.ui.login.LoginActivity;
-import com.kora.android.presentation.ui.main.fragments.borrow.BorrowFragment;
+import com.kora.android.presentation.ui.main.fragments.borrow.BorrowMainFragment;
 import com.kora.android.presentation.ui.main.fragments.home.HomeFragment;
 import com.kora.android.presentation.ui.main.fragments.profile.ProfileFragment;
 import com.kora.android.presentation.ui.main.fragments.request.RequestFragment;
@@ -128,7 +128,7 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
             case TAB_REQUEST_MONEY_POSITION:
                 return RequestFragment.getNewInstance();
             case TAB_BORROW_MONEY_POSITION:
-                return BorrowFragment.getNewInstance();
+                return BorrowMainFragment.getNewInstance();
             case TAB_DEPOSIT_POSITION:
                 return TransactionsFragment.getNewInstance();
             case TAB_WITHDRAWAL_POSITION:

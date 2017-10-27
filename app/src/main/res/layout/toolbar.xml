@@ -5,18 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="?android:attr/actionBarSize">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:elevation="3dp">
-
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:fontFamily="@font/muli_semi_bold"
-            style="@style/AppTheme.MainTheme.ActionBar.TitleTextStyle"/>
-    </android.support.v7.widget.Toolbar>
+    <include layout="@layout/toolbar_single" />
 
 </android.support.design.widget.AppBarLayout>

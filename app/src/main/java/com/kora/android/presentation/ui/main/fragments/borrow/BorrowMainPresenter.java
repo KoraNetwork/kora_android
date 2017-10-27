@@ -6,10 +6,10 @@ import com.kora.android.presentation.ui.base.presenter.BasePresenter;
 import javax.inject.Inject;
 
 @ConfigPersistent
-public class BorrowPresenter extends BasePresenter<BorrowView> {
+public class BorrowMainPresenter extends BasePresenter<BorrowMainView> {
 
     @Inject
-    public BorrowPresenter() {
+    public BorrowMainPresenter() {
 
     }
 }

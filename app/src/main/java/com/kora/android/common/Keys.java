@@ -98,6 +98,7 @@ public interface Keys {
         String ACTION_TYPE = "action_type_arg";
         String REQUEST_ENTITY = "request_entity_args";
         String REQUEST_ID = "request_id_arg";
+        String ARG_BORROW_TYPE = "borrow_type_args";
     }
 
     interface Users {

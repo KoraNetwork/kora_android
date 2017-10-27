@@ -140,7 +140,6 @@ public class ThirdStepActivity extends BaseActivity<ThirdStepPresenter> implemen
                 mCvNextFinish.setBackgroundColor(ContextCompat.getColor(this, R.color.color_button_background_green_1));
                 mTvNextFinish.setText(R.string.registration_finish);
                 getPresenter().setViewMode(VIEW_MODE_CONFIRM);
-                ViewUtils.hideKeyboard(this);
                 break;
             case VIEW_MODE_CONFIRM:
                 mTvCreateConfirmPin.setText(R.string.registration_create_pin_code);
@@ -148,9 +147,13 @@ public class ThirdStepActivity extends BaseActivity<ThirdStepPresenter> implemen
                 mCvNextFinish.setBackgroundColor(ContextCompat.getColor(this, R.color.color_button_background_blue));
                 mTvNextFinish.setText(R.string.registration_next);
                 getPresenter().setViewMode(VIEW_MODE_ENTER);
-                ViewUtils.hideKeyboard(this);
                 break;
         }
+        mEtPinFirstDigit.clearFocus();
+        mEtPinSecondDigit.clearFocus();
+        mEtPinThirdDigit.clearFocus();
+        mEtPinFourthDigit.clearFocus();
+        ViewUtils.hideKeyboard(this);
     }
 
     @Override

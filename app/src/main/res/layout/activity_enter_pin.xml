@@ -2,6 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusableInTouchMode="true">
@@ -24,10 +25,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:fontFamily="@font/muli_bold"
                 android:text="@string/enter_pin_enter_pin"
                 android:textColor="@color/color_button_text_white"
-                android:textSize="20sp"
-                app:fontFamily="@font/muli_bold" />
+                android:textSize="20sp" />
         </RelativeLayout>
 
     </android.support.v7.widget.Toolbar>
@@ -49,10 +50,10 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="36dp"
+                android:fontFamily="@font/muli_normal"
                 android:text="@string/enter_pin_to_confirm"
                 android:textColor="@color/color_text_text"
-                android:textSize="16sp"
-                app:fontFamily="@font/muli_normal" />
+                android:textSize="16sp" />
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/edit_layout_enter_pin"
@@ -74,12 +75,14 @@
                         android:id="@+id/edit_text_pin_first_digit"
                         android:layout_width="45dp"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/muli_normal"
                         android:gravity="center"
                         android:inputType="number"
                         android:maxLength="1"
                         android:maxLines="1"
                         android:textColor="@color/color_edit_text"
-                        android:textSize="24sp" />
+                        android:textSize="24sp"
+                        tools:text="1" />
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/edit_text_pin_second_digit"
@@ -87,12 +90,14 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
                         android:layout_marginStart="15dp"
+                        android:fontFamily="@font/muli_normal"
                         android:gravity="center"
                         android:inputType="number"
                         android:maxLength="1"
                         android:maxLines="1"
                         android:textColor="@color/color_edit_text"
-                        android:textSize="24sp" />
+                        android:textSize="24sp"
+                        tools:text="1" />
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/edit_text_pin_third_digit"
@@ -100,12 +105,14 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
                         android:layout_marginStart="15dp"
+                        android:fontFamily="@font/muli_normal"
                         android:gravity="center"
                         android:inputType="number"
                         android:maxLength="1"
                         android:maxLines="1"
                         android:textColor="@color/color_edit_text"
-                        android:textSize="24sp" />
+                        android:textSize="24sp"
+                        tools:text="1" />
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/edit_text_pin_fourth_digit"
@@ -113,12 +120,14 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
                         android:layout_marginStart="15dp"
+                        android:fontFamily="@font/muli_normal"
                         android:gravity="center"
                         android:inputType="number"
                         android:maxLength="1"
                         android:maxLines="1"
                         android:textColor="@color/color_edit_text"
-                        android:textSize="24sp" />
+                        android:textSize="24sp"
+                        tools:text="1" />
                 </LinearLayout>
 
             </android.support.design.widget.TextInputLayout>
@@ -150,10 +159,10 @@
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
+                        android:fontFamily="@font/muli_bold"
                         android:text="@string/enter_pin_finish"
                         android:textColor="@color/color_button_text_white"
-                        android:textSize="14sp"
-                        app:fontFamily="@font/muli_bold" />
+                        android:textSize="14sp" />
                 </RelativeLayout>
 
             </android.support.v7.widget.CardView>
