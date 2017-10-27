@@ -9,6 +9,7 @@ import android.text.Editable;
 import android.widget.Toast;
 
 import com.kora.android.R;
+import com.kora.android.common.utils.ViewUtils;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.enums.ActionType;
 import com.kora.android.presentation.model.UserEntity;
@@ -160,7 +161,7 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
     @OnClick(R.id.card_view_finish)
     public void onClickFinish() {
         final String pinCode =
-                mEtPinFirstDigit.getText().toString().trim() +
+                        mEtPinFirstDigit.getText().toString().trim() +
                         mEtPinSecondDigit.getText().toString().trim() +
                         mEtPinThirdDigit.getText().toString().trim() +
                         mEtPinFourthDigit.getText().toString().trim();
@@ -169,6 +170,7 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
 
     @Override
     public void showNextScreen() {
+        ViewUtils.hideKeyboard(this);
         Toast.makeText(this, R.string.enter_pin_transaction_is_sent, Toast.LENGTH_SHORT).show();
         startActivity(MainActivity.getLaunchIntent(this));
     }

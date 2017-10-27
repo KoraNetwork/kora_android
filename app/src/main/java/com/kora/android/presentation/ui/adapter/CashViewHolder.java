@@ -1,4 +1,4 @@
-package com.kora.android.presentation.ui.main.fragments.transactions.adapter;
+package com.kora.android.presentation.ui.adapter;
 
 import android.content.Context;
 import android.support.annotation.Nullable;

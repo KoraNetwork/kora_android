@@ -19,7 +19,7 @@ import com.kora.android.presentation.ui.main.fragments.transactions.filter.Trans
 import com.kora.android.presentation.model.TransactionEntity;
 import com.kora.android.presentation.ui.base.backstack.StackFragment;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
-import com.kora.android.presentation.ui.main.fragments.transactions.adapter.TransactionAdapter;
+import com.kora.android.presentation.ui.adapter.TransactionAdapter;
 import com.kora.android.presentation.ui.main.fragments.transactions.filter.TransactionFilterDialog;
 import com.kora.android.presentation.ui.base.adapter.RecyclerViewScrollListener;
 import com.kora.android.views.DividerItemDecoration;
