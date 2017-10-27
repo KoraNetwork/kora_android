@@ -236,7 +236,7 @@
     <string name="request_money_from_label">From: %1$s</string>
     <string name="request_money_ask_for_money_label">To: %1$s</string>
     <string name="request_money_ask_to_me">To: Me</string>
-    <string name="request_money_ask_money_label">%1$s ask for money</string>
+    <string name="request_money_ask_money_label">To: %1$s</string>
     <string name="request_money_status_in_progress">In progress</string>
     <string name="request_money_status_rejected">Reject</string>
 

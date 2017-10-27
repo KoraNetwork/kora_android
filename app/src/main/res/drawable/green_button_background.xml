@@ -3,8 +3,8 @@
         android:color="#194665">
     <item>
         <shape android:shape="rectangle">
-            <color android:color="@color/color_button_background_green_1"/>
-            <corners android:radius="4dp"/>
+            <solid android:color="@color/color_button_background_green_1" />
+            <corners android:radius="4dp" />
         </shape>
     </item>
     <item android:id="@android:id/mask">
