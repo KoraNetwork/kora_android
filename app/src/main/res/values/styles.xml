@@ -68,7 +68,7 @@
         <item name="android:gravity">left|center_vertical</item>
     </style>
 
-    <style name="AppTheme.ActionButton" parent="Base.TextAppearance.AppCompat.Button">
+    <style name="AppTheme.ActionButton" parent="Base.Widget.AppCompat.Button">
         <item name="android:layout_marginBottom">24dp</item>
         <item name="android:layout_marginTop">24dp</item>
         <item name="android:layout_marginLeft">16dp</item>

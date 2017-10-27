@@ -23,6 +23,7 @@ import com.kora.android.common.Keys;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.backstack.BackStackActivity;
+import com.kora.android.presentation.ui.base.custom.MultiDialog;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
 import com.kora.android.presentation.ui.login.LoginActivity;
@@ -188,7 +189,17 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
                 break;
 
             case R.id.nav_log_out:
-                getPresenter().logout();
+                new MultiDialog.DialogBuilder()
+                        .setTitle(R.string.dialog_logout_title)
+                        .setMessage(R.string.dialog_logout_message)
+                        .setPositiveButton(R.string.dialog_logout_positive_btn, (dialogInterface, i) -> {
+                            dialogInterface.dismiss();
+                            getPresenter().logout();
+                        })
+                        .setNegativeButton(R.string.dialog_logout_negative_btn, (dialogInterface, i) -> {
+                            dialogInterface.dismiss();
+                        })
+                        .build(this).show();
                 break;
         }
 

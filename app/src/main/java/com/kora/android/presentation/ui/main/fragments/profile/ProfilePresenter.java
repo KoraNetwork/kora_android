@@ -204,6 +204,9 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
         @Override
         public void onNext(UserEntity userEntity) {
             mUserEntity = userEntity;
+            if (!isViewAttached()) return;
+            getView().retrieveUserData(userEntity);
+
         }
 
         @Override

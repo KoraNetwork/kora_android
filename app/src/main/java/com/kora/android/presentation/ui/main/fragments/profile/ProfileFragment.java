@@ -34,6 +34,7 @@ import com.kora.android.presentation.model.CountryEntity;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.backstack.StackFragment;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
+import com.kora.android.presentation.ui.main.MainActivity;
 import com.kora.android.presentation.ui.registration.currencies.CurrenciesActivity;
 import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo;
 import com.miguelbcr.ui.rx_paparazzo2.entities.Options;
@@ -217,6 +218,7 @@ public class ProfileFragment extends StackFragment<ProfilePresenter>
 
     @Override
     public void retrieveUserData(final UserEntity userEntity) {
+        ((MainActivity) getActivity()).showUserData(userEntity);
         Glide.with(this)
                 .load(API_BASE_URL + userEntity.getAvatar())
                 .apply(RequestOptions.circleCropTransform())
