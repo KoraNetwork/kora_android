@@ -2,7 +2,4 @@ vmartynyuk@pettersonapps.com,
 volodymyr.mitso@pettersonapps.com,
 victoria.mygalko@pettersonapps.com,
 lashkay77777@gmail.com,
-rkatsala@gmail.com,
-dixon@kora.foundation,
-maomao@kora.foundation,
-fine.eugene@gmail.com
+rkatsala@gmail.com

@@ -10,6 +10,11 @@
     <string name="dialog_retry_positive_btn">Retry</string>
     <string name="dialog_retry_negative_btn">Cancel</string>
 
+    <string name="dialog_logout_title">Warning?</string>
+    <string name="dialog_logout_message">Are you sure you want to logout?</string>
+    <string name="dialog_logout_positive_btn">Logout</string>
+    <string name="dialog_logout_negative_btn">Cancel</string>
+
     <string name="dialog_action_ok">OK</string>
 
     <string name="dialog_permission_export_wallet_title">Info</string>
@@ -163,8 +168,8 @@
 
     <!-- Send To Request From -->
     <string name="send_money_send_title" formatted="false">Send to %s</string>
-    <string name="send_money_request_from" formatted="false">Send for %s</string>
-    <string name="send_money_request_to" formatted="false">Ask for %s</string>
+    <string name="send_money_request_from" formatted="false">Requested by %s</string>
+    <string name="send_money_request_to" formatted="false">Requested for %s</string>
     <string name="send_money_request_title" formatted="false">Request from %s</string>
     <string name="send_money_amount_in_users_currency_label">Amount in users currency</string>
     <string name="converted_amount_value">%1$.2f</string>
@@ -229,7 +234,8 @@
     <string name="request_money_title">Request money</string>
     <string name="request_money_from_my_label">From: Me</string>
     <string name="request_money_from_label">From: %1$s</string>
-    <string name="request_money_ask_for_money_label">Ask for money</string>
+    <string name="request_money_ask_for_money_label">To: %1$s</string>
+    <string name="request_money_ask_to_me">To: Me</string>
     <string name="request_money_ask_money_label">%1$s ask for money</string>
     <string name="request_money_status_in_progress">In progress</string>
     <string name="request_money_status_rejected">Reject</string>
