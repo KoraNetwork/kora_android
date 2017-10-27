@@ -1,10 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusableInTouchMode="true">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/color_toolbar"
+        android:contentInsetLeft="0dp"
+        android:contentInsetStart="0dp"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/image_view_kora_logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_kora_logo_small" />
+        </RelativeLayout>
+
+    </android.support.v7.widget.Toolbar>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:layout_below="@id/toolbar"
+        android:id="@+id/swipe_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -15,35 +47,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/color_toolbar"
-                android:contentInsetLeft="0dp"
-                android:contentInsetStart="0dp"
-                app:contentInsetLeft="0dp"
-                app:contentInsetStart="0dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:id="@+id/image_view_kora_logo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/ic_kora_logo_small" />
-                </RelativeLayout>
-
-            </android.support.v7.widget.Toolbar>
-
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_view_balance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/toolbar"
                 android:layout_marginLeft="16dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
@@ -172,7 +179,7 @@
                 android:layout_below="@id/image_view_flag"
                 android:layout_marginLeft="16dp"
                 android:layout_marginStart="16sp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="36dp"
                 android:text="@string/home_my_apps"
                 android:textColor="@color/color_text_blue"
                 android:textSize="16sp"
@@ -183,12 +190,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/text_view_my_apps"
-                android:layout_marginTop="8dp">
+                android:layout_marginTop="16dp"
+                android:scrollbars="none">
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:paddingBottom="8dp">
+                    android:layout_height="match_parent">
 
                     <LinearLayout
                         android:id="@+id/linear_layout_agent"
@@ -307,8 +314,8 @@
                         android:id="@+id/image_view_add"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignBottom="@+id/linear_layout_cooperative"
                         android:layout_alignTop="@+id/linear_layout_cooperative"
+                        android:layout_marginTop="20dp"
                         android:layout_marginLeft="24dp"
                         android:layout_marginRight="24dp"
                         android:layout_toEndOf="@+id/linear_layout_cooperative"
@@ -326,21 +333,30 @@
                 android:layout_below="@+id/scroll_view_my_apps"
                 android:layout_marginLeft="16dp"
                 android:layout_marginStart="16sp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="36dp"
                 android:text="@string/home_transactions"
                 android:textColor="@color/color_text_blue"
                 android:textSize="16sp"
                 app:fontFamily="@font/muli_bold" />
 
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view_transactions"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/text_view_transactions"
+                android:layout_marginTop="16dp"
+                android:paddingBottom="16dp"
+                android:scrollbars="none" />
+
             <android.support.v7.widget.CardView
                 android:id="@+id/card_view_show_all_transactions"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/text_view_transactions"
+                android:layout_below="@+id/recycler_view_transactions"
                 android:layout_marginBottom="24dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="16dp"
                 android:clickable="true"
                 android:foreground="?android:attr/selectableItemBackground"
                 app:cardBackgroundColor="@color/color_button_background_blue"
@@ -369,5 +385,8 @@
         </RelativeLayout>
 
     </ScrollView>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 
 </RelativeLayout>

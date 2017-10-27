@@ -6,10 +6,15 @@ import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.base.DefaultWeb3jSubscriber;
 import com.kora.android.domain.usecase.balance.GetBalanceUseCase;
+import com.kora.android.domain.usecase.transaction.GetTransactionsUseCase;
 import com.kora.android.domain.usecase.user.GetUserDataUseCase;
+import com.kora.android.presentation.model.TransactionEntity;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
+import com.kora.android.presentation.ui.main.fragments.transactions.filter.TransactionFilterModel;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -21,14 +26,17 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
     private final GetUserDataUseCase mUserDataUseCase;
     private final GetBalanceUseCase mGetBalanceUseCase;
+    private final GetTransactionsUseCase mGetTransactionsUseCase;
 
     private UserEntity mUserEntity;
 
     @Inject
     public HomePresenter(final GetUserDataUseCase userDataUseCase,
-                         final GetBalanceUseCase getBalanceUseCase) {
+                         final GetBalanceUseCase getBalanceUseCase,
+                         final GetTransactionsUseCase getTransactionsUseCase) {
         mUserDataUseCase = userDataUseCase;
         mGetBalanceUseCase = getBalanceUseCase;
+        mGetTransactionsUseCase = getTransactionsUseCase;
     }
 
     public void startGetUserTask() {
@@ -61,6 +69,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
         protected void onStart() {
             if (!isViewAttached()) return;
             getView().showProgress(true);
+            getView().enableAndShowRefreshIndicator(true, false);
         }
 
         @Override
@@ -82,6 +91,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             super.onError(throwable);
             if (!isViewAttached()) return;
             getView().showProgress(false);
+            getView().enableAndShowRefreshIndicator(true, false);
         }
 
         @Override
@@ -110,19 +120,21 @@ public class HomePresenter extends BasePresenter<HomeView> {
             if(!isViewAttached()) return;
             getView().showBalance(balance + " " + mUserEntity.getCurrency());
             getView().showCurrencyName(mUserEntity.getCurrencyNameFull());
+            startGetTransactionTask();
         }
 
-        @Override
-        public void onComplete() {
-            if (!isViewAttached()) return;
-            getView().showProgress(false);
-        }
+//        @Override
+//        public void onComplete() {
+//            if (!isViewAttached()) return;
+//            getView().showProgress(false);
+//        }
 
         @Override
         public void onError(@NonNull final Throwable throwable) {
             super.onError(throwable);
             if (!isViewAttached()) return;
             getView().showProgress(false);
+            getView().enableAndShowRefreshIndicator(true, false);
         }
 
         @Override
@@ -132,9 +144,62 @@ public class HomePresenter extends BasePresenter<HomeView> {
         }
     }
 
+    public void startGetTransactionTask() {
+        mGetTransactionsUseCase.setData(new TransactionFilterModel(), 0);
+        mGetTransactionsUseCase.execute(new GetTransactionsSubscriber());
+    }
+
+    private Action mGetTransactionsAction = new Action() {
+        @Override
+        public void run() throws Exception {
+            mGetTransactionsUseCase.execute(new GetTransactionsSubscriber());
+        }
+    };
+
+    private class GetTransactionsSubscriber extends DefaultInternetSubscriber<List<TransactionEntity>> {
+
+//        @Override
+//        protected void onStart() {
+//            if (!isViewAttached()) return;
+//            getView().showProgress(true);
+//        }
+
+        @Override
+        public void onNext(@NonNull final List<TransactionEntity> transactionEntityList) {
+            if (!isViewAttached()) return;
+            getView().showTransactions(transactionEntityList);
+        }
+
+        @Override
+        public void onComplete() {
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+            getView().enableAndShowRefreshIndicator(true, false);
+        }
+
+        @Override
+        public void onError(@NonNull final Throwable throwable) {
+            super.onError(throwable);
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+            getView().enableAndShowRefreshIndicator(true, false);
+        }
+
+        @Override
+        public void handleUnprocessableEntity(final ErrorModel errorModel) {
+            getView().showError(errorModel.getError());
+        }
+
+        @Override
+        public void handleNetworkError(final RetrofitException retrofitException) {
+            getView().showErrorWithRetry(new RetryAction(mGetTransactionsAction));
+        }
+    }
+
     @Override
     public void onDetachView() {
         mUserDataUseCase.dispose();
         mGetBalanceUseCase.dispose();
+        mGetTransactionsUseCase.dispose();
     }
 }

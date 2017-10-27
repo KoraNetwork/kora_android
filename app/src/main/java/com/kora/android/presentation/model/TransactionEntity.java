@@ -150,4 +150,18 @@ public class TransactionEntity implements Parcelable {
         dest.writeLong(createdAt.getTime());
     }
 
+    @Override
+    public String toString() {
+        return "TransactionEntity{" + "\n" +
+                "id='" + id + "\n" +
+                "fromAmount=" + fromAmount + "\n" +
+                "toAmount=" + toAmount + "\n" +
+                "transactionHash=" + transactionHash + "\n" +
+                "sender=" + sender + "\n" +
+                "receiver=" + receiver + "\n" +
+                "transactionType=" + transactionType + "\n" +
+                "mDirection=" + mDirection + "\n" +
+                "createdAt=" + createdAt + "\n" +
+                "}";
+    }
 }

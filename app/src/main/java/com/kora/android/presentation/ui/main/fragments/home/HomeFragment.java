@@ -1,6 +1,10 @@
 package com.kora.android.presentation.ui.main.fragments.home;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -8,14 +12,20 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.kora.android.R;
 import com.kora.android.di.component.FragmentComponent;
+import com.kora.android.presentation.model.TransactionEntity;
+import com.kora.android.presentation.ui.adapter.TransactionAdapter;
 import com.kora.android.presentation.ui.base.backstack.StackFragment;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
+import com.kora.android.views.DividerItemDecoration;
+
+import java.util.List;
 
 import butterknife.BindView;
 
 import static com.kora.android.data.network.Constants.API_BASE_URL;
 
-public class HomeFragment extends StackFragment<HomePresenter> implements HomeView {
+public class HomeFragment extends StackFragment<HomePresenter> implements HomeView,
+        SwipeRefreshLayout.OnRefreshListener {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -25,6 +35,12 @@ public class HomeFragment extends StackFragment<HomePresenter> implements HomeVi
     TextView mTvCurrencyBalance;
     @BindView(R.id.text_view_currency_name)
     TextView mTvCurrencyName;
+    @BindView(R.id.recycler_view_transactions)
+    RecyclerView mRvTransactions;
+    @BindView(R.id.swipe_layout)
+    SwipeRefreshLayout mSlRefresh;
+
+    private TransactionAdapter mTransactionAdapter;
 
     public static BaseFragment getNewInstance() {
         return new HomeFragment();
@@ -48,7 +64,21 @@ public class HomeFragment extends StackFragment<HomePresenter> implements HomeVi
     @Override
     protected void onViewReady(final Bundle savedInstanceState) {
 
+        initUI();
         getPresenter().startGetUserTask();
+    }
+
+    private void initUI() {
+        mTransactionAdapter = new TransactionAdapter(null);
+
+        mRvTransactions.setLayoutManager(new LinearLayoutManager(getBaseActivity()));
+        mRvTransactions.setAdapter(mTransactionAdapter);
+        mRvTransactions.setItemAnimator(new DefaultItemAnimator());
+        mRvTransactions.addItemDecoration(new DividerItemDecoration(
+                mRvTransactions.getContext(),
+                R.drawable.list_divider));
+
+        mSlRefresh.setOnRefreshListener(this);
     }
 
     @Override
@@ -66,5 +96,23 @@ public class HomeFragment extends StackFragment<HomePresenter> implements HomeVi
     @Override
     public void showCurrencyName(final String currencyName) {
         mTvCurrencyName.setText(currencyName);
+    }
+
+    @Override
+    public void showTransactions(final List<TransactionEntity> transactionEntityList) {
+        mTransactionAdapter.clearAll();
+        mTransactionAdapter.addItems(transactionEntityList);
+    }
+
+    @Override
+    public void enableAndShowRefreshIndicator(final boolean enableIndicator,
+                                              final boolean showIndicator) {
+        mSlRefresh.setEnabled(enableIndicator);
+        mSlRefresh.setRefreshing(showIndicator);
+    }
+
+    @Override
+    public void onRefresh() {
+        getPresenter().startGetUserTask();
     }
 }
