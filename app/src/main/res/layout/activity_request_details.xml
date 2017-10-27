@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
 
-    <include layout="@layout/toolbar"/>
+    <include layout="@layout/toolbar" />
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -25,7 +28,8 @@
                 android:orientation="horizontal"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:paddingTop="16dp">
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp">
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/user_image"
@@ -48,7 +52,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/color_black"
                         android:textSize="16sp"
-                        app:fontFamily="@font/muli_bold"
+                        android:fontFamily="@font/muli_bold"
                         tools:text="User Name"/>
 
                     <LinearLayout
@@ -63,7 +67,7 @@
                             android:layout_weight="1"
                             android:textColor="#696a6b"
                             android:textSize="14sp"
-                            app:fontFamily="@font/muli_regular"
+                            android:fontFamily="@font/muli_regular"
                             tools:text="631-270-2352"/>
 
                         <android.support.v7.widget.AppCompatTextView
@@ -82,14 +86,14 @@
             </LinearLayout>
 
             <LinearLayout
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
                 android:id="@+id/returned_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="8dp"
                 android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp">
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -115,28 +119,27 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
                 <RelativeLayout
+                    android:layout_marginTop="12dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_weight="1"
-                    android:gravity="bottom">
+                    android:layout_height="wrap_content">
 
                     <com.kora.android.views.TextInputLayoutWithDrawable
+                        android:fontFamily="@font/muli_regular"
+                        android:layout_toLeftOf="@+id/my_suffix"
+                        android:layout_toStartOf="@+id/my_suffix"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="true"
                         android:id="@+id/edit_layout_amount"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
-                        android:layout_marginTop="12dp"
                         app:errorEnabled="true">
 
                         <android.support.design.widget.TextInputEditText
+                            android:fontFamily="@font/muli_regular"
+                            tools:text="100"
                             android:id="@+id/edit_text_sender_amount"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -149,68 +152,82 @@
                     </com.kora.android.views.TextInputLayoutWithDrawable>
 
                     <android.support.v7.widget.AppCompatTextView
+                        android:fontFamily="@font/muli_regular"
+                        android:layout_marginTop="25dp"
                         android:id="@+id/my_suffix"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:layout_centerInParent="true"
-                        android:paddingBottom="12dp"
-                        android:paddingRight="12dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginRight="16dp"
                         android:textColor="@color/color_edit_text"
-                        android:textSize="16sp"/>
+                        android:textSize="16sp"
+                        tools:text="USD" />
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_weight="1"
-                    android:gravity="bottom">
+                    android:layout_height="wrap_content">
 
                     <com.kora.android.views.TextInputLayoutWithDrawable
+                        android:fontFamily="@font/muli_regular"
+                        android:layout_toLeftOf="@+id/his_suffix"
+                        android:layout_toStartOf="@+id/his_suffix"
                         android:id="@+id/edit_layout_converted_amount"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
-                        android:layout_marginTop="12dp"
                         app:errorEnabled="true">
 
                         <android.support.design.widget.TextInputEditText
+
+                            android:clickable="false"
+                            android:cursorVisible="false"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+
+                            android:fontFamily="@font/muli_regular"
+                            tools:text="2700"
+                            android:layout_toLeftOf="@+id/my_suffix"
+                            android:layout_toStartOf="@+id/my_suffix"
                             android:id="@+id/edit_text_receiver_amount"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:enabled="false"
                             android:hint="@string/send_money_amount_in_users_currency_label"
-                            android:inputType="text"
                             android:maxLines="1"
                             android:textColor="@color/color_edit_text"
                             android:textSize="16sp"/>
                     </com.kora.android.views.TextInputLayoutWithDrawable>
 
                     <android.support.v7.widget.AppCompatTextView
+                        android:layout_marginTop="25dp"
+                        android:fontFamily="@font/muli_regular"
                         android:id="@+id/his_suffix"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
                         android:layout_centerInParent="true"
-                        android:paddingBottom="12dp"
-                        android:paddingRight="12dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginRight="16dp"
                         android:textColor="@color/color_edit_text"
-                        android:textSize="16sp"/>
+                        android:textSize="16sp"
+                        tools:text="UAH" />
                 </RelativeLayout>
-            </LinearLayout>
 
             <com.kora.android.views.TextInputLayoutWithDrawable
+                android:fontFamily="@font/muli_regular"
                 android:id="@+id/edit_layout_additional"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginTop="12dp"
                 app:errorEnabled="true">
 
                 <android.support.design.widget.TextInputEditText
+                    android:fontFamily="@font/muli_regular"
                     android:id="@+id/edit_text_additional"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

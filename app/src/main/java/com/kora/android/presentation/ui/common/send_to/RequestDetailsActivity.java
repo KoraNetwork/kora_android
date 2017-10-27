@@ -203,6 +203,7 @@ public class RequestDetailsActivity extends ToolbarActivity<RequestDetailsPresen
     }
 
     public void retrieveReceiver(UserEntity user) {
+        mHisSuffixText.setText(user.getCurrency());
 
         setTitle(getString(R.string.send_money_send_title, user.getFullName()));
         mUserName.setText(user.getFullName());
@@ -222,7 +223,7 @@ public class RequestDetailsActivity extends ToolbarActivity<RequestDetailsPresen
     @Override
     public void showConvertedCurrency(Double amount, String currency) {
         mReceiverAmount.setText(String.format(Locale.ENGLISH, "%1$.2f", amount));
-        mHisSuffixText.setText(currency);
+//        mHisSuffixText.setText(currency);
     }
 
     @Override

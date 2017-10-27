@@ -171,7 +171,7 @@
     <string name="send_money_request_from" formatted="false">Requested by %s</string>
     <string name="send_money_request_to" formatted="false">Requested from %s</string>
     <string name="send_money_request_title" formatted="false">Request from %s</string>
-    <string name="send_money_amount_in_users_currency_label">Amount in users currency</string>
+    <string name="send_money_amount_in_users_currency_label">Amount in user currency</string>
     <string name="converted_amount_value">%1$.2f</string>
     <string name="send_money_amount_label">Amount</string>
     <string name="send_money_aditional_label">Additional Note</string>

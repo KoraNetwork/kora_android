@@ -2,6 +2,7 @@ package com.kora.android.presentation.ui.main.fragments.home;
 
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,6 +22,7 @@ import com.kora.android.views.DividerItemDecoration;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 import static com.kora.android.data.network.Constants.API_BASE_URL;
 
@@ -39,6 +41,8 @@ public class HomeFragment extends StackFragment<HomePresenter> implements HomeVi
     RecyclerView mRvTransactions;
     @BindView(R.id.swipe_layout)
     SwipeRefreshLayout mSlRefresh;
+    @BindView(R.id.card_view_show_all_transactions)
+    CardView mCvShowTransactions;
 
     private TransactionAdapter mTransactionAdapter;
 
@@ -114,5 +118,10 @@ public class HomeFragment extends StackFragment<HomePresenter> implements HomeVi
     @Override
     public void onRefresh() {
         getPresenter().startGetUserTask();
+    }
+
+    @OnClick(R.id.card_view_show_all_transactions)
+    public void onClickShowTransactions() {
+        
     }
 }
