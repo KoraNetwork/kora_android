@@ -142,13 +142,13 @@
     <!-- Menu and main activity -->
     <string name="menu_home">Home</string>
     <string name="menu_send_money">Send Money</string>
-    <string name="requests_money">Requests Money</string>
+    <string name="requests_money">Request Money</string>
     <string name="menu_borrow_money">Borrow Money</string>
     <string name="menu_deposit">Deposit</string>
     <string name="menu_withdrawal">Withdrawal</string>
     <string name="menu_transactions_history">Transactions History</string>
     <string name="menu_user_profile">User Profile</string>
-    <string name="menu_sand_a_feedback">Sand a Feedback</string>
+    <string name="menu_sand_a_feedback">Send a Feedback</string>
     <string name="menu_logout">Log out</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -181,9 +181,9 @@
     <string name="empty_receiver_amount_error">Receiver amount should be not empty</string>
     <string name="send_money_confirm_button_label">Confirm</string>
     <string name="send_money_reject_label">Reject</string>
-    <string name="send_money_confirm_success">Request confirmed</string>
-    <string name="send_money_reject_success">Request rejected</string>
-    <string name="send_money_request_send_success">Request sent</string>
+    <string name="send_money_confirm_success">Request is confirmed</string>
+    <string name="send_money_reject_success">Request is rejected</string>
+    <string name="send_money_request_send_success">Request is sent</string>
 
     <!-- Add contact activity -->
     <string name="add_contact_title">Add your contacts</string>
