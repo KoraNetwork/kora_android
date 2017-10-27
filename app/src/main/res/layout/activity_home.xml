@@ -50,7 +50,7 @@
                 android:text="@string/home_balance"
                 android:textColor="@color/color_text_blue"
                 android:textSize="16sp"
-                app:fontFamily="@font/muli_bold" />
+                android:fontFamily="@font/muli_bold" />
 
             <LinearLayout
                 android:id="@+id/linear_layout_deposit_withdraw"
@@ -87,7 +87,7 @@
                             android:text="@string/home_deposit"
                             android:textColor="@color/color_button_text_white"
                             android:textSize="14sp"
-                            app:fontFamily="@font/muli_bold" />
+                            android:fontFamily="@font/muli_bold" />
                     </RelativeLayout>
 
                 </android.support.v7.widget.CardView>
@@ -120,7 +120,7 @@
                             android:text="@string/home_withdraw"
                             android:textColor="@color/color_button_text_white"
                             android:textSize="14sp"
-                            app:fontFamily="@font/muli_bold" />
+                            android:fontFamily="@font/muli_bold" />
                     </RelativeLayout>
 
                 </android.support.v7.widget.CardView>
@@ -148,7 +148,7 @@
                 android:layout_toRightOf="@+id/image_view_flag"
                 android:textColor="@color/color_text_black"
                 android:textSize="14sp"
-                app:fontFamily="@font/muli_semi_bold"
+                android:fontFamily="@font/muli_semi_bold"
                 tools:text="100.00 USD" />
 
             <android.support.v7.widget.AppCompatTextView
@@ -162,7 +162,7 @@
                 android:layout_toRightOf="@+id/image_view_flag"
                 android:textColor="@color/color_text_grey"
                 android:textSize="12sp"
-                app:fontFamily="@font/muli_regular"
+                android:fontFamily="@font/muli_regular"
                 tools:text="United States Dollar" />
 
             <android.support.v7.widget.AppCompatTextView
@@ -176,7 +176,7 @@
                 android:text="@string/home_my_apps"
                 android:textColor="@color/color_text_blue"
                 android:textSize="16sp"
-                app:fontFamily="@font/muli_bold" />
+                android:fontFamily="@font/muli_bold" />
 
             <HorizontalScrollView
                 android:id="@+id/scroll_view_my_apps"
@@ -206,6 +206,7 @@
                             android:src="@drawable/ic_agent" />
 
                         <TextView
+                            android:fontFamily="@font/muli_regular"
                             android:id="@+id/text_view_agent"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -234,10 +235,10 @@
                             android:src="@drawable/ic_merchant" />
 
                         <TextView
+                            android:fontFamily="@font/muli_regular"
                             android:id="@+id/text_view_merchant"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-
                             android:layout_marginTop="4dp"
                             android:gravity="center"
                             android:text="@string/home_merchant"
@@ -264,6 +265,7 @@
                             android:src="@drawable/ic_lending" />
 
                         <TextView
+                            android:fontFamily="@font/muli_regular"
                             android:id="@+id/text_view_lending"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -293,6 +295,7 @@
                             android:src="@drawable/ic_cooperative" />
 
                         <TextView
+                            android:fontFamily="@font/muli_regular"
                             android:id="@+id/text_view_cooperative"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -330,7 +333,7 @@
                 android:text="@string/home_transactions"
                 android:textColor="@color/color_text_blue"
                 android:textSize="16sp"
-                app:fontFamily="@font/muli_bold" />
+                android:fontFamily="@font/muli_bold" />
 
             <android.support.v7.widget.CardView
                 android:id="@+id/card_view_show_all_transactions"
@@ -361,7 +364,7 @@
                         android:text="@string/home_show_all_transactions"
                         android:textColor="@color/color_button_text_white"
                         android:textSize="14sp"
-                        app:fontFamily="@font/muli_bold" />
+                        android:fontFamily="@font/muli_bold" />
                 </RelativeLayout>
 
             </android.support.v7.widget.CardView>
