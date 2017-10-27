@@ -60,9 +60,9 @@ public class RequestFilterDialog extends FilterDialog<RequestFilterModel> {
 
     private void setupViews() {
         if (mRequestFilterModel.getDirection() != null && mRequestFilterModel.getDirection() == Direction.TO) {
-            mShowGroup.check(mShowUpcomingRadio.getId());
-        } else if (mRequestFilterModel.getDirection() != null && mRequestFilterModel.getDirection() == Direction.FROM) {
             mShowGroup.check(mShowIncomingRadio.getId());
+        } else if (mRequestFilterModel.getDirection() != null && mRequestFilterModel.getDirection() == Direction.FROM) {
+            mShowGroup.check(mShowUpcomingRadio.getId());
         } else {
             mShowGroup.check(mShowAllRadio.getId());
         }

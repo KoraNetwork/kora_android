@@ -62,9 +62,9 @@ public class TransactionFilterDialog extends FilterDialog<TransactionFilterModel
 
     private void setupViews() {
         if (mTransactionFilterModel.getDirections() != null && mTransactionFilterModel.getDirections() == Direction.TO) {
-            mShowGroup.check(mShowUpcomingRadio.getId());
-        } else if (mTransactionFilterModel.getDirections() != null && mTransactionFilterModel.getDirections() == Direction.FROM) {
             mShowGroup.check(mShowIncomingRadio.getId());
+        } else if (mTransactionFilterModel.getDirections() != null && mTransactionFilterModel.getDirections() == Direction.FROM) {
+            mShowGroup.check(mShowUpcomingRadio.getId());
         } else {
             mShowGroup.check(mShowAllRadio.getId());
         }
