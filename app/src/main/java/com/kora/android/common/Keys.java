@@ -99,6 +99,8 @@ public interface Keys {
         String REQUEST_ENTITY = "request_entity_args";
         String REQUEST_ID = "request_id_arg";
         String ARG_BORROW_TYPE = "borrow_type_args";
+        String BORROW_LIST = "borrow_list_args";
+        String BORROW_TYPE = "borrow_type";
     }
 
     interface Users {

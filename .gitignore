@@ -41,3 +41,4 @@ captures/
 
 *.jar
 !gradle/wrapper/gradle-wrapper.jar
+/app/version.properties
