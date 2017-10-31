@@ -31,7 +31,7 @@ class TransactionsPresenter extends BasePresenter<TransactionsView> {
 
     public void retrieveTransactions(final TransactionFilterModel transactionFilterModel, int itemCount) {
         mTransactionFilterModel = transactionFilterModel;
-        mGetTransactionsUseCase.setData(transactionFilterModel, itemCount);
+        mGetTransactionsUseCase.setData(transactionFilterModel, 0, itemCount);
         mGetTransactionsUseCase.execute(new GetTransactionsSubscriber());
     }
 

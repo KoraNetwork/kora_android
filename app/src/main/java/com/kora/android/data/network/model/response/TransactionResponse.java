@@ -4,8 +4,10 @@ import com.bluelinelabs.logansquare.annotation.JsonField;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
 import com.kora.android.data.network.model.converter.DateTypeCustomConverter;
 import com.kora.android.data.network.model.converter.DirectionTypeConverter;
+import com.kora.android.data.network.model.converter.TransactionStateConverter;
 import com.kora.android.data.network.model.converter.TransactionTypeConverter;
 import com.kora.android.presentation.enums.Direction;
+import com.kora.android.presentation.enums.TransactionState;
 import com.kora.android.presentation.enums.TransactionType;
 
 import java.util.Date;
@@ -22,6 +24,7 @@ public class TransactionResponse {
     @JsonField(name = "transactionHash") private List<String> mTransactionHash;
     @JsonField(name = "from") private UserResponse mSender;
     @JsonField(name = "to") private UserResponse mReceiver;
+    @JsonField(name = "state", typeConverter = TransactionStateConverter.class) private TransactionState mState;
 
     @JsonField(name = "createdAt", typeConverter = DateTypeCustomConverter.class) private Date mCreatedAt;
     @JsonField(name = "updatedAt", typeConverter = DateTypeCustomConverter.class) private Date mUpdatedAt;
@@ -104,5 +107,13 @@ public class TransactionResponse {
 
     public void setDirection(Direction direction) {
         mDirection = direction;
+    }
+
+    public TransactionState getState() {
+        return mState;
+    }
+
+    public void setState(TransactionState state) {
+        mState = state;
     }
 }

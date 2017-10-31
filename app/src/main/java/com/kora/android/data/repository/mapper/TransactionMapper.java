@@ -37,6 +37,7 @@ public class TransactionMapper {
                                         .setCreatedAt(transactionResponse.getCreatedAt())
                                         .setSender(sender)
                                         .setReceiver(receiver)
+                                        .setTransactionState(transactionResponse.getState())
                                         .createTransactionEntity()));
     }
 

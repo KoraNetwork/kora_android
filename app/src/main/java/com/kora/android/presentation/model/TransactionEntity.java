@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.kora.android.presentation.enums.Direction;
+import com.kora.android.presentation.enums.TransactionState;
 import com.kora.android.presentation.enums.TransactionType;
 
 import java.util.Date;
@@ -20,11 +21,18 @@ public class TransactionEntity implements Parcelable {
     private TransactionType transactionType;
     private Direction mDirection;
     private Date createdAt = new Date();
+    private TransactionState mTransactionState;
 
-    public TransactionEntity(String id, double fromAmount, double toAmount,
-                             List<String> transactionHash, UserEntity sender, UserEntity receiver,
-                             TransactionType transactionType, Direction direction,
-                             Date createdAt) {
+    public TransactionEntity(String id,
+                             double fromAmount,
+                             double toAmount,
+                             List<String> transactionHash,
+                             UserEntity sender,
+                             UserEntity receiver,
+                             TransactionType transactionType,
+                             Direction direction,
+                             Date createdAt,
+                             TransactionState transactionState) {
         this.id = id;
         this.fromAmount = fromAmount;
         this.toAmount = toAmount;
@@ -34,31 +42,8 @@ public class TransactionEntity implements Parcelable {
         this.transactionType = transactionType;
         this.mDirection = direction;
         this.createdAt = createdAt;
+        this.mTransactionState = transactionState;
     }
-
-    protected TransactionEntity(Parcel in) {
-        id = in.readString();
-        fromAmount = in.readDouble();
-        toAmount = in.readDouble();
-        transactionHash = in.readArrayList(String.class.getClassLoader());
-        sender = (UserEntity) in.readValue(UserEntity.class.getClassLoader());
-        receiver = (UserEntity) in.readValue(UserEntity.class.getClassLoader());
-        transactionType = TransactionType.valueOf(in.readString());
-        mDirection = Direction.valueOf(in.readString());
-        createdAt.setTime(in.readLong());
-    }
-
-    public static final Creator<TransactionEntity> CREATOR = new Creator<TransactionEntity>() {
-        @Override
-        public TransactionEntity createFromParcel(Parcel in) {
-            return new TransactionEntity(in);
-        }
-
-        @Override
-        public TransactionEntity[] newArray(int size) {
-            return new TransactionEntity[size];
-        }
-    };
 
     public String getId() {
         return id;
@@ -132,22 +117,12 @@ public class TransactionEntity implements Parcelable {
         this.createdAt = createdAt;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public TransactionState getTransactionState() {
+        return mTransactionState;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(id);
-        dest.writeDouble(fromAmount);
-        dest.writeDouble(toAmount);
-        dest.writeList(transactionHash);
-        dest.writeValue(sender);
-        dest.writeValue(receiver);
-        dest.writeString(transactionType.name());
-        dest.writeString(mDirection.name());
-        dest.writeLong(createdAt.getTime());
+    public void setTransactionState(TransactionState transactionState) {
+        mTransactionState = transactionState;
     }
 
     @Override
@@ -162,6 +137,55 @@ public class TransactionEntity implements Parcelable {
                 "transactionType=" + transactionType + "\n" +
                 "mDirection=" + mDirection + "\n" +
                 "createdAt=" + createdAt + "\n" +
+                "mTransactionState=" + mTransactionState + "\n" +
                 "}";
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.id);
+        dest.writeDouble(this.fromAmount);
+        dest.writeDouble(this.toAmount);
+        dest.writeStringList(this.transactionHash);
+        dest.writeParcelable(this.sender, flags);
+        dest.writeParcelable(this.receiver, flags);
+        dest.writeInt(this.transactionType == null ? -1 : this.transactionType.ordinal());
+        dest.writeInt(this.mDirection == null ? -1 : this.mDirection.ordinal());
+        dest.writeLong(this.createdAt != null ? this.createdAt.getTime() : -1);
+        dest.writeInt(this.mTransactionState == null ? -1 : this.mTransactionState.ordinal());
+    }
+
+    protected TransactionEntity(Parcel in) {
+        this.id = in.readString();
+        this.fromAmount = in.readDouble();
+        this.toAmount = in.readDouble();
+        this.transactionHash = in.createStringArrayList();
+        this.sender = in.readParcelable(UserEntity.class.getClassLoader());
+        this.receiver = in.readParcelable(UserEntity.class.getClassLoader());
+        int tmpTransactionType = in.readInt();
+        this.transactionType = tmpTransactionType == -1 ? null : TransactionType.values()[tmpTransactionType];
+        int tmpMDirection = in.readInt();
+        this.mDirection = tmpMDirection == -1 ? null : Direction.values()[tmpMDirection];
+        long tmpCreatedAt = in.readLong();
+        this.createdAt = tmpCreatedAt == -1 ? null : new Date(tmpCreatedAt);
+        int tmpMTransactionState = in.readInt();
+        this.mTransactionState = tmpMTransactionState == -1 ? null : TransactionState.values()[tmpMTransactionState];
+    }
+
+    public static final Creator<TransactionEntity> CREATOR = new Creator<TransactionEntity>() {
+        @Override
+        public TransactionEntity createFromParcel(Parcel source) {
+            return new TransactionEntity(source);
+        }
+
+        @Override
+        public TransactionEntity[] newArray(int size) {
+            return new TransactionEntity[size];
+        }
+    };
 }

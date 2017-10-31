@@ -7,6 +7,7 @@ import org.web3j.protocol.infura.InfuraHttpService;
 import java.math.BigInteger;
 
 import static com.kora.android.data.web3j.Constants.DEFAULT_OWNER_BALANCE;
+import static com.kora.android.data.web3j.Constants.FUNCTION_FORWARD_TO;
 import static com.kora.android.data.web3j.Constants.FUNCTION_GET_BALANCE;
 import static com.kora.android.data.web3j.Constants.FUNCTION_TRANSFER;
 import static com.kora.android.data.web3j.Constants.KORA_WALLET_ADDRESS;
@@ -87,5 +88,9 @@ public class Web3jConnection {
 
     public String getGetTransferFunction() {
         return FUNCTION_TRANSFER;
+    }
+
+    public String getForwardToFunction() {
+        return FUNCTION_FORWARD_TO;
     }
 }

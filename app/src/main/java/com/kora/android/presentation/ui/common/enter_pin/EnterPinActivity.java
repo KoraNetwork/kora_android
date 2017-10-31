@@ -42,8 +42,6 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
     @BindView(R.id.edit_text_pin_fourth_digit)
     TextInputEditText mEtPinFourthDigit;
 
-    private ActionType mActionType;
-
     public static Intent getLaunchIntent(final BaseActivity baseActivity,
                                          final UserEntity receiver,
                                          final double senderAmount,
@@ -99,7 +97,7 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
             if (bundle.containsKey(RECEIVER_AMOUNT))
                 getPresenter().setReceiverAmount(bundle.getDouble(RECEIVER_AMOUNT));
             if (bundle.containsKey(ACTION_TYPE))
-                mActionType = (ActionType) bundle.getSerializable(ACTION_TYPE);
+                getPresenter().setActionType((ActionType) bundle.getSerializable(ACTION_TYPE));
             if (bundle.containsKey(REQUEST_ID))
                 getPresenter().setRequestId(bundle.getString(REQUEST_ID));
         }
@@ -107,7 +105,7 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
             getPresenter().setReceiver(getIntent().getParcelableExtra(USER_ENTITY));
             getPresenter().setSenderAmount(getIntent().getDoubleExtra(SENDER_AMOUNT, 0));
             getPresenter().setReceiverAmount(getIntent().getDoubleExtra(RECEIVER_AMOUNT, 0));
-            mActionType = (ActionType) getIntent().getSerializableExtra(ACTION_TYPE);
+            getPresenter().setActionType((ActionType) getIntent().getSerializableExtra(ACTION_TYPE));
             getPresenter().setRequestId(getIntent().getStringExtra(REQUEST_ID));
         }
     }
@@ -118,7 +116,7 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
         outState.putParcelable(USER_ENTITY, getPresenter().getReceiver());
         outState.putDouble(SENDER_AMOUNT, getPresenter().getSenderAmount());
         outState.putDouble(RECEIVER_AMOUNT, getPresenter().getReceiverAmount());
-        outState.putSerializable(TRANSACTION_TYPE, mActionType);
+        outState.putSerializable(TRANSACTION_TYPE, getPresenter().getActionType());
         outState.putString(REQUEST_ID, getPresenter().getRequestId());
     }
 
@@ -165,7 +163,8 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
                         mEtPinSecondDigit.getText().toString().trim() +
                         mEtPinThirdDigit.getText().toString().trim() +
                         mEtPinFourthDigit.getText().toString().trim();
-        getPresenter().startSendTransactionTask(pinCode, mActionType);
+//        getPresenter().startSendTransactionTask(pinCode, mActionType);
+        getPresenter().startCreateRawTransactionTask(pinCode);
     }
 
     @Override
