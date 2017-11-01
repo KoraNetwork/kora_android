@@ -159,6 +159,7 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
     private TransactionType getTransactionTypeByAction(ActionType actionType) {
         switch (actionType) {
             case CREATE_REQUEST:
+            case SHOW_REQUEST:
                 return TransactionType.REQUEST;
             case SEND_MONEY:
                 return TransactionType.SEND;
@@ -278,6 +279,15 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     public void startCreateRawTransactionTask(final String pinCode) {
+        if (pinCode == null || pinCode.isEmpty()) {
+            getView().showEmptyPinCode();
+            return;
+        }
+        if (!StringUtils.isPinCodeLongEnough(pinCode)) {
+            getView().showTooShortPinCode();
+            return;
+        }
+
         mCreateRawTransactionUseCase.setData(
                 mReceiver,
                 mSenderAmount,
