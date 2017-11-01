@@ -254,7 +254,7 @@
 
     <!-- Borrow money -->
     <string name="borrow_borrow_money">Borrow money</string>
-    <string name="borrow_borrow_from" formatted="false">"Borrow from %s</string>
+    <string name="borrow_borrow_from">"Borrow from %s</string>
     <string name="borrow_borrow_interest_rate">Annual Interest Rate (%)</string>
     <string name="borrow_borrow_total_interest">Total interest:</string>
     <string name="borrow_borrow_total_amount">Total amount:</string>
@@ -263,10 +263,20 @@
     <string name="borrow_borrow_maturity_date">Maturity date</string>
     <string name="borrow_borrow_additional_note">Additional note</string>
     <string name="borrow_borrow_borrow_now">BORROW NOW</string>
+    <string name="borrow_lender_label">Lender</string>
+    <string name="borrow_guarantors_label">Your guarantors</string>
 
     <!-- Borrow list -->
     <string name="borrow_request_title">Request</string>
     <string name="borrow_loans_title">Lean</string>
     <string name="borrow_in_progress_title">In progress</string>
+
+
+    <string name="borrow_add_guarantor_title">Add your guarantors</string>
+    <string name="dialog_remove_guarantor_title">Alert</string>
+    <string name="dialog_remove_guarantor_message">Are you sure you want to remove this guarantor?</string>
+    <string name="dialog_remove_guarantor_positive_btn">Yes</string>
+    <string name="dialog_remove_guarantor_negative_btn">No</string>
+
 
 </resources>

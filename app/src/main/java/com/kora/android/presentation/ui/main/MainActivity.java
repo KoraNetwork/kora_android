@@ -52,6 +52,7 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
     public static final int TAB_TRANSACTIONS_HISTORY_POSITION = 6;
     public static final int TAB_USER_PROFILE_POSITION = 7;
     public static final int TAB_SEND_A_FEEDBACK_POSITION = 8;
+    public static final int TAB_LOG_OUT = 9;
 
     @BindView(R.id.root_view) CoordinatorLayout mRootView;
     @BindView(R.id.content_layout) LinearLayout mContentLayout;
@@ -187,8 +188,8 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
             case R.id.nav_send_a_feedback:
                 position = TAB_SEND_A_FEEDBACK_POSITION;
                 break;
-
             case R.id.nav_log_out:
+                position = TAB_LOG_OUT;
                 new MultiDialog.DialogBuilder()
                         .setTitle(R.string.dialog_logout_title)
                         .setMessage(R.string.dialog_logout_message)
@@ -204,7 +205,9 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
         }
 
         mDrawerLayout.closeDrawer(GravityCompat.START);
-
+        if (position == TAB_LOG_OUT) {
+            return false;
+        }
         if (position != mSelectedItemPosition)
             getNavigator().showFragment(rootTabFragment(position), position);
 

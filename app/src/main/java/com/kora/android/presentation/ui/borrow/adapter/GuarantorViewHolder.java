@@ -1,9 +1,11 @@
-package com.kora.android.presentation.ui.adapter;
+package com.kora.android.presentation.ui.borrow.adapter;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -12,29 +14,26 @@ import com.bumptech.glide.request.RequestOptions;
 import com.kora.android.R;
 import com.kora.android.common.utils.StringUtils;
 import com.kora.android.presentation.model.UserEntity;
-import com.kora.android.presentation.ui.base.adapter.OnItemClickListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.kora.android.data.network.Constants.API_BASE_URL;
 
-public final class UserViewHolder extends RecyclerView.ViewHolder {
+public final class GuarantorViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.root_layout) LinearLayout rootLayout;
+    @BindView(R.id.delete_button) ImageView deleteButton;
     @BindView(R.id.user_image) AppCompatImageView userImage;
     @BindView(R.id.user_name) TextView userName;
     @BindView(R.id.user_phone) TextView userPhone;
 
-    private UserEntity mUserEntity;
-
-    public UserViewHolder(View itemView) {
+    public GuarantorViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
     }
 
     public void bind(UserEntity user) {
-        mUserEntity = user;
 
         final Context context = itemView.getContext();
         Glide.with(context)
@@ -48,7 +47,10 @@ public final class UserViewHolder extends RecyclerView.ViewHolder {
         userPhone.setText(StringUtils.getFormattedPhoneNumber(user.getPhoneNumber()));
     }
 
-    public void setOnUserClickListener(OnItemClickListener onUserClickListener) {
+    public void setOnUserClickListener(@Nullable GuarantorsAdapter.OnItemClickListener onUserClickListener) {
+        if (onUserClickListener == null) return;
         rootLayout.setOnClickListener(v -> onUserClickListener.onItemClicked(getAdapterPosition()));
+        deleteButton.setOnClickListener(v -> onUserClickListener.onDeleteItemClicked(getAdapterPosition()));
+
     }
 }
