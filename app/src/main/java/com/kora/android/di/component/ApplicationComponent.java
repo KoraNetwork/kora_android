@@ -17,6 +17,7 @@ import com.kora.android.data.web3j.utils.EtherWalletUtils;
 import com.kora.android.di.module.ApplicationModule;
 import com.kora.android.di.module.NetworkModule;
 import com.kora.android.di.module.RepositoryModule;
+import com.kora.android.di.module.ServiceModule;
 import com.kora.android.di.module.Web3jModule;
 
 import javax.inject.Singleton;
@@ -26,6 +27,7 @@ import dagger.Component;
 @Singleton
 @Component(modules = {
         ApplicationModule.class,
+        ServiceModule.class,
         NetworkModule.class,
         RepositoryModule.class,
         Web3jModule.class
@@ -37,16 +39,24 @@ public interface ApplicationComponent {
     Context context();
 
     PreferenceHandler preferanceHandler();
+
     RegistrationPrefHelper registrationPrefHelper();
 
     EtherWalletUtils etherWalletUtils();
+
     EtherWalletStorage etherWalletStorage();
+
     Web3jConnection web3jConnection();
 
     AuthRepository authRepository();
+
     UserRepository userRepository();
+
     CurrencyConverterRepository currencyConverterRepository();
+
     TransactionRepository transactionRepository();
+
     RequestRepository requestRepository();
+
     BorrowRepository borrowRepository();
 }

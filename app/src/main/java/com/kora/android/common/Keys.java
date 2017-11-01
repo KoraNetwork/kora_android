@@ -4,8 +4,7 @@ import android.support.annotation.IntDef;
 
 public interface Keys {
 
-    int ITEMS_PER_PAGE_10 = 10;
-    int ITEMS_PER_PAGE_5 = 5;
+    int ITEMS_PER_PAGE = 10;
 
     interface ProxyHelperKeys {
         String PROXY_HELPER_FILE_NAME = "com_kora_android_proxy_helper_file_name";
@@ -29,6 +28,7 @@ public interface Keys {
         String REGISTRATION_HELPER_CREATOR_ADDRESS = "REGISTRATION_HELPER_CREATOR_ADDRESS";
         String REGISTRATION_HELPER_RECOVERY_ADDRESS = "REGISTRATION_HELPER_RECOVERY_ADDRESS";
         String REGISTRATION_HELPER_OWNER_ADDRESS = "REGISTRATION_HELPER_OWNER_ADDRESS";
+        String REGISTRATION_HELPER_PIN_CODE = "REGISTRATION_HELPER_PIN_CODE";
     }
 
     interface PermissionChecker {

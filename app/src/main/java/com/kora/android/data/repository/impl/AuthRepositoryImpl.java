@@ -66,8 +66,7 @@ public class AuthRepositoryImpl implements AuthRepository {
     public Observable<Object> logout() {
         return mAuthService.logout()
                 .map(o -> {
-                    mPreferenceHandler.forget(Keys.Shared.USER);
-                    mPreferenceHandler.forget(Keys.Shared.TOKEN);
+                    mPreferenceHandler.forgetAll();
                     return o;
                 });
     }

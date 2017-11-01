@@ -357,4 +357,8 @@ public class UserEntity implements Parcelable {
                 ? this.getUserName() == null || this.getUserName().length() == 0
                 ? "" : this.getUserName() : this.getLegalName();
     }
+
+    public boolean hasIdentity() {
+        return getOwner() != null && getIdentity() != null && getCreator() != null && getRecoveryKey() != null;
+    }
 }

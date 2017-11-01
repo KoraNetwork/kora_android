@@ -39,8 +39,8 @@
 
         <activity
             android:name=".presentation.ui.registration.step1.FirstStepActivity"
-            android:theme="@style/AppTheme.Light"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Light"
             android:windowSoftInputMode="stateHidden"/>
 
         <activity
@@ -117,6 +117,10 @@
 
         <service
             android:name=".presentation.service.IncomingSmsService"
+            android:exported="false"/>
+
+        <service
+            android:name=".presentation.service.wallet.CreateWalletService"
             android:exported="false"/>
 
         <provider

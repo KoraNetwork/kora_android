@@ -1,8 +1,5 @@
 package com.kora.android.presentation.ui.registration.step4;
 
-import android.util.Log;
-
-import com.kora.android.R;
 import com.kora.android.common.helper.RegistrationPrefHelper;
 import com.kora.android.common.utils.DateUtils;
 import com.kora.android.common.utils.StringUtils;
@@ -10,15 +7,11 @@ import com.kora.android.data.network.config.ErrorModel;
 import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
-import com.kora.android.domain.base.DefaultWeb3jSubscriber;
-import com.kora.android.domain.usecase.balance.IncreaseBalanceUseCase;
 import com.kora.android.domain.usecase.registration.RegisterUseCase;
 import com.kora.android.presentation.model.CountryEntity;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -30,17 +23,14 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
 
     private final RegistrationPrefHelper mRegistrationPrefHelper;
     private final RegisterUseCase mRegisterUseCase;
-    private final IncreaseBalanceUseCase mIncreaseBalanceUseCase;
 
     private UserEntity mUserEntity;
     private String mConfirmPassword;
 
     @Inject
     public FourthStepPresenter(final RegistrationPrefHelper registrationPrefHelper,
-                               final IncreaseBalanceUseCase increaseBalanceUseCase,
                                final RegisterUseCase registerUseCase) {
         mRegistrationPrefHelper = registrationPrefHelper;
-        mIncreaseBalanceUseCase = increaseBalanceUseCase;
         mRegisterUseCase = registerUseCase;
         mUserEntity = new UserEntity();
     }
@@ -158,15 +148,13 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
         @Override
         protected void onStart() {
             if(!isViewAttached()) return;
-            getView().showProgress(true, false, R.string.registration_increase_account_wait);
-            Log.e("_____", "START");
+            getView().showProgress(true);
         }
 
         @Override
         public void onNext(@NonNull final UserEntity userEntity) {
             if(!isViewAttached()) return;
-            startIncreaseBalanceTask(userEntity);
-//            getView().showNextScreen();
+            getView().startRegisterWalletService(userEntity);
         }
 
         @Override
@@ -176,11 +164,12 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
             getView().showProgress(false);
         }
 
-//        @Override
-//        public void onComplete() {
-//            if(!isViewAttached()) return;
-//            getView().showProgress(false);
-//        }
+        @Override
+        public void onComplete() {
+            if(!isViewAttached()) return;
+            getView().showProgress(false);
+            getView().onRegistrationSuccess();
+        }
 
         @Override
         public void handleUnprocessableEntity(ErrorModel errorModel) {
@@ -195,51 +184,8 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
         }
     }
 
-    public void startIncreaseBalanceTask(final UserEntity userEntity) {
-        mIncreaseBalanceUseCase.setData(userEntity);
-        mIncreaseBalanceUseCase.execute(new IncreaseBalanceSubscriber());
-    }
-
-    private class IncreaseBalanceSubscriber extends DefaultWeb3jSubscriber<List<String>> {
-
-//        @Override
-//        protected void onStart() {
-//            if(!isViewAttached()) return;
-//            getView().showProgress(true);
-//        }
-
-        @Override
-        public void onNext(@NonNull final List<String> transactionHashList) {
-            if(!isViewAttached()) return;
-            getView().showNextScreen();
-        }
-
-        @Override
-        public void onComplete() {
-            if (!isViewAttached()) return;
-            getView().showProgress(false);
-        }
-
-        @Override
-        public void onError(@NonNull final Throwable throwable) {
-            super.onError(throwable);
-            if (!isViewAttached()) return;
-            getView().showProgress(false);
-
-            Log.e("_____", throwable.toString());
-            throwable.printStackTrace();
-        }
-
-        @Override
-        public void handleWeb3jError(final String message) {
-            if(!isViewAttached()) return;
-            getView().showError(message);
-        }
-    }
-
     @Override
     public void onDetachView() {
         mRegisterUseCase.dispose();
-        mIncreaseBalanceUseCase.dispose();
     }
 }

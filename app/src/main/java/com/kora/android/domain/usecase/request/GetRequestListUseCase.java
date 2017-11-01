@@ -29,6 +29,6 @@ public class GetRequestListUseCase extends AsyncUseCase {
 
     @Override
     protected Observable buildObservableTask() {
-        return mRequestRepository.getRequestList(mRequestFilterModel, mSkip, Keys.ITEMS_PER_PAGE_10);
+        return mRequestRepository.getRequestList(mRequestFilterModel, mSkip, Keys.ITEMS_PER_PAGE);
     }
 }

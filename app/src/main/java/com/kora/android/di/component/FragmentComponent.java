@@ -20,7 +20,7 @@ public interface FragmentComponent {
     void inject(final SendFragment sendFragment);
     void inject(final RequestFragment requestFragment);
     void inject(final TransactionsFragment transactionsFragment);
-    void inject(ProfileFragment profileFragment);
+    void inject(final ProfileFragment profileFragment);
     void inject(final BorrowMainFragment borrowMainFragment);
-    void inject(BorrowFragment fragmentComponent);
+    void inject(final BorrowFragment fragmentComponent);
 }

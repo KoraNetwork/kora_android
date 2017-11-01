@@ -3,6 +3,7 @@ package com.kora.android.di.component;
 import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.di.module.ActivityModule;
 import com.kora.android.di.module.FragmentModule;
+import com.kora.android.di.module.ServiceModule;
 
 import dagger.Component;
 
@@ -13,4 +14,6 @@ public interface ConfigPersistentComponent {
     ActivityComponent activityComponent(final ActivityModule activityModule);
 
     FragmentComponent fragmentComponent(final FragmentModule fragmentModule);
+
+    ServiceComponent serviceComponent(final ServiceModule fragmentModule);
 }

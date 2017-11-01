@@ -15,6 +15,7 @@ import static com.kora.android.common.Keys.RegistrationHelperKeys.REGISTRATION_H
 import static com.kora.android.common.Keys.RegistrationHelperKeys.REGISTRATION_HELPER_FILE_PASSWORD;
 import static com.kora.android.common.Keys.RegistrationHelperKeys.REGISTRATION_HELPER_PHONE_NUMBER;
 import static com.kora.android.common.Keys.RegistrationHelperKeys.REGISTRATION_HELPER_OWNER_ADDRESS;
+import static com.kora.android.common.Keys.RegistrationHelperKeys.REGISTRATION_HELPER_PIN_CODE;
 import static com.kora.android.common.Keys.RegistrationHelperKeys.REGISTRATION_HELPER_RECOVERY_ADDRESS;
 import static com.kora.android.common.Keys.RegistrationHelperKeys.REGISTRATION_HELPER_IDENTITY_ADDRESS;
 
@@ -83,5 +84,13 @@ public class RegistrationPrefHelper {
 
     public void clear() {
         mEncryptedPreferences.edit().clear().apply();
+    }
+
+    public String getPinCode() {
+        return mEncryptedPreferences.getString(REGISTRATION_HELPER_PIN_CODE, "");
+    }
+
+    public void storePin(String pinCode) {
+        mEncryptedPreferences.edit().putString(REGISTRATION_HELPER_PIN_CODE, pinCode).apply();
     }
 }

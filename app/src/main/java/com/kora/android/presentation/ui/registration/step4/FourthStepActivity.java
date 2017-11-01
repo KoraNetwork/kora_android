@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -20,6 +21,8 @@ import com.kora.android.common.utils.DateUtils;
 import com.kora.android.common.utils.ViewUtils;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.model.CountryEntity;
+import com.kora.android.presentation.model.UserEntity;
+import com.kora.android.presentation.service.wallet.CreateWalletService;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.main.MainActivity;
 import com.kora.android.presentation.ui.registration.currencies.CurrenciesActivity;
@@ -281,13 +284,20 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
         mElConfirmPassword.setError(getString(R.string.registration_confirm_password_incorrect));
     }
 
-    @OnClick(R.id.card_view_confirm)
-    public void onClickConfirm() {
-        getPresenter().startRegistrationTask();
+    @Override
+    public void onRegistrationSuccess() {
+        Toast.makeText(this, R.string.registration_success_message, Toast.LENGTH_LONG).show();
+        startActivity(MainActivity.getLaunchIntent(this));
     }
 
     @Override
-    public void showNextScreen() {
-        startActivity(MainActivity.getLaunchIntent(this));
+    public void startRegisterWalletService(UserEntity userEntity) {
+        Intent launchIntent = CreateWalletService.getLaunchIntent(this, userEntity);
+        startService(launchIntent);
+    }
+
+    @OnClick(R.id.card_view_confirm)
+    public void onClickConfirm() {
+        getPresenter().startRegistrationTask();
     }
 }
