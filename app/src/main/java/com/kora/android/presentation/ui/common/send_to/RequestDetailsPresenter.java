@@ -169,8 +169,11 @@ public class RequestDetailsPresenter extends BasePresenter<RequestDetailsView> {
 
     public void onConfirmClicked() {
         if (mRequest == null) return;
-      if (!isViewAttached()) return;
-      getView().openPinScreen(mRequest.getFrom(), mRequest.getFromAmount(), mRequest.getToAmount(), mRequest.getId());
+        if (!isViewAttached()) return;
+        if (mRequest.getDirection().equals(Direction.TO))
+            getView().openPinScreen(mRequest.getFrom(), mRequest.getToAmount(), mRequest.getFromAmount(), mRequest.getId());
+        else if (mRequest.getDirection().equals(Direction.FROM))
+            getView().openPinScreen(mRequest.getFrom(), mRequest.getFromAmount(), mRequest.getToAmount(), mRequest.getId());
     }
 
     public void onRejectClicked() {

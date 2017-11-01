@@ -242,7 +242,7 @@
     <string name="request_money_ask_to_me">To: Me</string>
     <string name="request_money_ask_money_label">To: %1$s</string>
     <string name="request_money_status_in_progress">In progress</string>
-    <string name="request_money_status_rejected">Reject</string>
+    <string name="request_money_status_rejected">Rejected</string>
 
     <!-- Request filter -->
     <string name="request_filter_show_label">Show:</string>

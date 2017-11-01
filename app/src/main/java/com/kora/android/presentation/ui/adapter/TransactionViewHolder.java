@@ -21,7 +21,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public final class RequestViewHolder extends RecyclerView.ViewHolder {
+public final class TransactionViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.direction_icon) ImageView mDirectionIcon;
     @BindView(R.id.sender_name) TextView mSenderName;
@@ -38,7 +38,7 @@ public final class RequestViewHolder extends RecyclerView.ViewHolder {
     private Unbinder mUnbinder;
 
 
-    public RequestViewHolder(View itemView, @Nullable OnItemClickListener onItemClickListener) {
+    public TransactionViewHolder(View itemView, @Nullable OnItemClickListener onItemClickListener) {
         super(itemView);
         mUnbinder = ButterKnife.bind(this, itemView);
         mContext = itemView.getContext();
@@ -100,11 +100,11 @@ public final class RequestViewHolder extends RecyclerView.ViewHolder {
     private int getStateColor(final TransactionState transactionState) {
         switch (transactionState) {
             case PENDING:
-                return R.color.color_state_pending;
+                return R.color.color_transaction_state_pending;
             case SUCCESS:
-                return R.color.color_state_success;
+                return R.color.color_transaction_state_success;
             case ERROR:
-                return R.color.color_state_error;
+                return R.color.color_transaction_state_error;
         }
         return 0;
     }

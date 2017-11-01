@@ -45,6 +45,22 @@ public class RequestEntity implements Parcelable {
         mTransactions = transactions;
     }
 
+    @Override
+    public String toString() {
+        return "RequestEntity{" + "\n" +
+                "mId=" + mId + "\n" +
+                "mFrom=" + mFrom + "\n" +
+                "mTo=" + mTo + "\n" +
+                "mFromAmount=" + mFromAmount + "\n" +
+                "mToAmount=" + mToAmount + "\n" +
+                "mAdditionalNote='" + mAdditionalNote + "\n" +
+                "mState=" + mState + "\n" +
+                "mCreatedAt=" + mCreatedAt + "\n" +
+                "mDirection=" + mDirection + "\n" +
+                "mTransactions=" + mTransactions + "\n" +
+                "}";
+    }
+
     public String getId() {
         return mId;
     }
