@@ -3,4 +3,10 @@
     <declare-styleable name="CustomTextView">
         <attr name="fontString" format="string" />
     </declare-styleable>
+
+    <declare-styleable name="CurrencyEditText">
+        <attr name="allow_negative_values" format="boolean" />
+        <attr name="decimal_digits" format="integer" />
+        <attr name="currency" format="string" />
+    </declare-styleable>
 </resources>

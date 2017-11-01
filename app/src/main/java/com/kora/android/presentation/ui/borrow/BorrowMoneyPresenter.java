@@ -46,9 +46,9 @@ public class BorrowMoneyPresenter extends BasePresenter<BorrowMoneyView> {
         getView().showLender(mLender);
     }
 
-    public void convertIfNeed(String amountString) {
+    public void convertIfNeed(long amount) {
         if (mLender == null || mSender == null) return;
-        double amount = Double.valueOf(amountString);
+//        double amount = Double.valueOf(amountString);
         if (mLender.getCurrency().equals(mSender.getCurrency())) {
             if (getView() == null) return;
             getView().showConvertedCurrency(amount, mSender.getCurrency());

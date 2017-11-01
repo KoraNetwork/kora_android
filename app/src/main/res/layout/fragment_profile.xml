@@ -164,7 +164,7 @@
             </android.support.design.widget.TextInputLayout>
 
 
-            <com.kora.android.views.TextInputLayoutWithDrawable
+            <com.kora.android.views.currency.CurrencyInputLayout
                 android:id="@+id/edit_layout_currency"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -184,7 +184,7 @@
                     android:maxLines="1"
                     android:textColor="@color/color_edit_text"
                     android:textSize="16sp"/>
-            </com.kora.android.views.TextInputLayoutWithDrawable>
+            </com.kora.android.views.currency.CurrencyInputLayout>
 
 
             <android.support.design.widget.TextInputLayout

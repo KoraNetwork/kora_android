@@ -33,6 +33,7 @@ import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.base.view.ToolbarActivity;
 import com.kora.android.presentation.ui.borrow.adapter.GuarantorsAdapter;
 import com.kora.android.presentation.ui.common.recent.RecentActivity;
+import com.kora.android.views.currency.CurrencyEditText;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -60,13 +61,14 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
     @BindView(R.id.add_guarantor_button) ImageButton mAddGuarantorBtn;
     @BindView(R.id.his_suffix) TextView mHisSuffixText;
     @BindView(R.id.my_suffix) TextView mMySuffixText;
-    @BindView(R.id.edit_text_sender_amount) TextInputEditText mSenderAmount;
+    @BindView(R.id.edit_text_sender_amount) CurrencyEditText mSenderAmount;
     @BindView(R.id.edit_layout_amount) TextInputLayout mSenderAmountContainer;
-    @BindView(R.id.edit_text_receiver_amount) TextInputEditText mReceiverAmount;
+    @BindView(R.id.edit_text_receiver_amount) CurrencyEditText mReceiverAmount;
     @BindView(R.id.edit_layout_converted_amount) TextInputLayout mReceiverAmountContainer;
     @BindView(R.id.amount_container) LinearLayout mAmountContainer;
 
     private GuarantorsAdapter mUserAdapter;
+    private int mAmountEditTextWidth = 0;
 
     public static Intent getLaunchIntent(final BaseActivity baseActivity,
                                          final UserEntity userEntity) {
@@ -158,7 +160,8 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
                     }
                 });
 
-        mHisSuffixText.setText(lender.getCurrency());
+//        mHisSuffixText.setText(lender.getCurrency());
+        mReceiverAmount.setCurrency(lender.getCurrency());
         mLenderName.setText(lender.getFullName());
         mLenderPhone.setText(StringUtils.getFormattedPhoneNumber(lender.getPhoneNumber()));
     }
@@ -166,11 +169,24 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
     @Override
     public void showConvertedCurrency(double amount, String currency) {
         mReceiverAmount.setText(String.format(Locale.ENGLISH, "%1$.2f", amount));
+        changeAmountContainerOrientation();
+    }
+
+    private void changeAmountContainerOrientation() {
+        if (isTextLonger(mSenderAmount) || isTextLonger(mReceiverAmount)) {
+            if (mAmountContainer.getOrientation() != LinearLayout.VERTICAL)
+                mAmountContainer.setOrientation(LinearLayout.VERTICAL);
+        } else {
+            if (mAmountContainer.getOrientation() != LinearLayout.HORIZONTAL)
+                mAmountContainer.setOrientation(LinearLayout.HORIZONTAL);
+        }
     }
 
     @Override
     public void retrieveSenderCurrency(UserEntity userEntity) {
-        mMySuffixText.setText(userEntity.getCurrency());
+//        mMySuffixText.setText(userEntity.getCurrency());
+        mSenderAmount.setCurrency(userEntity.getCurrency());
+        mSenderAmount.setCurrency(userEntity.getCurrency());
         Glide.with(this)
                 .asBitmap()
                 .load(API_BASE_URL + userEntity.getFlag())
@@ -233,13 +249,7 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
         timer.removeCallbacks(converter);
         timer.postDelayed(converter, 500);
 
-        if (isTextLonger(mSenderAmount)) {
-            if (mAmountContainer.getOrientation() != LinearLayout.VERTICAL)
-                mAmountContainer.setOrientation(LinearLayout.VERTICAL);
-        } else {
-            if (mAmountContainer.getOrientation() != LinearLayout.HORIZONTAL)
-                mAmountContainer.setOrientation(LinearLayout.HORIZONTAL);
-        }
+        changeAmountContainerOrientation();
     }
 
     private boolean isTextLonger(TextInputEditText editText) {
@@ -249,19 +259,22 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
         int width = editText.getMeasuredWidth();
         width -= editText.getPaddingRight();
         width -= editText.getPaddingLeft();
-        width -= editText.getCompoundDrawables()[0].getMinimumWidth();
+//        width -= editText.getCompoundDrawables().length > 0 ? editText.getCompoundDrawables()[0].getMinimumWidth() : 0;
         width -= editText.getCompoundDrawablePadding();
-        if (textSize >= width) return true;
+        if (mAmountEditTextWidth > 0 && textSize >= mAmountEditTextWidth)
+            return true;
+        if (textSize >= width) {
+            mAmountEditTextWidth = width;
+            return true;
+        }
         return false;
     }
 
     Runnable converter = new Runnable() {
         @Override
         public void run() {
-            String val = mSenderAmount.getText().toString().trim();
-            if (val.equals("")) mReceiverAmount.setText("");
-            else
-                getPresenter().convertIfNeed(val);
+            long val = mSenderAmount.getRawValue();
+            getPresenter().convertIfNeed(val);
         }
     };
 }
