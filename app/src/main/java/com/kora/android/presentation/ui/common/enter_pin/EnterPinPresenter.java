@@ -11,6 +11,8 @@ import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.base.DefaultWeb3jSubscriber;
 import com.kora.android.domain.usecase.request.DeleteRequestUseCase;
 import com.kora.android.domain.usecase.transaction.AddToTransactionsUseCase;
+import com.kora.android.domain.usecase.transaction.CreateRawTransactionUseCase;
+import com.kora.android.domain.usecase.transaction.SendRawTransactionUseCase;
 import com.kora.android.domain.usecase.transaction.SendTransactionUseCase;
 import com.kora.android.presentation.enums.ActionType;
 import com.kora.android.presentation.enums.TransactionType;
@@ -32,7 +34,10 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
     private final SendTransactionUseCase mSendTransactionUseCase;
     private final AddToTransactionsUseCase mAddToTransactionsUseCase;
     private final DeleteRequestUseCase mDeleteRequestUseCase;
+    private final CreateRawTransactionUseCase mCreateRawTransactionUseCase;
+    private final SendRawTransactionUseCase mSendRawTransactionUseCase;
 
+    private ActionType mActionType;
     private UserEntity mReceiver;
     private double mSenderAmount;
     private double mReceiverAmount;
@@ -41,10 +46,14 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
     @Inject
     public EnterPinPresenter(final SendTransactionUseCase sendTransactionUseCase,
                              final AddToTransactionsUseCase addToTransactionsUseCase,
-                             final DeleteRequestUseCase deleteRequestUseCase) {
+                             final DeleteRequestUseCase deleteRequestUseCase,
+                             final CreateRawTransactionUseCase createRawTransactionUseCase,
+                             final SendRawTransactionUseCase sendRawTransactionUseCase) {
         mSendTransactionUseCase = sendTransactionUseCase;
         mAddToTransactionsUseCase = addToTransactionsUseCase;
         mDeleteRequestUseCase = deleteRequestUseCase;
+        mCreateRawTransactionUseCase = createRawTransactionUseCase;
+        mSendRawTransactionUseCase = sendRawTransactionUseCase;
     }
 
     public void startSendTransactionTask(final String pinCode, ActionType actionType) {
@@ -59,6 +68,14 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
 
         mSendTransactionUseCase.setData(pinCode, mReceiver, mSenderAmount, mReceiverAmount);
         mSendTransactionUseCase.execute(new SendTransactionSubscriber(actionType));
+    }
+
+    public ActionType getActionType() {
+        return mActionType;
+    }
+
+    public void setActionType(final ActionType actionType) {
+        mActionType = actionType;
     }
 
     public void setReceiver(final UserEntity receiver) {
@@ -142,6 +159,7 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
     private TransactionType getTransactionTypeByAction(ActionType actionType) {
         switch (actionType) {
             case CREATE_REQUEST:
+            case SHOW_REQUEST:
                 return TransactionType.REQUEST;
             case SEND_MONEY:
                 return TransactionType.SEND;
@@ -258,10 +276,117 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         }
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public void startCreateRawTransactionTask(final String pinCode) {
+        if (pinCode == null || pinCode.isEmpty()) {
+            getView().showEmptyPinCode();
+            return;
+        }
+        if (!StringUtils.isPinCodeLongEnough(pinCode)) {
+            getView().showTooShortPinCode();
+            return;
+        }
+
+        mCreateRawTransactionUseCase.setData(
+                mReceiver,
+                mSenderAmount,
+                mReceiverAmount,
+                pinCode);
+        mCreateRawTransactionUseCase.execute(new CreateRawTransactionSubscriber());
+    }
+
+    private class CreateRawTransactionSubscriber extends DefaultWeb3jSubscriber<List<String>> {
+
+        @Override
+        protected void onStart() {
+            if (!isViewAttached()) return;
+            getView().showProgress(true);
+        }
+
+        @Override
+        public void onNext(final List<String> rawTransactions) {
+            if (!isViewAttached()) return;
+            for (int i = 0; i < rawTransactions.size(); i++) {
+                Log.e("_____", rawTransactions.get(i));
+            }
+            startSendRawTransactionTask(rawTransactions);
+        }
+
+//        @Override
+//        public void onComplete() {
+//            if (!isViewAttached()) return;
+//            getView().showProgress(false);
+//        }
+
+        @Override
+        public void onError(final Throwable throwable) {
+            super.onError(throwable);
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+        }
+
+        @Override
+        public void handleWeb3jError(final String message) {
+            getView().showError(message);
+        }
+    }
+
+    public void startSendRawTransactionTask(final List<String> rawTransactions) {
+        mSendRawTransactionUseCase.setData(
+                getTransactionTypeByAction(mActionType),
+                mReceiver.getId(),
+                mSenderAmount,
+                mReceiverAmount,
+                rawTransactions);
+        mSendRawTransactionUseCase.execute(new SendRawTransactionSubscriber());
+    }
+
+    private class SendRawTransactionSubscriber extends DefaultInternetSubscriber<TransactionEntity> {
+
+//        @Override
+//        protected void onStart() {
+//            if (!isViewAttached()) return;
+//            getView().showProgress(true);
+//        }
+
+        @Override
+        public void onNext(@NonNull final TransactionEntity transactionEntity) {
+            if (!isViewAttached()) return;
+            Log.e("_____", transactionEntity.toString());
+            getView().showNextScreen();
+        }
+
+        @Override
+        public void onComplete() {
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+        }
+
+        @Override
+        public void onError(@NonNull final Throwable throwable) {
+            super.onError(throwable);
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+        }
+
+        @Override
+        public void handleUnprocessableEntity(final ErrorModel errorModel) {
+            getView().showError(errorModel.getError());
+        }
+
+        @Override
+        public void handleNetworkError(final RetrofitException retrofitException) {
+            getView().showErrorWithRetry(new RetryAction(mAddToTransactionsAction));
+        }
+    }
+
     @Override
     public void onDetachView() {
         mSendTransactionUseCase.dispose();
         mAddToTransactionsUseCase.dispose();
         mDeleteRequestUseCase.dispose();
+        mCreateRawTransactionUseCase.dispose();
+        mSendRawTransactionUseCase.dispose();
     }
 }

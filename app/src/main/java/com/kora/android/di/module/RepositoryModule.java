@@ -26,6 +26,8 @@ import com.kora.android.data.repository.mapper.BorrowMapper;
 import com.kora.android.data.repository.mapper.RequestMapper;
 import com.kora.android.data.repository.mapper.TransactionMapper;
 import com.kora.android.data.repository.mapper.UserMapper;
+import com.kora.android.data.web3j.connection.Web3jConnection;
+import com.kora.android.data.web3j.storage.EtherWalletStorage;
 
 import javax.inject.Singleton;
 
@@ -65,9 +67,20 @@ public class RepositoryModule {
 
     @Singleton
     @Provides
-    public TransactionRepository provideTransactionRepository(final TransactionService transactionService,
+    public TransactionRepository provideTransactionRepository(final Context context,
+                                                              final PreferenceHandler preferenceHandler,
+                                                              final Web3jConnection web3jConnection,
+                                                              final EtherWalletStorage etherWalletStorage,
+                                                              final TransactionService transactionService,
                                                               final TransactionMapper transactionMapper) {
-        return new TransactionRepositoryImpl(transactionService, transactionMapper);
+        return new TransactionRepositoryImpl(
+                context,
+                preferenceHandler,
+                web3jConnection,
+                etherWalletStorage,
+                transactionService,
+                transactionMapper
+        );
     }
 
     @Singleton

@@ -15,19 +15,23 @@ public class GetTransactionsUseCase extends AsyncUseCase {
     private final TransactionRepository mTransactionRepository;
     private TransactionFilterModel mTransactionFilter;
     private int mSkip = 0;
+    private int mLimit = 0;
 
     @Inject
     public GetTransactionsUseCase(final TransactionRepository transactionRepository) {
         mTransactionRepository = transactionRepository;
     }
 
-    public void setData(TransactionFilterModel data, int skip) {
+    public void setData(final TransactionFilterModel data,
+                        final int limit,
+                        final int skip) {
         mTransactionFilter = data;
+        mLimit = limit;
         mSkip = skip;
     }
 
     @Override
     protected Observable buildObservableTask() {
-        return mTransactionRepository.retrieveTransactions(mTransactionFilter, mSkip);
+        return mTransactionRepository.retrieveTransactions(mTransactionFilter, mLimit, mSkip);
     }
 }

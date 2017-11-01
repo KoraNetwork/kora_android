@@ -344,6 +344,7 @@
                     android:textSize="16sp" />
 
                 <android.support.v7.widget.RecyclerView
+                    android:nestedScrollingEnabled="false"
                     android:id="@+id/recycler_view_transactions"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

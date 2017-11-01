@@ -10,7 +10,7 @@
     <string name="dialog_retry_positive_btn">Retry</string>
     <string name="dialog_retry_negative_btn">Cancel</string>
 
-    <string name="dialog_logout_title">Warning?</string>
+    <string name="dialog_logout_title">Warning</string>
     <string name="dialog_logout_message">Are you sure you want to logout?</string>
     <string name="dialog_logout_positive_btn">Logout</string>
     <string name="dialog_logout_negative_btn">Cancel</string>
@@ -200,6 +200,7 @@
 
     <!-- Web3j error messages -->
     <string name="web3j_error_message_network">The Internet connection appears to be offline.</string>
+    <string name="web3j_error_message_preferences">Preferences mistake.</string>
     <string name="web3j_error_message_owner_balance" formatted="false">You need to have at least %s ETH to make transactions. Owner balance is %s.</string>
     <string name="web3j_error_message_identity_balance" formatted="false">You can not send %s eFiats. Proxy balance is %s.</string>
 
@@ -216,6 +217,9 @@
     <string name="transaction_history_type_send">Sent</string>
     <string name="transaction_history_type_request">Requested</string>
     <string name="transaction_history_type_deposit">Deposit</string>
+    <string name="transaction_history_state_pending">Pending</string>
+    <string name="transaction_history_state_success">Success</string>
+    <string name="transaction_history_state_error">Error</string>
 
     <!-- Transaction filter -->
     <string name="transaction_filter_show_label">Show:</string>

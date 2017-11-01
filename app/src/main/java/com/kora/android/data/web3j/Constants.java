@@ -25,6 +25,7 @@ public interface Constants {
     String FUNCTION_GET_BALANCE = "balanceOf";
 
     String FUNCTION_TRANSFER = "transfer";
+    String FUNCTION_FORWARD_TO = "forwardTo";
 
 
 

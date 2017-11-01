@@ -21,6 +21,8 @@ import javax.inject.Inject;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Action;
 
+import static com.kora.android.common.Keys.ITEMS_PER_PAGE_5;
+
 @ConfigPersistent
 public class HomePresenter extends BasePresenter<HomeView> {
 
@@ -145,7 +147,10 @@ public class HomePresenter extends BasePresenter<HomeView> {
     }
 
     public void startGetTransactionTask() {
-        mGetTransactionsUseCase.setData(new TransactionFilterModel(), 0);
+        mGetTransactionsUseCase.setData(
+                new TransactionFilterModel(),
+                ITEMS_PER_PAGE_5,
+                0);
         mGetTransactionsUseCase.execute(new GetTransactionsSubscriber());
     }
 

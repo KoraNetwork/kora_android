@@ -27,7 +27,7 @@
                 android:layout_marginTop="16dp"
                 android:textColor="@color/color_dialog_title"
                 android:textSize="20sp"
-                app:fontFamily="@font/muli_semi_bold"
+                android:fontFamily="@font/muli_semi_bold"
                 tools:text="Dialog title"/>
 
             <android.support.v7.widget.AppCompatTextView
@@ -39,7 +39,7 @@
                 android:layout_marginTop="24dp"
                 android:textColor="@color/color_dialog_text"
                 android:textSize="18sp"
-                app:fontFamily="@font/muli_normal"
+                android:fontFamily="@font/muli_normal"
                 tools:text="Dialog text"/>
 
             <FrameLayout
@@ -61,13 +61,12 @@
                         android:layout_weight="1"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
-                        android:fontFamily="sans-serif"
                         android:gravity="center"
                         android:padding="16dp"
                         android:text="CANCEL"
                         android:textColor="@color/color_dialog_button_text"
                         android:textSize="18sp"
-                        app:fontFamily="@font/muli_bold"
+                        android:fontFamily="@font/muli_bold"
                         />
 
                     <!--<View-->
@@ -82,14 +81,12 @@
                         android:layout_weight="1"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
-                        android:fontFamily="sans-serif"
+                        android:fontFamily="@font/muli_bold"
                         android:gravity="center"
                         android:padding="16dp"
                         android:text="CANCEL"
                         android:textColor="@color/color_dialog_button_text"
-                        android:textSize="18sp"
-                        app:fontFamily="@font/muli_bold"
-                        />
+                        android:textSize="18sp" />
                 </LinearLayout>
 
                 <android.support.v7.widget.AppCompatTextView
@@ -98,15 +95,13 @@
                     android:layout_height="wrap_content"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
-                    android:fontFamily="sans-serif"
+                    android:fontFamily="@font/muli_bold"
                     android:gravity="center"
                     android:padding="16dp"
                     android:text="OK"
                     android:textColor="@color/color_dialog_button_text"
                     android:textSize="18sp"
-                    android:visibility="visible"
-
-                    app:fontFamily="@font/muli_bold"/>
+                    android:visibility="visible" />
             </FrameLayout>
 
         </LinearLayout>

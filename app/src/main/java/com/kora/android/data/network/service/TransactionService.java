@@ -1,5 +1,6 @@
 package com.kora.android.data.network.service;
 
+import com.kora.android.data.network.model.request.RawTransactionRequest;
 import com.kora.android.data.network.model.request.TransactionRequest;
 import com.kora.android.data.network.model.response.TransactionListResponse;
 import com.kora.android.data.network.model.response.TransactionResponse;
@@ -22,4 +23,7 @@ public interface TransactionService {
 
     @POST("transactions")
     Observable<TransactionResponse> addToTransactions(@Body final TransactionRequest transactionRequest);
+
+    @POST("transactions")
+    Observable<TransactionResponse> sendRawTransaction(@Body final RawTransactionRequest rawTransactionRequest);
 }

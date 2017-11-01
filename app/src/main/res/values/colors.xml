@@ -45,4 +45,8 @@
 
     <color name="color_floating_button">#46a6e4</color>
 
+    <color name="color_state_pending">#2b74a5</color>
+    <color name="color_state_success">#62cd9a</color>
+    <color name="color_state_error">#e62f60</color>
+
 </resources>

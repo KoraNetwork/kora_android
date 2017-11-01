@@ -1,8 +1,10 @@
 package com.kora.android.presentation.ui.adapter;
 
 import android.content.Context;
+import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 
 import com.kora.android.R;
 import com.kora.android.common.utils.DateUtils;
+import com.kora.android.presentation.enums.TransactionState;
 import com.kora.android.presentation.enums.TransactionType;
 import com.kora.android.presentation.model.TransactionEntity;
 import com.kora.android.presentation.ui.base.adapter.OnItemClickListener;
@@ -24,7 +27,9 @@ public final class RequestViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.sender_name) TextView mSenderName;
     @BindView(R.id.receiver_name) TextView mReceiverName;
     @BindView(R.id.date) TextView mDate;
+    @BindView(R.id.time) TextView mTime;
     @BindView(R.id.type) TextView mType;
+    @BindView(R.id.state) TextView mState;
     @BindView(R.id.amount) TextView mAmount;
 
     private OnItemClickListener mOnItemClickListener;
@@ -56,12 +61,15 @@ public final class RequestViewHolder extends RecyclerView.ViewHolder {
                 break;
         }
 
-        mType.setText(getTypeResource(transactionEntity.getTransactionType()));
+        mType.setText(getTypeString(transactionEntity.getTransactionType()));
+        mState.setText(getStateString(transactionEntity.getTransactionState()));
+        mState.setTextColor(ContextCompat.getColor(mContext, getStateColor(transactionEntity.getTransactionState())));
         mDate.setText(DateUtils.getFormattedDate("dd.MM.yyyy", transactionEntity.getCreatedAt()));
+        mTime.setText(DateUtils.getFormattedDate("HH:mm:ss", transactionEntity.getCreatedAt()));
     }
 
     @StringRes
-    private int getTypeResource(TransactionType transactionType) {
+    private int getTypeString(final TransactionType transactionType) {
         switch (transactionType) {
             case BORROW:
                 return R.string.transaction_history_type_borrow;
@@ -71,6 +79,32 @@ public final class RequestViewHolder extends RecyclerView.ViewHolder {
                 return R.string.transaction_history_type_request;
             case DEPOSIT:
                 return R.string.transaction_history_type_deposit;
+        }
+        return 0;
+    }
+
+    @StringRes
+    private int getStateString(final TransactionState transactionState) {
+        switch (transactionState) {
+            case PENDING:
+                return R.string.transaction_history_state_pending;
+            case SUCCESS:
+                return R.string.transaction_history_state_success;
+            case ERROR:
+                return R.string.transaction_history_state_error;
+        }
+        return 0;
+    }
+
+    @ColorRes
+    private int getStateColor(final TransactionState transactionState) {
+        switch (transactionState) {
+            case PENDING:
+                return R.color.color_state_pending;
+            case SUCCESS:
+                return R.color.color_state_success;
+            case ERROR:
+                return R.color.color_state_error;
         }
         return 0;
     }
