@@ -237,9 +237,9 @@ public class RequestDetailsActivity extends ToolbarActivity<RequestDetailsPresen
     }
 
     @Override
-    public void openPinScreen(UserEntity receiver, Double sAmount, Double rAmount, String requestId) {
+    public void openPinScreen(UserEntity receiver, Double sAmount, Double rAmount, RequestEntity request) {
         startActivity(EnterPinActivity.getLaunchIntent(this,
-                receiver, sAmount, rAmount, mActionType, requestId));
+                receiver, sAmount, rAmount, mActionType, request));
     }
 
     @Override

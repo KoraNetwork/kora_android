@@ -19,7 +19,7 @@ public interface RequestRepository {
     Observable<Object> deleteRequest(final String requestId,
                                      final double fromAmount,
                                      final double toAmount,
-                                     final List<String> transactionHash);
+                                     final List<String> rawTransactions);
 
     Observable<RequestEntity> updateRequest(final String requestId);
 }

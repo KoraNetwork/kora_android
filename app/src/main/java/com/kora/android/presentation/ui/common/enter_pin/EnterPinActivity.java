@@ -12,6 +12,7 @@ import com.kora.android.R;
 import com.kora.android.common.utils.ViewUtils;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.enums.ActionType;
+import com.kora.android.presentation.model.RequestEntity;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.main.MainActivity;
@@ -22,7 +23,7 @@ import butterknife.OnTextChanged;
 
 import static com.kora.android.common.Keys.Args.ACTION_TYPE;
 import static com.kora.android.common.Keys.Args.RECEIVER_AMOUNT;
-import static com.kora.android.common.Keys.Args.REQUEST_ID;
+import static com.kora.android.common.Keys.Args.REQUEST_ENTITY;
 import static com.kora.android.common.Keys.Args.SENDER_AMOUNT;
 import static com.kora.android.common.Keys.Args.TRANSACTION_TYPE;
 import static com.kora.android.common.Keys.Args.USER_ENTITY;
@@ -60,13 +61,13 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
                                          final double senderAmount,
                                          final double receiverAmount,
                                          final ActionType actionType,
-                                         final String requestId) {
+                                         final RequestEntity request) {
         final Intent intent = new Intent(baseActivity, EnterPinActivity.class);
         intent.putExtra(USER_ENTITY, receiver);
         intent.putExtra(SENDER_AMOUNT, senderAmount);
         intent.putExtra(RECEIVER_AMOUNT, receiverAmount);
         intent.putExtra(ACTION_TYPE, actionType);
-        intent.putExtra(REQUEST_ID, requestId);
+        intent.putExtra(REQUEST_ENTITY, request);
         return intent;
     }
 
@@ -98,15 +99,15 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
                 getPresenter().setReceiverAmount(bundle.getDouble(RECEIVER_AMOUNT));
             if (bundle.containsKey(ACTION_TYPE))
                 getPresenter().setActionType((ActionType) bundle.getSerializable(ACTION_TYPE));
-            if (bundle.containsKey(REQUEST_ID))
-                getPresenter().setRequestId(bundle.getString(REQUEST_ID));
+            if (bundle.containsKey(REQUEST_ENTITY))
+                getPresenter().setRequest(bundle.getParcelable(REQUEST_ENTITY));
         }
         if (getIntent() != null) {
             getPresenter().setReceiver(getIntent().getParcelableExtra(USER_ENTITY));
             getPresenter().setSenderAmount(getIntent().getDoubleExtra(SENDER_AMOUNT, 0));
             getPresenter().setReceiverAmount(getIntent().getDoubleExtra(RECEIVER_AMOUNT, 0));
             getPresenter().setActionType((ActionType) getIntent().getSerializableExtra(ACTION_TYPE));
-            getPresenter().setRequestId(getIntent().getStringExtra(REQUEST_ID));
+            getPresenter().setRequest(getIntent().getParcelableExtra(REQUEST_ENTITY));
         }
     }
 
@@ -117,7 +118,7 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
         outState.putDouble(SENDER_AMOUNT, getPresenter().getSenderAmount());
         outState.putDouble(RECEIVER_AMOUNT, getPresenter().getReceiverAmount());
         outState.putSerializable(TRANSACTION_TYPE, getPresenter().getActionType());
-        outState.putString(REQUEST_ID, getPresenter().getRequestId());
+        outState.putParcelable(REQUEST_ENTITY, getPresenter().getRequest());
     }
 
     @OnTextChanged(R.id.edit_text_pin_first_digit)

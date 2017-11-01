@@ -8,11 +8,12 @@ import java.util.List;
 @JsonObject
 public class DeleteRequestRequest {
 
+    @JsonField(name = "fromAmount")
     private double mFromAmount;
     @JsonField(name = "toAmount")
     private double mToAmount;
-    @JsonField(name = "transactionHash")
-    private List<String> mTransactionHash;
+    @JsonField(name = "rawTransactions")
+    private List<String> mRawTransactions;
 
     public DeleteRequestRequest addFromAmount(final double fromAmount) {
         mFromAmount = fromAmount;
@@ -24,8 +25,8 @@ public class DeleteRequestRequest {
         return this;
     }
 
-    public DeleteRequestRequest addTransactionHash(final List<String> transactionHash) {
-        mTransactionHash = transactionHash;
+    public DeleteRequestRequest addRawTransactions(final List<String> rawTransactions) {
+        mRawTransactions = rawTransactions;
         return this;
     }
 
@@ -45,11 +46,11 @@ public class DeleteRequestRequest {
         this.mToAmount = mToAmount;
     }
 
-    public List<String> getTransactionHash() {
-        return mTransactionHash;
+    public List<String> getRawTransactions() {
+        return mRawTransactions;
     }
 
-    public void setTransactionHash(List<String> mTransactionHash) {
-        this.mTransactionHash = mTransactionHash;
+    public void setRawTransactions(List<String> rawTransactions) {
+        this.mRawTransactions = rawTransactions;
     }
 }
