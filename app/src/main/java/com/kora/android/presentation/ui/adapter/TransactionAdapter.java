@@ -34,7 +34,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         switch (viewType) {
             case REQUEST_TYPE:
                 itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_transaction, parent, false);
-                return new RequestViewHolder(itemView, mOnItemClickListener);
+                return new TransactionViewHolder(itemView, mOnItemClickListener);
             case DEPOSIT_TYPE:
                 itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_transaction_cash, parent, false);
                 return new CashViewHolder(itemView, mOnItemClickListener);
@@ -44,8 +44,8 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof RequestViewHolder) {
-            ((RequestViewHolder) holder).bind(mTransactions.get(position));
+        if (holder instanceof TransactionViewHolder) {
+            ((TransactionViewHolder) holder).bind(mTransactions.get(position));
         } else if (holder instanceof CashViewHolder){
             ((CashViewHolder) holder).bind(mTransactions.get(position));
         }

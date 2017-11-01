@@ -263,7 +263,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
                 final Function koraTransferFunction = new Function(
                         mWeb3jConnection.getGetTransferFunction(),
                         Arrays.asList(
-                                new Address(sender.getIdentity()),
+                                new Address(receiver.getIdentity()),
                                 new Uint256(Web3jUtils.convertTokenToBigInteger(receiverAmount))
                         ),
                         Collections.emptyList()

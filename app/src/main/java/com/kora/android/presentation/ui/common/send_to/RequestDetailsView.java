@@ -15,7 +15,7 @@ public interface RequestDetailsView extends BaseView<RequestDetailsPresenter> {
 
     void emptyReceiverAmountError();
 
-    void openPinScreen(UserEntity receiver, Double sAmount, Double rAmount, String requestId);
+    void openPinScreen(UserEntity receiver, Double sAmount, Double rAmount, RequestEntity request);
 
     void onConfirmClicked();
 

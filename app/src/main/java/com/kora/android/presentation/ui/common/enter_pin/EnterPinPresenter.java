@@ -15,7 +15,9 @@ import com.kora.android.domain.usecase.transaction.CreateRawTransactionUseCase;
 import com.kora.android.domain.usecase.transaction.SendRawTransactionUseCase;
 import com.kora.android.domain.usecase.transaction.SendTransactionUseCase;
 import com.kora.android.presentation.enums.ActionType;
+import com.kora.android.presentation.enums.Direction;
 import com.kora.android.presentation.enums.TransactionType;
+import com.kora.android.presentation.model.RequestEntity;
 import com.kora.android.presentation.model.TransactionEntity;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
@@ -41,7 +43,7 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
     private UserEntity mReceiver;
     private double mSenderAmount;
     private double mReceiverAmount;
-    private String mRequestId;
+    private RequestEntity mRequest;
 
     @Inject
     public EnterPinPresenter(final SendTransactionUseCase sendTransactionUseCase,
@@ -102,12 +104,12 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         return mReceiverAmount;
     }
 
-    public String getRequestId() {
-        return mRequestId;
+    public RequestEntity getRequest() {
+        return mRequest;
     }
 
-    public void setRequestId(String requestId) {
-        this.mRequestId = requestId;
+    public void setRequest(RequestEntity requestId) {
+        this.mRequest = requestId;
     }
 
     private class SendTransactionSubscriber extends DefaultWeb3jSubscriber<List<String>> {
@@ -222,60 +224,6 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         }
     }
 
-    public void startDeleteRequestTask(final List<String> transactionHash) {
-        mDeleteRequestUseCase.setData(
-                mRequestId,
-                mSenderAmount,
-                mReceiverAmount,
-                transactionHash);
-        mDeleteRequestUseCase.execute(new DeleteRequestSubscriber());
-    }
-
-    private Action mDeleteRequestAction = new Action() {
-        @Override
-        public void run() throws Exception {
-            mDeleteRequestUseCase.execute(new DeleteRequestSubscriber());
-        }
-    };
-
-    private class DeleteRequestSubscriber extends DefaultInternetSubscriber<Object> {
-
-//        @Override
-//        protected void onStart() {
-//            if (!isViewAttached()) return;
-//            getView().showProgress(true);
-//        }
-
-        @Override
-        public void onNext(@NonNull final Object object) {
-            if (!isViewAttached()) return;
-            getView().showNextScreen();
-        }
-
-        @Override
-        public void onComplete() {
-            if (!isViewAttached()) return;
-            getView().showProgress(false);
-        }
-
-        @Override
-        public void onError(@NonNull final Throwable throwable) {
-            super.onError(throwable);
-            if (!isViewAttached()) return;
-            getView().showProgress(false);
-        }
-
-        @Override
-        public void handleUnprocessableEntity(final ErrorModel errorModel) {
-            getView().showError(errorModel.getError());
-        }
-
-        @Override
-        public void handleNetworkError(final RetrofitException retrofitException) {
-            getView().showErrorWithRetry(new RetryAction(mDeleteRequestAction));
-        }
-    }
-
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     public void startCreateRawTransactionTask(final String pinCode) {
@@ -310,7 +258,11 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
             for (int i = 0; i < rawTransactions.size(); i++) {
                 Log.e("_____", rawTransactions.get(i));
             }
-            startSendRawTransactionTask(rawTransactions);
+
+            if (mActionType.equals(ActionType.SEND_MONEY))
+                startSendRawTransactionTask(rawTransactions);
+            else if (mActionType.equals(ActionType.SHOW_REQUEST))
+                startDeleteRequestTask(rawTransactions);
         }
 
 //        @Override
@@ -378,6 +330,68 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         @Override
         public void handleNetworkError(final RetrofitException retrofitException) {
             getView().showErrorWithRetry(new RetryAction(mAddToTransactionsAction));
+        }
+    }
+
+    public void startDeleteRequestTask(final List<String> rawTransactions) {
+        if (mRequest.getDirection().equals(Direction.TO)) {
+            mDeleteRequestUseCase.setData(
+                    mRequest.getId(),
+                    mReceiverAmount,
+                    mSenderAmount,
+                    rawTransactions);
+        } else if (mRequest.getDirection().equals(Direction.FROM)) {
+            mDeleteRequestUseCase.setData(
+                    mRequest.getId(),
+                    mSenderAmount,
+                    mReceiverAmount,
+                    rawTransactions);
+        }
+        mDeleteRequestUseCase.execute(new DeleteRequestSubscriber());
+    }
+
+    private Action mDeleteRequestAction = new Action() {
+        @Override
+        public void run() throws Exception {
+            mDeleteRequestUseCase.execute(new DeleteRequestSubscriber());
+        }
+    };
+
+    private class DeleteRequestSubscriber extends DefaultInternetSubscriber<Object> {
+
+//        @Override
+//        protected void onStart() {
+//            if (!isViewAttached()) return;
+//            getView().showProgress(true);
+//        }
+
+        @Override
+        public void onNext(@NonNull final Object object) {
+            if (!isViewAttached()) return;
+            getView().showNextScreen();
+        }
+
+        @Override
+        public void onComplete() {
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+        }
+
+        @Override
+        public void onError(@NonNull final Throwable throwable) {
+            super.onError(throwable);
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+        }
+
+        @Override
+        public void handleUnprocessableEntity(final ErrorModel errorModel) {
+            getView().showError(errorModel.getError());
+        }
+
+        @Override
+        public void handleNetworkError(final RetrofitException retrofitException) {
+            getView().showErrorWithRetry(new RetryAction(mDeleteRequestAction));
         }
     }
 

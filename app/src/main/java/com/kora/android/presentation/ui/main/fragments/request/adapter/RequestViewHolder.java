@@ -23,12 +23,11 @@ public class RequestViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.sender_name) TextView mSenderName;
     @BindView(R.id.request_name) TextView mRequestName;
     @BindView(R.id.date) TextView mDate;
+    @BindView(R.id.time) TextView mTime;
     @BindView(R.id.amount) TextView mAmount;
     @BindView(R.id.status) TextView mRequestStatus;
 
-
     private OnItemClickListener mOnItemClickListener;
-
     private Context mContext;
 
     public RequestViewHolder(View itemView, @Nullable OnItemClickListener onItemClickListener) {
@@ -43,33 +42,32 @@ public class RequestViewHolder extends RecyclerView.ViewHolder {
             case FROM:
                 mDirectionIcon.setImageResource(R.drawable.ic_arrow_red);
                 mSenderName.setText(R.string.request_money_from_my_label);
-                mAmount.setText(mContext.getString(R.string.transactions_amount, requestEntity.getToAmount(), requestEntity.getTo().getCurrency()));
+                mAmount.setText(mContext.getString(R.string.transactions_amount, requestEntity.getFromAmount(), requestEntity.getFrom().getCurrency()));
                 mRequestName.setText(mContext.getString(R.string.request_money_ask_money_label, requestEntity.getTo().getFullName()));
                 break;
             case TO:
                 mDirectionIcon.setImageResource(R.drawable.ic_arrow_gr);
                 mSenderName.setText(mContext.getString(R.string.request_money_from_label, requestEntity.getFrom().getFullName()));
-                mAmount.setText(mContext.getString(R.string.transactions_amount, requestEntity.getFromAmount(), requestEntity.getFrom().getCurrency()));
+                mAmount.setText(mContext.getString(R.string.transactions_amount, requestEntity.getToAmount(), requestEntity.getTo().getCurrency()));
                 mRequestName.setText(R.string.request_money_ask_to_me);
                 break;
-
         }
-
         showStatus(requestEntity.getState());
 
         mDate.setText(DateUtils.getFormattedDate("dd.MM.yyyy", requestEntity.getCreatedAt()));
+        mTime.setText(DateUtils.getFormattedDate("HH:mm:ss", requestEntity.getCreatedAt()));
     }
 
     private void showStatus(RequestState state) {
         switch (state) {
             case INPROGRESS:
                 mRequestStatus.setText(R.string.request_money_status_in_progress);
-                mRequestStatus.setTextColor(mContext.getResources().getColor(R.color.color_text_blue));
+                mRequestStatus.setTextColor(mContext.getResources().getColor(R.color.color_request_state_in_progress));
                 break;
 
             case REJECTED:
                 mRequestStatus.setText(R.string.request_money_status_rejected);
-                mRequestStatus.setTextColor(mContext.getResources().getColor(R.color.color_text_red));
+                mRequestStatus.setTextColor(mContext.getResources().getColor(R.color.color_request_state_rejected));
                 break;
         }
     }

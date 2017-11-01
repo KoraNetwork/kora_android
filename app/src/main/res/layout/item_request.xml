@@ -1,93 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:id="@+id/root_view"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:background="?attr/selectableItemBackground"
-              android:orientation="horizontal"
-              android:padding="16dp">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:padding="16dp">
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/direction_icon"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
-        tools:src="@drawable/ic_arrow_red"/>
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        tools:src="@drawable/ic_arrow_red" />
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_toEndOf="@+id/direction_icon"
+        android:layout_toRightOf="@+id/direction_icon"
+        android:layout_toStartOf="@+id/linearLayout"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/sender_name"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:fontFamily="@font/muli_regular"
+            android:textColor="#3b3d3d"
+            android:textSize="14sp"
+            tools:text="From: Michael Jerreford" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/sender_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ellipsize="end"
-                android:lines="1"
-                android:textColor="#3b3d3d"
-                android:textSize="14sp"
-                app:fontFamily="@font/muli_regular"
-                tools:text="From: Michael Jerreford"/>
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/amount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#3b3d3d"
-                android:textSize="14sp"
-                app:fontFamily="@font/muli_bold"
-                tools:text="10 NGN"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/request_name"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/request_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ellipsize="end"
-                android:lines="1"
-                android:textColor="#3b3d3d"
-                android:textSize="14sp"
-                app:fontFamily="@font/muli_regular"
-                tools:text="Ask Money"/>
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#afb1b3"
-                android:textSize="12sp"
-                app:fontFamily="@font/muli_regular"
-                tools:text="17.10.2017"/>
-
-        </LinearLayout>
+            android:textColor="#3b3d3d"
+            android:textSize="14sp"
+            android:fontFamily="@font/muli_regular"
+            tools:text="To: Somebody"/>
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:fontFamily="@font/muli_normal"
-            android:textSize="12sp"
-            tools:text="Pending"/>
-
-
+            android:fontFamily="@font/muli_semi_bold"
+            android:textSize="13sp"
+            android:textColor="@color/color_request_state_in_progress"
+            tools:text="In progress"/>
     </LinearLayout>
 
-</LinearLayout>
+    <LinearLayout
+        android:gravity="end"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:id="@+id/linearLayout">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/muli_bold"
+            android:textColor="#3b3d3d"
+            android:textSize="14sp"
+            tools:text="10000 NGN" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_marginTop="8dp"
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/muli_regular"
+            android:textColor="#afb1b3"
+            android:textSize="12sp"
+            tools:text="17.10.2017" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/muli_regular"
+            android:textColor="#afb1b3"
+            android:textSize="12sp"
+            tools:text="10:20:30" />
+    </LinearLayout>
+
+</RelativeLayout>
