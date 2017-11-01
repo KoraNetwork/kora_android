@@ -1,5 +1,9 @@
 package com.kora.android.common.utils;
 
+import android.os.Build;
+import android.telephony.PhoneNumberUtils;
+
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -66,13 +70,20 @@ public class StringUtils {
     }
 
     public static String addPlusIfNeeded(final String phoneNumber) {
-        if (phoneNumber.startsWith("+"))
-            return phoneNumber;
-        else
+        if (phoneNumber.length() == 12 && !phoneNumber.startsWith("+")) {
             return "+" + phoneNumber;
+        } else return phoneNumber;
     }
 
     public static String getCodeFromMessage(final String message) {
         return message.replaceAll("[^0-9]", "");
+    }
+
+    public static String getFormattedPhoneNumber(String phone) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            return PhoneNumberUtils.formatNumber(addPlusIfNeeded(phone), Locale.ENGLISH.getISO3Country());
+        } else {
+           return PhoneNumberUtils.formatNumber(addPlusIfNeeded(phone)); //Deprecated method
+        }
     }
 }

@@ -6,6 +6,7 @@ import com.kora.android.KoraApplication;
 import com.kora.android.common.helper.RegistrationPrefHelper;
 import com.kora.android.common.preferences.PreferenceHandler;
 import com.kora.android.data.repository.AuthRepository;
+import com.kora.android.data.repository.BorrowRepository;
 import com.kora.android.data.repository.CurrencyConverterRepository;
 import com.kora.android.data.repository.RequestRepository;
 import com.kora.android.data.repository.TransactionRepository;
@@ -47,4 +48,5 @@ public interface ApplicationComponent {
     CurrencyConverterRepository currencyConverterRepository();
     TransactionRepository transactionRepository();
     RequestRepository requestRepository();
+    BorrowRepository borrowRepository();
 }

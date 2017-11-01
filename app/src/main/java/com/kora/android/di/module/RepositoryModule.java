@@ -5,20 +5,24 @@ import android.content.Context;
 import com.kora.android.common.preferences.PreferenceHandler;
 import com.kora.android.common.preferences.PreferenceHandlerImpl;
 import com.kora.android.data.network.service.AuthService;
+import com.kora.android.data.network.service.BorrowService;
 import com.kora.android.data.network.service.CurrencyConverterService;
 import com.kora.android.data.network.service.RequestService;
 import com.kora.android.data.network.service.TransactionService;
 import com.kora.android.data.network.service.UserService;
 import com.kora.android.data.repository.AuthRepository;
+import com.kora.android.data.repository.BorrowRepository;
 import com.kora.android.data.repository.CurrencyConverterRepository;
 import com.kora.android.data.repository.RequestRepository;
 import com.kora.android.data.repository.TransactionRepository;
 import com.kora.android.data.repository.UserRepository;
 import com.kora.android.data.repository.impl.AuthRepositoryImpl;
+import com.kora.android.data.repository.impl.BorrowRepositoryImpl;
 import com.kora.android.data.repository.impl.CurrencyConverterRepositoryImpl;
 import com.kora.android.data.repository.impl.RequestRepositoryImpl;
 import com.kora.android.data.repository.impl.TransactionRepositoryImpl;
 import com.kora.android.data.repository.impl.UserRepositoryImpl;
+import com.kora.android.data.repository.mapper.BorrowMapper;
 import com.kora.android.data.repository.mapper.RequestMapper;
 import com.kora.android.data.repository.mapper.TransactionMapper;
 import com.kora.android.data.repository.mapper.UserMapper;
@@ -84,5 +88,12 @@ public class RepositoryModule {
     public RequestRepository provideRequestRepository(final RequestService requestService,
                                                       final RequestMapper requestMapper) {
         return new RequestRepositoryImpl(requestService, requestMapper);
+    }
+
+    @Singleton
+    @Provides
+    public BorrowRepository provideBorrowRepository(final BorrowService borrowService,
+                                                     final BorrowMapper borrowMapper) {
+        return new BorrowRepositoryImpl(borrowService, borrowMapper);
     }
 }

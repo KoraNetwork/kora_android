@@ -160,11 +160,13 @@ dependencies {
     //gson
     compile 'com.google.code.gson:gson:2.8.2'
     // date picker
-    compile "com.wdullaer:materialdatetimepicker:3.1.1"
+    compile ("com.wdullaer:materialdatetimepicker:3.3.1") {
+        exclude group: 'com.android.support'
+    }
 
     // Fabric
     compile('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
-        transitive = true;
+        transitive = true
     }
 
     // test

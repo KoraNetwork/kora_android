@@ -83,6 +83,7 @@ public interface Keys {
 
     interface Args {
         String USER_ENTITY = "user_entity_args";
+        String GUARANTERS_LIST = "guaranters_list_args";
         String VIEW_MODE = "view_mode_args";
         String USER_LIST = "user_list_args";
         String SENDER_AMOUNT = "sender_amount_args";
@@ -100,6 +101,8 @@ public interface Keys {
         String REQUEST_ENTITY = "request_entity_args";
         String REQUEST_ID = "request_id_arg";
         String ARG_BORROW_TYPE = "borrow_type_args";
+        String BORROW_LIST = "borrow_list_args";
+        String BORROW_TYPE = "borrow_type";
     }
 
     interface Users {
