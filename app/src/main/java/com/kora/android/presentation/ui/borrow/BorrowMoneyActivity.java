@@ -32,7 +32,7 @@ import com.kora.android.presentation.ui.base.custom.MultiDialog;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.base.view.ToolbarActivity;
 import com.kora.android.presentation.ui.borrow.adapter.GuarantorsAdapter;
-import com.kora.android.presentation.ui.common.recent.RecentActivity;
+import com.kora.android.presentation.ui.common.add_contact.GetContactActivity;
 import com.kora.android.views.currency.CurrencyEditText;
 
 import java.util.ArrayList;
@@ -201,7 +201,7 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
 
     @OnClick(R.id.add_guarantor_button)
     public void onAddGuarantorClicked() {
-        startActivityForResult(RecentActivity.getLaunchIntent(this, getString(R.string.borrow_add_guarantor_title)), REQUEST_ADD_GUARANTOR);
+        startActivityForResult(GetContactActivity.getLaunchIntent(this, getString(R.string.borrow_add_guarantor_title)), REQUEST_ADD_GUARANTOR);
     }
 
     @Override

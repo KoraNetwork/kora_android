@@ -19,7 +19,7 @@ import com.kora.android.presentation.ui.adapter.UserAdapter;
 import com.kora.android.presentation.ui.base.adapter.OnItemClickListener;
 import com.kora.android.presentation.ui.base.backstack.StackFragment;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
-import com.kora.android.presentation.ui.common.add_contact.AddContactActivity;
+import com.kora.android.presentation.ui.common.add_contact.GetContactActivity;
 import com.kora.android.presentation.ui.common.send_to.RequestDetailsActivity;
 
 import java.util.ArrayList;
@@ -107,7 +107,7 @@ public class SendFragment extends StackFragment<SendPresenter> implements SendVi
 
     @OnClick(R.id.text_add_new_contact)
     public void onAddContactClicked() {
-        startActivityForResult(AddContactActivity.getLaunchIntent(getBaseActivity()), REQUEST_GET_CONTACT);
+        startActivityForResult(GetContactActivity.getLaunchIntent(getBaseActivity(), getString(R.string.send_money_title)), REQUEST_GET_CONTACT);
     }
 
     @Override

@@ -14,7 +14,6 @@ public class GetUsersUseCase extends AsyncUseCase {
     private final UserRepository mUserRepository;
 
     private String mSearch;
-    private int mLimit;
     private int mSkip;
     private String mUseName;
 
@@ -24,25 +23,21 @@ public class GetUsersUseCase extends AsyncUseCase {
     }
 
     public void setData(final String search,
-                        final int limit,
                         final int skip) {
         mSearch = search;
-        mLimit = limit;
         mSkip = skip;
     }
 
     public void setData(final String search,
-                        final int limit,
                         final int skip,
                         final String userName) {
         mSearch = search;
-        mLimit = limit;
         mSkip = skip;
         mUseName = userName;
     }
 
     @Override
     protected Observable buildObservableTask() {
-        return mUserRepository.getUsers(mSearch, mLimit, mSkip, mUseName);
+        return mUserRepository.getUsers(mSearch, mSkip, mUseName);
     }
 }

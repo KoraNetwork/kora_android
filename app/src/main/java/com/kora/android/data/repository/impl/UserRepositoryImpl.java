@@ -1,6 +1,6 @@
 package com.kora.android.data.repository.impl;
 
-import android.util.Pair;
+import android.support.v4.util.Pair;
 
 import com.kora.android.common.Keys;
 import com.kora.android.common.preferences.PreferenceHandler;
@@ -87,15 +87,14 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Observable<Pair<Integer, List<UserEntity>>> getUsers(final String search,
-                                                                final int limit,
-                                                                final int skip,
-                                                                final String sort) {
-        return mUserService.getUsers(search, limit, skip, sort)
-                .flatMap(userListResponse -> Observable.fromIterable(userListResponse.getData())
-                        .compose(mUserMapper.transformResponseToEntityUser())
-                        .toList().toObservable()
-                        .flatMap(userEntityList -> Observable.just(new Pair<>(userListResponse.getTotal(), userEntityList))));
+    public Observable<Pair<List<UserEntity>, List<UserEntity>>> getUsers(final String search,
+                                                                         final int skip,
+                                                                         final String sort) {
+        return mUserService.getUsers(search, Keys.ITEMS_PER_PAGE, skip, sort)
+                .flatMap(userListResponse ->
+                        Observable.zip(mUserMapper.transformUserListResponseToEntityUserList(userListResponse.getRecents()),
+                                mUserMapper.transformUserListResponseToEntityUserList(userListResponse.getContacts()),
+                                Pair::new));
     }
 
     public ObservableTransformer<UserEntity, UserEntity> storeUser() {

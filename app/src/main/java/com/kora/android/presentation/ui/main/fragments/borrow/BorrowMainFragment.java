@@ -12,7 +12,7 @@ import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.backstack.StackFragment;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
 import com.kora.android.presentation.ui.borrow.BorrowMoneyActivity;
-import com.kora.android.presentation.ui.common.recent.RecentActivity;
+import com.kora.android.presentation.ui.common.add_contact.GetContactActivity;
 import com.kora.android.presentation.ui.main.fragments.borrow.adapter.BorrowPageAdapter;
 
 import butterknife.BindView;
@@ -72,7 +72,7 @@ public class BorrowMainFragment extends StackFragment<BorrowMainPresenter> imple
     @OnClick(R.id.floating_button_create_borrow)
     public void onClickCreateBorrow() {
         startActivityForResult(
-                RecentActivity.getLaunchIntent(getBaseActivity(), getString(R.string.borrow_borrow_money)),
+                GetContactActivity.getLaunchIntent(getBaseActivity(), getString(R.string.borrow_borrow_money)),
                 REQUEST_GET_BORROWER);
     }
 

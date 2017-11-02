@@ -86,7 +86,7 @@
             android:windowSoftInputMode="stateHidden"/>
 
         <activity
-            android:name=".presentation.ui.common.add_contact.AddContactActivity"
+            android:name=".presentation.ui.common.add_contact.GetContactActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.MainTheme"
             android:windowSoftInputMode="stateHidden"/>
