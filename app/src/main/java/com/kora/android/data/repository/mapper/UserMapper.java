@@ -8,6 +8,7 @@ import com.kora.android.presentation.model.CountryEntity;
 import com.kora.android.presentation.model.UserEntity;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -133,6 +134,14 @@ public class UserMapper {
         return userResponseObservable -> userResponseObservable
                 .flatMap(userResponses -> Observable.fromIterable(userResponses)
                         .compose(transformResponseToEntityUser())).toList().toObservable();
+
+    }
+
+    public Observable<List<UserEntity>> transformUserListResponseToEntityUserList(List<UserResponse> userResponses) {
+        if (userResponses == null) return Observable.just(new ArrayList<>());
+        return Observable.just(userResponses)
+                .compose(transformUserListResponseToEntityUserList());
+
 
     }
 

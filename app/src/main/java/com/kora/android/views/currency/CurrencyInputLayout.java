@@ -1,4 +1,4 @@
-package com.kora.android.views;
+package com.kora.android.views.currency;
 
 import android.content.Context;
 import android.graphics.Rect;
@@ -9,21 +9,21 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class TextInputLayoutWithDrawable extends TextInputLayout {
+public class CurrencyInputLayout extends TextInputLayout {
 
     private Object collapsingTextHelper;
     private Rect bounds;
     private Method recalculateMethod;
 
-    public TextInputLayoutWithDrawable(Context context) {
+    public CurrencyInputLayout(Context context) {
         this(context, null);
     }
 
-    public TextInputLayoutWithDrawable(Context context, AttributeSet attrs) {
+    public CurrencyInputLayout(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public TextInputLayoutWithDrawable(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CurrencyInputLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         init();

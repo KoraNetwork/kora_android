@@ -65,7 +65,7 @@ public final class Validator {
     }
 
     public static boolean isValidPrice(final double price) {
-        return price >= 0.3;
+        return price > 0;
     }
 
     public static boolean isCorrectLink(String website) {
@@ -89,6 +89,32 @@ public final class Validator {
             DateFormat df = new SimpleDateFormat("HH:mm", Locale.US);
             Date newDate = df.parse(newTime);
             Date currentDate = df.parse(df.format(new Date()));
+            return newDate.before(currentDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public static boolean isFutureDate(String startDate, String format) {
+        try {
+            DateFormat df = new SimpleDateFormat(format, Locale.US);
+            Date newDate = df.parse(startDate);
+            Date currentDate = df.parse(df.format(new Date()));
+            return currentDate.before(newDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public static boolean isBefore(String startDate, String maturityDate, String prettyDatePattern) {
+        try {
+            DateFormat df = new SimpleDateFormat(prettyDatePattern, Locale.US);
+            Date newDate = df.parse(startDate);
+            Date currentDate = df.parse(maturityDate);
             return newDate.before(currentDate);
         } catch (ParseException e) {
             e.printStackTrace();

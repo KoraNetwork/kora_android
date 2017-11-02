@@ -6,13 +6,11 @@ import com.kora.android.common.utils.Validator;
 import com.kora.android.data.network.config.ErrorModel;
 import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.di.annotation.ConfigPersistent;
-import com.kora.android.domain.base.DefaultDisposableObserver;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.usecase.request.AddToRequestsUseCase;
 import com.kora.android.domain.usecase.request.UpdateRequestUseCase;
 import com.kora.android.domain.usecase.user.ConvertAmountUseCase;
 import com.kora.android.domain.usecase.user.GetUserDataUseCase;
-import com.kora.android.domain.usecase.user.SetAsRecentUseCase;
 import com.kora.android.presentation.enums.Direction;
 import com.kora.android.presentation.model.RequestEntity;
 import com.kora.android.presentation.model.UserEntity;
@@ -29,7 +27,6 @@ public class RequestDetailsPresenter extends BasePresenter<RequestDetailsView> {
 
     private final GetUserDataUseCase mGetUserDataUseCase;
     private final ConvertAmountUseCase mConvertAmountUseCase;
-    private final SetAsRecentUseCase mSetAsRecentUseCase;
     private final AddToRequestsUseCase mAddToRequestsUseCase;
     private final UpdateRequestUseCase mUpdateRequestUseCase;
 
@@ -41,12 +38,10 @@ public class RequestDetailsPresenter extends BasePresenter<RequestDetailsView> {
     @Inject
     public RequestDetailsPresenter(final GetUserDataUseCase getUserDataUseCase,
                                    final ConvertAmountUseCase convertAmountUseCase,
-                                   final SetAsRecentUseCase setAsRecentUseCase,
                                    final AddToRequestsUseCase addToRequestsUseCase,
                                    final UpdateRequestUseCase updateRequestUseCase) {
         mGetUserDataUseCase = getUserDataUseCase;
         mConvertAmountUseCase = convertAmountUseCase;
-        mSetAsRecentUseCase = setAsRecentUseCase;
         mAddToRequestsUseCase = addToRequestsUseCase;
         mUpdateRequestUseCase = updateRequestUseCase;
     }
@@ -155,12 +150,6 @@ public class RequestDetailsPresenter extends BasePresenter<RequestDetailsView> {
 
     public UserEntity getSender() {
         return mSender;
-    }
-
-    public void setAsResent() {
-        if (mReceiver == null) return;
-        mSetAsRecentUseCase.setData(mReceiver);
-        mSetAsRecentUseCase.execute(new DefaultDisposableObserver());
     }
 
     public RequestEntity getRequest() {
@@ -328,7 +317,6 @@ public class RequestDetailsPresenter extends BasePresenter<RequestDetailsView> {
     public void onDetachView() {
         mGetUserDataUseCase.dispose();
         mConvertAmountUseCase.dispose();
-        mSetAsRecentUseCase.dispose();
         mAddToRequestsUseCase.dispose();
         mUpdateRequestUseCase.dispose();
     }

@@ -24,7 +24,7 @@ import com.kora.android.presentation.ui.base.adapter.RecyclerViewScrollListener;
 import com.kora.android.presentation.ui.base.adapter.filter.OnFilterListener;
 import com.kora.android.presentation.ui.base.backstack.StackFragment;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
-import com.kora.android.presentation.ui.common.recent.RecentActivity;
+import com.kora.android.presentation.ui.common.add_contact.GetContactActivity;
 import com.kora.android.presentation.ui.common.send_to.RequestDetailsActivity;
 import com.kora.android.presentation.ui.main.fragments.request.adapter.RequestAdapter;
 import com.kora.android.presentation.ui.main.fragments.request.filter.RequestFilterDialog;
@@ -118,7 +118,7 @@ public class RequestFragment extends StackFragment<RequestPresenter> implements 
 
     @OnClick(R.id.floating_button_create_request)
     public void onClickCreateRequest() {
-        startActivityForResult(RecentActivity.getLaunchIntent(getBaseActivity(), getString(R.string.request_money_title)), REQUEST_CREATE);
+        startActivityForResult(GetContactActivity.getLaunchIntent(getBaseActivity(), getString(R.string.request_money_title)), REQUEST_CREATE);
     }
 
     @Override

@@ -27,7 +27,7 @@ import static com.kora.android.common.Keys.CURRENCY_USD;
 import static com.kora.android.common.Keys.DEFAULT_USD_BALANCE;
 
 @ConfigPersistent
-public class CreateWalletPresenter extends BaseServicePresenter<CreateWalletContractor> {
+public class CreateWalletsPresenter extends BaseServicePresenter<CreateWalletsContractor> {
 
     private final RegistrationPrefHelper mRegistrationPrefHelper;
     private final CreateIdentityUseCase mCreateIdentityUseCase;
@@ -38,11 +38,11 @@ public class CreateWalletPresenter extends BaseServicePresenter<CreateWalletCont
     private UserEntity mUserEntity;
 
     @Inject
-    public CreateWalletPresenter(final RegistrationPrefHelper registrationPrefHelper,
-                                 final UpdateUserUseCase updateUserUseCase,
-                                 final CreateIdentityUseCase createIdentityUseCase,
-                                 final ConvertAmountUseCase convertAmountUseCase,
-                                 final IncreaseBalanceUseCase increaseBalanceUseCase) {
+    public CreateWalletsPresenter(final RegistrationPrefHelper registrationPrefHelper,
+                                  final UpdateUserUseCase updateUserUseCase,
+                                  final CreateIdentityUseCase createIdentityUseCase,
+                                  final ConvertAmountUseCase convertAmountUseCase,
+                                  final IncreaseBalanceUseCase increaseBalanceUseCase) {
         mRegistrationPrefHelper = registrationPrefHelper;
         mCreateIdentityUseCase = createIdentityUseCase;
         mUpdateUserUseCase = updateUserUseCase;
@@ -97,7 +97,7 @@ public class CreateWalletPresenter extends BaseServicePresenter<CreateWalletCont
         @Override
         public void onError(@NonNull final Throwable throwable) {
             super.onError(throwable);
-            Log.e(CreateWalletService.class.getCanonicalName(), throwable.getLocalizedMessage());
+            Log.e(CreateWalletsService.class.getCanonicalName(), throwable.getLocalizedMessage());
             throwable.printStackTrace();
         }
 

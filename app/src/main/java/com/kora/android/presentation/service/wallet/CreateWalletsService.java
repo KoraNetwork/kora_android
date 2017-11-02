@@ -13,12 +13,12 @@ import com.kora.android.presentation.service.BaseService;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 
-public class CreateWalletService extends BaseService<CreateWalletPresenter> implements CreateWalletContractor {
+public class CreateWalletsService extends BaseService<CreateWalletsPresenter> implements CreateWalletsContractor {
 
     private static final int NOTIFICATION_ID = 11;
 
     public static Intent getLaunchIntent(final BaseActivity baseActivity, final UserEntity userEntity) {
-        final Intent intent = new Intent(baseActivity, CreateWalletService.class);
+        final Intent intent = new Intent(baseActivity, CreateWalletsService.class);
         intent.putExtra(Keys.Extras.EXTRA_USER, userEntity);
         return intent;
     }

@@ -124,7 +124,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <com.kora.android.views.TextInputLayoutWithDrawable
+                    <com.kora.android.views.currency.CurrencyInputLayout
                         android:fontFamily="@font/muli_regular"
                         android:layout_toLeftOf="@+id/my_suffix"
                         android:layout_toStartOf="@+id/my_suffix"
@@ -149,7 +149,7 @@
                             android:textColor="@color/color_edit_text"
                             android:textSize="16sp"/>
 
-                    </com.kora.android.views.TextInputLayoutWithDrawable>
+                    </com.kora.android.views.currency.CurrencyInputLayout>
 
                     <android.support.v7.widget.AppCompatTextView
                         android:fontFamily="@font/muli_regular"
@@ -170,7 +170,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <com.kora.android.views.TextInputLayoutWithDrawable
+                    <com.kora.android.views.currency.CurrencyInputLayout
                         android:fontFamily="@font/muli_regular"
                         android:layout_toLeftOf="@+id/his_suffix"
                         android:layout_toStartOf="@+id/his_suffix"
@@ -199,7 +199,7 @@
                             android:maxLines="1"
                             android:textColor="@color/color_edit_text"
                             android:textSize="16sp"/>
-                    </com.kora.android.views.TextInputLayoutWithDrawable>
+                    </com.kora.android.views.currency.CurrencyInputLayout>
 
                     <android.support.v7.widget.AppCompatTextView
                         android:layout_marginTop="25dp"
@@ -217,7 +217,7 @@
                         tools:text="UAH" />
                 </RelativeLayout>
 
-            <com.kora.android.views.TextInputLayoutWithDrawable
+            <com.kora.android.views.currency.CurrencyInputLayout
                 android:fontFamily="@font/muli_regular"
                 android:id="@+id/edit_layout_additional"
                 android:layout_width="match_parent"
@@ -235,7 +235,7 @@
                     android:inputType="textMultiLine"
                     android:textColor="@color/color_edit_text"
                     android:textSize="16sp"/>
-            </com.kora.android.views.TextInputLayoutWithDrawable>
+            </com.kora.android.views.currency.CurrencyInputLayout>
 
 
             <android.support.v7.widget.AppCompatButton

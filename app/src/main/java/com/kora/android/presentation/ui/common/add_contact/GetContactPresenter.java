@@ -1,15 +1,18 @@
 package com.kora.android.presentation.ui.common.add_contact;
 
-import android.util.Pair;
+import android.support.v4.util.Pair;
 
 import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.di.annotation.ConfigPersistent;
+import com.kora.android.domain.base.DefaultDisposableObserver;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.usecase.user.GetUsersUseCase;
+import com.kora.android.domain.usecase.user.SetAsRecentUseCase;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -18,27 +21,27 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Action;
 
 @ConfigPersistent
-public class AddContactPresenter extends BasePresenter<AddContactView> {
+public class GetContactPresenter extends BasePresenter<GetContactView> {
 
     private final GetUsersUseCase mGetUsersUseCase;
+    private final SetAsRecentUseCase mSetAsRecentUseCase;
+
+    ArrayList<String> mExcludedUsers = new ArrayList<>();
 
     private String mSearch;
-    private int mLimit = 10;
-    private int mSkip;
-    private int mTotal;
-
     @Inject
-    public AddContactPresenter(final GetUsersUseCase getUsersUseCase) {
+    public GetContactPresenter(final GetUsersUseCase getUsersUseCase,
+                               final SetAsRecentUseCase setAsRecentUseCase) {
         mGetUsersUseCase = getUsersUseCase;
+        mSetAsRecentUseCase = setAsRecentUseCase;
     }
 
-    public void startGetUsersTask(final int userCount, final boolean doSkip) {
-        if (doSkip)
-            mSkip = userCount;
-        else
-            mSkip = 0;
-        if (mTotal != 0 && mTotal == mSkip) return;
-        mGetUsersUseCase.setData(mSearch, mLimit, mSkip);
+    public void getUsers() {
+        getUsers(0);
+    }
+
+    public void getUsers(final int skip) {
+        mGetUsersUseCase.setData(mSearch, skip, mExcludedUsers);
         mGetUsersUseCase.execute(new GetUsersSubscriber());
     }
 
@@ -53,7 +56,20 @@ public class AddContactPresenter extends BasePresenter<AddContactView> {
         mSearch = search;
     }
 
-    private class GetUsersSubscriber extends DefaultInternetSubscriber<Pair<Integer, List<UserEntity>>> {
+    public void setExcluded(ArrayList<String> userIds) {
+        mExcludedUsers = userIds;
+    }
+
+    public List<String> getExcluded() {
+        return mExcludedUsers;
+    }
+
+    public void setAsRecent(UserEntity item) {
+        mSetAsRecentUseCase.setData(item);
+        mSetAsRecentUseCase.execute(new DefaultDisposableObserver());
+    }
+
+    private class GetUsersSubscriber extends DefaultInternetSubscriber<Pair<List<UserEntity>, List<UserEntity>>> {
 
         @Override
         protected void onStart() {
@@ -62,13 +78,9 @@ public class AddContactPresenter extends BasePresenter<AddContactView> {
         }
 
         @Override
-        public void onNext(@NonNull final Pair<Integer, List<UserEntity>> pair) {
+        public void onNext(@NonNull final Pair<List<UserEntity>, List<UserEntity>> users) {
             if (!isViewAttached()) return;
-            mTotal = pair.first;
-            if (mSkip == 0)
-                getView().showUsers(pair.second, true);
-            else
-                getView().showUsers(pair.second, false);
+            getView().showUsers(users);
         }
 
         @Override
@@ -93,5 +105,6 @@ public class AddContactPresenter extends BasePresenter<AddContactView> {
     @Override
     public void onDetachView() {
         mGetUsersUseCase.dispose();
+        mSetAsRecentUseCase.dispose();
     }
 }

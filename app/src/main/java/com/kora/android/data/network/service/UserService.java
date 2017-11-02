@@ -35,11 +35,12 @@ public interface UserService {
     @GET("recents")
     Observable<List<UserResponse>> getRecentUsers();
 
-    @GET("contacts")
+    @GET("recents/contacts")
     Observable<UserListResponse> getUsers(@Query("search") String search,
                                           @Query("limit") int limit,
                                           @Query("skip") int skip,
-                                          @Query("sort") String sort);
+                                          @Query("sort") String sort,
+                                          @Query("not[]") List<String> excluded);
 
     @POST("recents/add")
     Observable<Object> addToRecent(@Body UserIdRequest userIdRequest);

@@ -261,31 +261,6 @@ public class UserEntity implements Parcelable {
     public void setCurrencyNameFull(String mCurrencyNameFull) {
         this.mCurrencyNameFull = mCurrencyNameFull;
     }
-    @Override
-    public String toString() {
-        return "UserEntity{" + "\n" +
-                "mId=" + mId + "\n" +
-                "mAvatar=" + mAvatar + "\n" +
-                "mPhoneNumber=" + mPhoneNumber + "\n" +
-                "mIdentity=" + mIdentity + "\n" +
-                "mCreator=" + mCreator + "\n" +
-                "mRecoveryKey=" + mRecoveryKey + "\n" +
-                "mOwner=" + mOwner + "\n" +
-                "mUserName=" + mUserName + "\n" +
-                "mLegalName=" + mLegalName + "\n" +
-                "mEmail=" + mEmail + "\n" +
-                "mDateOfBirth=" + mDateOfBirth + "\n" +
-                "mCurrency=" + mCurrency + "\n" +
-                "mPostalCode=" + mPostalCode + "\n" +
-                "mAddress=" + mAddress + "\n" +
-                "mPassword=" + mPassword + "\n" +
-                "mCountryCode=" + mCountryCode + "\n" +
-                "mERC20Token=" + mERC20Token + "\n" +
-                "mFlag=" + mFlag + "\n" +
-                "mCurrencyNameFull=" + mCurrencyNameFull + "\n" +
-                '}';
-    }
-
 
     @Override
     public int describeContents() {
@@ -363,5 +338,44 @@ public class UserEntity implements Parcelable {
                 getOwner() != null && !getOwner().isEmpty() &&
                 getRecoveryKey() != null && !getRecoveryKey().isEmpty() &&
                 getIdentity() != null && !getIdentity().isEmpty();
+    }
+
+    public static class Section implements Parcelable {
+
+        private final String name;
+
+        public Section(String name) {
+            this.name = name;
+        }
+
+        protected Section(Parcel in) {
+            name = in.readString();
+        }
+
+        public static final Creator<Section> CREATOR = new Creator<Section>() {
+            @Override
+            public Section createFromParcel(Parcel in) {
+                return new Section(in);
+            }
+
+            @Override
+            public Section[] newArray(int size) {
+                return new Section[size];
+            }
+        };
+
+        public String getName() {
+            return name;
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(name);
+        }
     }
 }

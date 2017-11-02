@@ -188,6 +188,7 @@
     <!-- Add contact activity -->
     <string name="add_contact_title">Add your contacts</string>
     <string name="add_contact_name_phone_email">receiver name or mobile phone or email</string>
+    <string name="add_contact_recent_title">Recent</string>
 
     <!-- Enter pin activity -->
     <string name="enter_pin_enter_pin">"Enter PIN code</string>
@@ -269,19 +270,28 @@
     <string name="borrow_borrow_borrow_now">BORROW NOW</string>
     <string name="borrow_lender_label">Lender</string>
     <string name="borrow_guarantors_label">Your guarantors</string>
+    <string name="borrow_add_guarantor_title">Add your guarantors</string>
+
+    <string name="dialog_remove_guarantor_title">Alert</string>
+    <string name="dialog_remove_guarantor_message">Are you sure you want to remove this guarantor?</string>
+    <string name="dialog_remove_guarantor_positive_btn">Yes</string>
+    <string name="dialog_remove_guarantor_negative_btn">No</string>
+
+    <string name="borrow_amount">%1$.2f %2$s</string>
+    <string name="borrow_no_guaranters_error_message">You should add at least one guaranter</string>
+    <string name="borrow_empty_amount_error_message">Amount should not be zero</string>
+    <string name="borrow_empty_rate_error_message">Rate should be not empty</string>
+    <string name="borrow_empty_start_date_error_message">Start date should be not empty</string>
+    <string name="borrow_empty_maturity_date_error_message">Maturity date should be not empty</string>
+    <string name="borrow_request_added_message">Request Added</string>
+    <string name="borrow_past_start_date_error_message">Start date should be in future</string>
+    <string name="borrow_past_maturity_date_error_message">Maturity date should be after start date</string>
 
     <!-- Borrow list -->
     <string name="borrow_request_title">Request</string>
     <string name="borrow_loans_title">Lean</string>
     <string name="borrow_in_progress_title">In progress</string>
-
-
-    <string name="borrow_add_guarantor_title">Add your guarantors</string>
-    <string name="dialog_remove_guarantor_title">Alert</string>
-    <string name="dialog_remove_guarantor_message">Are you sure you want to remove this guarantor?</string>
-    <string name="dialog_remove_guarantor_positive_btn">Yes</string>
-    <string name="dialog_remove_guarantor_negative_btn">No</string>
-    <string name="registration_setup_notification_service">Setup accound in proccess</string>
+    <string name="add_contact_all_title">All contacts</string>
 
     <!-- Wallet service -->
     <string name="wallet_service_start_message">It takes some time to setup your wallet. Please be patient.</string>

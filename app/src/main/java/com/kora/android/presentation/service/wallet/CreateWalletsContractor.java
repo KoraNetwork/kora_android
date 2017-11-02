@@ -3,7 +3,7 @@ package com.kora.android.presentation.service.wallet;
 import com.kora.android.presentation.service.BaseServiceContractor;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
 
-public interface CreateWalletContractor extends BaseServiceContractor<CreateWalletPresenter> {
+public interface CreateWalletsContractor extends BaseServiceContractor<CreateWalletsPresenter> {
 
     void showError(final String message, final RetryAction retryAction);
 

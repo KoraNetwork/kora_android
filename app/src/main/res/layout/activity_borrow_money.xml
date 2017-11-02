@@ -10,11 +10,13 @@
     <include layout="@layout/toolbar"/>
 
     <ScrollView
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
 
         <LinearLayout
+            android:id="@+id/main_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -122,6 +124,7 @@
                 android:src="@drawable/dashed_separator_background"/>
 
             <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/guarantors_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="9dp"
@@ -131,6 +134,16 @@
                 android:textColor="#61000000"
                 android:textSize="12sp"
                 tools:text="Your guarantors"/>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/no_guaranter_error"
+                style="?attr/errorTextAppearance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:text="@string/borrow_no_guaranters_error_message"
+                android:textColor="@color/color_red"
+                android:visibility="gone"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/guarantors_list"
@@ -173,7 +186,7 @@
                     android:layout_weight="1"
                     android:gravity="bottom">
 
-                    <com.kora.android.views.TextInputLayoutWithDrawable
+                    <com.kora.android.views.currency.CurrencyInputLayout
                         android:id="@+id/edit_layout_amount"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -181,19 +194,20 @@
                         android:layout_marginRight="16dp"
                         app:errorEnabled="true">
 
-                        <android.support.design.widget.TextInputEditText
+                        <com.kora.android.views.currency.CurrencyEditText
                             android:id="@+id/edit_text_sender_amount"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/muli_regular"
                             android:hint="@string/send_money_amount_label"
                             android:inputType="numberDecimal"
-                            android:paddingRight="50dp"
                             android:textColor="@color/color_edit_text"
                             android:textSize="16sp"
+                            app:allow_negative_values="false"
+                            app:decimal_digits="2"
                             tools:text="100"/>
 
-                    </com.kora.android.views.TextInputLayoutWithDrawable>
+                    </com.kora.android.views.currency.CurrencyInputLayout>
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/my_suffix"
@@ -216,7 +230,7 @@
                     android:layout_weight="1"
                     android:gravity="bottom">
 
-                    <com.kora.android.views.TextInputLayoutWithDrawable
+                    <com.kora.android.views.currency.CurrencyInputLayout
                         android:id="@+id/edit_layout_converted_amount"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -224,7 +238,7 @@
                         android:layout_marginRight="16dp"
                         app:errorEnabled="true">
 
-                        <android.support.design.widget.TextInputEditText
+                        <com.kora.android.views.currency.CurrencyEditText
                             android:id="@+id/edit_text_receiver_amount"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -233,11 +247,12 @@
                             android:hint="@string/send_money_amount_in_users_currency_label"
                             android:inputType="numberDecimal"
                             android:maxLines="1"
-                            android:paddingRight="50dp"
                             android:textColor="@color/color_edit_text"
                             android:textSize="16sp"
+                            app:allow_negative_values="false"
+                            app:decimal_digits="2"
                             tools:text="2750"/>
-                    </com.kora.android.views.TextInputLayoutWithDrawable>
+                    </com.kora.android.views.currency.CurrencyInputLayout>
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/his_suffix"
@@ -292,17 +307,19 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
+                    android:layout_marginBottom="5dp"
                     android:fontFamily="@font/muli_regular"
                     android:text="@string/borrow_borrow_total_interest"
                     android:textColor="@color/color_text_grey_2"
                     android:textSize="16sp"/>
 
-                <TextView
+                <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/text_total_interest"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
+                    android:layout_marginBottom="5dp"
                     android:fontFamily="@font/muli_semi_bold"
                     android:textColor="@color/color_text_green"
                     android:textSize="16sp"
@@ -321,7 +338,7 @@
                     android:textColor="@color/color_text_grey_2"
                     android:textSize="16sp"/>
 
-                <TextView
+                <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/text_total_amount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -396,15 +413,15 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/muli_regular"
                     android:hint="@string/borrow_borrow_additional_note"
-                    android:inputType="text"
-                    android:maxLength="20"
-                    android:maxLines="1"
+                    android:inputType="textMultiLine"
+                    android:maxLength="256"
                     android:textColor="@color/color_edit_text"
                     android:textSize="18sp"
                     />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.v7.widget.AppCompatButton
+                android:id="@+id/action_button"
                 style="@style/AppTheme.ActionButton.Blue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

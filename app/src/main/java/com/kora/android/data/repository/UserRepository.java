@@ -1,6 +1,6 @@
 package com.kora.android.data.repository;
 
-import android.util.Pair;
+import android.support.v4.util.Pair;
 
 import com.kora.android.presentation.model.UserEntity;
 
@@ -14,10 +14,10 @@ public interface UserRepository {
 
     Observable<UserEntity> updateUser(final UserEntity userEntity);
 
-    Observable<Pair<Integer, List<UserEntity>>> getUsers(final String search,
-                                                         final int limit,
-                                                         final int skip,
-                                                         final String sort);
+    Observable<Pair<List<UserEntity>, List<UserEntity>>> getUsers(final String search,
+                                                                  final int skip,
+                                                                  final String sort,
+                                                                  List<String> excluded);
 
     Observable<UserEntity> updateAvatar(final String avatar);
 

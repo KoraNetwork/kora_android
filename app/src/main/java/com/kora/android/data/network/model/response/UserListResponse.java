@@ -8,32 +8,24 @@ import java.util.List;
 @JsonObject
 public class UserListResponse {
 
-    @JsonField(name = "total")
-    private int mTotal;
-    @JsonField(name = "data")
-    private List<UserResponse> mData;
+    @JsonField(name = "recents")
+    private List<UserResponse> mRecents;
+    @JsonField(name = "contacts")
+    private List<UserResponse> mContacts;
 
-    public int getTotal() {
-        return mTotal;
+    public List<UserResponse> getRecents() {
+        return mRecents;
     }
 
-    public void setTotal(int mTotal) {
-        this.mTotal = mTotal;
+    public void setRecents(List<UserResponse> recents) {
+        mRecents = recents;
     }
 
-    public List<UserResponse> getData() {
-        return mData;
+    public List<UserResponse> getContacts() {
+        return mContacts;
     }
 
-    public void setData(List<UserResponse> mUserResponseList) {
-        this.mData = mUserResponseList;
-    }
-
-    @Override
-    public String toString() {
-        return "UserListResponse{" + "\n" +
-                "mTotal=" + mTotal + "\n" +
-                "mData=" + mData + "\n" +
-                "}";
+    public void setContacts(List<UserResponse> contacts) {
+        mContacts = contacts;
     }
 }

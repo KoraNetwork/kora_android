@@ -3,6 +3,7 @@ package com.kora.android.presentation.ui.common.add_contact;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -27,28 +28,35 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnTextChanged;
 
-public class AddContactActivity extends ToolbarActivity<AddContactPresenter> implements AddContactView,
+import static com.kora.android.common.Keys.Extras.EXCLUDED_USER_IDS;
+import static com.kora.android.common.Keys.Extras.TITLE;
+
+public class GetContactActivity extends ToolbarActivity<GetContactPresenter> implements GetContactView,
         OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
-    @BindView(R.id.toolbar)
-    Toolbar mToolbar;
-    @BindView(R.id.edit_text_search)
-    AppCompatEditText mEtSearch;
-    @BindView(R.id.recycler_view_users)
-    RecyclerView mRvUsers;
-    @BindView(R.id.swipe_layout)
-    SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.toolbar) Toolbar mToolbar;
+    @BindView(R.id.edit_text_search) AppCompatEditText mEtSearch;
+    @BindView(R.id.recycler_view_users) RecyclerView mRvUsers;
+    @BindView(R.id.swipe_layout) SwipeRefreshLayout swipeRefreshLayout;
 
     public UserAdapter mUserAdapter;
 
-    public static Intent getLaunchIntent(final BaseActivity baseActivity) {
-        final Intent intent = new Intent(baseActivity, AddContactActivity.class);
+    public static Intent getLaunchIntent(final BaseActivity baseActivity, final String title) {
+        final Intent intent = new Intent(baseActivity, GetContactActivity.class);
+        intent.putExtra(TITLE, title);
+        return intent;
+    }
+
+    public static Intent getLaunchIntent(final BaseActivity baseActivity, final String title, final List<String> excludedIds) {
+        final Intent intent = new Intent(baseActivity, GetContactActivity.class);
+        intent.putExtra(TITLE, title);
+        intent.putStringArrayListExtra(EXCLUDED_USER_IDS, (ArrayList<String>) excludedIds);
         return intent;
     }
 
     @Override
     public int getLayoutResource() {
-        return R.layout.activity_add_contact;
+        return R.layout.activity_get_contact;
     }
 
     @Override
@@ -74,28 +82,33 @@ public class AddContactActivity extends ToolbarActivity<AddContactPresenter> imp
         initUI();
 
         if (savedInstanceState == null) {
-            getPresenter().startGetUsersTask(0, true);
+            getPresenter().getUsers();
         } else {
-            ArrayList<UserEntity> users = savedInstanceState.getParcelableArrayList(Keys.Args.USER_LIST);
+            List users = savedInstanceState.getParcelableArrayList(Keys.Args.USER_LIST);
             mUserAdapter.addUsers(users);
         }
     }
 
     private void initArguments(final Bundle bundle) {
-//        if (bundle != null) {
-//            if (bundle.containsKey(ACTION_TYPE))
-//                mActionType = (ActionType) bundle.getSerializable(ACTION_TYPE);
-//        }
-//        if (getIntent() != null) {
-//            mActionType = (ActionType) getIntent().getSerializableExtra(ACTION_TYPE);
-//        }
+        if (bundle != null && bundle.containsKey(TITLE)) {
+            setTitle(bundle.getString(TITLE));
+        }
+        if (bundle != null && bundle.containsKey(EXCLUDED_USER_IDS)) {
+            getPresenter().setExcluded(bundle.getStringArrayList(EXCLUDED_USER_IDS));
+        }
+        if (getIntent() != null) {
+            setTitle(getIntent().getStringExtra(TITLE));
+            getPresenter().setExcluded(getIntent().getStringArrayListExtra(EXCLUDED_USER_IDS));
+        }
+
     }
 
     @Override
     protected void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
-//        outState.putSerializable(ACTION_TYPE, mActionType);
+        outState.putString(TITLE, getTitle().toString());
         outState.putParcelableArrayList(Keys.Args.USER_LIST, (ArrayList<UserEntity>) mUserAdapter.getItems());
+        outState.putStringArrayList(EXCLUDED_USER_IDS, (ArrayList<String>) getPresenter().getExcluded());
     }
 
     private void initUI() {
@@ -109,11 +122,17 @@ public class AddContactActivity extends ToolbarActivity<AddContactPresenter> imp
     }
 
     @Override
-    public void showUsers(final List<UserEntity> userEntityList, final boolean clearList) {
-        if (clearList)
-            mUserAdapter.clearAll();
-        mUserAdapter.addUsers(userEntityList);
-        mRvUsers.invalidate();
+    public void showUsers(final Pair<List<UserEntity>, List<UserEntity>> pair) {
+        if (pair.first != null && pair.first.size() > 0) {
+            mUserAdapter.addUser(new UserEntity.Section(getString(R.string.add_contact_recent_title)));
+            mUserAdapter.addUsers(pair.first);
+        }
+        if (pair.second != null && pair.second.size() > 0) {
+            int size = pair.first == null ? 0 : pair.first.size();
+            if (mUserAdapter.getRawItemsCount() == size)
+                mUserAdapter.addUser(new UserEntity.Section(getString(R.string.add_contact_all_title)));
+            mUserAdapter.addUsers(pair.second);
+        }
     }
 
     @Override
@@ -131,13 +150,8 @@ public class AddContactActivity extends ToolbarActivity<AddContactPresenter> imp
     private final RecyclerViewScrollListener mRecyclerViewScrollListener = new RecyclerViewScrollListener() {
 
         @Override
-        public void onScrolled(final RecyclerView recyclerView, final int dx, final int dy) {
-            super.onScrolled(recyclerView, dx, dy);
-        }
-
-        @Override
         public void onLoadMore(final int totalItemsCount) {
-            getPresenter().startGetUsersTask(mUserAdapter.getItemCount(), true);
+            getPresenter().getUsers(mUserAdapter.getRawItemsCount());
         }
     };
 
@@ -153,11 +167,13 @@ public class AddContactActivity extends ToolbarActivity<AddContactPresenter> imp
         mRecyclerViewScrollListener.resetParams();
         final String search = mEtSearch.getText().toString().trim();
         getPresenter().setSearch(search);
-        getPresenter().startGetUsersTask(mUserAdapter.getItemCount(), false);
+        mUserAdapter.clearAll();
+        getPresenter().getUsers();
     };
 
     @Override
     public void onItemClicked(int position) {
+        getPresenter().setAsRecent(mUserAdapter.getItem(position));
         Intent intent = new Intent();
         intent.putExtra(Keys.Extras.EXTRA_ACTION, Action.CREATE);
         intent.putExtra(Keys.Extras.EXTRA_USER, mUserAdapter.getItem(position));
@@ -167,7 +183,8 @@ public class AddContactActivity extends ToolbarActivity<AddContactPresenter> imp
 
     @Override
     public void onRefresh() {
+        mUserAdapter.clearAll();
         swipeRefreshLayout.setRefreshing(false);
-        getPresenter().startGetUsersTask(0, false);
+        getPresenter().getUsers();
     }
 }
