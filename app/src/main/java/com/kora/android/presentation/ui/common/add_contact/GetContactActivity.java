@@ -28,6 +28,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnTextChanged;
 
+import static com.kora.android.common.Keys.Extras.EXCLUDED_USER_IDS;
 import static com.kora.android.common.Keys.Extras.TITLE;
 
 public class GetContactActivity extends ToolbarActivity<GetContactPresenter> implements GetContactView,
@@ -43,6 +44,13 @@ public class GetContactActivity extends ToolbarActivity<GetContactPresenter> imp
     public static Intent getLaunchIntent(final BaseActivity baseActivity, final String title) {
         final Intent intent = new Intent(baseActivity, GetContactActivity.class);
         intent.putExtra(TITLE, title);
+        return intent;
+    }
+
+    public static Intent getLaunchIntent(final BaseActivity baseActivity, final String title, final List<String> excludedIds) {
+        final Intent intent = new Intent(baseActivity, GetContactActivity.class);
+        intent.putExtra(TITLE, title);
+        intent.putStringArrayListExtra(EXCLUDED_USER_IDS, (ArrayList<String>) excludedIds);
         return intent;
     }
 
@@ -85,8 +93,12 @@ public class GetContactActivity extends ToolbarActivity<GetContactPresenter> imp
         if (bundle != null && bundle.containsKey(TITLE)) {
             setTitle(bundle.getString(TITLE));
         }
+        if (bundle != null && bundle.containsKey(EXCLUDED_USER_IDS)) {
+            getPresenter().setExcluded(bundle.getStringArrayList(EXCLUDED_USER_IDS));
+        }
         if (getIntent() != null) {
             setTitle(getIntent().getStringExtra(TITLE));
+            getPresenter().setExcluded(getIntent().getStringArrayListExtra(EXCLUDED_USER_IDS));
         }
 
     }
@@ -96,6 +108,7 @@ public class GetContactActivity extends ToolbarActivity<GetContactPresenter> imp
         super.onSaveInstanceState(outState);
         outState.putString(TITLE, getTitle().toString());
         outState.putParcelableArrayList(Keys.Args.USER_LIST, (ArrayList<UserEntity>) mUserAdapter.getItems());
+        outState.putStringArrayList(EXCLUDED_USER_IDS, (ArrayList<String>) getPresenter().getExcluded());
     }
 
     private void initUI() {

@@ -36,6 +36,7 @@ import com.kora.android.presentation.ui.common.add_contact.GetContactActivity;
 import com.kora.android.views.currency.CurrencyEditText;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -59,8 +60,6 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
     @BindView(R.id.lender_phone) TextView mLenderPhone;
     @BindView(R.id.guarantors_list) RecyclerView mGuarantorList;
     @BindView(R.id.add_guarantor_button) ImageButton mAddGuarantorBtn;
-    @BindView(R.id.his_suffix) TextView mHisSuffixText;
-    @BindView(R.id.my_suffix) TextView mMySuffixText;
     @BindView(R.id.edit_text_sender_amount) CurrencyEditText mSenderAmount;
     @BindView(R.id.edit_layout_amount) TextInputLayout mSenderAmountContainer;
     @BindView(R.id.edit_text_receiver_amount) CurrencyEditText mReceiverAmount;
@@ -184,7 +183,6 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
 
     @Override
     public void retrieveSenderCurrency(UserEntity userEntity) {
-//        mMySuffixText.setText(userEntity.getCurrency());
         mSenderAmount.setCurrency(userEntity.getCurrency());
         mSenderAmount.setCurrency(userEntity.getCurrency());
         Glide.with(this)
@@ -201,7 +199,20 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
 
     @OnClick(R.id.add_guarantor_button)
     public void onAddGuarantorClicked() {
-        startActivityForResult(GetContactActivity.getLaunchIntent(this, getString(R.string.borrow_add_guarantor_title)), REQUEST_ADD_GUARANTOR);
+        startActivityForResult(GetContactActivity.getLaunchIntent(this,
+                getString(R.string.borrow_add_guarantor_title),
+                getExistedIds()), REQUEST_ADD_GUARANTOR);
+    }
+
+    private List<String> getExistedIds() {
+        List<String> userIds = new ArrayList<>();
+        userIds.add(getPresenter().getLender().getId());
+        List<UserEntity> items = mUserAdapter.getItems();
+        for (UserEntity entity : items) {
+            userIds.add(entity.getId());
+        }
+
+        return userIds;
     }
 
     @Override
@@ -215,7 +226,7 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
     }
 
     private void changeAddGuarantorButtonState() {
-        boolean visible = mUserAdapter.getItemCount() >= MAX_SIZE;
+        boolean visible = mUserAdapter.getItemCount() < MAX_SIZE;
         mAddGuarantorBtn.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 

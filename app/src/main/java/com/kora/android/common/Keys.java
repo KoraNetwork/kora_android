@@ -79,6 +79,7 @@ public interface Keys {
         String EXTRA_REQUEST_ENTITY = "com.kora.android.extra_request_entity";
         String EXTRA_USER = "com.kora.android.extra_user";
         String TITLE = "com.kora.android.extra_title";
+        String EXCLUDED_USER_IDS = "com.kora.android.extra_excluded_user_ids";
     }
 
     interface Args {

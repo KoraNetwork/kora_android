@@ -10,6 +10,7 @@ import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -21,6 +22,7 @@ import io.reactivex.functions.Action;
 public class GetContactPresenter extends BasePresenter<GetContactView> {
 
     private final GetUsersUseCase mGetUsersUseCase;
+    ArrayList<String> mExcludedUsers = new ArrayList<>();
 
     private String mSearch;
     @Inject
@@ -33,7 +35,7 @@ public class GetContactPresenter extends BasePresenter<GetContactView> {
     }
 
     public void getUsers(final int skip) {
-        mGetUsersUseCase.setData(mSearch, skip);
+        mGetUsersUseCase.setData(mSearch, skip, mExcludedUsers);
         mGetUsersUseCase.execute(new GetUsersSubscriber());
     }
 
@@ -46,6 +48,14 @@ public class GetContactPresenter extends BasePresenter<GetContactView> {
 
     public void setSearch(final String search) {
         mSearch = search;
+    }
+
+    public void setExcluded(ArrayList<String> userIds) {
+        mExcludedUsers = userIds;
+    }
+
+    public List<String> getExcluded() {
+        return mExcludedUsers;
     }
 
     private class GetUsersSubscriber extends DefaultInternetSubscriber<Pair<List<UserEntity>, List<UserEntity>>> {
