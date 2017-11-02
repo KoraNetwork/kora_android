@@ -18,16 +18,21 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.kora.android.R;
+import com.kora.android.common.Keys;
+import com.kora.android.common.utils.DateUtils;
 import com.kora.android.common.utils.StringUtils;
 import com.kora.android.common.utils.ViewUtils;
 import com.kora.android.di.component.ActivityComponent;
+import com.kora.android.presentation.model.BorrowEntity;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.custom.MultiDialog;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
@@ -35,13 +40,16 @@ import com.kora.android.presentation.ui.base.view.ToolbarActivity;
 import com.kora.android.presentation.ui.borrow.adapter.GuarantorsAdapter;
 import com.kora.android.presentation.ui.common.add_contact.GetContactActivity;
 import com.kora.android.views.currency.CurrencyEditText;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import butterknife.OnFocusChange;
 import butterknife.OnTextChanged;
 
 import static com.kora.android.common.Keys.Args.GUARANTERS_LIST;
@@ -51,24 +59,39 @@ import static com.kora.android.data.network.Constants.API_BASE_URL;
 import static com.kora.android.presentation.ui.borrow.adapter.GuarantorsAdapter.MAX_SIZE;
 
 public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
-        implements BorrowMoneyView, GuarantorsAdapter.OnItemClickListener {
+        implements BorrowMoneyView, GuarantorsAdapter.OnItemClickListener,
+        DatePickerDialog.OnDateSetListener {
 
     public static final int REQUEST_ADD_GUARANTOR = 513;
+    private static final String START_DATE_PICKER = "start_date_picker";
+    private static final String MATURITI_DATE_PICKER = "maturity_date_picker";
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
+    @BindView(R.id.scroll_view) ScrollView mScrollView;
+    @BindView(R.id.main_container) LinearLayout mMainContainer;
+
     @BindView(R.id.user_image) ImageView mLenderAvatar;
     @BindView(R.id.lender_name) TextView mLenderName;
     @BindView(R.id.lender_phone) TextView mLenderPhone;
     @BindView(R.id.guarantors_list) RecyclerView mGuarantorList;
     @BindView(R.id.add_guarantor_button) ImageButton mAddGuarantorBtn;
+    @BindView(R.id.amount_container) LinearLayout mAmountContainer;
+    @BindView(R.id.text_total_interest) TextView mTotalInterest;
+    @BindView(R.id.text_total_amount) TextView mTotalAmount;
+    @BindView(R.id.guarantors_title) TextView mGuarantorsTitle;
+
+    @BindView(R.id.no_guaranter_error) TextView mNoGuaranterError;
     @BindView(R.id.edit_text_sender_amount) CurrencyEditText mSenderAmount;
     @BindView(R.id.edit_layout_amount) TextInputLayout mSenderAmountContainer;
     @BindView(R.id.edit_text_receiver_amount) CurrencyEditText mReceiverAmount;
     @BindView(R.id.edit_layout_converted_amount) TextInputLayout mReceiverAmountContainer;
-    @BindView(R.id.amount_container) LinearLayout mAmountContainer;
-    @BindView(R.id.text_total_interest) TextView mTotalInterest;
-    @BindView(R.id.text_total_amount) TextView mTotalAmount;
     @BindView(R.id.edit_text_interesr_rate) EditText mRateEditText;
+    @BindView(R.id.edit_layout_interest_rate) TextInputLayout mElRate;
+    @BindView(R.id.edit_layout_start_date) TextInputLayout mElStartDate;
+    @BindView(R.id.edit_text_start_date) EditText mEtStartDate;
+    @BindView(R.id.edit_layout_maturity_date) TextInputLayout mElMaturityDate;
+    @BindView(R.id.edit_text_maturity_date) EditText mEtMaturityDate;
+    @BindView(R.id.edit_text_additional_note) EditText mEtAdditionalNote;
 
     private GuarantorsAdapter mUserAdapter;
     private int mAmountEditTextWidth = 0;
@@ -105,6 +128,9 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
         super.onViewReady(savedInstanceState);
 
         initUI();
+
+        mEtStartDate.setKeyListener(null);
+        mEtMaturityDate.setKeyListener(null);
 
         if (savedInstanceState == null) {
             getPresenter().getCurrentUser();
@@ -201,6 +227,63 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
                 });
     }
 
+    @Override
+    public void showNoGuarantersError() {
+        mNoGuaranterError.setVisibility(View.VISIBLE);
+        ViewUtils.scrollToView(mScrollView, mMainContainer, mGuarantorsTitle);
+    }
+
+    @Override
+    public void showInvalidAmountError() {
+        mSenderAmountContainer.setError(getString(R.string.borrow_empty_amount_error_message));
+        ViewUtils.scrollToView(mScrollView, mMainContainer, mSenderAmountContainer);
+    }
+
+    @Override
+    public void showInvalidConvertedAmountError() {
+        mReceiverAmountContainer.setError(getString(R.string.borrow_empty_amount_error_message));
+        ViewUtils.scrollToView(mScrollView, mMainContainer, mReceiverAmountContainer);
+    }
+
+    @Override
+    public void showEmptyRateError() {
+        mElRate.setError(getString(R.string.borrow_empty_rate_error_message));
+        ViewUtils.scrollToView(mScrollView, mMainContainer, mElRate);
+    }
+
+    @Override
+    public void showEmptyStartDateError() {
+        mElStartDate.setError(getString(R.string.borrow_empty_start_date_error_message));
+        ViewUtils.scrollToView(mScrollView, mMainContainer, mElStartDate);
+    }
+
+    @Override
+    public void showPastStartDateError() {
+        mElStartDate.setError(getString(R.string.borrow_past_start_date_error_message));
+        ViewUtils.scrollToView(mScrollView, mMainContainer, mElStartDate);
+    }
+
+    @Override
+    public void showEmptyMaturityDateError() {
+        mElMaturityDate.setError(getString(R.string.borrow_empty_maturity_date_error_message));
+        ViewUtils.scrollToView(mScrollView, mMainContainer, mElMaturityDate);
+    }
+
+    @Override
+    public void showPastMaturityDateError() {
+        mElMaturityDate.setError(getString(R.string.borrow_past_maturity_date_error_message));
+        ViewUtils.scrollToView(mScrollView, mMainContainer, mElMaturityDate);
+    }
+
+    @Override
+    public void onBorrowRequestAdded(BorrowEntity borrowEntity) {
+        Toast.makeText(this, R.string.borrow_request_added_message, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent();
+        intent.putExtra(Keys.Extras.EXTRA_BORROW, borrowEntity);
+        setResult(RESULT_OK, intent);
+        finishActivity();
+    }
+
     @OnClick(R.id.add_guarantor_button)
     public void onAddGuarantorClicked() {
         startActivityForResult(GetContactActivity.getLaunchIntent(this,
@@ -226,6 +309,7 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
             UserEntity user = data.getParcelableExtra(EXTRA_USER);
             mUserAdapter.addItem(user);
             changeAddGuarantorButtonState();
+            mNoGuaranterError.setVisibility(View.GONE);
         }
     }
 
@@ -316,7 +400,72 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
             mTotalInterest.setText(getString(R.string.borrow_amount, totalInterest, mReceiverAmount.getCurrency()));
             mTotalAmount.setText(getString(R.string.borrow_amount, totalAmount, mReceiverAmount.getCurrency()));
 
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
+    }
+
+    @OnClick(R.id.edit_text_start_date)
+    void onStartDateClicked() {
+        mElStartDate.setError(null);
+
+        Calendar cal = DateUtils.getCalendarFromPrettyDate(mEtStartDate.getText().toString().trim());
+        if (cal == null) cal = Calendar.getInstance();
+        DatePickerDialog dpd = DatePickerDialog.newInstance(this, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+        dpd.setAccentColor("#77cda4");
+        dpd.show(getFragmentManager(), START_DATE_PICKER);
+    }
+
+    @OnFocusChange(R.id.edit_text_start_date)
+    void onStartDateFocusChanged(View view, boolean isFocused) {
+        if (isFocused) {
+            onStartDateClicked();
+        }
+    }
+
+    @OnClick(R.id.edit_text_maturity_date)
+    void onMaturityDateClicked() {
+        mElMaturityDate.setError(null);
+
+        Calendar cal = DateUtils.getCalendarFromPrettyDate(mEtMaturityDate.getText().toString().trim());
+        if (cal == null) cal = Calendar.getInstance();
+        DatePickerDialog dpd = DatePickerDialog.newInstance(this, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+        dpd.setAccentColor("#77cda4");
+        dpd.show(getFragmentManager(), MATURITI_DATE_PICKER);
+    }
+
+    @OnFocusChange(R.id.edit_text_maturity_date)
+    void onMaturityDateFocusChanged(View view, boolean isFocused) {
+        if (isFocused) {
+            onMaturityDateClicked();
+        }
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        final String prettyDate = DateUtils.getPrettyDate(year, monthOfYear, dayOfMonth);
+        switch (view.getTag()) {
+            case START_DATE_PICKER:
+                mEtStartDate.setText(prettyDate);
+                break;
+            case MATURITI_DATE_PICKER:
+                mEtMaturityDate.setText(prettyDate);
+                break;
+        }
+    }
+
+    @OnClick(R.id.action_button)
+    public void onBorrowClicked() {
+        mSenderAmountContainer.setError(null);
+        mReceiverAmountContainer.setError(null);
+        mElRate.setError(null);
+
+        getPresenter().onBorrowClicked(mUserAdapter.getItems(),
+                mSenderAmount.getAmount(),
+                mReceiverAmount.getAmount(),
+                mRateEditText.getText().toString().trim(),
+                mEtStartDate.getText().toString().trim(),
+                mEtMaturityDate.getText().toString().trim(),
+                mEtAdditionalNote.getText().toString().trim());
     }
 }

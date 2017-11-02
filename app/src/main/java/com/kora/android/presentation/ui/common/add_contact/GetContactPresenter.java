@@ -4,8 +4,10 @@ import android.support.v4.util.Pair;
 
 import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.di.annotation.ConfigPersistent;
+import com.kora.android.domain.base.DefaultDisposableObserver;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.usecase.user.GetUsersUseCase;
+import com.kora.android.domain.usecase.user.SetAsRecentUseCase;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
@@ -22,12 +24,16 @@ import io.reactivex.functions.Action;
 public class GetContactPresenter extends BasePresenter<GetContactView> {
 
     private final GetUsersUseCase mGetUsersUseCase;
+    private final SetAsRecentUseCase mSetAsRecentUseCase;
+
     ArrayList<String> mExcludedUsers = new ArrayList<>();
 
     private String mSearch;
     @Inject
-    public GetContactPresenter(final GetUsersUseCase getUsersUseCase) {
+    public GetContactPresenter(final GetUsersUseCase getUsersUseCase,
+                               final SetAsRecentUseCase setAsRecentUseCase) {
         mGetUsersUseCase = getUsersUseCase;
+        mSetAsRecentUseCase = setAsRecentUseCase;
     }
 
     public void getUsers() {
@@ -56,6 +62,11 @@ public class GetContactPresenter extends BasePresenter<GetContactView> {
 
     public List<String> getExcluded() {
         return mExcludedUsers;
+    }
+
+    public void setAsRecent(UserEntity item) {
+        mSetAsRecentUseCase.setData(item);
+        mSetAsRecentUseCase.execute(new DefaultDisposableObserver());
     }
 
     private class GetUsersSubscriber extends DefaultInternetSubscriber<Pair<List<UserEntity>, List<UserEntity>>> {
@@ -94,5 +105,6 @@ public class GetContactPresenter extends BasePresenter<GetContactView> {
     @Override
     public void onDetachView() {
         mGetUsersUseCase.dispose();
+        mSetAsRecentUseCase.dispose();
     }
 }

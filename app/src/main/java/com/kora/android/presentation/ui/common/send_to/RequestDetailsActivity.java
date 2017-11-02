@@ -103,7 +103,6 @@ public class RequestDetailsActivity extends ToolbarActivity<RequestDetailsPresen
 
         if (savedInstanceState == null) {
             getPresenter().getCurrentUser();
-            getPresenter().setAsResent();
         }
 
         initUI();

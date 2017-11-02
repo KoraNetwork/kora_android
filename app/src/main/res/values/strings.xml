@@ -285,12 +285,21 @@
     <string name="dialog_remove_guarantor_message">Are you sure you want to remove this guarantor?</string>
     <string name="dialog_remove_guarantor_positive_btn">Yes</string>
     <string name="dialog_remove_guarantor_negative_btn">No</string>
+    <string name="borrow_amount">%1$.2f %2$s</string>
+    <string name="borrow_no_guaranters_error_message">You should add at least one guaranter</string>
+    <string name="borrow_empty_amount_error_message">Amount should not be zero</string>
+    <string name="borrow_empty_rate_error_message">Rate should be not empty</string>
+    <string name="borrow_empty_start_date_error_message">Start date should be not empty</string>
+    <string name="borrow_empty_maturity_date_error_message">Maturity date should be not empty</string>
+    <string name="borrow_request_added_message">Request Added</string>
+    <string name="borrow_past_start_date_error_message">Start date should be in future</string>
+    <string name="borrow_past_maturity_date_error_message">Maturity date should be after start date</string>
 
     <!-- Borrow list -->
     <string name="borrow_request_title">Request</string>
     <string name="borrow_loans_title">Lean</string>
     <string name="borrow_in_progress_title">In progress</string>
     <string name="add_contact_all_title">All contacts</string>
-    <string name="borrow_amount">%1$.2f %2$s</string>
+
 
 </resources>

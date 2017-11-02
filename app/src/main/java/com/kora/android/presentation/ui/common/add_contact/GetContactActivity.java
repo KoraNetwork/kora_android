@@ -173,6 +173,7 @@ public class GetContactActivity extends ToolbarActivity<GetContactPresenter> imp
 
     @Override
     public void onItemClicked(int position) {
+        getPresenter().setAsRecent(mUserAdapter.getItem(position));
         Intent intent = new Intent();
         intent.putExtra(Keys.Extras.EXTRA_ACTION, Action.CREATE);
         intent.putExtra(Keys.Extras.EXTRA_USER, mUserAdapter.getItem(position));

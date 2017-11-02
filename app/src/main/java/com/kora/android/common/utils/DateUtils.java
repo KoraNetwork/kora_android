@@ -8,7 +8,7 @@ import java.util.Locale;
 
 public class DateUtils {
 
-    private static final String PRETTY_DATE_PATTERN = "dd MMM yyyy";
+    public static final String PRETTY_DATE_PATTERN = "dd MMM yyyy";
     private static final String FORMATTED_DATE_PATTERN = "yyyy-MM-dd";
 
     public static Date getDate(String date) {

@@ -80,6 +80,7 @@ public interface Keys {
         String EXTRA_USER = "com.kora.android.extra_user";
         String TITLE = "com.kora.android.extra_title";
         String EXCLUDED_USER_IDS = "com.kora.android.extra_excluded_user_ids";
+        String EXTRA_BORROW = "com.kora.android.extra_borrow";
     }
 
     interface Args {
