@@ -46,15 +46,15 @@ public class BorrowMoneyPresenter extends BasePresenter<BorrowMoneyView> {
         getView().showLender(mLender);
     }
 
-    public void convertIfNeed(long amount) {
+    public void convertIfNeed(double amount) {
         if (mLender == null || mSender == null) return;
-//        double amount = Double.valueOf(amountString);
+
         if (mLender.getCurrency().equals(mSender.getCurrency())) {
             if (getView() == null) return;
             getView().showConvertedCurrency(amount, mSender.getCurrency());
             return;
         }
-        mConvertAmountUseCase.setData(amount, mLender.getCurrency(), mSender.getCurrency());
+        mConvertAmountUseCase.setData(amount, mSender.getCurrency(), mLender.getCurrency());
         mConvertAmountUseCase.execute(new ConvertSubscriber());
     }
 

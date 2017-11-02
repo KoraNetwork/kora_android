@@ -111,8 +111,17 @@ public class CurrencyEditText extends TextInputEditText {
         return rawValue;
     }
 
+    public double getAmount() {
+        return parse(getRawValue());
+    }
+
     public void setValue(long value) {
         String formattedText = format(value);
+        setText(formattedText);
+    }
+
+    public void setValue(String value) {
+        String formattedText = formatCurrency(value);
         setText(formattedText);
     }
 
@@ -162,6 +171,10 @@ public class CurrencyEditText extends TextInputEditText {
 
     private String format(String val) {
         return CurrencyTextFormatter.formatText(val, currency, decimalDigits);
+    }
+
+    private double parse(long val) {
+        return CurrencyTextFormatter.parseText(String.valueOf(val), currency, decimalDigits);
     }
 
     private void initCurrencyTextWatcher() {

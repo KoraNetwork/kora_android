@@ -299,7 +299,7 @@
                     android:textColor="@color/color_text_grey_2"
                     android:textSize="16sp"/>
 
-                <TextView
+                <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/text_total_interest"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -323,7 +323,7 @@
                     android:textColor="@color/color_text_grey_2"
                     android:textSize="16sp"/>
 
-                <TextView
+                <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/text_total_amount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

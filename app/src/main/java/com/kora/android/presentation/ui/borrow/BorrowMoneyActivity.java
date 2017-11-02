@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextPaint;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -65,6 +66,9 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
     @BindView(R.id.edit_text_receiver_amount) CurrencyEditText mReceiverAmount;
     @BindView(R.id.edit_layout_converted_amount) TextInputLayout mReceiverAmountContainer;
     @BindView(R.id.amount_container) LinearLayout mAmountContainer;
+    @BindView(R.id.text_total_interest) TextView mTotalInterest;
+    @BindView(R.id.text_total_amount) TextView mTotalAmount;
+    @BindView(R.id.edit_text_interesr_rate) EditText mRateEditText;
 
     private GuarantorsAdapter mUserAdapter;
     private int mAmountEditTextWidth = 0;
@@ -167,8 +171,9 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
 
     @Override
     public void showConvertedCurrency(double amount, String currency) {
-        mReceiverAmount.setText(String.format(Locale.ENGLISH, "%1$.2f", amount));
+        mReceiverAmount.setValue(String.format(Locale.ENGLISH, "%1$.2f", amount));
         changeAmountContainerOrientation();
+        calculateTotals();
     }
 
     private void changeAmountContainerOrientation() {
@@ -183,7 +188,6 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
 
     @Override
     public void retrieveSenderCurrency(UserEntity userEntity) {
-        mSenderAmount.setCurrency(userEntity.getCurrency());
         mSenderAmount.setCurrency(userEntity.getCurrency());
         Glide.with(this)
                 .asBitmap()
@@ -263,6 +267,11 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
         changeAmountContainerOrientation();
     }
 
+    @OnTextChanged(R.id.edit_text_interesr_rate)
+    public void onRateChanged() {
+        calculateTotals();
+    }
+
     private boolean isTextLonger(TextInputEditText editText) {
         Editable text = editText.getText();
         TextPaint paint = editText.getPaint();
@@ -284,8 +293,30 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
     Runnable converter = new Runnable() {
         @Override
         public void run() {
-            long val = mSenderAmount.getRawValue();
+            double val = mSenderAmount.getAmount();
             getPresenter().convertIfNeed(val);
         }
     };
+
+    private void calculateTotals() {
+        double amount = mReceiverAmount.getAmount();
+        String rateString = mRateEditText.getText().toString();
+
+        if (amount == 0 || rateString.isEmpty()) {
+            mTotalInterest.setText("");
+            mTotalAmount.setText("");
+            return;
+        }
+        try {
+            double rate = Double.valueOf(rateString);
+
+            double totalInterest = amount * rate / 100;
+            double totalAmount = amount + totalInterest;
+
+            mTotalInterest.setText(getString(R.string.borrow_amount, totalInterest, mReceiverAmount.getCurrency()));
+            mTotalAmount.setText(getString(R.string.borrow_amount, totalAmount, mReceiverAmount.getCurrency()));
+
+        } catch (Exception e) {}
+
+    }
 }
