@@ -16,7 +16,7 @@ import javax.inject.Inject;
 
 public abstract class BaseService<P extends BaseServicePresenter> extends Service implements BaseServiceContractor<P> {
 
-    private static final String CHANEL_ID = "setup";
+    private static final String CHANNEL_ID = "setup";
 
     @Inject
     P mPresenter;
@@ -36,9 +36,7 @@ public abstract class BaseService<P extends BaseServicePresenter> extends Servic
 
         if (mPresenter != null)
             mPresenter.attachService(this);
-
     }
-
 
     protected void createServiceComponent() {
         final ConfigPersistentComponent configPersistentComponent = DaggerConfigPersistentComponent.builder()
@@ -60,18 +58,22 @@ public abstract class BaseService<P extends BaseServicePresenter> extends Servic
     }
 
     @Override
-    public void showNotification(int id, String message, boolean cancelable) {
-        mNotification = new NotificationCompat.Builder(this, CHANEL_ID)
+    public void showNotification(final int id, String message, final boolean cancelable) {
+        mNotification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.mipmap.ic_launcher_foreground)
                 .setContentTitle(message)
                 .setAutoCancel(cancelable)
                 .build();
-
         mNotificationManager.notify(id, mNotification);
     }
 
+    @Override
+    public void cancelNotification(final int id) {
+        mNotificationManager.cancel(id);
+    }
+
     public Notification getNotification() {
-        return new NotificationCompat.Builder(this, CHANEL_ID)
+        return new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.mipmap.ic_launcher_foreground)
                 .build();
     }

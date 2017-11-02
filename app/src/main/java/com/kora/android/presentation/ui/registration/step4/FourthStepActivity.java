@@ -285,15 +285,8 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
     }
 
     @Override
-    public void onRegistrationSuccess() {
-        Toast.makeText(this, R.string.registration_success_message, Toast.LENGTH_LONG).show();
+    public void showNextScreen() {
         startActivity(MainActivity.getLaunchIntent(this));
-    }
-
-    @Override
-    public void startRegisterWalletService(UserEntity userEntity) {
-        Intent launchIntent = CreateWalletService.getLaunchIntent(this, userEntity);
-        startService(launchIntent);
     }
 
     @OnClick(R.id.card_view_confirm)

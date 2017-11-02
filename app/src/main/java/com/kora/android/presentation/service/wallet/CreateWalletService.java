@@ -3,6 +3,7 @@ package com.kora.android.presentation.service.wallet;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.widget.Toast;
 
 import com.kora.android.R;
 import com.kora.android.common.Keys;
@@ -16,20 +17,20 @@ public class CreateWalletService extends BaseService<CreateWalletPresenter> impl
 
     private static final int NOTIFICATION_ID = 11;
 
-    public static Intent getLaunchIntent(final BaseActivity baseActivity, UserEntity userEntity) {
+    public static Intent getLaunchIntent(final BaseActivity baseActivity, final UserEntity userEntity) {
         final Intent intent = new Intent(baseActivity, CreateWalletService.class);
         intent.putExtra(Keys.Extras.EXTRA_USER, userEntity);
         return intent;
     }
 
     @Override
-    public void injectToComponent(ServiceComponent serviceComponent) {
+    public void injectToComponent(final ServiceComponent serviceComponent) {
         serviceComponent.inject(this);
     }
 
     @Nullable
     @Override
-    public IBinder onBind(Intent intent) {
+    public IBinder onBind(final Intent intent) {
         return null;
     }
 
@@ -39,10 +40,13 @@ public class CreateWalletService extends BaseService<CreateWalletPresenter> impl
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public int onStartCommand(final Intent intent, final int flags, final int startId) {
+        Toast.makeText(this, R.string.wallet_service_start_message, Toast.LENGTH_LONG).show();
         startForeground(1, getNotification());
-        UserEntity user = intent.getParcelableExtra(Keys.Extras.EXTRA_USER);
-        getPresenter().createWallet(user);
+
+        final UserEntity userEntity = intent.getParcelableExtra(Keys.Extras.EXTRA_USER);
+        getPresenter().setUserEntity(userEntity);
+        getPresenter().createWallets();
 
         return START_STICKY;
     }
@@ -54,38 +58,24 @@ public class CreateWalletService extends BaseService<CreateWalletPresenter> impl
 
     @Override
     public void showCreateIdentityMessage() {
-        showNotification(NOTIFICATION_ID, getString(R.string.registration_notification_creating_identity_message), false);
-    }
-
-    @Override
-    public void showCreatedIdentityMessage() {
-        showNotification(NOTIFICATION_ID, getString(R.string.registration_notification_created_identity_message), true);
+        showNotification(NOTIFICATION_ID, getString(R.string.wallet_service_creating_identity_message), true);
     }
 
     @Override
     public void showUpdateUserMessage() {
-        showNotification(NOTIFICATION_ID, getString(R.string.registration_notification_updating_user_message), false);
-    }
-
-    @Override
-    public void showUpdatedUserMessage() {
-        showNotification(NOTIFICATION_ID, getString(R.string.registration_notification_updated_user_message), true);
+        showNotification(NOTIFICATION_ID, getString(R.string.wallet_service_updating_user_message), true);
     }
 
     @Override
     public void showIncreaseBalanceMessage() {
-        showNotification(NOTIFICATION_ID, getString(R.string.registration_notification_increasing_balance_message), false);
-    }
-
-    @Override
-    public void showIncreasedBalanceMessage() {
-        showNotification(NOTIFICATION_ID, getString(R.string.registration_notification_increased_balance_message), true);
+        showNotification(NOTIFICATION_ID, getString(R.string.wallet_service_increasing_balance_message), true);
     }
 
     @Override
     public void finishService() {
-        showNotification(NOTIFICATION_ID, getString(R.string.registration_notification_service_finished_message), true);
-        stopForeground(false);
+        Toast.makeText(this, R.string.wallet_service_finished_message, Toast.LENGTH_LONG).show();
+        cancelNotification(NOTIFICATION_ID);
+        stopForeground(true);
         stopSelf();
     }
 }

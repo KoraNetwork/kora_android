@@ -11,6 +11,7 @@ import com.kora.android.data.repository.CurrencyConverterRepository;
 import com.kora.android.data.repository.RequestRepository;
 import com.kora.android.data.repository.TransactionRepository;
 import com.kora.android.data.repository.UserRepository;
+import com.kora.android.data.repository.Web3jRepository;
 import com.kora.android.data.web3j.connection.Web3jConnection;
 import com.kora.android.data.web3j.storage.EtherWalletStorage;
 import com.kora.android.data.web3j.utils.EtherWalletUtils;
@@ -39,24 +40,17 @@ public interface ApplicationComponent {
     Context context();
 
     PreferenceHandler preferanceHandler();
-
     RegistrationPrefHelper registrationPrefHelper();
 
     EtherWalletUtils etherWalletUtils();
-
     EtherWalletStorage etherWalletStorage();
-
     Web3jConnection web3jConnection();
 
     AuthRepository authRepository();
-
     UserRepository userRepository();
-
     CurrencyConverterRepository currencyConverterRepository();
-
     TransactionRepository transactionRepository();
-
     RequestRepository requestRepository();
-
     BorrowRepository borrowRepository();
+    Web3jRepository walletRepository();
 }

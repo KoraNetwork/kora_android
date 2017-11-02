@@ -27,7 +27,5 @@ public interface FourthStepView extends BaseView<FourthStepPresenter> {
     void showEmptyConfirmPassword();
     void showIncorrectConfirmPassword();
 
-    void onRegistrationSuccess();
-
-    void startRegisterWalletService(UserEntity userEntity);
+    void showNextScreen();
 }

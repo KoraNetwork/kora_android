@@ -98,13 +98,6 @@
     <string name="registration_dialog_negative_back_pressed">Cancel</string>
     <string name="registration_dialog_message_verification_dode_was_sent">SMS message with verification code was sent</string>
     <string name="registration_increase_account_wait">Kora is sending money on your new account. Please wait for a while. Please do not exit the app.</string>
-    <string name="registration_success_message">It takes some time to setup your wallet! Please be patient!</string>
-    <string name="registration_notification_updating_user_message">Updating user data....</string>
-    <string name="registration_notification_updated_user_message">User updated!</string>
-    <string name="registration_notification_increasing_balance_message">Increasing balance....</string>
-    <string name="registration_notification_increased_balance_message">Balance increased!</string>
-    <string name="registration_notification_service_finished_message">Setup wallet completed! Now you can use make requests, send and borrow money!</string>
-
 
     <!-- Registration countries activity -->
     <string name="registration_select_country">Select country</string>
@@ -289,8 +282,15 @@
     <string name="dialog_remove_guarantor_positive_btn">Yes</string>
     <string name="dialog_remove_guarantor_negative_btn">No</string>
     <string name="registration_setup_notification_service">Setup accound in proccess</string>
-    <string name="registration_notification_creating_identity_message">Creating identity</string>
-    <string name="registration_notification_created_identity_message">Identity created</string>
 
+    <!-- Wallet service -->
+    <string name="wallet_service_start_message">It takes some time to setup your wallet. Please be patient.</string>
+    <string name="wallet_service_creating_identity_message">Creating identity</string>
+    <string name="wallet_service_created_identity_message">Identity is created</string>
+    <string name="wallet_service_updating_user_message">Updating user data</string>
+    <string name="wallet_service_updated_user_message">User data is updated</string>
+    <string name="wallet_service_increasing_balance_message">Increasing balance</string>
+    <string name="wallet_service_increased_balance_message">Balance is increased</string>
+    <string name="wallet_service_finished_message">Wallet setup is completed. Now you can make requests, send and borrow money.</string>
 
 </resources>

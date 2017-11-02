@@ -116,7 +116,7 @@
             android:windowSoftInputMode="stateHidden"/>
 
         <service
-            android:name=".presentation.service.IncomingSmsService"
+            android:name=".presentation.service.sms.IncomingSmsService"
             android:exported="false"/>
 
         <service

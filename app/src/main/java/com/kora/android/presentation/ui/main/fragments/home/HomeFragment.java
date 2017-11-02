@@ -7,6 +7,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -105,8 +106,11 @@ public class HomeFragment extends StackFragment<HomePresenter> implements HomeVi
 
     @Override
     public void showTransactions(final List<TransactionEntity> transactionEntityList) {
-        mTransactionAdapter.clearAll();
-        mTransactionAdapter.addItems(transactionEntityList);
+        if (transactionEntityList != null && !transactionEntityList.isEmpty()) {
+            mRvTransactions.setVisibility(View.VISIBLE);
+            mTransactionAdapter.clearAll();
+            mTransactionAdapter.addItems(transactionEntityList);
+        }
     }
 
     @Override

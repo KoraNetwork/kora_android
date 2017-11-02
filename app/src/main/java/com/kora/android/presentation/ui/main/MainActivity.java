@@ -234,9 +234,9 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
     }
 
     @Override
-    public void showUserData(UserEntity userEntity) {
+    public void showUserData(final UserEntity userEntity) {
         if (!userEntity.hasIdentity()) {
-            Intent launchIntent = CreateWalletService.getLaunchIntent(this, userEntity);
+            final Intent launchIntent = CreateWalletService.getLaunchIntent(this, userEntity);
             startService(launchIntent);
         }
         Glide.with(this)

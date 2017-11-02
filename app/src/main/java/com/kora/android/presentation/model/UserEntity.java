@@ -359,6 +359,9 @@ public class UserEntity implements Parcelable {
     }
 
     public boolean hasIdentity() {
-        return getOwner() != null && getIdentity() != null && getCreator() != null && getRecoveryKey() != null;
+        return
+                getOwner() != null && !getOwner().isEmpty() &&
+                getRecoveryKey() != null && !getRecoveryKey().isEmpty() &&
+                getIdentity() != null && !getIdentity().isEmpty();
     }
 }

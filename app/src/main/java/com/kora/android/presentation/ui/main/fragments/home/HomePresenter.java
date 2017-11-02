@@ -5,7 +5,7 @@ import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.base.DefaultWeb3jSubscriber;
-import com.kora.android.domain.usecase.balance.GetBalanceUseCase;
+import com.kora.android.domain.usecase.web3j.GetBalanceUseCase;
 import com.kora.android.domain.usecase.transaction.GetTransactionsUseCase;
 import com.kora.android.domain.usecase.user.GetUserDataUseCase;
 import com.kora.android.presentation.model.TransactionEntity;
@@ -53,18 +53,6 @@ public class HomePresenter extends BasePresenter<HomeView> {
         }
     };
 
-    public void startGetBalanceTask() {
-        mGetBalanceUseCase.setData(mUserEntity.getIdentity(), mUserEntity.getERC20Token());
-        mGetBalanceUseCase.execute(new GetBalanceSubscriber());
-    }
-
-    private Action mGetBalanceAction = new Action() {
-        @Override
-        public void run() throws Exception {
-            mGetBalanceUseCase.execute(new GetBalanceSubscriber());
-        }
-    };
-
     private class GetUserSubscriber extends DefaultInternetSubscriber<UserEntity> {
 
         @Override
@@ -77,9 +65,18 @@ public class HomePresenter extends BasePresenter<HomeView> {
         @Override
         public void onNext(final UserEntity userEntity) {
             if (!isViewAttached()) return;
-            mUserEntity = userEntity;
             getView().showFlag(userEntity.getFlag());
-            startGetBalanceTask();
+
+            mUserEntity = userEntity;
+
+            if (userEntity.getIdentity() != null && !userEntity.getIdentity().isEmpty()) {
+                mGetBalanceUseCase.setData(userEntity.getIdentity(), userEntity.getERC20Token());
+                mGetBalanceUseCase.execute(new GetBalanceSubscriber());
+            } else {
+                if (!isViewAttached()) return;
+                getView().showProgress(false);
+                getView().enableAndShowRefreshIndicator(true, false);
+            }
         }
 
 //        @Override
@@ -109,6 +106,13 @@ public class HomePresenter extends BasePresenter<HomeView> {
         }
     }
 
+    private Action mGetBalanceAction = new Action() {
+        @Override
+        public void run() throws Exception {
+            mGetBalanceUseCase.execute(new GetBalanceSubscriber());
+        }
+    };
+
     private class GetBalanceSubscriber extends DefaultWeb3jSubscriber<String> {
 
         @Override
@@ -122,7 +126,12 @@ public class HomePresenter extends BasePresenter<HomeView> {
             if(!isViewAttached()) return;
             getView().showBalance(balance + " " + mUserEntity.getCurrency());
             getView().showCurrencyName(mUserEntity.getCurrencyNameFull());
-            startGetTransactionTask();
+
+            mGetTransactionsUseCase.setData(
+                    new TransactionFilterModel(),
+                    ITEMS_PER_PAGE,
+                    0);
+            mGetTransactionsUseCase.execute(new GetTransactionsSubscriber());
         }
 
 //        @Override
@@ -144,14 +153,6 @@ public class HomePresenter extends BasePresenter<HomeView> {
             if(!isViewAttached()) return;
             getView().showError(message);
         }
-    }
-
-    public void startGetTransactionTask() {
-        mGetTransactionsUseCase.setData(
-                new TransactionFilterModel(),
-                ITEMS_PER_PAGE,
-                0);
-        mGetTransactionsUseCase.execute(new GetTransactionsSubscriber());
     }
 
     private Action mGetTransactionsAction = new Action() {

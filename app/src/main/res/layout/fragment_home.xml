@@ -344,6 +344,7 @@
                     android:textSize="16sp" />
 
                 <android.support.v7.widget.RecyclerView
+                    android:visibility="gone"
                     android:nestedScrollingEnabled="false"
                     android:id="@+id/recycler_view_transactions"
                     android:layout_width="match_parent"
@@ -361,7 +362,7 @@
                     android:layout_marginBottom="24dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="24dp"
                     android:clickable="true"
                     android:foreground="?android:attr/selectableItemBackground"
                     app:cardBackgroundColor="@color/color_button_background_blue"
