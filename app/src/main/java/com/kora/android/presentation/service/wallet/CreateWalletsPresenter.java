@@ -97,7 +97,7 @@ public class CreateWalletsPresenter extends BaseServicePresenter<CreateWalletsCo
         @Override
         public void onError(@NonNull final Throwable throwable) {
             super.onError(throwable);
-            Log.e(CreateWalletsService.class.getCanonicalName(), throwable.getLocalizedMessage());
+            Log.e("_____", throwable.toString());
             throwable.printStackTrace();
         }
 

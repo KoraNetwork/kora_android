@@ -91,16 +91,16 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
         getPresenter().startGetCountryTask();
     }
 
-    @Override
-    public void onBackPressed() {
-        showDialogMessage(
-                R.string.registration_dialog_title_back_pressed,
-                R.string.registration_dialog_message_back_pressed,
-                R.string.registration_dialog_positive_back_pressed,
-                (dialogInterface, i) -> super.onBackPressed(),
-                R.string.registration_dialog_negative_back_pressed,
-                (dialogInterface, i) -> dialogInterface.dismiss());
-    }
+//    @Override
+//    public void onBackPressed() {
+//        showDialogMessage(
+//                R.string.registration_dialog_title_back_pressed,
+//                R.string.registration_dialog_message_back_pressed,
+//                R.string.registration_dialog_positive_back_pressed,
+//                (dialogInterface, i) -> super.onBackPressed(),
+//                R.string.registration_dialog_negative_back_pressed,
+//                (dialogInterface, i) -> dialogInterface.dismiss());
+//    }
 
     private void initDate() {
         final Calendar calendar = Calendar.getInstance();
