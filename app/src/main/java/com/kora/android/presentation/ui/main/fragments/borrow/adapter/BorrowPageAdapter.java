@@ -11,6 +11,10 @@ import com.kora.android.presentation.ui.main.fragments.borrow.fragment.BorrowFra
 
 public class BorrowPageAdapter extends FragmentStatePagerAdapter {
 
+    public static final int POSITION_REQUEST = 0;
+    public static final int POSITION_LOANS = 1;
+    public static final int POSITION_IN_PROGRESS = 2;
+
     private Context mContext;
 
     public BorrowPageAdapter(FragmentManager manager, Context context) {
@@ -21,11 +25,11 @@ public class BorrowPageAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch (position) {
-            case 0:
+            case POSITION_REQUEST:
                 return BorrowFragment.getNewInstance(BorrowType.REQUEST);
-            case 1:
+            case POSITION_LOANS:
                 return BorrowFragment.getNewInstance(BorrowType.LOANS);
-            case 2:
+            case POSITION_IN_PROGRESS:
                 return BorrowFragment.getNewInstance(BorrowType.IN_PROGRESS);
         }
         return null;
@@ -39,11 +43,11 @@ public class BorrowPageAdapter extends FragmentStatePagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         switch (position) {
-            case 0:
+            case POSITION_REQUEST:
                 return mContext.getString(R.string.borrow_request_title);
-            case 1:
+            case POSITION_LOANS:
                 return mContext.getString(R.string.borrow_loans_title);
-            case 2:
+            case POSITION_IN_PROGRESS:
                 return mContext.getString(R.string.borrow_in_progress_title);
         }
         return "";

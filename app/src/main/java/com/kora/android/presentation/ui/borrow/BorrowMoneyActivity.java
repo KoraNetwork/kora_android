@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextPaint;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -32,6 +33,7 @@ import com.kora.android.common.utils.DateUtils;
 import com.kora.android.common.utils.StringUtils;
 import com.kora.android.common.utils.ViewUtils;
 import com.kora.android.di.component.ActivityComponent;
+import com.kora.android.presentation.enums.ViewMode;
 import com.kora.android.presentation.model.BorrowEntity;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.custom.MultiDialog;
@@ -52,8 +54,10 @@ import butterknife.OnClick;
 import butterknife.OnFocusChange;
 import butterknife.OnTextChanged;
 
+import static com.kora.android.common.Keys.Args.BORROW_ENTITY;
 import static com.kora.android.common.Keys.Args.GUARANTERS_LIST;
 import static com.kora.android.common.Keys.Args.USER_ENTITY;
+import static com.kora.android.common.Keys.Args.VIEW_MODE;
 import static com.kora.android.common.Keys.Extras.EXTRA_USER;
 import static com.kora.android.data.network.Constants.API_BASE_URL;
 import static com.kora.android.presentation.ui.borrow.adapter.GuarantorsAdapter.MAX_SIZE;
@@ -92,14 +96,25 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
     @BindView(R.id.edit_layout_maturity_date) TextInputLayout mElMaturityDate;
     @BindView(R.id.edit_text_maturity_date) EditText mEtMaturityDate;
     @BindView(R.id.edit_text_additional_note) EditText mEtAdditionalNote;
+    @BindView(R.id.action_button) Button mActionButton;
 
     private GuarantorsAdapter mUserAdapter;
     private int mAmountEditTextWidth = 0;
+
+    private ViewMode mViewMode;
 
     public static Intent getLaunchIntent(final BaseActivity baseActivity,
                                          final UserEntity userEntity) {
         final Intent intent = new Intent(baseActivity, BorrowMoneyActivity.class);
         intent.putExtra(USER_ENTITY, userEntity);
+        intent.putExtra(VIEW_MODE, ViewMode.EDIT_MODE);
+        return intent;
+    }
+
+    public static Intent getLaunchIntent(final BaseActivity baseActivity, final BorrowEntity borrowEntity) {
+        final Intent intent = new Intent(baseActivity, BorrowMoneyActivity.class);
+        intent.putExtra(BORROW_ENTITY, borrowEntity);
+        intent.putExtra(VIEW_MODE, ViewMode.VIEW_MODE);
         return intent;
     }
 
@@ -132,11 +147,12 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
         mEtStartDate.setKeyListener(null);
         mEtMaturityDate.setKeyListener(null);
 
+        initArguments(savedInstanceState);
+        setupMode();
+
         if (savedInstanceState == null) {
             getPresenter().getCurrentUser();
         }
-
-        initArguments(savedInstanceState);
     }
 
     private void initArguments(final Bundle bundle) {
@@ -147,10 +163,54 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
                 mUserAdapter.addItems(bundle.getParcelableArrayList(GUARANTERS_LIST));
                 changeAddGuarantorButtonState();
             }
+            if (bundle.containsKey(VIEW_MODE)) {
+                mViewMode = (ViewMode) bundle.getSerializable(VIEW_MODE);
+            }
+            if (bundle.containsKey(BORROW_ENTITY)) {
+                getPresenter().setBorrow(bundle.getParcelable(BORROW_ENTITY));
+            }
         }
         if (getIntent() != null) {
             getPresenter().setLender(getIntent().getParcelableExtra(USER_ENTITY));
+            getPresenter().setBorrow(getIntent().getParcelableExtra(BORROW_ENTITY));
+            mViewMode = (ViewMode) getIntent().getSerializableExtra(VIEW_MODE);
         }
+    }
+
+    private void setupMode() {
+        switch (mViewMode) {
+            case EDIT_MODE:
+                setupEditMode();
+                break;
+            case VIEW_MODE:
+                setupViewMode();
+                break;
+        }
+    }
+
+    private void setupViewMode() {
+        mUserAdapter.setViewMode(ViewMode.VIEW_MODE);
+
+        setEditableViews(false);
+        getPresenter().loadBorrowData();
+        mActionButton.setVisibility(View.GONE);
+    }
+
+    private void setupEditMode() {
+        mUserAdapter.setViewMode(ViewMode.EDIT_MODE);
+
+        setEditableViews(true);
+        getPresenter().loadLenderData();
+
+    }
+
+    private void setEditableViews(boolean editable) {
+        mSenderAmount.setEnabled(editable);
+        mRateEditText.setEnabled(editable);
+        mEtStartDate.setEnabled(editable);
+        mEtMaturityDate.setEnabled(editable);
+        mEtAdditionalNote.setEnabled(editable);
+        mAddGuarantorBtn.setVisibility(editable ? View.VISIBLE : View.GONE);
     }
 
     private void initUI() {
@@ -166,6 +226,7 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(USER_ENTITY, getPresenter().getLender());
+        outState.putSerializable(VIEW_MODE, mViewMode);
         outState.putParcelableArrayList(GUARANTERS_LIST, (ArrayList<UserEntity>) mUserAdapter.getItems());
     }
 
@@ -193,6 +254,19 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
         mReceiverAmount.setCurrency(lender.getCurrency());
         mLenderName.setText(lender.getFullName());
         mLenderPhone.setText(StringUtils.getFormattedPhoneNumber(lender.getPhoneNumber()));
+    }
+
+    @Override
+    public void showBorrowRequest(BorrowEntity borrowEntity) {
+        showLender(borrowEntity.getReceiver());
+        mUserAdapter.addItems(borrowEntity.getGuarantors());
+        mSenderAmount.setValue(String.format(Locale.ENGLISH, "%1$.2f", borrowEntity.getFromAmount()));
+        showConvertedCurrency(borrowEntity.getToAmount(), borrowEntity.getReceiver().getCurrency());
+        mEtStartDate.setText(DateUtils.getFormattedDate(DateUtils.PRETTY_DATE_PATTERN, borrowEntity.getStartDate()));
+        mEtMaturityDate.setText(DateUtils.getFormattedDate(DateUtils.PRETTY_DATE_PATTERN, borrowEntity.getMaturityDate()));
+        mRateEditText.setText(String.valueOf(borrowEntity.getRate()));
+        mEtAdditionalNote.setText(borrowEntity.getAdditionalNote());
+        changeAmountContainerOrientation();
     }
 
     @Override

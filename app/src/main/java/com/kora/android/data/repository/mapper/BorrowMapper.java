@@ -7,7 +7,6 @@ import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.model.builder.BorrowEntityBuilder;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -51,7 +50,11 @@ public class BorrowMapper {
 
     private List<UserEntity> combineLists(UserEntity... guarantor) {
         List<UserEntity> users = new ArrayList<>();
-        users.addAll(Arrays.asList(guarantor));
+        for (UserEntity entity : guarantor) {
+            if (entity.getId() != null)
+                users.add(entity);
+        }
+
         return users;
     }
 

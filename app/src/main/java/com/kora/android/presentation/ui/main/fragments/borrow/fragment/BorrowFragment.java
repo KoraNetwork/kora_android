@@ -11,8 +11,10 @@ import com.kora.android.common.Keys;
 import com.kora.android.di.component.FragmentComponent;
 import com.kora.android.presentation.enums.BorrowType;
 import com.kora.android.presentation.model.BorrowEntity;
+import com.kora.android.presentation.ui.base.adapter.OnItemClickListener;
 import com.kora.android.presentation.ui.base.adapter.RecyclerViewScrollListener;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
+import com.kora.android.presentation.ui.borrow.BorrowMoneyActivity;
 import com.kora.android.presentation.ui.main.fragments.borrow.fragment.adapter.BorrowAdapter;
 import com.kora.android.views.DividerItemDecoration;
 
@@ -22,7 +24,7 @@ import java.util.List;
 import butterknife.BindView;
 
 public class BorrowFragment extends BaseFragment<BorrowPresenter> implements BorrowView,
-        SwipeRefreshLayout.OnRefreshListener {
+        SwipeRefreshLayout.OnRefreshListener, OnItemClickListener {
 
     @BindView(R.id.borrow_list) RecyclerView mBorrowList;
     @BindView(R.id.swipe_layout) SwipeRefreshLayout swipeRefreshLayout;
@@ -52,7 +54,7 @@ public class BorrowFragment extends BaseFragment<BorrowPresenter> implements Bor
         initArguments();
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        mBorrowAdapter = new BorrowAdapter(null);
+        mBorrowAdapter = new BorrowAdapter(this);
         mBorrowList.setLayoutManager(layoutManager);
         mBorrowList.setAdapter(mBorrowAdapter);
         mBorrowList.setItemAnimator(new DefaultItemAnimator());
@@ -122,5 +124,17 @@ public class BorrowFragment extends BaseFragment<BorrowPresenter> implements Bor
     public void onPause() {
         super.onPause();
         mBorrowList.removeOnScrollListener(mScrollListener);
+    }
+
+    public void addRequest(BorrowEntity borrowRequest) {
+//        if (borrowRequest == null) return;
+//        mBorrowAdapter.addItem(0, borrowRequest);
+    }
+
+    @Override
+    public void onItemClicked(int position) {
+        BorrowEntity item = mBorrowAdapter.getItem(position);
+        if (item == null) return;
+        startActivity(BorrowMoneyActivity.getLaunchIntent(getBaseActivity(), item));
     }
 }

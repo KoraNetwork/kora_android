@@ -29,4 +29,6 @@ public interface BorrowMoneyView extends BaseView<BorrowMoneyPresenter> {
     void showPastStartDateError();
 
     void showPastMaturityDateError();
+
+    void showBorrowRequest(BorrowEntity borrowEntity);
 }

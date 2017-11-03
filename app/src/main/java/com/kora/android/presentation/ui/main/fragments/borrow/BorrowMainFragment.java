@@ -8,23 +8,27 @@ import android.support.v7.widget.Toolbar;
 
 import com.kora.android.R;
 import com.kora.android.di.component.FragmentComponent;
+import com.kora.android.presentation.model.BorrowEntity;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.backstack.StackFragment;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
 import com.kora.android.presentation.ui.borrow.BorrowMoneyActivity;
 import com.kora.android.presentation.ui.common.add_contact.GetContactActivity;
 import com.kora.android.presentation.ui.main.fragments.borrow.adapter.BorrowPageAdapter;
+import com.kora.android.presentation.ui.main.fragments.borrow.fragment.BorrowFragment;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
 import static android.app.Activity.RESULT_OK;
+import static com.kora.android.common.Keys.Extras.EXTRA_BORROW;
 import static com.kora.android.common.Keys.Extras.EXTRA_USER;
 
 public class BorrowMainFragment extends StackFragment<BorrowMainPresenter> implements BorrowMainView {
 
-    public static final int REQUEST_GET_BORROWER = 555;
+    public static final int REQUEST_GET_LENDER = 555;
     public static final int REQUEST_CREATE_BORROW_REQUEST = 552;
+
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.tab_layout) TabLayout mTabLayout;
     @BindView(R.id.viewpager) ViewPager mViewPager;
@@ -73,17 +77,25 @@ public class BorrowMainFragment extends StackFragment<BorrowMainPresenter> imple
     public void onClickCreateBorrow() {
         startActivityForResult(
                 GetContactActivity.getLaunchIntent(getBaseActivity(), getString(R.string.borrow_borrow_money)),
-                REQUEST_GET_BORROWER);
+                REQUEST_GET_LENDER);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_GET_BORROWER && resultCode == RESULT_OK) {
-            UserEntity entity = data.getParcelableExtra(EXTRA_USER);
-            getNavigator().startActivityForResult(
-                    BorrowMoneyActivity.getLaunchIntent(getBaseActivity(), entity),
-                    REQUEST_CREATE_BORROW_REQUEST);
+        if (resultCode != RESULT_OK) return;
+        switch (requestCode) {
+            case REQUEST_GET_LENDER:
+                UserEntity entity = data.getParcelableExtra(EXTRA_USER);
+                startActivityForResult(
+                        BorrowMoneyActivity.getLaunchIntent(getBaseActivity(), entity),
+                        REQUEST_CREATE_BORROW_REQUEST);
+                break;
+            case REQUEST_CREATE_BORROW_REQUEST:
+                BorrowEntity borrowRequest = data.getParcelableExtra(EXTRA_BORROW);
+                BorrowFragment fragment = (BorrowFragment) mViewPagerAdapter.getItem(BorrowPageAdapter.POSITION_REQUEST);
+                fragment.addRequest(borrowRequest);
+                break;
         }
     }
 }

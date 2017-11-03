@@ -47,6 +47,11 @@ public class BorrowAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         notifyItemRangeInserted(size, mBorrows.size());
     }
 
+    public void addItem(int position, BorrowEntity borrowEntity) {
+        mBorrows.add(position, borrowEntity);
+        notifyItemInserted(position);
+    }
+
     public void setItems(ArrayList<BorrowEntity> borrows) {
         mBorrows.clear();
         mBorrows.addAll(borrows);
@@ -61,5 +66,10 @@ public class BorrowAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         int size = mBorrows.size();
         mBorrows.clear();
         notifyItemRangeRemoved(0, size);
+    }
+
+    public BorrowEntity getItem(int position) {
+        if (mBorrows == null || mBorrows.size() == 0) return null;
+        return mBorrows.get(position);
     }
 }

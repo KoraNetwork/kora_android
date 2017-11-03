@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.kora.android.R;
+import com.kora.android.presentation.enums.ViewMode;
 import com.kora.android.presentation.model.UserEntity;
 
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ public class GuarantorsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public static final int MAX_SIZE = 3;
     @Nullable
     private OnItemClickListener mOnUserClickListener;
+    private ViewMode mViewMode = ViewMode.EDIT_MODE;
 
     private List<UserEntity> mUsers;
 
@@ -49,7 +51,7 @@ public class GuarantorsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         notifyItemInserted(mUsers.size());
     }
 
-    public void addItems(ArrayList<UserEntity> users) {
+    public void addItems(List<UserEntity> users) {
         if (users == null) return;
         if (users.size() + mUsers.size() > MAX_SIZE) return;
         int size = mUsers.size();
@@ -61,8 +63,13 @@ public class GuarantorsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         mOnUserClickListener = onUserClickListener;
     }
 
+    public void setViewMode(final ViewMode viewMode) {
+        mViewMode = viewMode;
+    }
+
     private GuarantorViewHolder createUserViewHolder(View view) {
         GuarantorViewHolder viewHolder = new GuarantorViewHolder(view);
+        viewHolder.setViewMode(mViewMode);
         if (mOnUserClickListener != null)
             viewHolder.setOnUserClickListener(mOnUserClickListener);
         return viewHolder;

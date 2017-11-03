@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.kora.android.R;
 import com.kora.android.common.utils.StringUtils;
+import com.kora.android.presentation.enums.ViewMode;
 import com.kora.android.presentation.model.UserEntity;
 
 import butterknife.BindView;
@@ -27,6 +28,8 @@ public final class GuarantorViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.user_image) AppCompatImageView userImage;
     @BindView(R.id.user_name) TextView userName;
     @BindView(R.id.user_phone) TextView userPhone;
+
+    private ViewMode mViewMode;
 
     public GuarantorViewHolder(View itemView) {
         super(itemView);
@@ -45,6 +48,15 @@ public final class GuarantorViewHolder extends RecyclerView.ViewHolder {
 
         userName.setText(user.getFullName());
         userPhone.setText(StringUtils.getFormattedPhoneNumber(user.getPhoneNumber()));
+
+        switch (mViewMode) {
+            case VIEW_MODE:
+                deleteButton.setVisibility(View.GONE);
+                break;
+            case EDIT_MODE:
+                deleteButton.setVisibility(View.VISIBLE);
+                break;
+        }
     }
 
     public void setOnUserClickListener(@Nullable GuarantorsAdapter.OnItemClickListener onUserClickListener) {
@@ -52,5 +64,9 @@ public final class GuarantorViewHolder extends RecyclerView.ViewHolder {
         rootLayout.setOnClickListener(v -> onUserClickListener.onItemClicked(getAdapterPosition()));
         deleteButton.setOnClickListener(v -> onUserClickListener.onDeleteItemClicked(getAdapterPosition()));
 
+    }
+
+    public void setViewMode(final ViewMode viewMode) {
+        mViewMode = viewMode;
     }
 }

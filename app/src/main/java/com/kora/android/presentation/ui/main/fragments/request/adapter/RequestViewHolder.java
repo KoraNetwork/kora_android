@@ -13,6 +13,8 @@ import com.kora.android.presentation.enums.RequestState;
 import com.kora.android.presentation.model.RequestEntity;
 import com.kora.android.presentation.ui.base.adapter.OnItemClickListener;
 
+import java.text.DecimalFormat;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -30,11 +32,14 @@ public class RequestViewHolder extends RecyclerView.ViewHolder {
     private OnItemClickListener mOnItemClickListener;
     private Context mContext;
 
+    private DecimalFormat mFormatter;
+
     public RequestViewHolder(View itemView, @Nullable OnItemClickListener onItemClickListener) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         mContext = itemView.getContext();
         mOnItemClickListener = onItemClickListener;
+        mFormatter = new DecimalFormat("#,###,###,##0.00");
     }
 
     public void bind(RequestEntity requestEntity) {
@@ -42,20 +47,20 @@ public class RequestViewHolder extends RecyclerView.ViewHolder {
             case FROM:
                 mDirectionIcon.setImageResource(R.drawable.ic_arrow_red);
                 mSenderName.setText(R.string.request_money_from_my_label);
-                mAmount.setText(mContext.getString(R.string.transactions_amount, requestEntity.getFromAmount(), requestEntity.getFrom().getCurrency()));
+                mAmount.setText(mContext.getString(R.string.transactions_amount, mFormatter.format(requestEntity.getFromAmount()), requestEntity.getFrom().getCurrency()));
                 mRequestName.setText(mContext.getString(R.string.request_money_ask_money_label, requestEntity.getTo().getFullName()));
                 break;
             case TO:
                 mDirectionIcon.setImageResource(R.drawable.ic_arrow_gr);
                 mSenderName.setText(mContext.getString(R.string.request_money_from_label, requestEntity.getFrom().getFullName()));
-                mAmount.setText(mContext.getString(R.string.transactions_amount, requestEntity.getToAmount(), requestEntity.getTo().getCurrency()));
+                mAmount.setText(mContext.getString(R.string.transactions_amount, mFormatter.format(requestEntity.getToAmount()), requestEntity.getTo().getCurrency()));
                 mRequestName.setText(R.string.request_money_ask_to_me);
                 break;
         }
         showStatus(requestEntity.getState());
 
         mDate.setText(DateUtils.getFormattedDate("dd.MM.yyyy", requestEntity.getCreatedAt()));
-        mTime.setText(DateUtils.getFormattedDate("HH:mm:ss", requestEntity.getCreatedAt()));
+        mTime.setText(DateUtils.getFormattedDate("hh:mm aa", requestEntity.getCreatedAt()));
     }
 
     private void showStatus(RequestState state) {

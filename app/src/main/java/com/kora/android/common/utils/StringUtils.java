@@ -70,6 +70,7 @@ public class StringUtils {
     }
 
     public static String addPlusIfNeeded(final String phoneNumber) {
+        if (phoneNumber == null) return "";
         if (phoneNumber.length() == 12 && !phoneNumber.startsWith("+")) {
             return "+" + phoneNumber;
         } else return phoneNumber;
