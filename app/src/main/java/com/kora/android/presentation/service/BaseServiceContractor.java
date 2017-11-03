@@ -8,5 +8,7 @@ public interface BaseServiceContractor<P extends BaseServicePresenter>  {
 
     void injectToComponent(final ServiceComponent serviceComponent);
 
-    void showNotification(int id, String message, boolean cancelable);
+    void showNotification(final int id, String message, final boolean cancelable);
+
+    void cancelNotification(final int id);
 }

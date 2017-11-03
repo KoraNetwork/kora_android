@@ -8,8 +8,9 @@ import com.kora.android.data.web3j.model.response.IdentityCreatedResponse;
 import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.base.DefaultWeb3jSubscriber;
-import com.kora.android.domain.usecase.balance.IncreaseBalanceUseCase;
-import com.kora.android.domain.usecase.identity.CreateIdentityUseCase;
+import com.kora.android.domain.usecase.web3j.IncreaseBalanceUseCase;
+import com.kora.android.domain.usecase.web3j.CreateIdentityUseCase;
+import com.kora.android.domain.usecase.user.ConvertAmountUseCase;
 import com.kora.android.domain.usecase.user.UpdateUserUseCase;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.service.BaseServicePresenter;
@@ -22,33 +23,45 @@ import javax.inject.Inject;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Action;
 
+import static com.kora.android.common.Keys.CURRENCY_USD;
+import static com.kora.android.common.Keys.DEFAULT_USD_BALANCE;
+
 @ConfigPersistent
-public class CreateWalletPresenter extends BaseServicePresenter<CreateWalletContractor> {
+public class CreateWalletsPresenter extends BaseServicePresenter<CreateWalletsContractor> {
 
     private final RegistrationPrefHelper mRegistrationPrefHelper;
-    private final IncreaseBalanceUseCase mIncreaseBalanceUseCase;
     private final CreateIdentityUseCase mCreateIdentityUseCase;
     private final UpdateUserUseCase mUpdateUserUseCase;
+    private final ConvertAmountUseCase mConvertAmountUseCase;
+    private final IncreaseBalanceUseCase mIncreaseBalanceUseCase;
 
     private UserEntity mUserEntity;
 
     @Inject
-    public CreateWalletPresenter(final RegistrationPrefHelper registrationPrefHelper,
-                                 final IncreaseBalanceUseCase increaseBalanceUseCase,
-                                 final UpdateUserUseCase updateUserUseCase,
-                                 final CreateIdentityUseCase createIdentityUseCase) {
+    public CreateWalletsPresenter(final RegistrationPrefHelper registrationPrefHelper,
+                                  final UpdateUserUseCase updateUserUseCase,
+                                  final CreateIdentityUseCase createIdentityUseCase,
+                                  final ConvertAmountUseCase convertAmountUseCase,
+                                  final IncreaseBalanceUseCase increaseBalanceUseCase) {
         mRegistrationPrefHelper = registrationPrefHelper;
-        mIncreaseBalanceUseCase = increaseBalanceUseCase;
-        mUpdateUserUseCase = updateUserUseCase;
         mCreateIdentityUseCase = createIdentityUseCase;
+        mUpdateUserUseCase = updateUserUseCase;
+        mConvertAmountUseCase = convertAmountUseCase;
+        mIncreaseBalanceUseCase = increaseBalanceUseCase;
     }
 
-    public void createWallet(UserEntity user) {
-        mUserEntity = user;
-        String pinCode = mRegistrationPrefHelper.getPinCode();
+    public void createWallets() {
+        final String pinCode = mRegistrationPrefHelper.getPinCode();
+
         mCreateIdentityUseCase.setData(pinCode);
         mCreateIdentityUseCase.execute(new CreateIdentitySubscriber());
     }
+
+    public void setUserEntity(final UserEntity userEntity) {
+        mUserEntity = userEntity;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     private Action mCreateIdentityAction = new Action() {
         @Override
@@ -84,6 +97,7 @@ public class CreateWalletPresenter extends BaseServicePresenter<CreateWalletCont
         @Override
         public void onError(@NonNull final Throwable throwable) {
             super.onError(throwable);
+            Log.e(CreateWalletsService.class.getCanonicalName(), throwable.getLocalizedMessage());
             throwable.printStackTrace();
         }
 
@@ -91,15 +105,10 @@ public class CreateWalletPresenter extends BaseServicePresenter<CreateWalletCont
         public void handleWeb3jError(final String message) {
             if (!isServiceAttached()) return;
             getService().showError(message,  new RetryAction(mCreateIdentityAction));
-
-        }
-
-        @Override
-        public void onComplete() {
-            if (!isServiceAttached()) return;
-            getService().showCreatedIdentityMessage();
         }
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     private Action mUpdateUserAction = new Action() {
         @Override
@@ -117,30 +126,62 @@ public class CreateWalletPresenter extends BaseServicePresenter<CreateWalletCont
         }
 
         @Override
-        public void onNext(UserEntity userEntity) {
-            mIncreaseBalanceUseCase.setData(userEntity);
-            mIncreaseBalanceUseCase.execute(new IncreaseBalanceSubscriber());
+        public void onNext(final UserEntity userEntity) {
+            if (!userEntity.getCurrency().equals(CURRENCY_USD)) {
+                mConvertAmountUseCase.setData(DEFAULT_USD_BALANCE, CURRENCY_USD, userEntity.getCurrency());
+                mConvertAmountUseCase.execute(new ConvertAmountSubscriber());
+            } else {
+                mIncreaseBalanceUseCase.setData(userEntity, DEFAULT_USD_BALANCE);
+                mIncreaseBalanceUseCase.execute(new IncreaseBalanceSubscriber());
+            }
         }
 
         @Override
-        public void onError(Throwable throwable) {
+        public void onError(final Throwable throwable) {
             super.onError(throwable);
-            Log.e(CreateWalletService.class.getCanonicalName(), throwable.getLocalizedMessage());
+            Log.e("_____", throwable.toString());
             throwable.printStackTrace();
         }
 
         @Override
-        public void handleNetworkError(RetrofitException retrofitException) {
+        public void handleNetworkError(final RetrofitException retrofitException) {
             if (!isServiceAttached()) return;
             getService().showError(retrofitException.getMessage(), new RetryAction(mUpdateUserAction));
         }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private Action mConvertAmountAction = new Action() {
+        @Override
+        public void run() throws Exception {
+            mConvertAmountUseCase.execute(new ConvertAmountSubscriber());
+        }
+    };
+
+    private class ConvertAmountSubscriber extends DefaultInternetSubscriber<Double> {
 
         @Override
-        public void onComplete() {
+        public void onNext(final Double amount) {
+            mIncreaseBalanceUseCase.setData(mUserEntity, amount);
+            mIncreaseBalanceUseCase.execute(new IncreaseBalanceSubscriber());
+        }
+
+        @Override
+        public void onError(final Throwable throwable) {
+            super.onError(throwable);
+            Log.e("_____", throwable.toString());
+            throwable.printStackTrace();
+        }
+
+        @Override
+        public void handleNetworkError(final RetrofitException retrofitException) {
             if (!isServiceAttached()) return;
-            getService().showUpdatedUserMessage();
+            getService().showError(retrofitException.getMessage(), new RetryAction(mConvertAmountAction));
         }
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     private Action mIncreaseBalanceAction = new Action() {
         @Override
@@ -160,13 +201,14 @@ public class CreateWalletPresenter extends BaseServicePresenter<CreateWalletCont
         @Override
         public void onNext(@NonNull final List<String> transactionHashList) {
             if (!isServiceAttached()) return;
+            mRegistrationPrefHelper.clear();
             getService().finishService();
         }
 
         @Override
         public void onError(@NonNull final Throwable throwable) {
             super.onError(throwable);
-            Log.e(CreateWalletService.class.getCanonicalName(), throwable.getLocalizedMessage());
+            Log.e("_____", throwable.toString());
             throwable.printStackTrace();
         }
 
@@ -175,18 +217,15 @@ public class CreateWalletPresenter extends BaseServicePresenter<CreateWalletCont
             if (!isServiceAttached()) return;
             getService().showError(message, new RetryAction(mIncreaseBalanceAction));
         }
-
-        @Override
-        public void onComplete() {
-            if (!isServiceAttached()) return;
-            getService().showIncreasedBalanceMessage();
-        }
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
     public void onDetachService() {
-        mIncreaseBalanceUseCase.dispose();
-        mUpdateUserUseCase.dispose();
         mCreateIdentityUseCase.dispose();
+        mUpdateUserUseCase.dispose();
+        mConvertAmountUseCase.dispose();
+        mIncreaseBalanceUseCase.dispose();
     }
 }

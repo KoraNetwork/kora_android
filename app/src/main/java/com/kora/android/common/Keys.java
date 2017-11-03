@@ -6,6 +6,9 @@ public interface Keys {
 
     int ITEMS_PER_PAGE = 10;
 
+    String CURRENCY_USD = "USD";
+    double DEFAULT_USD_BALANCE = 25.00;
+
     interface ProxyHelperKeys {
         String PROXY_HELPER_FILE_NAME = "com_kora_android_proxy_helper_file_name";
         String PROXY_HELPER_PASSWORD = "com_kora_android_proxy_helper_password";
@@ -116,6 +119,5 @@ public interface Keys {
         @IntDef({MODE_SIMPLE, MODE_CHOOSE})
         @interface UserMode {
         }
-
     }
 }

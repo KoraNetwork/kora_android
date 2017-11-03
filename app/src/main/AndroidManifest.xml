@@ -116,11 +116,11 @@
             android:windowSoftInputMode="stateHidden"/>
 
         <service
-            android:name=".presentation.service.IncomingSmsService"
+            android:name=".presentation.service.sms.IncomingSmsService"
             android:exported="false"/>
 
         <service
-            android:name=".presentation.service.wallet.CreateWalletService"
+            android:name=".presentation.service.wallet.CreateWalletsService"
             android:exported="false"/>
 
         <provider

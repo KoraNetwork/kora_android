@@ -26,18 +26,4 @@ public interface Constants {
 
     String FUNCTION_TRANSFER = "transfer";
     String FUNCTION_FORWARD_TO = "forwardTo";
-
-
-
-    double DEFAULT_USD_BALANCE = 25.00;
-    double DEFAULT_EUR_BALANCE = 21.00;
-    double DEFAULT_GBP_BALANCE = 19.00;
-    double DEFAULT_UAH_BALANCE = 663.00;
-    double DEFAULT_NGN_BALANCE = 8986.00;
-
-    String USD = "USD";
-    String EUR = "EUR";
-    String GBP = "GBP";
-    String UAH = "UAH";
-    String NGN = "NGN";
 }

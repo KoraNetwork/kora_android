@@ -2,7 +2,7 @@ package com.kora.android.di.component;
 
 import com.kora.android.di.annotation.PerService;
 import com.kora.android.di.module.ServiceModule;
-import com.kora.android.presentation.service.wallet.CreateWalletService;
+import com.kora.android.presentation.service.wallet.CreateWalletsService;
 
 import dagger.Subcomponent;
 
@@ -10,5 +10,5 @@ import dagger.Subcomponent;
 @Subcomponent(modules = ServiceModule.class)
 public interface ServiceComponent {
 
-    void inject(CreateWalletService createWalletService);
+    void inject(CreateWalletsService createWalletsService);
 }

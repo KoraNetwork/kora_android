@@ -22,7 +22,7 @@ import com.kora.android.R;
 import com.kora.android.common.Keys;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.model.UserEntity;
-import com.kora.android.presentation.service.wallet.CreateWalletService;
+import com.kora.android.presentation.service.wallet.CreateWalletsService;
 import com.kora.android.presentation.ui.base.backstack.BackStackActivity;
 import com.kora.android.presentation.ui.base.custom.MultiDialog;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
@@ -234,9 +234,9 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
     }
 
     @Override
-    public void showUserData(UserEntity userEntity) {
+    public void showUserData(final UserEntity userEntity) {
         if (!userEntity.hasIdentity()) {
-            Intent launchIntent = CreateWalletService.getLaunchIntent(this, userEntity);
+            final Intent launchIntent = CreateWalletsService.getLaunchIntent(this, userEntity);
             startService(launchIntent);
         }
         Glide.with(this)

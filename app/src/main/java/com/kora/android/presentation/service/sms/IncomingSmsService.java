@@ -1,4 +1,4 @@
-package com.kora.android.presentation.service;
+package com.kora.android.presentation.service.sms;
 
 import android.app.Service;
 import android.content.Intent;
