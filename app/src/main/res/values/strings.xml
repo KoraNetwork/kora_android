@@ -295,7 +295,7 @@
 
     <!-- Borrow list -->
     <string name="borrow_request_title">Request</string>
-    <string name="borrow_loans_title">Lean</string>
+    <string name="borrow_loans_title">Loan</string>
     <string name="borrow_in_progress_title">In progress</string>
 
     <!-- Wallet service -->
