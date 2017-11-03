@@ -2,7 +2,7 @@ package com.kora.android.presentation.enums;
 
 public enum BorrowType {
 
-    REQUEST("requested"), LOANS("rejected"), IN_PROGRESS("inProgress");
+    REQUEST("requests"), LOANS("loans"), IN_PROGRESS("inProgress");
 
     private String text;
 

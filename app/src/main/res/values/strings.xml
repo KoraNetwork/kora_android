@@ -209,8 +209,8 @@
 
     <!-- Transaction History -->
     <string name="transaction_history_to">To: %s</string>
-    <string name="transaction_history_to_me">To: You</string>
-    <string name="transaction_history_from_me">From: You</string>
+    <string name="transaction_history_to_me">To: me</string>
+    <string name="transaction_history_from_me">From: me</string>
     <string name="transaction_history_from">From: %s</string>
     <string name="transaction_history_cash_in">Cash in:</string>
     <string name="transaction_history_cash_out">Cash out:</string>
@@ -245,6 +245,7 @@
     <string name="request_money_ask_to_me">To: Me</string>
     <string name="request_money_ask_money_label">To: %1$s</string>
     <string name="request_money_status_in_progress">In progress</string>
+    <string name="request_money_status_pending">Pending</string>
     <string name="request_money_status_rejected">Rejected</string>
     <string name="request_money_status_requested">Requested</string>
     <string name="request_money_status_borrowed">Borrowed</string>

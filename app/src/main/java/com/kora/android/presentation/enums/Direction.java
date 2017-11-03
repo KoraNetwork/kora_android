@@ -2,5 +2,5 @@ package com.kora.android.presentation.enums;
 
 public enum Direction {
 
-    FROM, TO
+    FROM, TO, GUARANTOR
 }
