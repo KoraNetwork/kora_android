@@ -1,34 +1,35 @@
 package com.kora.android.presentation.ui.borrow;
 
-import com.kora.android.presentation.model.BorrowEntity;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.view.BaseView;
 
 public interface BorrowMoneyView extends BaseView<BorrowMoneyPresenter> {
 
-    void showUser(UserEntity lender);
+    void showCurrentUser(UserEntity userEntity);
 
-    void showConvertedCurrency(double amount, String currency);
-
-    void retrieveSenderCurrency(UserEntity userEntity);
-
-    void showNoGuarantersError();
-
-    void showInvalidAmountError();
-
-    void showInvalidConvertedAmountError();
-
-    void showEmptyRateError();
-
-    void showEmptyStartDateError();
-
-    void showEmptyMaturityDateError();
-
-    void onBorrowRequestAdded(BorrowEntity borrowEntity);
-
-    void showPastStartDateError();
-
-    void showPastMaturityDateError();
-
-    void showBorrowRequest(BorrowEntity borrowEntity);
+//    void showSender(UserEntity lender);
+//
+//    void showReceiver(UserEntity lender);
+//
+//    void showConvertedCurrency(double amount);
+//
+//    void showNoGuarantersError();
+//
+//    void showInvalidAmountError();
+//
+//    void showInvalidConvertedAmountError();
+//
+//    void showEmptyRateError();
+//
+//    void showEmptyStartDateError();
+//
+//    void showEmptyMaturityDateError();
+//
+//    void onBorrowRequestAdded(BorrowEntity borrowEntity);
+//
+//    void showPastStartDateError();
+//
+//    void showPastMaturityDateError();
+//
+//    void showBorrowRequest(BorrowEntity borrowEntity);
 }

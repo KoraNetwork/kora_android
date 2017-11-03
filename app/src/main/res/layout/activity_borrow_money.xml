@@ -21,126 +21,259 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/borrow_type_header"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="9dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="19dp"
-                android:text="@string/borrow_lender_label"
-                android:textColor="#61000000"
-                android:textSize="12sp"
-                tools:text="Lender"/>
-
             <LinearLayout
+                android:id="@+id/lender_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="24dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp">
+                android:orientation="vertical">
 
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/user_image"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_weight="0"
-                    tools:src="@drawable/ic_user_default"/>
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/lender_header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="9dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="19dp"
+                    android:text="@string/borrow_lender_label"
+                    android:textColor="#61000000"
+                    android:textSize="12sp"
+                    tools:text="Lender"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical">
+                    android:paddingBottom="24dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/lender_avatar"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="0"
+                        tools:src="@drawable/ic_user_default"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <android.support.v7.widget.AppCompatTextView
+                                android:id="@+id/lender_name"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/muli_bold"
+                                android:textColor="@color/color_black"
+                                android:textSize="16sp"
+                                android:layout_weight="1"
+                                tools:text="User Name"/>
+
+                            <android.support.v7.widget.AppCompatTextView
+                                android:id="@+id/borrow_status"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/muli_regular"
+                                android:textSize="16sp"
+                                android:layout_weight="0"
+                                tools:text="Pending"/>
+
+                        </LinearLayout>
 
                         <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/lender_name"
-                            android:layout_width="0dp"
+                            android:id="@+id/lender_phone"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/muli_bold"
-                            android:textColor="@color/color_black"
-                            android:textSize="16sp"
-                            android:layout_weight="1"
-                            tools:text="User Name"/>
-
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/borrow_status"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/muli_bold"
-                            android:textColor="@color/color_black"
-                            android:textSize="16sp"
-                            android:layout_weight="0"
-                            tools:text="Pending"/>
+                            android:fontFamily="@font/muli_regular"
+                            android:textColor="#696a6b"
+                            android:textSize="14sp"
+                            tools:text="+380995551234"/>
 
                     </LinearLayout>
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/lender_phone"
-                        android:layout_width="match_parent"
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/star"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/muli_regular"
-                        android:textColor="#696a6b"
-                        android:textSize="14sp"
-                        tools:text="+380995551234"/>
+                        android:text="returned: 0"
+                        android:textColor="@color/color_text_green"
+                        android:textSize="12sp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="25dp"
+                        android:layout_marginStart="25dp"
+                        android:fontFamily="@font/muli_regular"
+                        android:text="not returned: 0"
+                        android:textColor="@color/color_text_green"
+                        android:textSize="12sp"/>
 
                 </LinearLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="20dp"
+                    android:layerType="software"
+                    android:src="@drawable/dashed_separator_background"/>
 
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/returned_container"
+                android:id="@+id/borrower_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp">
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/borower_header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="9dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="19dp"
+                    android:text="@string/borrow_borrower_label"
+                    android:textColor="#61000000"
+                    android:textSize="12sp"
+                    tools:text="Borower"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="24dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/borower_avatar"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="0"
+                        tools:src="@drawable/ic_user_default"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <android.support.v7.widget.AppCompatTextView
+                                android:id="@+id/borower_name"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/muli_bold"
+                                android:textColor="@color/color_black"
+                                android:textSize="16sp"
+                                android:layout_weight="1"
+                                tools:text="User Name"/>
+
+                            <android.support.v7.widget.AppCompatTextView
+                                android:id="@+id/borrow_status2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/muli_regular"
+                                android:textSize="16sp"
+                                android:layout_weight="0"
+                                tools:text="Pending"/>
+
+                        </LinearLayout>
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/borower_phone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/muli_regular"
+                            android:textColor="#696a6b"
+                            android:textSize="14sp"
+                            tools:text="+380995551234"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/star"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/muli_regular"
+                        android:text="returned: 0"
+                        android:textColor="@color/color_text_green"
+                        android:textSize="12sp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="25dp"
+                        android:layout_marginStart="25dp"
+                        android:fontFamily="@font/muli_regular"
+                        android:text="not returned: 0"
+                        android:textColor="@color/color_text_green"
+                        android:textSize="12sp"/>
+
+                </LinearLayout>
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/star"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/muli_regular"
-                    android:text="returned: 0"
-                    android:textColor="@color/color_text_green"
-                    android:textSize="12sp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginStart="25dp"
-                    android:fontFamily="@font/muli_regular"
-                    android:text="not returned: 0"
-                    android:textColor="@color/color_text_green"
-                    android:textSize="12sp"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="20dp"
+                    android:layerType="software"
+                    android:src="@drawable/dashed_separator_background"/>
 
             </LinearLayout>
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_marginBottom="20dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="20dp"
-                android:layerType="software"
-                android:src="@drawable/dashed_separator_background"/>
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/guarantors_title"
