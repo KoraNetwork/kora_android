@@ -46,6 +46,7 @@ public class UserMapper {
                         .addAddress(userResponse.getAddress())
                         .addERC20Token(userResponse.getERC20Token())
                         .addFlag(userResponse.getFlag())
+                        .addCountryCode(userResponse.getCountryCode())
                         .addCurrencyNameFull(userResponse.getCurrencyNameFull())
                 );
     }

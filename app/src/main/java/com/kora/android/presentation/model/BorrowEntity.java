@@ -51,6 +51,8 @@ public class BorrowEntity implements Parcelable {
         fromAmount = in.readDouble();
         toAmount = in.readDouble();
         rate = in.readInt();
+        state = RequestState.valueOf(in.readString());
+        direction = Direction.valueOf(in.readString());
         additionalNote = in.readString();
         sender = in.readParcelable(UserEntity.class.getClassLoader());
         receiver = in.readParcelable(UserEntity.class.getClassLoader());
@@ -190,6 +192,8 @@ public class BorrowEntity implements Parcelable {
         dest.writeDouble(fromAmount);
         dest.writeDouble(toAmount);
         dest.writeInt(rate);
+        dest.writeString(state.name());
+        dest.writeString(direction.name());
         dest.writeString(additionalNote);
         dest.writeParcelable(sender, flags);
         dest.writeParcelable(receiver, flags);

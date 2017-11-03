@@ -48,16 +48,22 @@ public class BorrowViewHolder extends RecyclerView.ViewHolder {
     public void bind(BorrowEntity borrowEntity) {
         switch (borrowEntity.getDirection()) {
             case FROM:
-                mDirectionIcon.setImageResource(R.drawable.ic_arrow_red);
+                mDirectionIcon.setImageResource(R.drawable.ic_arrow_gr);
                 mSenderName.setText(mContext.getString(R.string.transaction_history_from_me));
                 mReceiverName.setText(mContext.getString(R.string.transaction_history_to, borrowEntity.getReceiver().getFullName()));
                 mAmount.setText(mContext.getString(R.string.transactions_amount, mFormatter.format(borrowEntity.getToAmount()), borrowEntity.getReceiver().getCurrency()));
                 break;
             case TO:
-                mDirectionIcon.setImageResource(R.drawable.ic_arrow_gr);
-//                mSenderName.setText(mContext.getString(R.string.transaction_history_from, borrowEntity.getSender().getUserName()));
-//                mReceiverName.setText(mContext.getString(R.string.transaction_history_to_me));
-//                mAmount.setText(mContext.getString(R.string.transactions_amount, borrowEntity.getToAmount(), borrowEntity.getReceiver().getCurrency()));
+                mDirectionIcon.setImageResource(R.drawable.ic_arrow_red);
+                mSenderName.setText(mContext.getString(R.string.transaction_history_from, borrowEntity.getSender().getUserName()));
+                mReceiverName.setText(mContext.getString(R.string.transaction_history_to_me));
+                mAmount.setText(mContext.getString(R.string.transactions_amount, mFormatter.format(borrowEntity.getToAmount()), borrowEntity.getReceiver().getCurrency()));
+                break;
+            case GUARANTOR:
+                mDirectionIcon.setImageResource(R.drawable.ic_arrow_red);
+                mSenderName.setText(mContext.getString(R.string.transaction_history_from, borrowEntity.getSender().getUserName()));
+                mReceiverName.setText(mContext.getString(R.string.transaction_history_to_me));
+                mAmount.setText(mContext.getString(R.string.transactions_amount, mFormatter.format(borrowEntity.getToAmount()), borrowEntity.getReceiver().getCurrency()));
                 break;
         }
 
@@ -78,8 +84,10 @@ public class BorrowViewHolder extends RecyclerView.ViewHolder {
                 return R.string.request_money_status_in_progress;
             case BORROWED:
                 return R.string.request_money_status_borrowed;
+            case PENDING:
+                return R.string.request_money_status_pending;
         }
-        return 0;
+        return R.string.empty_string;
     }
 
     @OnClick(R.id.root_view)

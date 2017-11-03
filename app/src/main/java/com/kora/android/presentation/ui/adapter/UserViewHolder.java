@@ -45,7 +45,7 @@ public final class UserViewHolder extends RecyclerView.ViewHolder {
                 .into(userImage);
 
         userName.setText(user.getFullName());
-        userPhone.setText(StringUtils.getFormattedPhoneNumber(user.getPhoneNumber()));
+        userPhone.setText(StringUtils.getFormattedPhoneNumber(user.getPhoneNumber(), user.getCountryCode()));
     }
 
     public void setOnUserClickListener(OnItemClickListener onUserClickListener) {

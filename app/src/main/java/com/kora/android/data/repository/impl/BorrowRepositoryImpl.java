@@ -36,7 +36,7 @@ public class BorrowRepositoryImpl implements BorrowRepository {
 
     @Override
     public Observable<List<BorrowEntity>> loadBorrowList(int skip, BorrowType borrowType) {
-        return mBorrowService.loadBorrowList(skip, Keys.ITEMS_PER_PAGE, borrowType.text())
+        return mBorrowService.loadBorrowList(borrowType.text(), skip, Keys.ITEMS_PER_PAGE)
                 .compose(mBorrowMapper.transformBorrowListResponseToBorrowEntityList());
     }
 

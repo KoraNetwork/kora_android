@@ -105,6 +105,11 @@ public class UserEntity implements Parcelable {
         return this;
     }
 
+    public UserEntity addCountryCode(final String code) {
+        mCountryCode = code;
+        return this;
+    }
+
     public UserEntity addCurrencyNameFull(final String currencyNameFull) {
         mCurrencyNameFull = currencyNameFull;
         return this;

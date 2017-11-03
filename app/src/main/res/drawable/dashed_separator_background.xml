@@ -4,10 +4,10 @@
         <shape android:shape="line">
 
             <stroke
-                android:width="2dp"
-                android:color="#979797"
-                android:dashGap="15px"
-                android:dashWidth="5px"/>
+                android:width="1dp"
+                android:color="#66979797"
+                android:dashGap="25px"
+                android:dashWidth="10px"/>
         </shape>
     </item>
 </selector>

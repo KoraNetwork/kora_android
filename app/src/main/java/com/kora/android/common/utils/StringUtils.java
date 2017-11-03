@@ -3,7 +3,6 @@ package com.kora.android.common.utils;
 import android.os.Build;
 import android.telephony.PhoneNumberUtils;
 
-import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,6 +13,8 @@ public class StringUtils {
     private static final String FULL_PHONE_NUMBER_PATTERN = "(\\+?)(\\d{10,13})$"; // matcher.find();
     private static final String SHORT_PHONE_NUMBER_PATTERN = "(\\d{9,12})$"; // matcher.find();
     private static final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,}$"; // matcher.find();
+    private static final int DEFAULT_FONE_NUMBER_COUNT = 12;
+    public static final int NIGERIAN_PHONE_NUMBER_COUNT = 13;
 
     public static boolean isUserNameValid(final String userName) {
         final Pattern pattern = Pattern.compile(USER_NAME_PATTERN);
@@ -71,7 +72,7 @@ public class StringUtils {
 
     public static String addPlusIfNeeded(final String phoneNumber) {
         if (phoneNumber == null) return "";
-        if (phoneNumber.length() == 12 && !phoneNumber.startsWith("+")) {
+        if ((phoneNumber.length() == DEFAULT_FONE_NUMBER_COUNT || phoneNumber.length() == NIGERIAN_PHONE_NUMBER_COUNT) && !phoneNumber.startsWith("+")) {
             return "+" + phoneNumber;
         } else return phoneNumber;
     }
@@ -80,9 +81,9 @@ public class StringUtils {
         return message.replaceAll("[^0-9]", "");
     }
 
-    public static String getFormattedPhoneNumber(String phone) {
+    public static String getFormattedPhoneNumber(String phone, String countryCode) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            return PhoneNumberUtils.formatNumber(addPlusIfNeeded(phone), Locale.ENGLISH.getISO3Country());
+            return PhoneNumberUtils.formatNumber(addPlusIfNeeded(phone), countryCode);
         } else {
            return PhoneNumberUtils.formatNumber(addPlusIfNeeded(phone)); //Deprecated method
         }

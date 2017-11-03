@@ -209,8 +209,8 @@
 
     <!-- Transaction History -->
     <string name="transaction_history_to">To: %s</string>
-    <string name="transaction_history_to_me">To: You</string>
-    <string name="transaction_history_from_me">From: You</string>
+    <string name="transaction_history_to_me">To: me</string>
+    <string name="transaction_history_from_me">From: me</string>
     <string name="transaction_history_from">From: %s</string>
     <string name="transaction_history_cash_in">Cash in:</string>
     <string name="transaction_history_cash_out">Cash out:</string>
@@ -249,6 +249,7 @@
     <string name="request_money_ask_to_me">To: Me</string>
     <string name="request_money_ask_money_label">To: %1$s</string>
     <string name="request_money_status_in_progress">In progress</string>
+    <string name="request_money_status_pending">Pending</string>
     <string name="request_money_status_rejected">Rejected</string>
     <string name="request_money_status_requested">Requested</string>
     <string name="request_money_status_borrowed">Borrowed</string>
@@ -267,6 +268,7 @@
 
     <!-- Borrow money -->
     <string name="borrow_borrow_money">Borrow money</string>
+    <string name="borrow_create_request_title">New request</string>
     <string name="borrow_borrow_from">"Borrow from %s</string>
     <string name="borrow_borrow_interest_rate">Annual Interest Rate (%)</string>
     <string name="borrow_borrow_total_interest">Total interest:</string>
@@ -275,8 +277,10 @@
     <string name="borrow_borrow_start_date">Start date</string>
     <string name="borrow_borrow_maturity_date">Maturity date</string>
     <string name="borrow_borrow_additional_note">Additional note</string>
-    <string name="borrow_borrow_borrow_now">BORROW NOW</string>
+    <string name="borrow_borrow_borrow_now">Borrow now</string>
+    <string name="borrow_borrow_request_now">Send request</string>
     <string name="borrow_lender_label">Lender</string>
+    <string name="borrow_borrower_label">Borrower</string>
     <string name="borrow_guarantors_label">Your guarantors</string>
     <string name="borrow_add_guarantor_title">Add your guarantors</string>
 
@@ -297,7 +301,7 @@
 
     <!-- Borrow list -->
     <string name="borrow_request_title">Request</string>
-    <string name="borrow_loans_title">Lean</string>
+    <string name="borrow_loans_title">Loan</string>
     <string name="borrow_in_progress_title">In progress</string>
 
     <!-- Wallet service -->

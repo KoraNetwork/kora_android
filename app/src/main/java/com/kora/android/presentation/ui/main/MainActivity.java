@@ -104,11 +104,15 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
         mUserAvatar = headerView.findViewById(R.id.avatar_image);
         mUserName = headerView.findViewById(R.id.user_name);
         mUserEmail = headerView.findViewById(R.id.user_email);
+        mUserAvatar.setOnClickListener(v -> {
+            final MenuItem item = mNavigationView.getMenu().getItem(TAB_USER_PROFILE_POSITION);
+            onNavigationItemSelected(item);
+        });
 
         getPresenter().loadUserData();
 
         if (savedInstanceState == null) {
-            final MenuItem item = mNavigationView.getMenu().getItem(0);
+            final MenuItem item = mNavigationView.getMenu().getItem(TAB_HOME_POSITION);
             mNavigationView.getMenu().performIdentifierAction(item.getItemId(), TAB_HOME_POSITION);
             item.setChecked(true);
         }
@@ -162,6 +166,8 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+
         int position = TAB_HOME_POSITION;
 
         switch (item.getItemId()) {
@@ -204,8 +210,6 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
                         .build(this).show();
                 break;
         }
-
-        mDrawerLayout.closeDrawer(GravityCompat.START);
         if (position == TAB_LOG_OUT) {
             return false;
         }
