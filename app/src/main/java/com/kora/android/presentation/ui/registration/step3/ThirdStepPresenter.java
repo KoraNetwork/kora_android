@@ -57,5 +57,4 @@ public class ThirdStepPresenter  extends BasePresenter<ThirdStepView> {
     public void setViewMode(String viewMode) {
         mViewMode = viewMode;
     }
-
 }

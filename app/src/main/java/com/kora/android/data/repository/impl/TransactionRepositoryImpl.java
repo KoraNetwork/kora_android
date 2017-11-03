@@ -116,6 +116,9 @@ public class TransactionRepositoryImpl implements TransactionRepository {
             if (sender == null)
                 throw new Exception(mContext.getString(R.string.web3j_error_message_preferences));
 
+            if (sender.getIdentity() == null || sender.getIdentity().isEmpty())
+                throw new Exception(mContext.getString(R.string.web3j_error_message_identity));
+
             final Web3j web3j = mWeb3jConnection.getWeb3jRinkeby();
 
             final Credentials senderCredentials = mEtherWalletStorage.getCredentials(
