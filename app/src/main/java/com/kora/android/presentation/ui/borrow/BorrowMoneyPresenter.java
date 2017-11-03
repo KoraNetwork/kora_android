@@ -144,7 +144,7 @@ public class BorrowMoneyPresenter extends BasePresenter<BorrowMoneyView> {
     public void loadLenderData() {
         if (mLender == null) return;
         if (!isViewAttached()) return;
-        getView().showLender(mLender);
+        getView().showUser(mLender);
     }
 
     private class GetUserSubscriber extends DefaultInternetSubscriber<UserEntity> {

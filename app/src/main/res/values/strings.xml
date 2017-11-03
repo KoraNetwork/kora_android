@@ -276,6 +276,7 @@
     <string name="borrow_borrow_borrow_now">Borrow now</string>
     <string name="borrow_borrow_request_now">Send request</string>
     <string name="borrow_lender_label">Lender</string>
+    <string name="borrow_borrower_label">Borrower</string>
     <string name="borrow_guarantors_label">Your guarantors</string>
     <string name="borrow_add_guarantor_title">Add your guarantors</string>
 

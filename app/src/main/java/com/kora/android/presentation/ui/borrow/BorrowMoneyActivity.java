@@ -46,6 +46,7 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -83,6 +84,8 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
     @BindView(R.id.text_total_interest) TextView mTotalInterest;
     @BindView(R.id.text_total_amount) TextView mTotalAmount;
     @BindView(R.id.guarantors_title) TextView mGuarantorsTitle;
+    @BindView(R.id.borrow_type_header) TextView mBorrowTypeHeader;
+    @BindView(R.id.borrow_status) TextView mBorrowStatus;
 
     @BindView(R.id.no_guaranter_error) TextView mNoGuaranterError;
     @BindView(R.id.edit_text_sender_amount) CurrencyEditText mSenderAmount;
@@ -200,7 +203,7 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
         mUserAdapter.setViewMode(ViewMode.EDIT_MODE);
 
         setEditableViews(true);
-        mEtStartDate.setText(DateUtils.getPrettyDateFromFormatted(DateUtils.PRETTY_DATE_PATTERN));
+        mEtStartDate.setText(DateUtils.getFormattedDate(DateUtils.PRETTY_DATE_PATTERN, new Date()));
         getPresenter().loadLenderData();
 
     }
@@ -233,7 +236,7 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
     }
 
     @Override
-    public void showLender(UserEntity lender) {
+    public void showUser(UserEntity lender) {
         setTitle(getString(R.string.borrow_borrow_from, lender.getFullName()));
         Glide.with(this)
                 .load(API_BASE_URL + lender.getAvatar())
@@ -260,9 +263,25 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
 
     @Override
     public void showBorrowRequest(BorrowEntity borrowEntity) {
-        showLender(borrowEntity.getReceiver());
+        switch (borrowEntity.getDirection()) {
+            case FROM:
+                mBorrowTypeHeader.setText(R.string.borrow_borrower_label);
+                showUser(borrowEntity.getReceiver());
+                break;
+            case TO:
+                mBorrowTypeHeader.setText(R.string.borrow_lender_label);
+                showUser(borrowEntity.getSender());
+                break;
+            case GUARANTOR:
+                mBorrowTypeHeader.setText(R.string.borrow_lender_label);
+                showUser(borrowEntity.getSender());
+                break;
+        }
+
+        mBorrowStatus.setText(borrowEntity.getState().text());
         mUserAdapter.addItems(borrowEntity.getGuarantors());
         mSenderAmount.setValue(String.format(Locale.ENGLISH, "%1$.2f", borrowEntity.getFromAmount()));
+        mSenderAmount.setCurrency(borrowEntity.getSender().getCurrency());
         showConvertedCurrency(borrowEntity.getToAmount(), borrowEntity.getReceiver().getCurrency());
         mEtStartDate.setText(DateUtils.getFormattedDate(DateUtils.PRETTY_DATE_PATTERN, borrowEntity.getStartDate()));
         mEtMaturityDate.setText(DateUtils.getFormattedDate(DateUtils.PRETTY_DATE_PATTERN, borrowEntity.getMaturityDate()));
@@ -273,6 +292,7 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
 
     @Override
     public void showConvertedCurrency(double amount, String currency) {
+        mReceiverAmount.setCurrency(currency);
         mReceiverAmount.setValue(String.format(Locale.ENGLISH, "%1$.2f", amount));
         changeAmountContainerOrientation();
         calculateTotals();

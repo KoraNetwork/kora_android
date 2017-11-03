@@ -5,7 +5,8 @@ public enum RequestState {
     INPROGRESS("In progress"),
     REJECTED("Rejected"),
     REQUESTED("Requested"),
-    BORROWED("Borrowed"), PENDING("Pending");
+    BORROWED("Borrowed"),
+    PENDING("Pending");
 
     private String text;
 
