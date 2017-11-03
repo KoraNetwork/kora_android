@@ -7,6 +7,7 @@ import android.widget.RadioGroup;
 
 import com.kora.android.R;
 import com.kora.android.presentation.enums.Direction;
+import com.kora.android.presentation.enums.TransactionState;
 import com.kora.android.presentation.enums.TransactionType;
 import com.kora.android.presentation.ui.base.adapter.filter.FilterDialog;
 
@@ -28,6 +29,9 @@ public class TransactionFilterDialog extends FilterDialog<TransactionFilterModel
     @BindView(R.id.type_requesed) CheckBox mTypeRequestedCheckbox;
     @BindView(R.id.type_borrowed) CheckBox mTypeBorrowedCheckbox;
     @BindView(R.id.type_deposit) CheckBox mTypeDepositCheckbox;
+    @BindView(R.id.state_success) CheckBox mSateSuccessCheckbox;
+    @BindView(R.id.state_pending) CheckBox mStatePendingCheckbox;
+    @BindView(R.id.state_error) CheckBox mStateErrorCheckbox;
 
     private TransactionFilterModel mTransactionFilterModel = new TransactionFilterModel();
 
@@ -58,6 +62,7 @@ public class TransactionFilterDialog extends FilterDialog<TransactionFilterModel
     protected void onViewReady() {
         setupViews();
         setupTypes();
+        setupStates();
     }
 
     private void setupViews() {
@@ -78,7 +83,7 @@ public class TransactionFilterDialog extends FilterDialog<TransactionFilterModel
             mTypeDepositCheckbox.setChecked(true);
             return;
         }
-        Set<TransactionType> transactionTypes = mTransactionFilterModel.getTransactionTypes();
+        final Set<TransactionType> transactionTypes = mTransactionFilterModel.getTransactionTypes();
 
         if (transactionTypes.contains(TransactionType.SEND)) {
             mTypeSentCheckbox.setChecked(true);
@@ -92,35 +97,26 @@ public class TransactionFilterDialog extends FilterDialog<TransactionFilterModel
         if (transactionTypes.contains(TransactionType.DEPOSIT)) {
             mTypeDepositCheckbox.setChecked(true);
         }
-
     }
 
-    @OnCheckedChanged(R.id.type_sent)
-    public void onTypeSentCheckChanged(boolean isChecked) {
-        if (isChecked) mTransactionFilterModel.getTransactionTypes().add(TransactionType.SEND);
-        else mTransactionFilterModel.getTransactionTypes().remove(TransactionType.SEND);
+    private void setupStates() {
+        if (mTransactionFilterModel.getTransactionStates().size() == 0) {
+            mSateSuccessCheckbox.setChecked(true);
+            mStatePendingCheckbox.setChecked(true);
+            mStateErrorCheckbox.setChecked(true);
+            return;
+        }
+        final Set<TransactionState> transactionStates = mTransactionFilterModel.getTransactionStates();
 
-    }
-
-    @OnCheckedChanged(R.id.type_requesed)
-    public void onTypeRequestedCheckChanged(boolean isChecked) {
-        if (isChecked) mTransactionFilterModel.getTransactionTypes().add(TransactionType.REQUEST);
-        else mTransactionFilterModel.getTransactionTypes().remove(TransactionType.REQUEST);
-
-    }
-
-    @OnCheckedChanged(R.id.type_borrowed)
-    public void onTypeBorrowedCheckChanged(boolean isChecked) {
-        if (isChecked) mTransactionFilterModel.getTransactionTypes().add(TransactionType.BORROW);
-        else mTransactionFilterModel.getTransactionTypes().remove(TransactionType.BORROW);
-
-    }
-
-    @OnCheckedChanged(R.id.type_deposit)
-    public void onTypeDepositCheckChanged(boolean isChecked) {
-        if (isChecked) mTransactionFilterModel.getTransactionTypes().add(TransactionType.DEPOSIT);
-        else mTransactionFilterModel.getTransactionTypes().remove(TransactionType.DEPOSIT);
-
+        if (transactionStates.contains(TransactionState.SUCCESS)) {
+            mSateSuccessCheckbox.setChecked(true);
+        }
+        if (transactionStates.contains(TransactionState.PENDING)) {
+            mStatePendingCheckbox.setChecked(true);
+        }
+        if (transactionStates.contains(TransactionState.ERROR)) {
+            mStateErrorCheckbox.setChecked(true);
+        }
     }
 
     @OnCheckedChanged(R.id.show_all_radio)
@@ -140,6 +136,48 @@ public class TransactionFilterDialog extends FilterDialog<TransactionFilterModel
         if (isChecked) {
             mTransactionFilterModel.setDirections(Direction.FROM);
         }
+    }
+
+    @OnCheckedChanged(R.id.type_sent)
+    public void onTypeSentCheckChanged(boolean isChecked) {
+        if (isChecked) mTransactionFilterModel.getTransactionTypes().add(TransactionType.SEND);
+        else mTransactionFilterModel.getTransactionTypes().remove(TransactionType.SEND);
+    }
+
+    @OnCheckedChanged(R.id.type_requesed)
+    public void onTypeRequestedCheckChanged(boolean isChecked) {
+        if (isChecked) mTransactionFilterModel.getTransactionTypes().add(TransactionType.REQUEST);
+        else mTransactionFilterModel.getTransactionTypes().remove(TransactionType.REQUEST);
+    }
+
+    @OnCheckedChanged(R.id.type_borrowed)
+    public void onTypeBorrowedCheckChanged(boolean isChecked) {
+        if (isChecked) mTransactionFilterModel.getTransactionTypes().add(TransactionType.BORROW);
+        else mTransactionFilterModel.getTransactionTypes().remove(TransactionType.BORROW);
+    }
+
+    @OnCheckedChanged(R.id.type_deposit)
+    public void onTypeDepositCheckChanged(boolean isChecked) {
+        if (isChecked) mTransactionFilterModel.getTransactionTypes().add(TransactionType.DEPOSIT);
+        else mTransactionFilterModel.getTransactionTypes().remove(TransactionType.DEPOSIT);
+    }
+
+    @OnCheckedChanged(R.id.state_success)
+    public void onStateSuccessCheckChanged(boolean isChecked) {
+        if (isChecked) mTransactionFilterModel.getTransactionStates().add(TransactionState.SUCCESS);
+        else mTransactionFilterModel.getTransactionStates().remove(TransactionState.SUCCESS);
+    }
+
+    @OnCheckedChanged(R.id.state_pending)
+    public void onStatePendingCheckChanged(boolean isChecked) {
+        if (isChecked) mTransactionFilterModel.getTransactionStates().add(TransactionState.PENDING);
+        else mTransactionFilterModel.getTransactionStates().remove(TransactionState.PENDING);
+    }
+
+    @OnCheckedChanged(R.id.state_error)
+    public void onStateErrorCheckChanged(boolean isChecked) {
+        if (isChecked) mTransactionFilterModel.getTransactionStates().add(TransactionState.ERROR);
+        else mTransactionFilterModel.getTransactionStates().remove(TransactionState.ERROR);
     }
 
     @OnClick(R.id.button_cancel)
