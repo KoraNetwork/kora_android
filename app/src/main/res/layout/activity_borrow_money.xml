@@ -425,7 +425,7 @@
                 style="@style/AppTheme.ActionButton.Blue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/borrow_borrow_borrow_now"/>
+                android:text="@string/borrow_borrow_request_now"/>
 
         </LinearLayout>
 

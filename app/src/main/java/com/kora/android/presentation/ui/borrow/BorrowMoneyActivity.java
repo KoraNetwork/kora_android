@@ -220,6 +220,7 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
         mGuarantorList.setLayoutManager(new LinearLayoutManager(this));
         mGuarantorList.setAdapter(mUserAdapter);
         mGuarantorList.setItemAnimator(new DefaultItemAnimator());
+        mGuarantorList.setNestedScrollingEnabled(false);
     }
 
     @Override
@@ -441,7 +442,7 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
         width -= editText.getCompoundDrawablePadding();
         if (mAmountEditTextWidth > 0 && textSize >= mAmountEditTextWidth)
             return true;
-        if (textSize >= width) {
+        if (textSize >= width && width > 0) {
             mAmountEditTextWidth = width;
             return true;
         }
