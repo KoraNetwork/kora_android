@@ -30,6 +30,7 @@ public class BorrowMoneyPresenter extends BasePresenter<BorrowMoneyView> {
 
     private UserEntity mLender;
     private UserEntity mSender;
+    private BorrowEntity mBorrowRequest;
 
     @Inject
     public BorrowMoneyPresenter(final GetUserDataUseCase getUserDataUseCase,
@@ -51,8 +52,6 @@ public class BorrowMoneyPresenter extends BasePresenter<BorrowMoneyView> {
 
     public void setLender(UserEntity userEntity) {
         this.mLender = userEntity;
-        if (!isViewAttached()) return;
-        getView().showLender(mLender);
     }
 
     public void convertIfNeed(double amount) {
@@ -131,6 +130,22 @@ public class BorrowMoneyPresenter extends BasePresenter<BorrowMoneyView> {
             mGetUserDataUseCase.execute(new GetUserSubscriber());
         }
     };
+
+    public void setBorrow(BorrowEntity borrow) {
+        mBorrowRequest = borrow;
+    }
+
+    public void loadBorrowData() {
+        if (mBorrowRequest == null) return;
+        if (!isViewAttached()) return;
+        getView().showBorrowRequest(mBorrowRequest);
+    }
+
+    public void loadLenderData() {
+        if (mLender == null) return;
+        if (!isViewAttached()) return;
+        getView().showLender(mLender);
+    }
 
     private class GetUserSubscriber extends DefaultInternetSubscriber<UserEntity> {
 

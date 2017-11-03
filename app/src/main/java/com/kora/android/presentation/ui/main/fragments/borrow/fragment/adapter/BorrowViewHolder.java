@@ -10,12 +10,15 @@ import android.widget.TextView;
 
 import com.kora.android.R;
 import com.kora.android.common.utils.DateUtils;
-import com.kora.android.presentation.enums.TransactionType;
+import com.kora.android.presentation.enums.RequestState;
 import com.kora.android.presentation.model.BorrowEntity;
 import com.kora.android.presentation.ui.base.adapter.OnItemClickListener;
 
+import java.text.DecimalFormat;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class BorrowViewHolder extends RecyclerView.ViewHolder {
 
@@ -23,10 +26,14 @@ public class BorrowViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.sender_name) TextView mSenderName;
     @BindView(R.id.receiver_name) TextView mReceiverName;
     @BindView(R.id.date) TextView mDate;
+    @BindView(R.id.time) TextView mTime;
     @BindView(R.id.type) TextView mType;
+    @BindView(R.id.state) TextView mState;
     @BindView(R.id.amount) TextView mAmount;
 
     private OnItemClickListener mOnItemClickListener;
+
+    private DecimalFormat mFormatter;
 
     private Context mContext;
 
@@ -35,6 +42,7 @@ public class BorrowViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, itemView);
         mContext = itemView.getContext();
         mOnItemClickListener = onItemClickListener;
+        mFormatter = new DecimalFormat("#,###,###,##0.00");
     }
 
     public void bind(BorrowEntity borrowEntity) {
@@ -42,33 +50,41 @@ public class BorrowViewHolder extends RecyclerView.ViewHolder {
             case FROM:
                 mDirectionIcon.setImageResource(R.drawable.ic_arrow_red);
                 mSenderName.setText(mContext.getString(R.string.transaction_history_from_me));
-                mReceiverName.setText(mContext.getString(R.string.transaction_history_to, borrowEntity.getReceiver().getUserName()));
-                mAmount.setText(mContext.getString(R.string.transactions_amount, borrowEntity.getFromAmount(), borrowEntity.getSender().getCurrency()));
+                mReceiverName.setText(mContext.getString(R.string.transaction_history_to, borrowEntity.getReceiver().getFullName()));
+                mAmount.setText(mContext.getString(R.string.transactions_amount, mFormatter.format(borrowEntity.getToAmount()), borrowEntity.getReceiver().getCurrency()));
                 break;
             case TO:
                 mDirectionIcon.setImageResource(R.drawable.ic_arrow_gr);
-                mSenderName.setText(mContext.getString(R.string.transaction_history_from, borrowEntity.getSender().getUserName()));
-                mReceiverName.setText(mContext.getString(R.string.transaction_history_to_me));
-                mAmount.setText(mContext.getString(R.string.transactions_amount, borrowEntity.getToAmount(), borrowEntity.getReceiver().getCurrency()));
+//                mSenderName.setText(mContext.getString(R.string.transaction_history_from, borrowEntity.getSender().getUserName()));
+//                mReceiverName.setText(mContext.getString(R.string.transaction_history_to_me));
+//                mAmount.setText(mContext.getString(R.string.transactions_amount, borrowEntity.getToAmount(), borrowEntity.getReceiver().getCurrency()));
                 break;
         }
 
-//        mType.setText(getTypeResource(borrowEntity.getTransactionType()));
+        mType.setText(getTypeResource(borrowEntity.getState()));
         mDate.setText(DateUtils.getFormattedDate("dd.MM.yyyy", borrowEntity.getCreatedAt()));
+        mTime.setText(DateUtils.getFormattedDate("hh:mm aa", borrowEntity.getCreatedAt()));
+        mState.setVisibility(View.GONE);
     }
 
     @StringRes
-    private int getTypeResource(TransactionType transactionType) {
-        switch (transactionType) {
-            case BORROW:
-                return R.string.transaction_history_type_borrow;
-            case SEND:
-                return R.string.transaction_history_type_send;
-            case REQUEST:
-                return R.string.transaction_history_type_request;
-            case DEPOSIT:
-                return R.string.transaction_history_type_deposit;
+    private int getTypeResource(RequestState requestState) {
+        switch (requestState) {
+            case REJECTED:
+                return R.string.request_money_status_rejected;
+            case REQUESTED:
+                return R.string.request_money_status_requested;
+            case INPROGRESS:
+                return R.string.request_money_status_in_progress;
+            case BORROWED:
+                return R.string.request_money_status_borrowed;
         }
         return 0;
+    }
+
+    @OnClick(R.id.root_view)
+    public void onRootClicked() {
+        if (mOnItemClickListener == null) return;
+        mOnItemClickListener.onItemClicked(getAdapterPosition());
     }
 }

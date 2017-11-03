@@ -17,6 +17,8 @@ import com.kora.android.presentation.enums.TransactionType;
 import com.kora.android.presentation.model.TransactionEntity;
 import com.kora.android.presentation.ui.base.adapter.OnItemClickListener;
 
+import java.text.DecimalFormat;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -37,12 +39,16 @@ public final class TransactionViewHolder extends RecyclerView.ViewHolder {
     private Context mContext;
     private Unbinder mUnbinder;
 
+    private DecimalFormat mFormatter;
+
 
     public TransactionViewHolder(View itemView, @Nullable OnItemClickListener onItemClickListener) {
         super(itemView);
         mUnbinder = ButterKnife.bind(this, itemView);
         mContext = itemView.getContext();
         mOnItemClickListener = onItemClickListener;
+
+        mFormatter = new DecimalFormat("#,###,###,##0.00");
     }
 
     public void bind(TransactionEntity transactionEntity) {
@@ -51,21 +57,22 @@ public final class TransactionViewHolder extends RecyclerView.ViewHolder {
                 mDirectionIcon.setImageResource(R.drawable.ic_arrow_red);
                 mSenderName.setText(mContext.getString(R.string.transaction_history_from_me));
                 mReceiverName.setText(mContext.getString(R.string.transaction_history_to, transactionEntity.getReceiver().getUserName()));
-                mAmount.setText(mContext.getString(R.string.transactions_amount, transactionEntity.getFromAmount(), transactionEntity.getSender().getCurrency()));
+                mAmount.setText(mContext.getString(R.string.transactions_amount, mFormatter.format(transactionEntity.getFromAmount()), transactionEntity.getSender().getCurrency()));
                 break;
             case TO:
                 mDirectionIcon.setImageResource(R.drawable.ic_arrow_gr);
                 mSenderName.setText(mContext.getString(R.string.transaction_history_from, transactionEntity.getSender().getUserName()));
                 mReceiverName.setText(mContext.getString(R.string.transaction_history_to_me));
-                mAmount.setText(mContext.getString(R.string.transactions_amount, transactionEntity.getToAmount(), transactionEntity.getReceiver().getCurrency()));
+                mAmount.setText(mContext.getString(R.string.transactions_amount, mFormatter.format(transactionEntity.getToAmount()), transactionEntity.getReceiver().getCurrency()));
                 break;
         }
 
         mType.setText(getTypeString(transactionEntity.getTransactionType()));
+        mState.setVisibility(View.VISIBLE);
         mState.setText(getStateString(transactionEntity.getTransactionState()));
         mState.setTextColor(ContextCompat.getColor(mContext, getStateColor(transactionEntity.getTransactionState())));
         mDate.setText(DateUtils.getFormattedDate("dd.MM.yyyy", transactionEntity.getCreatedAt()));
-        mTime.setText(DateUtils.getFormattedDate("HH:mm:ss", transactionEntity.getCreatedAt()));
+        mTime.setText(DateUtils.getFormattedDate("hh:mm aa", transactionEntity.getCreatedAt()));
     }
 
     @StringRes
