@@ -22,6 +22,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.kora.android.R;
 import com.kora.android.common.Keys;
+import com.kora.android.common.utils.StringUtils;
 import com.kora.android.common.utils.ViewUtils;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.enums.Action;
@@ -206,7 +207,7 @@ public class RequestDetailsActivity extends ToolbarActivity<RequestDetailsPresen
 
         setTitle(getString(R.string.send_money_send_title, user.getFullName()));
         mUserName.setText(user.getFullName());
-        mUserPhone.setText(user.getPhoneNumber());
+        mUserPhone.setText(StringUtils.getFormattedPhoneNumber(user.getPhoneNumber(), user.getCountryCode()));
 
         Glide.with(this)
                 .load(API_BASE_URL + user.getAvatar())

@@ -27,6 +27,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.kora.android.R;
 import com.kora.android.common.Keys;
 import com.kora.android.common.utils.DateUtils;
+import com.kora.android.common.utils.StringUtils;
 import com.kora.android.common.utils.ViewUtils;
 import com.kora.android.di.component.FragmentComponent;
 import com.kora.android.presentation.enums.ViewMode;
@@ -228,7 +229,7 @@ public class ProfileFragment extends StackFragment<ProfilePresenter>
         retrieveCurrency(userEntity.getFlag(), userEntity.getCurrency());
         mEtUserName.setText(userEntity.getUserName());
         mEtEmail.setText(userEntity.getEmail());
-        mEtPhoneNumber.setText(userEntity.getPhoneNumber());
+        mEtPhoneNumber.setText(StringUtils.getFormattedPhoneNumber(userEntity.getPhoneNumber(), userEntity.getCountryCode()));
         mEtLegalName.setText(userEntity.getLegalName());
         mEtPostalCode.setText(userEntity.getPostalCode());
         mEtDateOfBirth.setText(DateUtils.getPrettyDateFromFormatted(userEntity.getDateOfBirth()));

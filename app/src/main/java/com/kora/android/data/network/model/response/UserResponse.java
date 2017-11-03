@@ -32,6 +32,8 @@ public class UserResponse {
     private String mCurrency;
     @JsonField(name = "postalCode")
     private String mPostalCode;
+    @JsonField(name = "countryCode")
+    private String mCountryCode;
     @JsonField(name = "address")
     private String mAddress;
     @JsonField(name = "ERC20Token")
@@ -177,26 +179,11 @@ public class UserResponse {
         mCurrencyNameFull = currencyNameFull;
     }
 
-    @Override
-    public String toString() {
-        return "UserResponse{" + "\n" +
-                "mId=" + mId + "\n" +
-                "mAvatar=" + mAvatar + "\n" +
-                "mPhoneNumber=" + mPhoneNumber + "\n" +
-                "mIdentity=" + mIdentity + "\n" +
-                "mCreator=" + mCreator + "\n" +
-                "mRecoveryKey=" + mRecoveryKey + "\n" +
-                "mOwner=" + mOwner + "\n" +
-                "mUserName=" + mUserName + "\n" +
-                "mLegalName=" + mLegalName + "\n" +
-                "mEmail=" + mEmail + "\n" +
-                "mDateOfBirth=" + mDateOfBirth + "\n" +
-                "mCurrency=" + mCurrency + "\n" +
-                "mPostalCode=" + mPostalCode + "\n" +
-                "mAddress=" + mAddress + "\n" +
-                "mERC20Token=" + mERC20Token + "\n" +
-                "mFlag=" + mFlag + "\n" +
-                "mCurrencyNameFull=" + mCurrencyNameFull + "\n" +
-                '}';
+    public String getCountryCode() {
+        return mCountryCode;
+    }
+
+    public void setCountryCode(String countryCode) {
+        mCountryCode = countryCode;
     }
 }

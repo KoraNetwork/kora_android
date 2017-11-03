@@ -200,6 +200,7 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
         mUserAdapter.setViewMode(ViewMode.EDIT_MODE);
 
         setEditableViews(true);
+        mEtStartDate.setText(DateUtils.getPrettyDateFromFormatted(DateUtils.PRETTY_DATE_PATTERN));
         getPresenter().loadLenderData();
 
     }
@@ -254,7 +255,7 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
 //        mHisSuffixText.setText(lender.getCurrency());
         mReceiverAmount.setCurrency(lender.getCurrency());
         mLenderName.setText(lender.getFullName());
-        mLenderPhone.setText(StringUtils.getFormattedPhoneNumber(lender.getPhoneNumber()));
+        mLenderPhone.setText(StringUtils.getFormattedPhoneNumber(lender.getPhoneNumber(), lender.getCountryCode()));
     }
 
     @Override

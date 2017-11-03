@@ -40,7 +40,7 @@ public class BorrowMapper {
                                 .setFromAmount(borrowResponse.getFromAmount())
                                 .setToAmount(borrowResponse.getToAmount())
                                 .setCreatedAt(borrowResponse.getCreatedAt())
-                                .setStartDate(borrowResponse.getMaturityDate())
+                                .setStartDate(borrowResponse.getStartDate())
                                 .setMaturityDate(borrowResponse.getMaturityDate())
                                 .setSender(sender)
                                 .setReceiver(receiver)

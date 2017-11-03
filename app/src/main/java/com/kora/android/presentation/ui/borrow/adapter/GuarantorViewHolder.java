@@ -47,7 +47,7 @@ public final class GuarantorViewHolder extends RecyclerView.ViewHolder {
                 .into(userImage);
 
         userName.setText(user.getFullName());
-        userPhone.setText(StringUtils.getFormattedPhoneNumber(user.getPhoneNumber()));
+        userPhone.setText(StringUtils.getFormattedPhoneNumber(user.getPhoneNumber(), user.getCountryCode()));
 
         switch (mViewMode) {
             case VIEW_MODE:

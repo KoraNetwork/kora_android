@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.regex.Pattern;
@@ -102,12 +103,33 @@ public final class Validator {
             DateFormat df = new SimpleDateFormat(format, Locale.US);
             Date newDate = df.parse(startDate);
             Date currentDate = df.parse(df.format(new Date()));
-            return currentDate.before(newDate);
+            return currentDate.before(newDate) || isSameDay(currentDate, newDate);
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
         return false;
+    }
+
+    private static boolean isSameDay(Date currentDate, Date todayDate) {
+        if (currentDate == null || todayDate == null) {
+            throw new IllegalArgumentException("The dates must not be null");
+        }
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTime(currentDate);
+        Calendar cal2 = Calendar.getInstance();
+        cal2.setTime(todayDate);
+        return isSameDay(cal1, cal2);
+
+    }
+
+    public static boolean isSameDay(Calendar cal1, Calendar cal2) {
+        if (cal1 == null || cal2 == null) {
+            throw new IllegalArgumentException("The dates must not be null");
+        }
+        return (cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA) &&
+                cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+                cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR));
     }
 
     public static boolean isBefore(String startDate, String maturityDate, String prettyDatePattern) {
