@@ -18,6 +18,7 @@ public interface TransactionService {
     @GET("transactions")
     Observable<TransactionListResponse> retrieveTransactionHistory(@Query("direction") String direction,
                                                                    @Query("type[]") List<String> type,
+                                                                   @Query("state[]") List<String> state,
                                                                    @Query("limit") int limit,
                                                                    @Query("skip") int skip);
 

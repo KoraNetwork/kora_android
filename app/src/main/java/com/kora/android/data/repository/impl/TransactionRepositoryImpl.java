@@ -81,6 +81,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         return mTransactionService.retrieveTransactionHistory(
                 transactionFilterModel.getTransactionDirectionsAsStrings(),
                 transactionFilterModel.getTransactionTypesAsStrings(),
+                transactionFilterModel.getTransactionStatesAsStrings(),
                 limit,
                 skip)
                 .compose(mTransactionMapper.transformTransactionListResponseToEntityList());

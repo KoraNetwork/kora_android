@@ -1,5 +1,6 @@
 package com.kora.android.presentation.ui.main.fragments.transactions;
 
+import com.kora.android.common.Keys;
 import com.kora.android.data.network.config.ErrorModel;
 import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.di.annotation.ConfigPersistent;
@@ -31,7 +32,7 @@ class TransactionsPresenter extends BasePresenter<TransactionsView> {
 
     public void retrieveTransactions(final TransactionFilterModel transactionFilterModel, int itemCount) {
         mTransactionFilterModel = transactionFilterModel;
-        mGetTransactionsUseCase.setData(transactionFilterModel, 0, itemCount);
+        mGetTransactionsUseCase.setData(transactionFilterModel, Keys.ITEMS_PER_PAGE, itemCount);
         mGetTransactionsUseCase.execute(new GetTransactionsSubscriber());
     }
 

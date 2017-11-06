@@ -47,7 +47,6 @@ public final class TransactionViewHolder extends RecyclerView.ViewHolder {
         mUnbinder = ButterKnife.bind(this, itemView);
         mContext = itemView.getContext();
         mOnItemClickListener = onItemClickListener;
-
         mFormatter = new DecimalFormat("#,###,###,##0.00");
     }
 

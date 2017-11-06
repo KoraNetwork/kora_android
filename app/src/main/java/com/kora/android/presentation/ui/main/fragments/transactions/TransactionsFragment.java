@@ -155,6 +155,7 @@ public class TransactionsFragment extends StackFragment<TransactionsPresenter>
     @Override
     public void onFilterChanged(TransactionFilterModel transactionFilterModel) {
         mTransactionAdapter.clearAll();
+        mScrollListener.resetParams();
         getPresenter().retrieveTransactions(transactionFilterModel, 0);
     }
 

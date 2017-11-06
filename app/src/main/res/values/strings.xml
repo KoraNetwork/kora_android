@@ -221,7 +221,7 @@
     <string name="transaction_history_type_request">Requested</string>
     <string name="transaction_history_type_deposit">Deposit</string>
     <string name="transaction_history_state_pending">Pending</string>
-    <string name="transaction_history_state_success">Success</string>
+    <string name="transaction_history_state_success">Finished</string>
     <string name="transaction_history_state_error">Error</string>
 
     <!-- Transaction filter -->
@@ -234,6 +234,10 @@
     <string name="transaction_filter_type_requested_label">Requesed</string>
     <string name="transaction_filter_type_borrowed_label">Borrowed</string>
     <string name="transaction_filter_type_deposit_label">Deposit</string>
+    <string name="transaction_filter_state_label">State:</string>
+    <string name="transaction_filter_state_pending_label">Pending</string>
+    <string name="transaction_filter_state_success_label">Finished</string>
+    <string name="transaction_filter_state_error_label">Error</string>
     <string name="transaction_filter_cancel_label">Cancel</string>
     <string name="transaction_filter_done_label">Done</string>
 
@@ -266,6 +270,7 @@
     <string name="borrow_borrow_money">Borrow money</string>
     <string name="borrow_create_request_title">New request</string>
     <string name="borrow_borrow_from">"Borrow from %s</string>
+    <string name="borrow_lend_to">"Lend to %s</string>
     <string name="borrow_borrow_interest_rate">Annual Interest Rate (%)</string>
     <string name="borrow_borrow_total_interest">Total interest:</string>
     <string name="borrow_borrow_total_amount">Total amount:</string>

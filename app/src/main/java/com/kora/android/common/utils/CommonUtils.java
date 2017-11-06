@@ -21,4 +21,13 @@ public class CommonUtils {
         final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
+
+    public static <E extends Enum<E>> boolean isStringInEnum(final String string, final Class<E> enumClass) {
+        for (E e : enumClass.getEnumConstants()) {
+            if (e.name().equals(string)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

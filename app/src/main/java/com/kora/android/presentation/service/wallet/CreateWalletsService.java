@@ -42,7 +42,7 @@ public class CreateWalletsService extends BaseService<CreateWalletsPresenter> im
     @Override
     public int onStartCommand(final Intent intent, final int flags, final int startId) {
         Toast.makeText(this, R.string.wallet_service_start_message, Toast.LENGTH_LONG).show();
-        startForeground(1, getNotification());
+        startForeground(NOTIFICATION_ID, getNotification());
 
         final UserEntity userEntity = intent.getParcelableExtra(Keys.Extras.EXTRA_USER);
         getPresenter().setUserEntity(userEntity);
