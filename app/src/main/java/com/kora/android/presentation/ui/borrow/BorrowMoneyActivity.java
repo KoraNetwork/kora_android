@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,7 +58,8 @@ import butterknife.OnTextChanged;
 
 import static com.kora.android.common.Keys.Args.BORROW_ENTITY;
 import static com.kora.android.common.Keys.Args.GUARANTERS_LIST;
-import static com.kora.android.common.Keys.Args.USER_ENTITY;
+import static com.kora.android.common.Keys.Args.USER_RECEIVER;
+import static com.kora.android.common.Keys.Args.USER_SENDER;
 import static com.kora.android.common.Keys.Args.VIEW_MODE;
 import static com.kora.android.common.Keys.Extras.BORROW_REQUEST_EXTRA;
 import static com.kora.android.common.Keys.Extras.EXTRA_USER;
@@ -96,6 +98,7 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
     @BindView(R.id.add_guarantor_button) ImageButton mAddGuarantorBtn;
 
     @BindView(R.id.amount_container) LinearLayout mAmountContainer;
+    @BindView(R.id.total_amount_container) RelativeLayout mTotalAmountContainer;
     @BindView(R.id.text_total_interest) TextView mTotalInterest;
     @BindView(R.id.text_total_amount) TextView mTotalAmount;
     @BindView(R.id.guarantors_title) TextView mGuarantorsTitle;
@@ -141,7 +144,7 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
 
     @Override
     public int getLayoutResource() {
-        return R.layout.activity_borrow_money;
+        return R.layout.activity_borrow_details;
     }
 
     @Override
@@ -184,8 +187,10 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
         if (bundle != null) {
             if (bundle.containsKey(VIEW_MODE))
                 mViewMode = (ViewMode) bundle.getSerializable(VIEW_MODE);
-            if (bundle.containsKey(USER_ENTITY))
-                getPresenter().setSender(bundle.getParcelable(USER_ENTITY));
+            if (bundle.containsKey(USER_SENDER))
+                getPresenter().setSender(bundle.getParcelable(USER_SENDER));
+            if (bundle.containsKey(USER_RECEIVER))
+                getPresenter().setReceiver(bundle.getParcelable(USER_RECEIVER));
             if (bundle.containsKey(BORROW_ENTITY))
                 getPresenter().setBorrow(bundle.getParcelable(BORROW_ENTITY));
             if (bundle.containsKey(GUARANTERS_LIST)) {
@@ -515,7 +520,7 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
         setupSender(borrow.getSender(), false);
         setupReceiver(borrow.getReceiver(), true);
 
-        mActionButton.setVisibility(View.GONE);
+        mActionButton.setVisibility(View.GONE); //TODO: check status
 
         setupBasicFields(borrow);
 
@@ -526,18 +531,26 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
         setupSender(borrow.getSender(), true);
         setupReceiver(borrow.getReceiver(), false);
 
-        mActionButton.setVisibility(View.GONE); //TODO: check status
+        mActionButton.setEnabled(false); //TODO: check status
+        mActionButton.setText(R.string.borrow_guarantor_borrow_now_label);
+        mGuarantorsTitle.setText(getString(R.string.borrow_which_guarantors_label, borrow.getSender().getFullName()));
 
         setupBasicFields(borrow);
 
     }
 
     private void setupGuarantorDirection(BorrowEntity borrow) {
-        setTitle(getString(R.string.borrow_borrow_from, borrow.getSender().getFullName()));
+        setTitle(getString(R.string.borrow_guarantor_from, borrow.getSender().getFullName()));
         setupSender(borrow.getSender(), true);
         setupReceiver(borrow.getReceiver(), true);
 
-        mActionButton.setVisibility(View.GONE); //TODO: check status
+        mElRate.setVisibility(View.GONE);
+        mTotalAmountContainer.setVisibility(View.GONE);
+        mGuarantorsTitle.setText(getString(R.string.borrow_which_guarantors_label, borrow.getSender().getFullName()));
+
+        mActionButton.setEnabled(false);
+        mActionButton.setText(R.string.borrow_guarantor_agree_label);
+        mActionButton.setBackgroundResource(R.drawable.green_button_background);
         setupBasicFields(borrow);
     }
 
