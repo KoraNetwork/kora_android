@@ -8,7 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
 import com.kora.android.R;
-import com.kora.android.common.permission.PermissionChecker;
+import com.kora.android.common.permission.PermissionCheckerActivity;
 import com.kora.android.common.permission.PermissionException;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
@@ -25,7 +25,7 @@ import static android.Manifest.permission.READ_SMS;
 public class SecondStepActivity extends BaseActivity<SecondStepPresenter> implements SecondStepView {
 
     @Inject
-    PermissionChecker mPermissionChecker;
+    PermissionCheckerActivity mPermissionCheckerActivity;
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -61,7 +61,7 @@ public class SecondStepActivity extends BaseActivity<SecondStepPresenter> implem
 
     private void startIncomingSmsService() {
         try {
-            mPermissionChecker.verifyPermissions(READ_SMS);
+            mPermissionCheckerActivity.verifyPermissions(READ_SMS);
             getPresenter().startIncomingSmsService();
         } catch (PermissionException ignored) {
         }
@@ -75,7 +75,7 @@ public class SecondStepActivity extends BaseActivity<SecondStepPresenter> implem
 
     private void stopIncomingSmsService() {
         try {
-            mPermissionChecker.verifyPermissions(READ_SMS);
+            mPermissionCheckerActivity.verifyPermissions(READ_SMS);
             getPresenter().stopIncomingSmsService();
         } catch (PermissionException ignored) {
         }

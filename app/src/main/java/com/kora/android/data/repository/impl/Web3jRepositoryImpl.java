@@ -1,6 +1,9 @@
 package com.kora.android.data.repository.impl;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Environment;
 
 import com.kora.android.R;
 import com.kora.android.common.utils.CommonUtils;
@@ -47,6 +50,8 @@ import javax.inject.Singleton;
 
 import io.reactivex.Observable;
 
+import static com.kora.android.common.Keys.EXPORT_FOLDER_NAME;
+
 @Singleton
 public class Web3jRepositoryImpl implements Web3jRepository {
 
@@ -70,18 +75,18 @@ public class Web3jRepositoryImpl implements Web3jRepository {
     public Observable<IdentityCreatedResponse> createWallets(final String pinCode) {
         return Observable.just(true).map(a -> {
             if (!CommonUtils.isNetworkConnected(mContext))
-                throw new Exception(mContext.getString(R.string.web3j_error_message_network));
+                throw new Exception(mContext.getString(R.string.web3j_error_message_no_network));
 
             final String ownerWalletFileName = mEtherWalletUtils.generateNewWalletFile(
                     pinCode,
                     new File(mContext.getFilesDir(), ""));
-            final EtherWallet ownerEtherWallet = EtherWallet.creteOwnerEtherWallet(ownerWalletFileName);
+            final EtherWallet ownerEtherWallet = EtherWallet.createEtherWalletFromFileName(ownerWalletFileName);
             mEtherWalletStorage.addWallet(ownerEtherWallet);
 
             final String recoveryWalletFileName = mEtherWalletUtils.generateNewWalletFile(
                     pinCode,
                     new File(mContext.getFilesDir(), ""));
-            final EtherWallet recoveryEtherWallet = EtherWallet.creteRecoveryEtherWallet(recoveryWalletFileName);
+            final EtherWallet recoveryEtherWallet = EtherWallet.createEtherWalletFromFileName(recoveryWalletFileName);
             mEtherWalletStorage.addWallet(recoveryEtherWallet);
 
             final ECKeyPair keys = ECKeyPair.create(Hex.decode(mWeb3jConnection.getKoraWalletPrivateKey()));
@@ -89,11 +94,11 @@ public class Web3jRepositoryImpl implements Web3jRepository {
                     mWeb3jConnection.getKoraWalletPassword(),
                     keys,
                     new File(mContext.getFilesDir(), ""));
-            final EtherWallet koraEtherWallet = EtherWallet.creteKoraEtherWallet(koraWalletFileName);
+            final EtherWallet koraEtherWallet = EtherWallet.createEtherWalletFromFileName(koraWalletFileName);
             mEtherWalletStorage.addWallet(koraEtherWallet);
 
             if (!CommonUtils.isNetworkConnected(mContext))
-                throw new Exception(mContext.getString(R.string.web3j_error_message_network));
+                throw new Exception(mContext.getString(R.string.web3j_error_message_no_network));
 
             final Web3j web3j = mWeb3jConnection.getWeb3jRinkeby();
 
@@ -126,7 +131,7 @@ public class Web3jRepositoryImpl implements Web3jRepository {
                                          final String smartContractAddress) {
         return Observable.just(true).map(a -> {
             if (!CommonUtils.isNetworkConnected(mContext))
-                throw new Exception(mContext.getString(R.string.web3j_error_message_network));
+                throw new Exception(mContext.getString(R.string.web3j_error_message_no_network));
 
             final Web3j web3j = mWeb3jConnection.getWeb3jRinkeby();
 
@@ -158,7 +163,7 @@ public class Web3jRepositoryImpl implements Web3jRepository {
                                                     final double amount) {
         return Observable.just(true).map(a -> {
             if (!CommonUtils.isNetworkConnected(mContext))
-                throw new Exception(mContext.getString(R.string.web3j_error_message_network));
+                throw new Exception(mContext.getString(R.string.web3j_error_message_no_network));
 
             final Web3j web3j = mWeb3jConnection.getWeb3jRinkeby();
 
@@ -205,4 +210,90 @@ public class Web3jRepositoryImpl implements Web3jRepository {
                     transactionReceipt.getTransactionHash());
         });
     }
+
+    @Override
+    public Observable<File> getWalletFile(final String walletAddress) {
+        return Observable.just(true).map(a -> {
+
+            if (walletAddress == null || walletAddress.isEmpty())
+                throw new Exception(mContext.getString(R.string.web3j_error_message_no_identity));
+
+            final List<EtherWallet> etherWalletList = mEtherWalletStorage.getWalletList();
+            if (etherWalletList == null || etherWalletList.isEmpty())
+                throw new Exception(mContext.getString(R.string.web3j_error_message_no_wallet));
+
+            final EtherWallet etherWallet = EtherWallet.createEtherWalletFromAddress(walletAddress);
+            if (!etherWalletList.contains(etherWallet))
+                throw new Exception(mContext.getString(R.string.web3j_error_message_no_wallet));
+
+            final File walletFile = new File(mContext.getFilesDir(), etherWallet.getWalletFileName());
+            if (walletAddress.length() == 0)
+                throw new Exception(mContext.getString(R.string.web3j_error_message_no_wallet));
+
+            return walletFile;
+        });
+    }
+
+    @Override
+    public Observable<Object> exportWalletFile(final File walletFile) {
+        return Observable.just(true).map(a -> {
+
+            final File folder = new File(Environment.getExternalStorageDirectory(), EXPORT_FOLDER_NAME);
+            if (!folder.exists())
+                folder.mkdirs();
+            final File copy = new File(folder, walletFile.getName());
+            mEtherWalletStorage.copyFile(walletFile, copy);
+
+            final Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            final Uri uri = Uri.fromFile(copy);
+            intent.setData(uri);
+            mContext.sendBroadcast(intent);
+
+            return a;
+        });
+    }
+
+    @Override
+    public Observable<Object> importWalletFile(final Uri walletFileUri) {
+        return Observable.just(true).map(a -> {
+
+            if (walletFileUri == null)
+                throw new Exception(mContext.getString(R.string.web3j_error_message_wrong_wallet));
+
+            String uriPath = walletFileUri.getPath();
+            if (uriPath == null || uriPath.isEmpty())
+                uriPath = mEtherWalletStorage.getUriPath(mContext, walletFileUri);
+            if (uriPath == null || uriPath.isEmpty())
+                throw new Exception(mContext.getString(R.string.web3j_error_message_wrong_wallet));
+
+            final File source = new File(uriPath);
+            final String filename = walletFileUri.getLastPathSegment();
+
+            android.util.Log.e("_____", source.getName());
+            android.util.Log.e("_____", source.getPath());
+            android.util.Log.e("_____", filename);
+            android.util.Log.e("_____", walletFileUri.toString());
+
+//            final File destination = new File(mContext.getFilesDir(), filename);
+//            mEtherWalletStorage.copyFile(source, destination);
+
+            return a;
+        });
+    }
+
+//    final Credentials credentials = mEtherWalletStorage.getCredentials(
+//            Web3jUtils.getKeystoreFileNameFromAddress(walletAddress),
+//            "123456789");
+//
+//    final String address = credentials.getAddress();
+//    final ECKeyPair ecKeyPair = credentials.getEcKeyPair();
+//    final BigInteger privateKey = ecKeyPair.getPrivateKey();
+//    final BigInteger publicKey = ecKeyPair.getPublicKey();
+//
+//            Log.e("_____", address);
+//            Log.e("_____", String.valueOf(privateKey));
+//            Log.e("_____", String.valueOf(publicKey));
+//
+//            Log.e("_____", String.valueOf(Numeric.toHexStringNoPrefix(privateKey)));
+
 }

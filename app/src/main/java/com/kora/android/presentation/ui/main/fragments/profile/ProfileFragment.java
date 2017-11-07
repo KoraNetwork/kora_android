@@ -1,13 +1,19 @@
 package com.kora.android.presentation.ui.main.fragments.profile;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,8 +30,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.kora.android.BuildConfig;
 import com.kora.android.R;
 import com.kora.android.common.Keys;
+import com.kora.android.common.permission.PermissionCheckerFragment;
+import com.kora.android.common.permission.PermissionException;
 import com.kora.android.common.utils.DateUtils;
 import com.kora.android.common.utils.StringUtils;
 import com.kora.android.common.utils.ViewUtils;
@@ -44,6 +53,8 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.util.Calendar;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnFocusChange;
@@ -51,15 +62,22 @@ import butterknife.OnTextChanged;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.app.Activity.RESULT_OK;
+import static com.kora.android.common.Keys.FILE_PROVIDER;
+import static com.kora.android.common.Keys.PermissionChecker.PERMISSION_REQUEST_CODE_WRITE_EXTERNAL_STORAGE;
 import static com.kora.android.common.Keys.SelectCurrency.SELECT_CURRENCY_EXTRA;
 import static com.kora.android.common.Keys.SelectCurrency.SELECT_CURRENCY_REQUEST_CODE;
+import static com.kora.android.common.Keys.SelectWalletFile.SELECT_WALLET_FILE_REQUEST_CODE;
 import static com.kora.android.data.network.Constants.API_BASE_URL;
 import static com.kora.android.presentation.enums.ViewMode.EDIT_MODE;
 import static com.kora.android.presentation.enums.ViewMode.VIEW_MODE;
 
-public class ProfileFragment extends StackFragment<ProfilePresenter>
-        implements ProfileView, DatePickerDialog.OnDateSetListener {
+public class ProfileFragment extends StackFragment<ProfilePresenter> implements ProfileView,
+        DatePickerDialog.OnDateSetListener, DialogInterface.OnClickListener {
+
+    @Inject
+    PermissionCheckerFragment mPermissionCheckerFragment;
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
 
@@ -357,16 +375,6 @@ public class ProfileFragment extends StackFragment<ProfilePresenter>
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SELECT_CURRENCY_REQUEST_CODE && resultCode == RESULT_OK) {
-            CountryEntity currency = data.getParcelableExtra(SELECT_CURRENCY_EXTRA);
-            retrieveCurrency(currency.getFlag(), currency.getCurrency());
-            getPresenter().setCurrency(currency);
-        }
-    }
-
-    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(Keys.Args.VIEW_MODE, mViewMode);
@@ -409,5 +417,109 @@ public class ProfileFragment extends StackFragment<ProfilePresenter>
             changeMode(mode);
             getPresenter().setUserEntity(user);
         }
+    }
+
+    @OnClick(R.id.button_export_wallet)
+    public void onClickExportWallet() {
+        getPresenter().getWalletFileFromInternalStorage();
+    }
+
+    @Override
+    public void showExportWalletDialog() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getBaseActivity());
+        builder.setItems(R.array.export_wallet_dialog_items, this);
+        builder.create().show();
+    }
+
+    @Override
+    public void onClick(final DialogInterface dialog, final int which) {
+        switch (which) {
+            case 0:
+                shareWallet();
+                break;
+            case 1:
+                exportWallet();
+                break;
+        }
+    }
+
+    public void shareWallet() {
+        final Uri uri = FileProvider.getUriForFile(
+                getBaseActivity(),
+                BuildConfig.APPLICATION_ID + FILE_PROVIDER,
+                getPresenter().getWalletFile());
+        final Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.setType("*/*"); // change type if needed
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        final PackageManager packageManager = getActivity().getPackageManager();
+        if (intent.resolveActivity(packageManager) != null) {
+            startActivity(Intent.createChooser(intent, getString(R.string.export_wallet_share)));
+        }
+    }
+
+    public void exportWallet() {
+        try {
+            mPermissionCheckerFragment.verifyPermissions(WRITE_EXTERNAL_STORAGE);
+            getPresenter().exportWalletFileOnExternalStorage();
+        } catch (final PermissionException permissionException) {
+            mPermissionCheckerFragment.requestPermissions(
+                    PERMISSION_REQUEST_CODE_WRITE_EXTERNAL_STORAGE,
+                    permissionException.getRequiredPermissions());
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(final int requestCode,
+                                           @NonNull final String[] permissions,
+                                           @NonNull final int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUEST_CODE_WRITE_EXTERNAL_STORAGE:
+                if (mPermissionCheckerFragment.permissionsGranted(permissions, grantResults)) {
+                    exportWallet();
+                } else {
+                    showDialogMessage(
+                            R.string.export_wallet_pemission_dialog_title,
+                            R.string.export_wallet_permission_dialog_message);
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    @Override
+    public void showExportedWalletMessage() {
+        Toast.makeText(getBaseActivity(), R.string.export_wallet_exported, Toast.LENGTH_LONG).show();
+    }
+
+    @OnClick(R.id.button_import_wallet)
+    public void onClickImportWallet() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("*/*"); // change type if needed
+        startActivityForResult(
+                Intent.createChooser(intent, getString(R.string.import_wallet_select)),
+                SELECT_WALLET_FILE_REQUEST_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == SELECT_CURRENCY_REQUEST_CODE && resultCode == RESULT_OK) {
+            CountryEntity currency = data.getParcelableExtra(SELECT_CURRENCY_EXTRA);
+            retrieveCurrency(currency.getFlag(), currency.getCurrency());
+            getPresenter().setCurrency(currency);
+
+        } else if (requestCode == SELECT_WALLET_FILE_REQUEST_CODE && resultCode == RESULT_OK) {
+            final Uri walletFileUri = data.getData();
+            getPresenter().importWalletFileOnInternalStorage(walletFileUri);
+        }
+    }
+
+    @Override
+    public void showImportedWalletMessage() {
+        Toast.makeText(getBaseActivity(), R.string.import_wallet_imported, Toast.LENGTH_LONG).show();
     }
 }

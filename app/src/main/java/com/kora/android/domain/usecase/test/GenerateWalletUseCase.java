@@ -52,7 +52,7 @@ public class GenerateWalletUseCase extends AsyncUseCase {
                 final ECKeyPair keys = ECKeyPair.create(Hex.decode(mPrivateKey));
                 walletFileName = mEtherWalletUtils.generateWalletFile(mPassword, keys, new File(mContext.getFilesDir(), ""), true);
             }
-            final EtherWallet etherWallet = new EtherWallet(walletFileName);
+            final EtherWallet etherWallet = EtherWallet.createEtherWalletFromFileName(walletFileName);
             mEtherWalletStorage.addWallet(etherWallet);
             return etherWallet;
         });

@@ -17,9 +17,6 @@
 
     <string name="dialog_action_ok">OK</string>
 
-    <string name="dialog_permission_export_wallet_title">Info</string>
-    <string name="dialog_permission_export_wallet_message">Can not export wallet to external storage. Permission should be granted.</string>
-
     <string name="dialog_permission_get_phone_number_title">Info</string>
     <string name="dialog_permission_get_phone_number_message">Can not get phone number. Permission should be granted.</string>
 
@@ -160,6 +157,8 @@
     <string name="update_profile_success_message">User Updated Success</string>
     <string name="title_edit_profile">Edit Profile</string>
     <string name="required_asterisk"> *</string>
+    <string name="profile_export_wallet">Export wallet</string>
+    <string name="profile_import_wallet">Import wallet</string>
 
     <!-- Send Money -->
     <string name="send_money_title">Send money</string>
@@ -201,11 +200,13 @@
     <string name="enter_pin_transaction_is_sent">Transaction is sent</string>
 
     <!-- Web3j error messages -->
-    <string name="web3j_error_message_network">The Internet connection appears to be offline.</string>
+    <string name="web3j_error_message_no_network">The Internet connection appears to be offline.</string>
     <string name="web3j_error_message_preferences">Preferences mistake.</string>
-    <string name="web3j_error_message_identity">Identity is not created yet. Try again later.</string>
+    <string name="web3j_error_message_no_identity">Identity is not created yet. Try again later.</string>
     <string name="web3j_error_message_owner_balance" formatted="false">You need to have at least %s ETH to make transactions. Owner balance is %s.</string>
     <string name="web3j_error_message_identity_balance" formatted="false">You can not send %s eFiats. Proxy balance is %s.</string>
+    <string name="web3j_error_message_no_wallet" formatted="false">No such wallet file on this device.</string>
+    <string name="web3j_error_message_wrong_wallet" formatted="false">Wrong wallet file is selected.</string>
 
     <!-- Transaction History -->
     <string name="transaction_history_to">To: %s</string>
@@ -313,5 +314,17 @@
     <string name="wallet_service_increasing_balance_message">Increasing balance</string>
     <string name="wallet_service_increased_balance_message">Balance is increased</string>
     <string name="wallet_service_finished_message">Wallet setup is completed. Now you can make requests, send and borrow money.</string>
+
+    <!-- Import export wallet -->
+    <string name="export_wallet_pemission_dialog_title">Info</string>
+    <string name="export_wallet_permission_dialog_message">Can not export wallet file to external storage. Permission should be granted.</string>
+    <string-array name="export_wallet_dialog_items">
+        <item>Export by sharing</item>
+        <item>Export on external storage</item>
+    </string-array>
+    <string name="export_wallet_share">Select app to export wallet file:</string>
+    <string name="export_wallet_exported">Wallet file is exported on external storage</string>
+    <string name="import_wallet_select">Select wallet file to import:</string>
+    <string name="import_wallet_imported">Wallet file is imported on internal storage</string>
 
 </resources>

@@ -3,10 +3,16 @@ package com.kora.android.common.utils;
 import java.math.BigInteger;
 import java.text.DecimalFormat;
 
+import static com.kora.android.common.Keys.JSON_FILE_EXTENSION;
+
 public class Web3jUtils {
 
     public static String getKeystoreFileNameFromAddress(final String address) {
-        return address.substring(2);
+        return address + JSON_FILE_EXTENSION;
+    }
+
+    public static String getAddressFromKeystoreFileName(final String keystoreFileName) {
+        return keystoreFileName.substring(0, keystoreFileName.length() - JSON_FILE_EXTENSION.length());
     }
 
     public static double convertWeiToEth(final BigInteger bigInteger) {

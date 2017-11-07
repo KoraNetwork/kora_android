@@ -2,8 +2,10 @@ package com.kora.android.data.web3j.storage;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 
 import com.kora.android.data.web3j.model.EtherWallet;
@@ -120,7 +122,7 @@ public class EtherWalletStorage {
 
     public void exportWallet(final String walletFileName) {
         final List<EtherWallet> etherWalletList = getWalletList();
-        final EtherWallet etherWallet = new EtherWallet(walletFileName);
+        final EtherWallet etherWallet = EtherWallet.createEtherWalletFromFileName(walletFileName);
         if (!etherWalletList.contains(etherWallet))
             return;
         final File folder = new File(Environment.getExternalStorageDirectory(), EXPORT_FOLDER_NAME);
@@ -137,7 +139,7 @@ public class EtherWalletStorage {
         mContext.sendBroadcast(mediaScannerIntent);
     }
 
-    private void copyFile(final File original, final File copy) {
+    public void copyFile(final File original, final File copy) {
         FileChannel inChannel = null;
         FileChannel outChannel = null;
         try {
@@ -163,5 +165,20 @@ public class EtherWalletStorage {
     public Credentials getCredentials(final String walletFileName, final String password) throws IOException, CipherException {
         final File file = new File(mContext.getFilesDir(), walletFileName);
         return WalletUtils.loadCredentials(password, file);
+    }
+
+    public String getUriPath(final Context context, final Uri uri) {
+        String path;
+        final String[] projection = {MediaStore.Files.FileColumns.DATA};
+        final Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
+        if (cursor == null) {
+            path = uri.getPath();
+        } else {
+            cursor.moveToFirst();
+            int column_index = cursor.getColumnIndexOrThrow(projection[0]);
+            path = cursor.getString(column_index);
+            cursor.close();
+        }
+        return ((path == null || path.isEmpty()) ? (uri.getPath()) : path);
     }
 }

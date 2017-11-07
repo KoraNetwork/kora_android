@@ -1,7 +1,5 @@
 package com.kora.android.di.module;
 
-import android.support.v4.app.Fragment;
-
 import com.kora.android.presentation.ui.base.view.BaseFragment;
 
 import dagger.Module;
@@ -12,12 +10,12 @@ public class FragmentModule {
 
     private final BaseFragment mFragment;
 
-    public FragmentModule(BaseFragment fragment) {
+    public FragmentModule(final BaseFragment fragment) {
         mFragment = fragment;
     }
 
     @Provides
-    Fragment providesFragment() {
+    BaseFragment providesFragment() {
         return mFragment;
     }
 }

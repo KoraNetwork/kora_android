@@ -4,28 +4,30 @@ import com.kora.android.data.repository.Web3jRepository;
 import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.AsyncUseCase;
 
+import java.io.File;
+
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
 
 @ConfigPersistent
-public class CreateIdentityUseCase extends AsyncUseCase {
+public class ExportWalletFileUseCase extends AsyncUseCase {
 
     private final Web3jRepository mWeb3jRepository;
 
-    private String mPinCode;
+    private File mWalletFile;
 
     @Inject
-    public CreateIdentityUseCase(final Web3jRepository web3jRepository) {
+    public ExportWalletFileUseCase(final Web3jRepository web3jRepository) {
         mWeb3jRepository = web3jRepository;
     }
 
-    public void setData(final String pinCode) {
-        mPinCode = pinCode;
+    public void setData(final File walletFile) {
+        mWalletFile = walletFile;
     }
 
     @Override
     protected Observable buildObservableTask() {
-        return mWeb3jRepository.createWallets(mPinCode);
+        return mWeb3jRepository.exportWalletFile(mWalletFile);
     }
 }

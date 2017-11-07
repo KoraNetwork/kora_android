@@ -9,23 +9,22 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 
 @ConfigPersistent
-public class CreateIdentityUseCase extends AsyncUseCase {
+public class GetWalletFileUseCase extends AsyncUseCase {
 
     private final Web3jRepository mWeb3jRepository;
 
-    private String mPinCode;
+    private String mWalletAddress;
 
     @Inject
-    public CreateIdentityUseCase(final Web3jRepository web3jRepository) {
+    public GetWalletFileUseCase(Web3jRepository web3jRepository) {
         mWeb3jRepository = web3jRepository;
     }
 
-    public void setData(final String pinCode) {
-        mPinCode = pinCode;
+    public void setData(final String walletAddress) {
+        mWalletAddress = walletAddress;
     }
-
     @Override
     protected Observable buildObservableTask() {
-        return mWeb3jRepository.createWallets(mPinCode);
+        return mWeb3jRepository.getWalletFile(mWalletAddress);
     }
 }

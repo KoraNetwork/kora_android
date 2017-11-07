@@ -7,6 +7,7 @@ import com.kora.android.common.preferences.PreferenceHandler;
 import com.kora.android.common.utils.CommonUtils;
 import com.kora.android.common.utils.Web3jUtils;
 import com.kora.android.data.web3j.connection.Web3jConnection;
+import com.kora.android.data.web3j.model.EtherWallet;
 import com.kora.android.data.web3j.smart_contracts.HumanStandardToken;
 import com.kora.android.data.web3j.smart_contracts.MetaIdentityManager;
 import com.kora.android.data.web3j.storage.EtherWalletStorage;
@@ -81,18 +82,18 @@ public class SendTransactionUseCase extends AsyncUseCase {
     protected Observable buildObservableTask() {
         return Observable.just(true).map(a -> {
             if (!CommonUtils.isNetworkConnected(mContext))
-                throw new Exception(mContext.getString(R.string.web3j_error_message_network));
+                throw new Exception(mContext.getString(R.string.web3j_error_message_no_network));
 
             final UserEntity sender = mPreferenceHandler.remindObject(USER, UserEntity.class);
             if (sender == null) return Collections.emptyList();
 
-            final String ownerFileName = Web3jUtils.getKeystoreFileNameFromAddress(sender.getOwner());
-            final Credentials sendCredentials = mEtherWalletStorage.getCredentials(ownerFileName, mPinCode);
+            final EtherWallet ownerWallet = EtherWallet.createEtherWalletFromAddress(sender.getOwner());
+            final Credentials sendCredentials = mEtherWalletStorage.getCredentials(ownerWallet.getWalletFileName(), mPinCode);
 
 
 
             if (!CommonUtils.isNetworkConnected(mContext))
-                throw new Exception(mContext.getString(R.string.web3j_error_message_network));
+                throw new Exception(mContext.getString(R.string.web3j_error_message_no_network));
 
             final Web3j web3j = mWeb3jConnection.getWeb3jRinkeby();
 
@@ -140,7 +141,7 @@ public class SendTransactionUseCase extends AsyncUseCase {
             if (sender.getCurrency().equals(mReceiver.getCurrency())) {
 
                 if (!CommonUtils.isNetworkConnected(mContext))
-                    throw new Exception(mContext.getString(R.string.web3j_error_message_network));
+                    throw new Exception(mContext.getString(R.string.web3j_error_message_no_network));
 
                 final MetaIdentityManager metaIdentityManager = MetaIdentityManager.load(
                         mWeb3jConnection.getMetaIdentityManagerRinkeby(),
@@ -175,7 +176,7 @@ public class SendTransactionUseCase extends AsyncUseCase {
             } else {
 
                 if (!CommonUtils.isNetworkConnected(mContext))
-                    throw new Exception(mContext.getString(R.string.web3j_error_message_network));
+                    throw new Exception(mContext.getString(R.string.web3j_error_message_no_network));
 
                 final MetaIdentityManager metaIdentityManager = MetaIdentityManager.load(
                         mWeb3jConnection.getMetaIdentityManagerRinkeby(),

@@ -1,59 +1,34 @@
 package com.kora.android.data.web3j.model;
 
+import com.kora.android.common.utils.Web3jUtils;
+
 import java.io.Serializable;
 
 public class EtherWallet implements Serializable {
 
-    private static final String ADDRESS_PREFIX = "0x";
-    private static final String OWNER_WALLET_TYPE = "OWNER_WALLET_TYPE";
-    private static final String RECOVERY_WALLET_TYPE = "RECOVERY_WALLET_TYPE";
-    private static final String KORA_WALLET_TYPE = "KORA_WALLET_TYPE";
-
     private String mWalletFileName;
     private String mAddress;
-    private String mWalletType;
 
-    public EtherWallet(final String walletFileName) {
+    public static EtherWallet createEtherWalletFromFileName(final String walletFileName) {
+        return new EtherWallet()
+                .addWalletFileName(walletFileName)
+                .addAddress(Web3jUtils.getAddressFromKeystoreFileName(walletFileName));
+    }
+
+    public static EtherWallet createEtherWalletFromAddress(final String address) {
+        return new EtherWallet()
+                .addWalletFileName(Web3jUtils.getKeystoreFileNameFromAddress(address))
+                .addAddress(address);
+    }
+
+    public EtherWallet addAddress(final String address) {
+        mAddress = address;
+        return this;
+    }
+
+    public EtherWallet addWalletFileName(final String walletFileName) {
         mWalletFileName = walletFileName;
-        mAddress = ADDRESS_PREFIX + walletFileName;
-    }
-
-    public EtherWallet(final String walletFileName, final String walletType) {
-        mWalletFileName = walletFileName;
-        mAddress = ADDRESS_PREFIX + walletFileName;
-        mWalletType = walletType;
-    }
-
-    public static EtherWallet creteOwnerEtherWallet(final String walletFileName) {
-        return new EtherWallet(walletFileName, OWNER_WALLET_TYPE);
-    }
-
-    public static EtherWallet creteRecoveryEtherWallet(final String walletFileName) {
-        return new EtherWallet(walletFileName, RECOVERY_WALLET_TYPE);
-    }
-
-    public static EtherWallet creteKoraEtherWallet(final String walletFileName) {
-        return new EtherWallet(walletFileName, KORA_WALLET_TYPE);
-    }
-
-    public boolean isOwnerWallet() {
-        return this.getWalletType().equals(OWNER_WALLET_TYPE);
-    }
-
-    public boolean isRecoveryWallet() {
-        return this.getWalletType().equals(RECOVERY_WALLET_TYPE);
-    }
-
-    public boolean isKoraWallet() {
-        return this.getWalletType().equals(KORA_WALLET_TYPE);
-    }
-
-    public String getAddress() {
-        return mAddress;
-    }
-
-    public void setAddress(String address) {
-        this.mAddress = address;
+        return this;
     }
 
     public String getWalletFileName() {
@@ -61,15 +36,15 @@ public class EtherWallet implements Serializable {
     }
 
     public void setWalletFileName(String walletFileName) {
-        this.mWalletFileName = walletFileName;
+        mWalletFileName = walletFileName;
     }
 
-    public String getWalletType() {
-        return mWalletType;
+    public String getAddress() {
+        return mAddress;
     }
 
-    public void setWalletType(String mWalletType) {
-        this.mWalletType = mWalletType;
+    public void setAddress(String address) {
+        mAddress = address;
     }
 
     @Override
@@ -77,7 +52,6 @@ public class EtherWallet implements Serializable {
         return "EtherWallet{" + "\n" +
                 "mWalletFileName=" + mWalletFileName + "\n" +
                 "mAddress=" + mAddress + "\n" +
-                "mWalletType=" + mWalletType + "\n" +
                 '}';
     }
 

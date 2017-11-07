@@ -15,6 +15,9 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 
+import static com.kora.android.common.Keys.ADDRESS_PREFIX;
+import static com.kora.android.common.Keys.JSON_FILE_EXTENSION;
+
 public class EtherWalletUtils {
 
     // methods are taken from original class org.web3j.crypto.WalletUtils to change getWalletFileName(WalletFile walletFile)
@@ -62,6 +65,6 @@ public class EtherWalletUtils {
     }
 
     private String getWalletFileName(WalletFile walletFile) {
-        return walletFile.getAddress();
+        return ADDRESS_PREFIX + walletFile.getAddress() + JSON_FILE_EXTENSION;
     }
 }

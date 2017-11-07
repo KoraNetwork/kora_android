@@ -3,7 +3,6 @@ package com.kora.android.data.repository.impl;
 import android.content.Context;
 
 import com.kora.android.R;
-import com.kora.android.common.Keys;
 import com.kora.android.common.preferences.PreferenceHandler;
 import com.kora.android.common.utils.CommonUtils;
 import com.kora.android.common.utils.Web3jUtils;
@@ -111,14 +110,14 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         return Observable.just(true).map(a -> {
 
             if (!CommonUtils.isNetworkConnected(mContext))
-                throw new Exception(mContext.getString(R.string.web3j_error_message_network));
+                throw new Exception(mContext.getString(R.string.web3j_error_message_no_network));
 
             final UserEntity sender = mPreferenceHandler.remindObject(USER, UserEntity.class);
             if (sender == null)
                 throw new Exception(mContext.getString(R.string.web3j_error_message_preferences));
 
             if (sender.getIdentity() == null || sender.getIdentity().isEmpty())
-                throw new Exception(mContext.getString(R.string.web3j_error_message_identity));
+                throw new Exception(mContext.getString(R.string.web3j_error_message_no_identity));
 
             final Web3j web3j = mWeb3jConnection.getWeb3jRinkeby();
 
@@ -168,7 +167,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
             ////////////////////////////////////////////////////////////////////////////////////////
 
             if (!CommonUtils.isNetworkConnected(mContext))
-                throw new Exception(mContext.getString(R.string.web3j_error_message_network));
+                throw new Exception(mContext.getString(R.string.web3j_error_message_no_network));
 
             final EthGetTransactionCount senderEthGetTransactionCount = web3j
                     .ethGetTransactionCount(sender.getOwner(), DefaultBlockParameterName.LATEST)

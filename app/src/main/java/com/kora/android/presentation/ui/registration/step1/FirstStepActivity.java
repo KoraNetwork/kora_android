@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.kora.android.R;
-import com.kora.android.common.permission.PermissionChecker;
+import com.kora.android.common.permission.PermissionCheckerActivity;
 import com.kora.android.common.utils.ViewUtils;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.model.CountryEntity;
@@ -35,7 +35,7 @@ import static com.kora.android.data.network.Constants.API_BASE_URL;
 public class FirstStepActivity extends BaseActivity<FirstStepPresenter> implements FirstStepView {
 
     @Inject
-    PermissionChecker mPermissionChecker;
+    PermissionCheckerActivity mPermissionCheckerActivity;
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -76,7 +76,7 @@ public class FirstStepActivity extends BaseActivity<FirstStepPresenter> implemen
     }
 
     private void requestPermission() {
-        mPermissionChecker.requestPermissions(PERMISSION_REQUEST_CODE_READ_SMS, READ_SMS, RECEIVE_SMS);
+        mPermissionCheckerActivity.requestPermissions(PERMISSION_REQUEST_CODE_READ_SMS, READ_SMS, RECEIVE_SMS);
     }
 
     @OnClick(R.id.relative_layout_select_country)

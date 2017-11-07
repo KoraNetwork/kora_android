@@ -25,6 +25,31 @@ public class UserEntity implements Parcelable {
     private String mFlag;
     private String mCurrencyNameFull;
 
+    @Override
+    public String toString() {
+        return "UserEntity{" + "\n" +
+                "mId=" + mId + "\n" +
+                "mAvatar=" + mAvatar + "\n" +
+                "mPhoneNumber=" + mPhoneNumber + "\n" +
+                "mIdentity=" + mIdentity + "\n" +
+                "mCreator=" + mCreator + "\n" +
+                "mRecoveryKey=" + mRecoveryKey + "\n" +
+                "mOwner=" + mOwner + "\n" +
+                "mUserName=" + mUserName + "\n" +
+                "mLegalName=" + mLegalName + "\n" +
+                "mEmail=" + mEmail + "\n" +
+                "mDateOfBirth=" + mDateOfBirth + "\n" +
+                "mCurrency=" + mCurrency + "\n" +
+                "mPostalCode=" + mPostalCode + "\n" +
+                "mAddress=" + mAddress + "\n" +
+                "mPassword=" + mPassword + "\n" +
+                "mCountryCode=" + mCountryCode + "\n" +
+                "mERC20Token=" + mERC20Token + "\n" +
+                "mFlag=" + mFlag + "\n" +
+                "mCurrencyNameFull=" + mCurrencyNameFull + "\n" +
+                "}";
+    }
+
     public UserEntity addId(final String id) {
         mId = id;
         return this;

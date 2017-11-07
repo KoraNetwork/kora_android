@@ -12,12 +12,12 @@ import com.kora.android.presentation.ui.base.view.BaseActivity;
 import javax.inject.Inject;
 
 @PerActivity
-public class PermissionChecker {
+public class PermissionCheckerActivity {
 
     private BaseActivity mBaseActivity;
 
     @Inject
-    public PermissionChecker(final BaseActivity activity) {
+    public PermissionCheckerActivity(final BaseActivity activity) {
         mBaseActivity = activity;
     }
 

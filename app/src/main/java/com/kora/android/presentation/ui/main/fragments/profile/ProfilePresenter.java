@@ -1,19 +1,28 @@
 package com.kora.android.presentation.ui.main.fragments.profile;
 
+import android.net.Uri;
+import android.util.Log;
+
 import com.kora.android.common.utils.DateUtils;
 import com.kora.android.common.utils.StringUtils;
 import com.kora.android.data.network.config.ErrorModel;
 import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
+import com.kora.android.domain.base.DefaultWeb3jSubscriber;
 import com.kora.android.domain.usecase.user.GetUserDataUseCase;
 import com.kora.android.domain.usecase.user.UpdateAvatarUseCase;
 import com.kora.android.domain.usecase.user.UpdateUserUseCase;
+import com.kora.android.domain.usecase.web3j.ExportWalletFileUseCase;
+import com.kora.android.domain.usecase.web3j.GetWalletFileUseCase;
+import com.kora.android.domain.usecase.web3j.ImportWalletUseCase;
 import com.kora.android.presentation.enums.ViewMode;
 import com.kora.android.presentation.model.CountryEntity;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
+
+import java.io.File;
 
 import javax.inject.Inject;
 
@@ -26,6 +35,9 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
     private final GetUserDataUseCase mGetUserDataUseCase;
     private final UpdateUserUseCase mUpdateUserUseCase;
     private final UpdateAvatarUseCase mUpdateAvatarUseCase;
+    private final GetWalletFileUseCase mGetWalletFileUseCase;
+    private final ExportWalletFileUseCase mExportWalletFileUseCase;
+    private final ImportWalletUseCase mImportWalletUseCase;
 
     private UserEntity mUpdatedUserEntity = new UserEntity();
     private UserEntity mUserEntity = new UserEntity();
@@ -33,10 +45,16 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
     @Inject
     public ProfilePresenter(final GetUserDataUseCase getUserDataUseCase,
                             final UpdateUserUseCase updateUserUseCase,
-                            final UpdateAvatarUseCase updateAvatarUseCase) {
+                            final UpdateAvatarUseCase updateAvatarUseCase,
+                            final GetWalletFileUseCase getWalletFileUseCase,
+                            final ExportWalletFileUseCase exportWalletFileUseCase,
+                            final ImportWalletUseCase importWalletUseCase) {
         mGetUserDataUseCase = getUserDataUseCase;
         mUpdateUserUseCase = updateUserUseCase;
         mUpdateAvatarUseCase = updateAvatarUseCase;
+        mGetWalletFileUseCase = getWalletFileUseCase;
+        mExportWalletFileUseCase = exportWalletFileUseCase;
+        mImportWalletUseCase = importWalletUseCase;
     }
 
     public void loadUserData() {
@@ -60,7 +78,7 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        mUpdatedUserEntity.setPhoneNumber(phoneNumber);
+        mUpdatedUserEntity.setPhoneNumber(StringUtils.getSimplePhoneNumber(phoneNumber));
     }
 
     public void setPostalCode(String postalCode) {
@@ -278,10 +296,143 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
         }
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private File mWalletFile;
+
+    public File getWalletFile() {
+        return mWalletFile;
+    }
+
+    public void getWalletFileFromInternalStorage() {
+        mGetWalletFileUseCase.setData(mUserEntity.getOwner());
+        mGetWalletFileUseCase.execute(new GetWalletFileSubscriber());
+    }
+
+    private class GetWalletFileSubscriber extends DefaultWeb3jSubscriber<File> {
+
+        @Override
+        protected void onStart() {
+            if (!isViewAttached()) return;
+            getView().showProgress(true);
+        }
+
+        @Override
+        public void onNext(final File walletFile) {
+            if (!isViewAttached()) return;
+            mWalletFile = walletFile;
+            getView().showExportWalletDialog();
+        }
+
+        @Override
+        public void onComplete() {
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+        }
+
+        @Override
+        public void onError(final Throwable throwable) {
+            super.onError(throwable);
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+
+            Log.e("_____", throwable.toString());
+            throwable.printStackTrace();
+        }
+
+        @Override
+        public void handleWeb3jError(final String message) {
+            getView().showError(message);
+        }
+    }
+
+    public void exportWalletFileOnExternalStorage() {
+        mExportWalletFileUseCase.setData(mWalletFile);
+        mExportWalletFileUseCase.execute(new ExportWalletFileSubscriber());
+    }
+
+    private class ExportWalletFileSubscriber extends DefaultWeb3jSubscriber<Object> {
+
+        protected void onStart() {
+            if (!isViewAttached()) return;
+            getView().showProgress(true);
+        }
+
+        @Override
+        public void onNext(final Object object) {
+            if (!isViewAttached()) return;
+            getView().showExportedWalletMessage();
+        }
+
+        @Override
+        public void onComplete() {
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+        }
+
+        @Override
+        public void onError(final Throwable throwable) {
+            super.onError(throwable);
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+
+            Log.e("_____", throwable.toString());
+            throwable.printStackTrace();
+        }
+
+        @Override
+        public void handleWeb3jError(final String message) {
+            getView().showError(message);
+        }
+    }
+
+    public void importWalletFileOnInternalStorage(final Uri walletFileUri) {
+        mImportWalletUseCase.setData(walletFileUri);
+        mImportWalletUseCase.execute(new ImportWalletSubscriber());
+    }
+
+    private class ImportWalletSubscriber extends DefaultWeb3jSubscriber<Object> {
+
+        protected void onStart() {
+            if (!isViewAttached()) return;
+            getView().showProgress(true);
+        }
+
+        @Override
+        public void onNext(final Object object) {
+            if (!isViewAttached()) return;
+            getView().showImportedWalletMessage();
+        }
+
+        @Override
+        public void onComplete() {
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+        }
+
+        @Override
+        public void onError(final Throwable throwable) {
+            super.onError(throwable);
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+
+            Log.e("_____", throwable.toString());
+            throwable.printStackTrace();
+        }
+
+        @Override
+        public void handleWeb3jError(final String message) {
+            getView().showError(message);
+        }
+    }
+
     @Override
     public void onDetachView() {
         mGetUserDataUseCase.dispose();
         mUpdateUserUseCase.dispose();
         mUpdateAvatarUseCase.dispose();
+        mGetWalletFileUseCase.dispose();
+        mExportWalletFileUseCase.dispose();
+        mImportWalletUseCase.dispose();
     }
 }

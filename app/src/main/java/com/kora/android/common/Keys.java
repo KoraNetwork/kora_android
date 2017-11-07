@@ -9,6 +9,11 @@ public interface Keys {
     String CURRENCY_USD = "USD";
     double DEFAULT_USD_BALANCE = 25.00;
 
+    String ADDRESS_PREFIX = "0x";
+    String JSON_FILE_EXTENSION = ".json";
+    String EXPORT_FOLDER_NAME = "Kora";
+    String FILE_PROVIDER = ".file_provider";
+
     interface ProxyHelperKeys {
         String PROXY_HELPER_FILE_NAME = "com_kora_android_proxy_helper_file_name";
         String PROXY_HELPER_PASSWORD = "com_kora_android_proxy_helper_password";
@@ -66,8 +71,8 @@ public interface Keys {
         String SELECT_CURRENCY_EXTRA = "SELECT_CURRENCY_EXTRA";
     }
 
-    interface SelectDate {
-        int SELECT_DATE_DIALOG_ID = 111;
+    interface SelectWalletFile {
+        int SELECT_WALLET_FILE_REQUEST_CODE = 333;
     }
 
     interface Shared {

@@ -64,6 +64,7 @@ public class StringUtils {
     }
 
     public static String deletePlusIfNeeded(final String phoneNumber) {
+        if (phoneNumber == null) return "";
         if (phoneNumber.startsWith("+"))
             return phoneNumber.substring(1);
         else
@@ -87,5 +88,9 @@ public class StringUtils {
         } else {
            return PhoneNumberUtils.formatNumber(addPlusIfNeeded(phone)); //Deprecated method
         }
+    }
+
+    public static String getSimplePhoneNumber(final String phoneNumber) {
+        return phoneNumber.replaceAll("[^0-9]","");
     }
 }
