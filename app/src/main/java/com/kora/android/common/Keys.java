@@ -89,6 +89,10 @@ public interface Keys {
         String TITLE = "com.kora.android.extra_title";
         String EXCLUDED_USER_IDS = "com.kora.android.extra_excluded_user_ids";
         String EXTRA_BORROW = "com.kora.android.extra_borrow";
+
+        String SENDER_ENTITY_EXTRA = "com.kora.android.extra_sender_entity";
+        String RECEIVER_ENTITY_EXTRA = "com.kora.android.extra_receiver_entity";
+        String BORROW_REQUEST_EXTRA = "com.kora.android.extra_borrow_request";
     }
 
     interface Args {

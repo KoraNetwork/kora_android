@@ -1,5 +1,7 @@
 package com.kora.android.presentation.ui.borrow;
 
+import android.support.annotation.NonNull;
+
 import com.kora.android.common.utils.DateUtils;
 import com.kora.android.common.utils.Validator;
 import com.kora.android.data.network.config.ErrorModel;
@@ -18,7 +20,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Action;
 
 @ConfigPersistent
@@ -28,8 +29,9 @@ public class BorrowMoneyPresenter extends BasePresenter<BorrowMoneyView> {
     private final GetUserDataUseCase mGetUserDataUseCase;
     private final AddBorrowRequestUseCase mAddBorrowRequestUseCase;
 
-    private UserEntity mLender;
     private UserEntity mSender;
+    private UserEntity mReceiver;
+
     private BorrowEntity mBorrowRequest;
 
     @Inject
@@ -41,87 +43,111 @@ public class BorrowMoneyPresenter extends BasePresenter<BorrowMoneyView> {
         mAddBorrowRequestUseCase = addBorrowRequestUseCase;
     }
 
-    public UserEntity getLender() {
-        return mLender;
+    public void setSender(UserEntity user) {
+        mSender = user;
     }
 
-    public void getCurrentUser() {
+    public UserEntity getSender() {
+        return mSender;
+    }
+
+    public void setBorrow(BorrowEntity borrow) {
+        mBorrowRequest = borrow;
+    }
+
+    public BorrowEntity getBorrow() {
+        return mBorrowRequest;
+    }
+
+    public void setReceiver(UserEntity user) {
+        mReceiver = user;
+    }
+
+    public UserEntity getReceiver() {
+        return mReceiver;
+    }
+
+    public void loadCurrentUser() {
         mGetUserDataUseCase.setData(false);
         mGetUserDataUseCase.execute(new GetUserSubscriber());
     }
 
-    public void setLender(UserEntity userEntity) {
-        this.mLender = userEntity;
-    }
 
-    public void convertIfNeed(double amount) {
-        if (mLender == null || mSender == null) return;
-
-        if (mLender.getCurrency().equals(mSender.getCurrency())) {
+    public void convertIfNeed(Double val) {
+        if (mReceiver == null || mSender == null) return;
+        if (mReceiver.getCurrency().equals(mSender.getCurrency())) {
             if (getView() == null) return;
-            getView().showConvertedCurrency(amount, mSender.getCurrency());
+            getView().showConvertedCurrency(val);
             return;
         }
-        mConvertAmountUseCase.setData(amount, mSender.getCurrency(), mLender.getCurrency());
+        mConvertAmountUseCase.setData(val, mSender.getCurrency(), mReceiver.getCurrency());
         mConvertAmountUseCase.execute(new ConvertSubscriber());
     }
 
-    public void onBorrowClicked(List<UserEntity> guaranters,
-                                double amount, double convertedAmount,
-                                String rate,
-                                String startDate, String maturityDate,
-                                String note) {
 
+    public void onCreateBorrowRequestClicked(List<UserEntity> guaranters,
+                                             double amount, double convertedAmount,
+                                             String rate,
+                                             String startDate, String maturityDate,
+                                             String note) {
+        boolean isValid = validateForm(guaranters, amount, convertedAmount, rate, startDate, maturityDate);
+        if (isValid) {
+            mAddBorrowRequestUseCase.setData(mReceiver, guaranters, amount, convertedAmount, Integer.valueOf(rate), startDate, maturityDate, note);
+            mAddBorrowRequestUseCase.execute(new AddBorrowRequestSubscriber());
+        }
+
+    }
+
+    private boolean validateForm(List<UserEntity> guaranters, double amount, double convertedAmount,
+                                 String rate, String startDate, String maturityDate) {
         if (guaranters == null || guaranters.size() == 0) {
-            if (!isViewAttached()) return;
+            if (!isViewAttached()) return false;
             getView().showNoGuarantersError();
-            return;
+            return false;
         }
         if (!Validator.isValidPrice(amount)) {
-            if (!isViewAttached()) return;
+            if (!isViewAttached()) return false;
             getView().showInvalidAmountError();
-            return;
+            return false;
         }
 
         if (!Validator.isValidPrice(convertedAmount)) {
-            if (!isViewAttached()) return;
+            if (!isViewAttached()) return false;
             getView().showInvalidConvertedAmountError();
-            return;
+            return false;
         }
 
         if (Validator.isEmpty(rate)) {
-            if (!isViewAttached()) return;
+            if (!isViewAttached()) return false;
             getView().showEmptyRateError();
-            return;
+            return false;
         }
 
         if (Validator.isEmpty(startDate)) {
-            if (!isViewAttached()) return;
+            if (!isViewAttached()) return false;
             getView().showEmptyStartDateError();
-            return;
+            return false;
         }
 
         if (!Validator.isFutureDate(startDate, DateUtils.PRETTY_DATE_PATTERN)) {
-            if (!isViewAttached()) return;
+            if (!isViewAttached()) return false;
             getView().showPastStartDateError();
-            return;
+            return false;
         }
 
         if (Validator.isEmpty(maturityDate)) {
-            if (!isViewAttached()) return;
+            if (!isViewAttached()) return false;
             getView().showEmptyMaturityDateError();
-            return;
+            return false;
         }
 
         if (!Validator.isBefore(startDate, maturityDate, DateUtils.PRETTY_DATE_PATTERN)) {
-            if (!isViewAttached()) return;
+            if (!isViewAttached()) return false;
             getView().showPastMaturityDateError();
-            return;
+            return false;
         }
 
-        mAddBorrowRequestUseCase.setData(mLender, guaranters, amount, convertedAmount, Integer.valueOf(rate), startDate, maturityDate, note);
-        mAddBorrowRequestUseCase.execute(new AddBorrowRequestSubscriber());
-
+        return true;
     }
 
     private Action mGetCurrentUserAction = new Action() {
@@ -130,22 +156,6 @@ public class BorrowMoneyPresenter extends BasePresenter<BorrowMoneyView> {
             mGetUserDataUseCase.execute(new GetUserSubscriber());
         }
     };
-
-    public void setBorrow(BorrowEntity borrow) {
-        mBorrowRequest = borrow;
-    }
-
-    public void loadBorrowData() {
-        if (mBorrowRequest == null) return;
-        if (!isViewAttached()) return;
-        getView().showBorrowRequest(mBorrowRequest);
-    }
-
-    public void loadLenderData() {
-        if (mLender == null) return;
-        if (!isViewAttached()) return;
-        getView().showUser(mLender);
-    }
 
     private class GetUserSubscriber extends DefaultInternetSubscriber<UserEntity> {
 
@@ -159,7 +169,7 @@ public class BorrowMoneyPresenter extends BasePresenter<BorrowMoneyView> {
         public void onNext(UserEntity userEntity) {
             mSender = userEntity;
             if (!isViewAttached()) return;
-            getView().retrieveSenderCurrency(userEntity);
+            getView().showCurrentUser(userEntity);
         }
 
         @Override
@@ -195,12 +205,13 @@ public class BorrowMoneyPresenter extends BasePresenter<BorrowMoneyView> {
         }
     };
 
+
     private class ConvertSubscriber extends DefaultInternetSubscriber<Double> {
 
         @Override
         public void onNext(Double amount) {
             if (!isViewAttached()) return;
-            getView().showConvertedCurrency(amount, mSender.getCurrency());
+            getView().showConvertedCurrency(amount);
 
         }
 

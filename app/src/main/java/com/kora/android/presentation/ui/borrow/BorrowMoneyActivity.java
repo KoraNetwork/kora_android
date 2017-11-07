@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,9 +58,13 @@ import butterknife.OnTextChanged;
 
 import static com.kora.android.common.Keys.Args.BORROW_ENTITY;
 import static com.kora.android.common.Keys.Args.GUARANTERS_LIST;
-import static com.kora.android.common.Keys.Args.USER_ENTITY;
+import static com.kora.android.common.Keys.Args.USER_RECEIVER;
+import static com.kora.android.common.Keys.Args.USER_SENDER;
 import static com.kora.android.common.Keys.Args.VIEW_MODE;
+import static com.kora.android.common.Keys.Extras.BORROW_REQUEST_EXTRA;
 import static com.kora.android.common.Keys.Extras.EXTRA_USER;
+import static com.kora.android.common.Keys.Extras.RECEIVER_ENTITY_EXTRA;
+import static com.kora.android.common.Keys.Extras.SENDER_ENTITY_EXTRA;
 import static com.kora.android.data.network.Constants.API_BASE_URL;
 import static com.kora.android.presentation.ui.borrow.adapter.GuarantorsAdapter.MAX_SIZE;
 
@@ -72,20 +77,31 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
     private static final String MATURITI_DATE_PICKER = "maturity_date_picker";
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
+
     @BindView(R.id.scroll_view) ScrollView mScrollView;
     @BindView(R.id.main_container) LinearLayout mMainContainer;
 
-    @BindView(R.id.user_image) ImageView mLenderAvatar;
+    @BindView(R.id.lender_container) LinearLayout mLenderContainer;
+    @BindView(R.id.lender_avatar) ImageView mLenderAvatar;
     @BindView(R.id.lender_name) TextView mLenderName;
     @BindView(R.id.lender_phone) TextView mLenderPhone;
+
+    @BindView(R.id.borrower_container) LinearLayout mBorrowerContainer;
+    @BindView(R.id.borower_avatar) ImageView mBorrowerAvatar;
+    @BindView(R.id.borower_name) TextView mBorrowerName;
+    @BindView(R.id.borower_phone) TextView mBorrowerPhone;
+
+    @BindView(R.id.borrow_status) TextView mBorrowRequestStatusLender;
+    @BindView(R.id.borrow_status2) TextView mBorrowRequestStatusBorower;
+
     @BindView(R.id.guarantors_list) RecyclerView mGuarantorList;
     @BindView(R.id.add_guarantor_button) ImageButton mAddGuarantorBtn;
+
     @BindView(R.id.amount_container) LinearLayout mAmountContainer;
+    @BindView(R.id.total_amount_container) RelativeLayout mTotalAmountContainer;
     @BindView(R.id.text_total_interest) TextView mTotalInterest;
     @BindView(R.id.text_total_amount) TextView mTotalAmount;
     @BindView(R.id.guarantors_title) TextView mGuarantorsTitle;
-    @BindView(R.id.borrow_type_header) TextView mBorrowTypeHeader;
-    @BindView(R.id.borrow_status) TextView mBorrowStatus;
 
     @BindView(R.id.no_guaranter_error) TextView mNoGuaranterError;
     @BindView(R.id.edit_text_sender_amount) CurrencyEditText mSenderAmount;
@@ -99,6 +115,7 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
     @BindView(R.id.edit_layout_maturity_date) TextInputLayout mElMaturityDate;
     @BindView(R.id.edit_text_maturity_date) EditText mEtMaturityDate;
     @BindView(R.id.edit_text_additional_note) EditText mEtAdditionalNote;
+
     @BindView(R.id.action_button) Button mActionButton;
 
     private GuarantorsAdapter mUserAdapter;
@@ -106,17 +123,16 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
 
     private ViewMode mViewMode;
 
-    public static Intent getLaunchIntent(final BaseActivity baseActivity,
-                                         final UserEntity userEntity) {
+    public static Intent getLaunchIntent(final BaseActivity baseActivity, final UserEntity receiver) {
         final Intent intent = new Intent(baseActivity, BorrowMoneyActivity.class);
-        intent.putExtra(USER_ENTITY, userEntity);
+        intent.putExtra(RECEIVER_ENTITY_EXTRA, receiver);
         intent.putExtra(VIEW_MODE, ViewMode.EDIT_MODE);
         return intent;
     }
 
     public static Intent getLaunchIntent(final BaseActivity baseActivity, final BorrowEntity borrowEntity) {
         final Intent intent = new Intent(baseActivity, BorrowMoneyActivity.class);
-        intent.putExtra(BORROW_ENTITY, borrowEntity);
+        intent.putExtra(BORROW_REQUEST_EXTRA, borrowEntity);
         intent.putExtra(VIEW_MODE, ViewMode.VIEW_MODE);
         return intent;
     }
@@ -128,7 +144,7 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
 
     @Override
     public int getLayoutResource() {
-        return R.layout.activity_borrow_money;
+        return R.layout.activity_borrow_details;
     }
 
     @Override
@@ -147,35 +163,45 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
 
         initUI();
 
+        initArguments(savedInstanceState);
+        setupMode();
+    }
+
+
+    // ================= BASIC
+
+    private void initUI() {
         mEtStartDate.setKeyListener(null);
         mEtMaturityDate.setKeyListener(null);
 
-        initArguments(savedInstanceState);
-        setupMode();
+        mUserAdapter = new GuarantorsAdapter();
+        mUserAdapter.setOnClickListener(this);
 
-        if (savedInstanceState == null) {
-            getPresenter().getCurrentUser();
-        }
+        mGuarantorList.setLayoutManager(new LinearLayoutManager(this));
+        mGuarantorList.setAdapter(mUserAdapter);
+        mGuarantorList.setItemAnimator(new DefaultItemAnimator());
+        mGuarantorList.setNestedScrollingEnabled(false);
     }
 
     private void initArguments(final Bundle bundle) {
         if (bundle != null) {
-            if (bundle.containsKey(USER_ENTITY))
-                getPresenter().setLender(bundle.getParcelable(USER_ENTITY));
+            if (bundle.containsKey(VIEW_MODE))
+                mViewMode = (ViewMode) bundle.getSerializable(VIEW_MODE);
+            if (bundle.containsKey(USER_SENDER))
+                getPresenter().setSender(bundle.getParcelable(USER_SENDER));
+            if (bundle.containsKey(USER_RECEIVER))
+                getPresenter().setReceiver(bundle.getParcelable(USER_RECEIVER));
+            if (bundle.containsKey(BORROW_ENTITY))
+                getPresenter().setBorrow(bundle.getParcelable(BORROW_ENTITY));
             if (bundle.containsKey(GUARANTERS_LIST)) {
                 mUserAdapter.addItems(bundle.getParcelableArrayList(GUARANTERS_LIST));
                 changeAddGuarantorButtonState();
             }
-            if (bundle.containsKey(VIEW_MODE)) {
-                mViewMode = (ViewMode) bundle.getSerializable(VIEW_MODE);
-            }
-            if (bundle.containsKey(BORROW_ENTITY)) {
-                getPresenter().setBorrow(bundle.getParcelable(BORROW_ENTITY));
-            }
         }
         if (getIntent() != null) {
-            getPresenter().setLender(getIntent().getParcelableExtra(USER_ENTITY));
-            getPresenter().setBorrow(getIntent().getParcelableExtra(BORROW_ENTITY));
+            getPresenter().setSender(getIntent().getParcelableExtra(SENDER_ENTITY_EXTRA));
+            getPresenter().setReceiver(getIntent().getParcelableExtra(RECEIVER_ENTITY_EXTRA));
+            getPresenter().setBorrow(getIntent().getParcelableExtra(BORROW_REQUEST_EXTRA));
             mViewMode = (ViewMode) getIntent().getSerializableExtra(VIEW_MODE);
         }
     }
@@ -191,21 +217,99 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
         }
     }
 
-    private void setupViewMode() {
-        mUserAdapter.setViewMode(ViewMode.VIEW_MODE);
+    private void setupEditMode() {
+        setTitle(getString(R.string.borrow_borrow_from, getPresenter().getReceiver().getFullName()));
+        mUserAdapter.setViewMode(ViewMode.EDIT_MODE);
+        setEditableViews(true);
+        mLenderContainer.setVisibility(View.VISIBLE);
+        mBorrowerContainer.setVisibility(View.GONE);
+        getPresenter().loadCurrentUser();
+        UserEntity receiver = getPresenter().getReceiver();
+        setupReceiver(receiver, true);
+        mActionButton.setOnClickListener(v -> {
+            mSenderAmountContainer.setError(null);
+            mReceiverAmountContainer.setError(null);
+            mElRate.setError(null);
 
-        setEditableViews(false);
-        getPresenter().loadBorrowData();
-        mActionButton.setVisibility(View.GONE);
+            getPresenter().onCreateBorrowRequestClicked(mUserAdapter.getItems(),
+                    mSenderAmount.getAmount(),
+                    mReceiverAmount.getAmount(),
+                    mRateEditText.getText().toString().trim(),
+                    mEtStartDate.getText().toString().trim(),
+                    mEtMaturityDate.getText().toString().trim(),
+                    mEtAdditionalNote.getText().toString().trim());
+        });
     }
 
-    private void setupEditMode() {
-        mUserAdapter.setViewMode(ViewMode.EDIT_MODE);
+    private void setupViewMode() {
+        mUserAdapter.setViewMode(ViewMode.VIEW_MODE);
+        setEditableViews(false);
 
-        setEditableViews(true);
         mEtStartDate.setText(DateUtils.getFormattedDate(DateUtils.PRETTY_DATE_PATTERN, new Date()));
-        getPresenter().loadLenderData();
 
+        BorrowEntity borrow = getPresenter().getBorrow();
+        if (borrow != null) {
+            switch (borrow.getDirection()) {
+                case GUARANTOR:
+                    setupGuarantorDirection(borrow);
+                    break;
+
+                case FROM:
+                    setupFromDirection(borrow);
+                    break;
+
+                case TO:
+                    setupToDirection(borrow);
+                    break;
+            }
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(VIEW_MODE, mViewMode);
+        outState.putParcelable(Keys.Args.USER_SENDER, getPresenter().getSender());
+        outState.putParcelable(Keys.Args.USER_RECEIVER, getPresenter().getReceiver());
+        outState.putParcelable(Keys.Args.BORROW_ENTITY, getPresenter().getBorrow());
+        outState.putParcelableArrayList(GUARANTERS_LIST, (ArrayList<UserEntity>) mUserAdapter.getItems());
+    }
+
+    // ================= COLLBACKS
+
+    @Override
+    public void showCurrentUser(UserEntity user) {
+        switch (mViewMode) {
+            case EDIT_MODE:
+                setupSender(user, false);
+                break;
+            case VIEW_MODE:
+                setupViewMode();
+                break;
+        }
+    }
+
+    @Override
+    public void showConvertedCurrency(Double amount) {
+        mReceiverAmount.setValue(String.format(Locale.ENGLISH, "%1$.2f", amount));
+        changeAmountContainerOrientation();
+        calculateTotals();
+    }
+
+    Runnable converter = new Runnable() {
+        @Override
+        public void run() {
+            double val = mSenderAmount.getAmount();
+            getPresenter().convertIfNeed(val);
+        }
+    };
+
+
+    // ================= HELPERS
+
+    private void changeAddGuarantorButtonState() {
+        boolean visible = mUserAdapter.getItemCount() < MAX_SIZE;
+        mAddGuarantorBtn.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
     private void setEditableViews(boolean editable) {
@@ -217,36 +321,39 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
         mAddGuarantorBtn.setVisibility(editable ? View.VISIBLE : View.GONE);
     }
 
-    private void initUI() {
-        mUserAdapter = new GuarantorsAdapter();
-        mUserAdapter.setOnClickListener(this);
-
-        mGuarantorList.setLayoutManager(new LinearLayoutManager(this));
-        mGuarantorList.setAdapter(mUserAdapter);
-        mGuarantorList.setItemAnimator(new DefaultItemAnimator());
-        mGuarantorList.setNestedScrollingEnabled(false);
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable(USER_ENTITY, getPresenter().getLender());
-        outState.putSerializable(VIEW_MODE, mViewMode);
-        outState.putParcelableArrayList(GUARANTERS_LIST, (ArrayList<UserEntity>) mUserAdapter.getItems());
-    }
-
-    @Override
-    public void showUser(UserEntity lender) {
-        setTitle(getString(R.string.borrow_borrow_from, lender.getFullName()));
-        Glide.with(this)
-                .load(API_BASE_URL + lender.getAvatar())
-                .apply(RequestOptions.circleCropTransform())
-                .thumbnail(Glide.with(this).load(R.drawable.ic_user_default))
-                .into(mLenderAvatar);
-
+    private void setupSender(UserEntity user, boolean showAsMain) {
+        mSenderAmount.setCurrency(user.getCurrency());
         Glide.with(this)
                 .asBitmap()
-                .load(API_BASE_URL + lender.getFlag())
+                .load(API_BASE_URL + user.getFlag())
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                        mSenderAmount.setCompoundDrawablesRelativeWithIntrinsicBounds(new BitmapDrawable(getResources(), resource), null, null, null);
+                        mSenderAmount.setCompoundDrawablePadding(ViewUtils.convertDpToPixel(12));
+                    }
+                });
+
+        if (showAsMain) {
+            Glide.with(this)
+                    .load(API_BASE_URL + user.getAvatar())
+                    .apply(RequestOptions.circleCropTransform())
+                    .thumbnail(Glide.with(this).load(R.drawable.ic_user_default))
+                    .into(mBorrowerAvatar);
+
+            mBorrowerName.setText(user.getFullName());
+            mBorrowerPhone.setText(StringUtils.getFormattedPhoneNumber(user.getPhoneNumber(), user.getCountryCode()));
+            mBorrowerContainer.setVisibility(View.VISIBLE);
+        } else {
+            mBorrowerContainer.setVisibility(View.GONE);
+        }
+    }
+
+    private void setupReceiver(UserEntity user, boolean showAsMain) {
+        mReceiverAmount.setCurrency(user.getCurrency());
+        Glide.with(this)
+                .asBitmap()
+                .load(API_BASE_URL + user.getFlag())
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
@@ -255,47 +362,36 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
                     }
                 });
 
-//        mHisSuffixText.setText(lender.getCurrency());
-        mReceiverAmount.setCurrency(lender.getCurrency());
-        mLenderName.setText(lender.getFullName());
-        mLenderPhone.setText(StringUtils.getFormattedPhoneNumber(lender.getPhoneNumber(), lender.getCountryCode()));
+        if (showAsMain) {
+            Glide.with(this)
+                    .load(API_BASE_URL + user.getAvatar())
+                    .apply(RequestOptions.circleCropTransform())
+                    .thumbnail(Glide.with(this).load(R.drawable.ic_user_default))
+                    .into(mLenderAvatar);
+
+            mLenderName.setText(user.getFullName());
+            mLenderPhone.setText(StringUtils.getFormattedPhoneNumber(user.getPhoneNumber(), user.getCountryCode()));
+            mLenderContainer.setVisibility(View.VISIBLE);
+        } else {
+            mLenderContainer.setVisibility(View.GONE);
+        }
     }
 
-    @Override
-    public void showBorrowRequest(BorrowEntity borrowEntity) {
-        switch (borrowEntity.getDirection()) {
-            case FROM:
-                mBorrowTypeHeader.setText(R.string.borrow_borrower_label);
-                showUser(borrowEntity.getReceiver());
-                break;
-            case TO:
-                mBorrowTypeHeader.setText(R.string.borrow_lender_label);
-                showUser(borrowEntity.getSender());
-                break;
-            case GUARANTOR:
-                mBorrowTypeHeader.setText(R.string.borrow_lender_label);
-                showUser(borrowEntity.getSender());
-                break;
+    private List<String> getExistedIds() {
+        List<String> userIds = new ArrayList<>();
+        userIds.add(getPresenter().getSender().getId());
+        List<UserEntity> items = mUserAdapter.getItems();
+        for (UserEntity entity : items) {
+            userIds.add(entity.getId());
         }
 
-        mBorrowStatus.setText(borrowEntity.getState().text());
-        mUserAdapter.addItems(borrowEntity.getGuarantors());
-        mSenderAmount.setValue(String.format(Locale.ENGLISH, "%1$.2f", borrowEntity.getFromAmount()));
-        mSenderAmount.setCurrency(borrowEntity.getSender().getCurrency());
-        showConvertedCurrency(borrowEntity.getToAmount(), borrowEntity.getReceiver().getCurrency());
-        mEtStartDate.setText(DateUtils.getFormattedDate(DateUtils.PRETTY_DATE_PATTERN, borrowEntity.getStartDate()));
-        mEtMaturityDate.setText(DateUtils.getFormattedDate(DateUtils.PRETTY_DATE_PATTERN, borrowEntity.getMaturityDate()));
-        mRateEditText.setText(String.valueOf(borrowEntity.getRate()));
-        mEtAdditionalNote.setText(borrowEntity.getAdditionalNote());
-        changeAmountContainerOrientation();
-    }
+        UserEntity receiver = getPresenter().getReceiver();
+        if (receiver != null) userIds.add(receiver.getId());
 
-    @Override
-    public void showConvertedCurrency(double amount, String currency) {
-        mReceiverAmount.setCurrency(currency);
-        mReceiverAmount.setValue(String.format(Locale.ENGLISH, "%1$.2f", amount));
-        changeAmountContainerOrientation();
-        calculateTotals();
+        UserEntity sender = getPresenter().getSender();
+        if (sender != null) userIds.add(sender.getId());
+
+        return userIds;
     }
 
     private void changeAmountContainerOrientation() {
@@ -308,19 +404,58 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
         }
     }
 
+    private boolean isTextLonger(TextInputEditText editText) {
+        Editable text = editText.getText();
+        TextPaint paint = editText.getPaint();
+        float textSize = paint.measureText(text.toString());
+        int width = editText.getMeasuredWidth();
+        width -= editText.getPaddingRight();
+        width -= editText.getPaddingLeft();
+//        width -= editText.getCompoundDrawables().length > 0 ? editText.getCompoundDrawables()[0].getMinimumWidth() : 0;
+        width -= editText.getCompoundDrawablePadding();
+        if (mAmountEditTextWidth > 0 && textSize >= mAmountEditTextWidth)
+            return true;
+        if (textSize >= width && width > 0) {
+            mAmountEditTextWidth = width;
+            return true;
+        }
+        return false;
+    }
+
+    private void calculateTotals() {
+        double amount = mReceiverAmount.getAmount();
+        String rateString = mRateEditText.getText().toString();
+
+        if (amount == 0 || rateString.isEmpty()) {
+            mTotalInterest.setText("");
+            mTotalAmount.setText("");
+            return;
+        }
+        try {
+            double rate = Double.valueOf(rateString);
+
+            double totalInterest = amount * rate / 100;
+            double totalAmount = amount + totalInterest;
+
+            mTotalInterest.setText(getString(R.string.borrow_amount, totalInterest, mReceiverAmount.getCurrency()));
+            mTotalAmount.setText(getString(R.string.borrow_amount, totalAmount, mReceiverAmount.getCurrency()));
+
+        } catch (Exception e) {
+        }
+
+    }
+
     @Override
-    public void retrieveSenderCurrency(UserEntity userEntity) {
-        mSenderAmount.setCurrency(userEntity.getCurrency());
-        Glide.with(this)
-                .asBitmap()
-                .load(API_BASE_URL + userEntity.getFlag())
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                        mSenderAmount.setCompoundDrawablesRelativeWithIntrinsicBounds(new BitmapDrawable(getResources(), resource), null, null, null);
-                        mSenderAmount.setCompoundDrawablePadding(ViewUtils.convertDpToPixel(12));
-                    }
-                });
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        final String prettyDate = DateUtils.getPrettyDate(year, monthOfYear, dayOfMonth);
+        switch (view.getTag()) {
+            case START_DATE_PICKER:
+                mEtStartDate.setText(prettyDate);
+                break;
+            case MATURITI_DATE_PICKER:
+                mEtMaturityDate.setText(prettyDate);
+                break;
+        }
     }
 
     @Override
@@ -380,23 +515,63 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
         finishActivity();
     }
 
-    @OnClick(R.id.add_guarantor_button)
-    public void onAddGuarantorClicked() {
-        startActivityForResult(GetContactActivity.getLaunchIntent(this,
-                getString(R.string.borrow_add_guarantor_title),
-                getExistedIds()), REQUEST_ADD_GUARANTOR);
+    private void setupFromDirection(BorrowEntity borrow) {
+        setTitle(getString(R.string.borrow_borrow_from, borrow.getReceiver().getFullName()));
+        setupSender(borrow.getSender(), false);
+        setupReceiver(borrow.getReceiver(), true);
+
+        mActionButton.setVisibility(View.GONE); //TODO: check status
+
+        setupBasicFields(borrow);
+
     }
 
-    private List<String> getExistedIds() {
-        List<String> userIds = new ArrayList<>();
-        userIds.add(getPresenter().getLender().getId());
-        List<UserEntity> items = mUserAdapter.getItems();
-        for (UserEntity entity : items) {
-            userIds.add(entity.getId());
-        }
+    private void setupToDirection(BorrowEntity borrow) {
+        setTitle(getString(R.string.borrow_lend_to, borrow.getSender().getFullName()));
+        setupSender(borrow.getSender(), true);
+        setupReceiver(borrow.getReceiver(), false);
 
-        return userIds;
+        mActionButton.setEnabled(false); //TODO: check status
+        mActionButton.setText(R.string.borrow_guarantor_borrow_now_label);
+        mGuarantorsTitle.setText(getString(R.string.borrow_which_guarantors_label, borrow.getSender().getFullName()));
+
+        setupBasicFields(borrow);
+
     }
+
+    private void setupGuarantorDirection(BorrowEntity borrow) {
+        setTitle(getString(R.string.borrow_guarantor_from, borrow.getSender().getFullName()));
+        setupSender(borrow.getSender(), true);
+        setupReceiver(borrow.getReceiver(), true);
+
+        mElRate.setVisibility(View.GONE);
+        mTotalAmountContainer.setVisibility(View.GONE);
+        mGuarantorsTitle.setText(getString(R.string.borrow_which_guarantors_label, borrow.getSender().getFullName()));
+
+        mActionButton.setEnabled(false);
+        mActionButton.setText(R.string.borrow_guarantor_agree_label);
+        mActionButton.setBackgroundResource(R.drawable.green_button_background);
+        setupBasicFields(borrow);
+    }
+
+
+    private void setupBasicFields(BorrowEntity borrow) {
+        mUserAdapter.addItems(borrow.getGuarantors());
+
+        mSenderAmount.setValue(String.format(Locale.ENGLISH, "%1$.2f", borrow.getFromAmount()));
+        mEtStartDate.setText(DateUtils.getFormattedDate(DateUtils.PRETTY_DATE_PATTERN, borrow.getStartDate()));
+        mEtMaturityDate.setText(DateUtils.getFormattedDate(DateUtils.PRETTY_DATE_PATTERN, borrow.getMaturityDate()));
+        mRateEditText.setText(String.valueOf(borrow.getRate()));
+        mEtAdditionalNote.setText(borrow.getAdditionalNote());
+
+        mReceiverAmount.setCurrency(borrow.getReceiver().getCurrency());
+        showConvertedCurrency(borrow.getToAmount());
+
+        changeAmountContainerOrientation();
+    }
+
+
+    // ================= LISTENERS
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -409,30 +584,10 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
         }
     }
 
-    private void changeAddGuarantorButtonState() {
-        boolean visible = mUserAdapter.getItemCount() < MAX_SIZE;
-        mAddGuarantorBtn.setVisibility(visible ? View.VISIBLE : View.GONE);
-    }
-
-    @Override
-    public void onItemClicked(int position) {
-
-    }
-
-    @Override
-    public void onDeleteItemClicked(int position) {
-        new MultiDialog.DialogBuilder()
-                .setTitle(R.string.dialog_remove_guarantor_title)
-                .setMessage(R.string.dialog_remove_guarantor_message)
-                .setPositiveButton(R.string.dialog_remove_guarantor_positive_btn, (dialogInterface, i) -> {
-                    dialogInterface.dismiss();
-                    mUserAdapter.removeItem(position);
-                    changeAddGuarantorButtonState();
-                })
-                .setNegativeButton(R.string.dialog_remove_guarantor_negative_btn, (dialogInterface, i) -> {
-                    dialogInterface.dismiss();
-                })
-                .build(this).show();
+    @OnClick(R.id.add_guarantor_button)
+    public void onAddGuarantorClicked() {
+        startActivityForResult(GetContactActivity.getLaunchIntent(this,
+                getString(R.string.borrow_add_guarantor_title), getExistedIds()), REQUEST_ADD_GUARANTOR);
     }
 
     Handler timer = new Handler();
@@ -452,53 +607,20 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
         calculateTotals();
     }
 
-    private boolean isTextLonger(TextInputEditText editText) {
-        Editable text = editText.getText();
-        TextPaint paint = editText.getPaint();
-        float textSize = paint.measureText(text.toString());
-        int width = editText.getMeasuredWidth();
-        width -= editText.getPaddingRight();
-        width -= editText.getPaddingLeft();
-//        width -= editText.getCompoundDrawables().length > 0 ? editText.getCompoundDrawables()[0].getMinimumWidth() : 0;
-        width -= editText.getCompoundDrawablePadding();
-        if (mAmountEditTextWidth > 0 && textSize >= mAmountEditTextWidth)
-            return true;
-        if (textSize >= width && width > 0) {
-            mAmountEditTextWidth = width;
-            return true;
-        }
-        return false;
-    }
-
-    Runnable converter = new Runnable() {
-        @Override
-        public void run() {
-            double val = mSenderAmount.getAmount();
-            getPresenter().convertIfNeed(val);
-        }
-    };
-
-    private void calculateTotals() {
-        double amount = mReceiverAmount.getAmount();
-        String rateString = mRateEditText.getText().toString();
-
-        if (amount == 0 || rateString.isEmpty()) {
-            mTotalInterest.setText("");
-            mTotalAmount.setText("");
-            return;
-        }
-        try {
-            double rate = Double.valueOf(rateString);
-
-            double totalInterest = amount * rate / 100;
-            double totalAmount = amount + totalInterest;
-
-            mTotalInterest.setText(getString(R.string.borrow_amount, totalInterest, mReceiverAmount.getCurrency()));
-            mTotalAmount.setText(getString(R.string.borrow_amount, totalAmount, mReceiverAmount.getCurrency()));
-
-        } catch (Exception e) {
-        }
-
+    @Override
+    public void onDeleteItemClicked(int position) {
+        new MultiDialog.DialogBuilder()
+                .setTitle(R.string.dialog_remove_guarantor_title)
+                .setMessage(R.string.dialog_remove_guarantor_message)
+                .setPositiveButton(R.string.dialog_remove_guarantor_positive_btn, (dialogInterface, i) -> {
+                    dialogInterface.dismiss();
+                    mUserAdapter.removeItem(position);
+                    changeAddGuarantorButtonState();
+                })
+                .setNegativeButton(R.string.dialog_remove_guarantor_negative_btn, (dialogInterface, i) -> {
+                    dialogInterface.dismiss();
+                })
+                .build(this).show();
     }
 
     @OnClick(R.id.edit_text_start_date)
@@ -538,30 +660,9 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
     }
 
     @Override
-    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        final String prettyDate = DateUtils.getPrettyDate(year, monthOfYear, dayOfMonth);
-        switch (view.getTag()) {
-            case START_DATE_PICKER:
-                mEtStartDate.setText(prettyDate);
-                break;
-            case MATURITI_DATE_PICKER:
-                mEtMaturityDate.setText(prettyDate);
-                break;
-        }
+    public void onItemClicked(int position) {
+
     }
 
-    @OnClick(R.id.action_button)
-    public void onBorrowClicked() {
-        mSenderAmountContainer.setError(null);
-        mReceiverAmountContainer.setError(null);
-        mElRate.setError(null);
 
-        getPresenter().onBorrowClicked(mUserAdapter.getItems(),
-                mSenderAmount.getAmount(),
-                mReceiverAmount.getAmount(),
-                mRateEditText.getText().toString().trim(),
-                mEtStartDate.getText().toString().trim(),
-                mEtMaturityDate.getText().toString().trim(),
-                mEtAdditionalNote.getText().toString().trim());
-    }
 }
