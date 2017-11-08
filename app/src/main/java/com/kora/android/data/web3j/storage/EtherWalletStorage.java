@@ -1,11 +1,13 @@
 package com.kora.android.data.web3j.storage;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.util.Log;
 
 import com.kora.android.data.web3j.model.EtherWallet;
@@ -19,17 +21,19 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EtherWalletStorage {
+import static com.kora.android.common.Keys.EXPORT_FOLDER_NAME;
+import static com.kora.android.common.Keys.JSON_FILE_EXTENSION;
+import static com.kora.android.common.Keys.WALLET_LIST_FILE_NAME;
 
-    private static final String WALLET_LIST_FILE_NAME = "wallets";
-    private static final String EXPORT_FOLDER_NAME = "Kora";
-    private static final String JSON_FILE_EXTENSION = ".json";
+public class EtherWalletStorage {
 
     private final Context mContext;
 
@@ -120,7 +124,7 @@ public class EtherWalletStorage {
         }
     }
 
-    public void exportWallet(final String walletFileName) {
+    public void exportWallet(final String walletFileName) throws IOException {
         final List<EtherWallet> etherWalletList = getWalletList();
         final EtherWallet etherWallet = EtherWallet.createEtherWalletFromFileName(walletFileName);
         if (!etherWalletList.contains(etherWallet))
@@ -139,7 +143,7 @@ public class EtherWalletStorage {
         mContext.sendBroadcast(mediaScannerIntent);
     }
 
-    public void copyFile(final File original, final File copy) {
+    public void copyFile(final File original, final File copy) throws IOException {
         FileChannel inChannel = null;
         FileChannel outChannel = null;
         try {
@@ -147,12 +151,9 @@ public class EtherWalletStorage {
             outChannel = new FileOutputStream(copy).getChannel();
         } catch (Exception ignored) {
         }
-        try {
-            inChannel.transferTo(0, inChannel.size(), outChannel);
-        } catch (Exception e) {
-            Log.e("_____", e.toString());
-            e.printStackTrace();
-        }
+
+        inChannel.transferTo(0, inChannel.size(), outChannel);
+
         try {
             if (inChannel != null)
                 inChannel.close();
@@ -162,9 +163,70 @@ public class EtherWalletStorage {
         }
     }
 
+    public void copyFile(final Uri originalUri, final File copy) throws IOException {
+        InputStream inputStream = null;
+        OutputStream outputStream = null;
+        try {
+            inputStream = mContext.getContentResolver().openInputStream(originalUri);
+            outputStream = new FileOutputStream(copy);
+        } catch (Exception ignored) {
+        }
+
+        final byte[] buffer = new byte[1024];
+        int read;
+        while ((read = inputStream.read(buffer)) != -1) {
+            outputStream.write(buffer, 0, read);
+        }
+
+        try {
+            if (inputStream != null)
+                inputStream.close();
+            if (outputStream != null)
+                outputStream.close();
+        } catch (Exception ignored) {
+        }
+    }
+
     public Credentials getCredentials(final String walletFileName, final String password) throws IOException, CipherException {
         final File file = new File(mContext.getFilesDir(), walletFileName);
         return WalletUtils.loadCredentials(password, file);
+    }
+
+    public FileMetaData getFileMetaData(final Context context, final Uri uri) {
+        final FileMetaData fileMetaData = new FileMetaData();
+        if ("file".equalsIgnoreCase(uri.getScheme())) {
+            final File file = new File(uri.getPath());
+            fileMetaData.setDisplayName(file.getName());
+            fileMetaData.setSize(file.length());
+            fileMetaData.setPath(file.getPath());
+            return fileMetaData;
+        } else {
+            final ContentResolver contentResolver = context.getContentResolver();
+            final Cursor cursor = contentResolver.query(uri, null, null, null, null);
+            fileMetaData.setMimeType(contentResolver.getType(uri));
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    int sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE);
+                    fileMetaData.setDisplayName(cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)));
+                    if (!cursor.isNull(sizeIndex))
+                        fileMetaData.setSize(cursor.getLong(sizeIndex));
+                    else
+                        fileMetaData.setSize(-1);
+                    try {
+                        fileMetaData.setPath(cursor.getString(cursor.getColumnIndexOrThrow("_data")));
+                    } catch (final Exception exception) {
+                        // do nothing, data does not exist
+                    }
+                    return fileMetaData;
+                }
+            } catch (Exception exception) {
+                Log.e("_____", exception.toString());
+            } finally {
+                if (cursor != null)
+                    cursor.close();
+            }
+            return null;
+        }
     }
 
     public String getUriPath(final Context context, final Uri uri) {

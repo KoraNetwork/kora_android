@@ -1,9 +1,13 @@
 package com.kora.android.data.repository.impl;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.OpenableColumns;
+import android.util.Log;
 
 import com.kora.android.R;
 import com.kora.android.common.utils.CommonUtils;
@@ -15,6 +19,7 @@ import com.kora.android.data.web3j.model.response.IdentityCreatedResponse;
 import com.kora.android.data.web3j.smart_contracts.HumanStandardToken;
 import com.kora.android.data.web3j.smart_contracts.MetaIdentityManager;
 import com.kora.android.data.web3j.storage.EtherWalletStorage;
+import com.kora.android.data.web3j.storage.FileMetaData;
 import com.kora.android.data.web3j.utils.EtherWalletUtils;
 import com.kora.android.presentation.model.UserEntity;
 
@@ -40,6 +45,7 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.utils.Numeric;
 
 import java.io.File;
+import java.io.InputStream;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
@@ -50,7 +56,9 @@ import javax.inject.Singleton;
 
 import io.reactivex.Observable;
 
+import static com.kora.android.common.Keys.ADDRESS_PREFIX;
 import static com.kora.android.common.Keys.EXPORT_FOLDER_NAME;
+import static com.kora.android.common.Keys.JSON_FILE_EXTENSION;
 
 @Singleton
 public class Web3jRepositoryImpl implements Web3jRepository {
@@ -227,7 +235,7 @@ public class Web3jRepositoryImpl implements Web3jRepository {
                 throw new Exception(mContext.getString(R.string.web3j_error_message_no_wallet));
 
             final File walletFile = new File(mContext.getFilesDir(), etherWallet.getWalletFileName());
-            if (walletAddress.length() == 0)
+            if (walletFile.length() == 0)
                 throw new Exception(mContext.getString(R.string.web3j_error_message_no_wallet));
 
             return walletFile;
@@ -260,40 +268,21 @@ public class Web3jRepositoryImpl implements Web3jRepository {
             if (walletFileUri == null)
                 throw new Exception(mContext.getString(R.string.web3j_error_message_wrong_wallet));
 
-            String uriPath = walletFileUri.getPath();
-            if (uriPath == null || uriPath.isEmpty())
-                uriPath = mEtherWalletStorage.getUriPath(mContext, walletFileUri);
-            if (uriPath == null || uriPath.isEmpty())
+            final FileMetaData fileMetaData = mEtherWalletStorage.getFileMetaData(mContext, walletFileUri);
+            if (fileMetaData == null)
+                throw new Exception(mContext.getString(R.string.web3j_error_message_wrong_wallet));
+            if (fileMetaData.getDisplayName() == null || fileMetaData.getDisplayName().isEmpty())
+                throw new Exception(mContext.getString(R.string.web3j_error_message_wrong_wallet));
+            if (!fileMetaData.getDisplayName().startsWith(ADDRESS_PREFIX) || !fileMetaData.getDisplayName().endsWith(JSON_FILE_EXTENSION))
                 throw new Exception(mContext.getString(R.string.web3j_error_message_wrong_wallet));
 
-            final File source = new File(uriPath);
-            final String filename = walletFileUri.getLastPathSegment();
+            final File destination = new File(mContext.getFilesDir(), fileMetaData.getDisplayName());
+            mEtherWalletStorage.copyFile(walletFileUri, destination);
 
-            android.util.Log.e("_____", source.getName());
-            android.util.Log.e("_____", source.getPath());
-            android.util.Log.e("_____", filename);
-            android.util.Log.e("_____", walletFileUri.toString());
-
-//            final File destination = new File(mContext.getFilesDir(), filename);
-//            mEtherWalletStorage.copyFile(source, destination);
+            final EtherWallet etherWallet = EtherWallet.createEtherWalletFromFileName(fileMetaData.getDisplayName());
+            mEtherWalletStorage.addWallet(etherWallet);
 
             return a;
         });
     }
-
-//    final Credentials credentials = mEtherWalletStorage.getCredentials(
-//            Web3jUtils.getKeystoreFileNameFromAddress(walletAddress),
-//            "123456789");
-//
-//    final String address = credentials.getAddress();
-//    final ECKeyPair ecKeyPair = credentials.getEcKeyPair();
-//    final BigInteger privateKey = ecKeyPair.getPrivateKey();
-//    final BigInteger publicKey = ecKeyPair.getPublicKey();
-//
-//            Log.e("_____", address);
-//            Log.e("_____", String.valueOf(privateKey));
-//            Log.e("_____", String.valueOf(publicKey));
-//
-//            Log.e("_____", String.valueOf(Numeric.toHexStringNoPrefix(privateKey)));
-
 }

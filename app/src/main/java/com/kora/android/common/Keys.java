@@ -12,6 +12,7 @@ public interface Keys {
     String ADDRESS_PREFIX = "0x";
     String JSON_FILE_EXTENSION = ".json";
     String EXPORT_FOLDER_NAME = "Kora";
+    String WALLET_LIST_FILE_NAME = "wallets";
     String FILE_PROVIDER = ".file_provider";
 
     interface ProxyHelperKeys {
