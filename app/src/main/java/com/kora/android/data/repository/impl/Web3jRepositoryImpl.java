@@ -97,13 +97,13 @@ public class Web3jRepositoryImpl implements Web3jRepository {
             final EtherWallet recoveryEtherWallet = EtherWallet.createEtherWalletFromFileName(recoveryWalletFileName);
             mEtherWalletStorage.addWallet(recoveryEtherWallet);
 
-            final ECKeyPair keys = ECKeyPair.create(Hex.decode(mWeb3jConnection.getKoraWalletPrivateKey()));
-            final String koraWalletFileName = mEtherWalletUtils.generateWalletFile(
-                    mWeb3jConnection.getKoraWalletPassword(),
-                    keys,
-                    new File(mContext.getFilesDir(), ""));
-            final EtherWallet koraEtherWallet = EtherWallet.createEtherWalletFromFileName(koraWalletFileName);
-            mEtherWalletStorage.addWallet(koraEtherWallet);
+//            final ECKeyPair keys = ECKeyPair.create(Hex.decode(mWeb3jConnection.getKoraWalletPrivateKey()));
+//            final String koraWalletFileName = mEtherWalletUtils.generateWalletFile(
+//                    mWeb3jConnection.getKoraWalletPassword(),
+//                    keys,
+//                    new File(mContext.getFilesDir(), ""));
+//            final EtherWallet koraEtherWallet = EtherWallet.createEtherWalletFromFileName(koraWalletFileName);
+//            mEtherWalletStorage.addWallet(koraEtherWallet);
 
             if (!CommonUtils.isNetworkConnected(mContext))
                 throw new Exception(mContext.getString(R.string.web3j_error_message_no_network));
@@ -281,6 +281,26 @@ public class Web3jRepositoryImpl implements Web3jRepository {
 
             final EtherWallet etherWallet = EtherWallet.createEtherWalletFromFileName(fileMetaData.getDisplayName());
             mEtherWalletStorage.addWallet(etherWallet);
+
+            return a;
+        });
+    }
+
+    @Override
+    public Observable<Object> importKoraWalletFile() {
+        return Observable.just(true).map(a -> {
+
+            final List<EtherWallet> etherWalletList = mEtherWalletStorage.getWalletList();
+            final EtherWallet koraEtherWallet = EtherWallet.createEtherWalletFromAddress(mWeb3jConnection.getKoraWalletAddress());
+            if (etherWalletList.contains(koraEtherWallet))
+                return a;
+
+            final ECKeyPair keys = ECKeyPair.create(Hex.decode(mWeb3jConnection.getKoraWalletPrivateKey()));
+            mEtherWalletUtils.generateWalletFile(
+                    mWeb3jConnection.getKoraWalletPassword(),
+                    keys,
+                    new File(mContext.getFilesDir(), ""));
+            mEtherWalletStorage.addWallet(koraEtherWallet);
 
             return a;
         });
