@@ -97,6 +97,8 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
 
     @Override
     protected void onViewReady(Bundle savedInstanceState) {
+        getPresenter().importKoraWallet();
+
         setupDrawer();
         getNavigator().showFragment(rootTabFragment(TAB_HOME_POSITION), TAB_HOME_POSITION);
 
@@ -108,8 +110,6 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
             final MenuItem item = mNavigationView.getMenu().getItem(TAB_USER_PROFILE_POSITION);
             onNavigationItemSelected(item);
         });
-
-        getPresenter().loadUserData();
 
         if (savedInstanceState == null) {
             final MenuItem item = mNavigationView.getMenu().getItem(TAB_HOME_POSITION);

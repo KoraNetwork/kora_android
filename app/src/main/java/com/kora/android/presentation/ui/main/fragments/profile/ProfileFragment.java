@@ -450,7 +450,7 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
                 getPresenter().getWalletFile());
         final Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        intent.setType("*/*"); // change type if needed
+        intent.setType("application/json"); // change type if needed
         intent.putExtra(Intent.EXTRA_STREAM, uri);
         final PackageManager packageManager = getActivity().getPackageManager();
         if (intent.resolveActivity(packageManager) != null) {

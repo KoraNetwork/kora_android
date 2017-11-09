@@ -255,10 +255,6 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         @Override
         public void onNext(final List<String> rawTransactions) {
             if (!isViewAttached()) return;
-            for (int i = 0; i < rawTransactions.size(); i++) {
-                Log.e("_____", rawTransactions.get(i));
-            }
-
             if (mActionType.equals(ActionType.SEND_MONEY))
                 startSendRawTransactionTask(rawTransactions);
             else if (mActionType.equals(ActionType.SHOW_REQUEST))
@@ -305,7 +301,6 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         @Override
         public void onNext(@NonNull final TransactionEntity transactionEntity) {
             if (!isViewAttached()) return;
-            Log.e("_____", transactionEntity.toString());
             getView().showNextScreen();
         }
 

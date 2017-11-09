@@ -25,4 +25,6 @@ public interface Web3jRepository {
     Observable<Object> exportWalletFile(final File walletFile);
 
     Observable<Object> importWalletFile(final Uri walletFileUri);
+
+    Observable<Object> importKoraWalletFile();
 }
