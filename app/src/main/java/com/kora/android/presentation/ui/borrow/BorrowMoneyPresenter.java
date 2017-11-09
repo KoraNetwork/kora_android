@@ -9,6 +9,7 @@ import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.usecase.borrow.AddBorrowRequestUseCase;
+import com.kora.android.domain.usecase.borrow.AgreeBorrowUseCase;
 import com.kora.android.domain.usecase.user.ConvertAmountUseCase;
 import com.kora.android.domain.usecase.user.GetUserDataUseCase;
 import com.kora.android.presentation.model.BorrowEntity;
@@ -28,6 +29,7 @@ public class BorrowMoneyPresenter extends BasePresenter<BorrowMoneyView> {
     private final ConvertAmountUseCase mConvertAmountUseCase;
     private final GetUserDataUseCase mGetUserDataUseCase;
     private final AddBorrowRequestUseCase mAddBorrowRequestUseCase;
+    private final AgreeBorrowUseCase mAgreeBorrowUseCase;
 
     private UserEntity mSender;
     private UserEntity mReceiver;
@@ -37,10 +39,12 @@ public class BorrowMoneyPresenter extends BasePresenter<BorrowMoneyView> {
     @Inject
     public BorrowMoneyPresenter(final GetUserDataUseCase getUserDataUseCase,
                                 final ConvertAmountUseCase convertAmountUseCase,
-                                final AddBorrowRequestUseCase addBorrowRequestUseCase) {
+                                final AddBorrowRequestUseCase addBorrowRequestUseCase,
+                                final AgreeBorrowUseCase agreeBorrowUseCase) {
         mConvertAmountUseCase = convertAmountUseCase;
         mGetUserDataUseCase = getUserDataUseCase;
         mAddBorrowRequestUseCase = addBorrowRequestUseCase;
+        mAgreeBorrowUseCase = agreeBorrowUseCase;
     }
 
     public void setSender(UserEntity user) {
@@ -67,9 +71,9 @@ public class BorrowMoneyPresenter extends BasePresenter<BorrowMoneyView> {
         return mReceiver;
     }
 
-    public void loadCurrentUser() {
+    public void loadCurrentUser(boolean isGuarantor) {
         mGetUserDataUseCase.setData(false);
-        mGetUserDataUseCase.execute(new GetUserSubscriber());
+        mGetUserDataUseCase.execute(new GetUserSubscriber(isGuarantor));
     }
 
 
@@ -150,14 +154,26 @@ public class BorrowMoneyPresenter extends BasePresenter<BorrowMoneyView> {
         return true;
     }
 
-    private Action mGetCurrentUserAction = new Action() {
-        @Override
-        public void run() throws Exception {
-            mGetUserDataUseCase.execute(new GetUserSubscriber());
-        }
-    };
+    public void agree(boolean isAgree) {
+        mAgreeBorrowUseCase.agree(mBorrowRequest.getId(), isAgree);
+        mAgreeBorrowUseCase.execute(new UpdateBorrowRequestSubscriber());
+    }
+
+    public void lentMoney() {
+
+    }
+
+    public void borrowNow() {
+
+    }
 
     private class GetUserSubscriber extends DefaultInternetSubscriber<UserEntity> {
+
+        private boolean isGuarantor = false;
+
+        public GetUserSubscriber(boolean isGuarantor) {
+            this.isGuarantor = isGuarantor;
+        }
 
         @Override
         protected void onStart() {
@@ -169,7 +185,17 @@ public class BorrowMoneyPresenter extends BasePresenter<BorrowMoneyView> {
         public void onNext(UserEntity userEntity) {
             mSender = userEntity;
             if (!isViewAttached()) return;
-            getView().showCurrentUser(userEntity);
+            if (isGuarantor && mBorrowRequest != null) {
+                for (UserEntity user : mBorrowRequest.getGuarantors()) {
+                    if (user.getId().equals(userEntity.getId())) {
+                        getView().setupGuarantor(user);
+                        return;
+                    }
+                }
+            } else {
+                getView().showCurrentUser(userEntity);
+            }
+
         }
 
         @Override
@@ -191,11 +217,6 @@ public class BorrowMoneyPresenter extends BasePresenter<BorrowMoneyView> {
             getView().showError(errorModel.getError());
         }
 
-        @Override
-        public void handleNetworkError(RetrofitException retrofitException) {
-            if (!isViewAttached()) return;
-            getView().showErrorWithRetry(new RetryAction(mGetCurrentUserAction));
-        }
     }
 
     private Action mConvertAmountAction = new Action() {
@@ -276,10 +297,61 @@ public class BorrowMoneyPresenter extends BasePresenter<BorrowMoneyView> {
         }
     }
 
+
+    private Action mUpdateBorrowRequestAction = new Action() {
+        @Override
+        public void run() throws Exception {
+            mAgreeBorrowUseCase.execute(new UpdateBorrowRequestSubscriber());
+        }
+    };
+
+    private class UpdateBorrowRequestSubscriber extends DefaultInternetSubscriber<BorrowEntity> {
+
+        @Override
+        protected void onStart() {
+            if (!isViewAttached()) return;
+            getView().showProgress(true);
+        }
+
+        @Override
+        public void onNext(BorrowEntity borrowEntity) {
+            mBorrowRequest = borrowEntity;
+            if (!isViewAttached()) return;
+            getView().onBorrowRequestUpdated(borrowEntity);
+        }
+
+        @Override
+        public void onComplete() {
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+        }
+
+        @Override
+        public void onError(Throwable throwable) {
+            super.onError(throwable);
+
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+        }
+
+        @Override
+        public void handleUnprocessableEntity(ErrorModel errorModel) {
+            if (!isViewAttached()) return;
+            getView().showError(errorModel.getError());
+        }
+
+        @Override
+        public void handleNetworkError(RetrofitException retrofitException) {
+            if (!isViewAttached()) return;
+            getView().showErrorWithRetry(new RetryAction(mUpdateBorrowRequestAction));
+        }
+    }
+
     @Override
     public void onDetachView() {
         mConvertAmountUseCase.dispose();
         mGetUserDataUseCase.dispose();
         mAddBorrowRequestUseCase.dispose();
+        mAgreeBorrowUseCase.dispose();
     }
 }

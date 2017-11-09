@@ -284,11 +284,14 @@
     <string name="borrow_borrow_additional_note">Additional note</string>
     <string name="borrow_borrow_borrow_now">Borrow now</string>
     <string name="borrow_borrow_request_now">Send request</string>
+    <string name="borrow_borrow_disagree">Disagree</string>
+    <string name="borrow_borrow_confirm">Confirm</string>
     <string name="borrow_lender_label">Lender</string>
     <string name="borrow_borrower_label">Borrower</string>
     <string name="borrow_guarantors_label">Your guarantors</string>
     <string name="borrow_which_guarantors_label">%1$s\'s guarantors</string>
     <string name="borrow_add_guarantor_title">Add your guarantors</string>
+    <string name="borrow_be_guarantors_label">Can you be my guarantor?</string>
 
     <string name="dialog_remove_guarantor_title">Alert</string>
     <string name="dialog_remove_guarantor_message">Are you sure you want to remove this guarantor?</string>
@@ -331,5 +334,6 @@
     <string name="export_wallet_exported">Wallet file is exported on external storage</string>
     <string name="import_wallet_select">Select wallet file to import:</string>
     <string name="import_wallet_imported">Wallet file is imported on internal storage</string>
+
 
 </resources>

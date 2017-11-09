@@ -1,5 +1,6 @@
 package com.kora.android.presentation.ui.main.fragments.borrow.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -9,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import com.kora.android.R;
 import com.kora.android.common.Keys;
 import com.kora.android.di.component.FragmentComponent;
+import com.kora.android.presentation.enums.Action;
 import com.kora.android.presentation.enums.BorrowType;
 import com.kora.android.presentation.model.BorrowEntity;
 import com.kora.android.presentation.ui.base.adapter.OnItemClickListener;
@@ -23,8 +25,14 @@ import java.util.List;
 
 import butterknife.BindView;
 
+import static android.app.Activity.RESULT_OK;
+import static com.kora.android.common.Keys.Extras.BORROW_REQUEST_EXTRA;
+import static com.kora.android.common.Keys.Extras.EXTRA_ACTION;
+
 public class BorrowFragment extends BaseFragment<BorrowPresenter> implements BorrowView,
         SwipeRefreshLayout.OnRefreshListener, OnItemClickListener {
+
+    private static final int BORROW_DETAILS = 225;
 
     @BindView(R.id.borrow_list) RecyclerView mBorrowList;
     @BindView(R.id.swipe_layout) SwipeRefreshLayout swipeRefreshLayout;
@@ -127,7 +135,7 @@ public class BorrowFragment extends BaseFragment<BorrowPresenter> implements Bor
     }
 
     public void addRequest(BorrowEntity borrowRequest) {
-//        if (borrowRequest == null) return;
+        if (borrowRequest == null) return;
 //        mBorrowAdapter.addItem(0, borrowRequest);
     }
 
@@ -135,6 +143,24 @@ public class BorrowFragment extends BaseFragment<BorrowPresenter> implements Bor
     public void onItemClicked(int position) {
         BorrowEntity item = mBorrowAdapter.getItem(position);
         if (item == null) return;
-        startActivity(BorrowMoneyActivity.getLaunchIntent(getBaseActivity(), item));
+        startActivityForResult(BorrowMoneyActivity.getLaunchIntent(getBaseActivity(), item), BORROW_DETAILS);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == BORROW_DETAILS && resultCode == RESULT_OK) {
+            Action action = (Action) data.getSerializableExtra(EXTRA_ACTION);
+            switch (action) {
+                case UPDATE:
+                    BorrowEntity updatedItem = data.getParcelableExtra(BORROW_REQUEST_EXTRA);
+                    mBorrowAdapter.updateItem(updatedItem);
+                    break;
+                case DELETE:
+                    BorrowEntity deletedItem = data.getParcelableExtra(BORROW_REQUEST_EXTRA);
+                    mBorrowAdapter.deleteItem(deletedItem);
+                    break;
+            }
+        }
     }
 }

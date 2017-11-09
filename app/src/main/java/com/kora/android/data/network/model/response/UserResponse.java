@@ -42,6 +42,8 @@ public class UserResponse {
     private String mFlag;
     @JsonField(name = "currencyNameFull")
     private String mCurrencyNameFull;
+    @JsonField(name = "agree")
+    private Boolean mAgreed;
 
     public String getId() {
         return mId;
@@ -185,5 +187,13 @@ public class UserResponse {
 
     public void setCountryCode(String countryCode) {
         mCountryCode = countryCode;
+    }
+
+    public Boolean getAgreed() {
+        return mAgreed;
+    }
+
+    public void setAgreed(Boolean agreed) {
+        mAgreed = agreed;
     }
 }

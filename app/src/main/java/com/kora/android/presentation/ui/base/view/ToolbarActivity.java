@@ -5,6 +5,7 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
 import com.kora.android.R;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
@@ -52,5 +53,14 @@ public abstract class ToolbarActivity<P extends BasePresenter> extends BaseActiv
     @DrawableRes
     protected int getNavigationIcon() {
         return R.drawable.ic_back_white;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

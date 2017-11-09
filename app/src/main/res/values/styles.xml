@@ -88,6 +88,12 @@
         <item name="android:background">@drawable/green_button_background</item>
     </style>
 
+    <style name="AppTheme.ActionButton.Borderless">
+        <item name="android:textColor">@color/color_button_blue</item>
+        <item name="android:foreground">?android:attr/selectableItemBackgroundBorderless</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
     <style name="AppTheme.MainTheme.TabLayout" parent="Widget.Design.TabLayout">
         <item name="tabIndicatorColor">@android:color/white</item>
         <item name="tabBackground">@color/color_status_bar</item>

@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,7 +25,8 @@ import static com.kora.android.data.network.Constants.API_BASE_URL;
 public final class GuarantorViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.root_layout) LinearLayout rootLayout;
-    @BindView(R.id.delete_button) ImageView deleteButton;
+    @BindView(R.id.delete_button) ImageButton deleteButton;
+    @BindView(R.id.checked_icon) ImageView checkedIcon;
     @BindView(R.id.user_image) AppCompatImageView userImage;
     @BindView(R.id.user_name) TextView userName;
     @BindView(R.id.user_phone) TextView userPhone;
@@ -52,6 +54,9 @@ public final class GuarantorViewHolder extends RecyclerView.ViewHolder {
         switch (mViewMode) {
             case VIEW_MODE:
                 deleteButton.setVisibility(View.GONE);
+                checkedIcon.setVisibility(user.getAgreed() == null ? View.GONE : View.VISIBLE);
+                checkedIcon.setImageResource(user.getAgreed() == null || !user.getAgreed() ? R.drawable.ic_delete : R.drawable.ic_circular_check_button_activ);
+
                 break;
             case EDIT_MODE:
                 deleteButton.setVisibility(View.VISIBLE);

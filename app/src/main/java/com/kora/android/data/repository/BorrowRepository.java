@@ -13,4 +13,6 @@ public interface BorrowRepository {
     Observable<List<BorrowEntity>> loadBorrowList(int skip, BorrowType borrowType);
 
     Observable<BorrowEntity> addBorrowRequest(UserEntity lender, List<UserEntity> guaranters, double amount, double convertedAmount, int rate, String note, Date startDate, Date maturityDate);
+
+    Observable<BorrowEntity> agree(String borrowId, boolean isAgreed);
 }
