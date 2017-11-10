@@ -23,6 +23,9 @@ import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
 
+import org.web3j.crypto.CipherException;
+
+import java.io.FileNotFoundException;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -33,11 +36,9 @@ import io.reactivex.functions.Action;
 @ConfigPersistent
 public class EnterPinPresenter extends BasePresenter<EnterPinView> {
 
-    private final SendTransactionUseCase mSendTransactionUseCase;
-    private final AddToTransactionsUseCase mAddToTransactionsUseCase;
-    private final DeleteRequestUseCase mDeleteRequestUseCase;
     private final CreateRawTransactionUseCase mCreateRawTransactionUseCase;
     private final SendRawTransactionUseCase mSendRawTransactionUseCase;
+    private final DeleteRequestUseCase mDeleteRequestUseCase;
 
     private ActionType mActionType;
     private UserEntity mReceiver;
@@ -46,30 +47,12 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
     private RequestEntity mRequest;
 
     @Inject
-    public EnterPinPresenter(final SendTransactionUseCase sendTransactionUseCase,
-                             final AddToTransactionsUseCase addToTransactionsUseCase,
-                             final DeleteRequestUseCase deleteRequestUseCase,
-                             final CreateRawTransactionUseCase createRawTransactionUseCase,
-                             final SendRawTransactionUseCase sendRawTransactionUseCase) {
-        mSendTransactionUseCase = sendTransactionUseCase;
-        mAddToTransactionsUseCase = addToTransactionsUseCase;
-        mDeleteRequestUseCase = deleteRequestUseCase;
+    public EnterPinPresenter(final CreateRawTransactionUseCase createRawTransactionUseCase,
+                             final SendRawTransactionUseCase sendRawTransactionUseCase,
+                             final DeleteRequestUseCase deleteRequestUseCase) {
         mCreateRawTransactionUseCase = createRawTransactionUseCase;
         mSendRawTransactionUseCase = sendRawTransactionUseCase;
-    }
-
-    public void startSendTransactionTask(final String pinCode, ActionType actionType) {
-        if (pinCode == null || pinCode.isEmpty()) {
-            getView().showEmptyPinCode();
-            return;
-        }
-        if (!StringUtils.isPinCodeLongEnough(pinCode)) {
-            getView().showTooShortPinCode();
-            return;
-        }
-
-        mSendTransactionUseCase.setData(pinCode, mReceiver, mSenderAmount, mReceiverAmount);
-        mSendTransactionUseCase.execute(new SendTransactionSubscriber(actionType));
+        mDeleteRequestUseCase = deleteRequestUseCase;
     }
 
     public ActionType getActionType() {
@@ -112,52 +95,6 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         this.mRequest = requestId;
     }
 
-    private class SendTransactionSubscriber extends DefaultWeb3jSubscriber<List<String>> {
-
-        private ActionType mActionType;
-
-        public SendTransactionSubscriber(ActionType actionType) {
-            mActionType = actionType;
-        }
-
-        @Override
-        protected void onStart() {
-            if(!isViewAttached()) return;
-            getView().showProgress(true, false, R.string.enter_pin_sending_transaction_wait);
-        }
-
-        @Override
-        public void onNext(@NonNull final List<String> transactionHashList) {
-            if(!isViewAttached()) return;
-            if (mActionType.equals(ActionType.SEND_MONEY))
-                startAddToTransactionsTask(transactionHashList, mActionType);
-            else if (mActionType.equals(ActionType.SHOW_REQUEST))
-                startDeleteRequestTask(transactionHashList);
-        }
-//
-//        @Override
-//        public void onComplete() {
-//            if (!isViewAttached()) return;
-//            getView().showProgress(false);
-//        }
-
-        @Override
-        public void onError(@NonNull final Throwable throwable) {
-            super.onError(throwable);
-            if (!isViewAttached()) return;
-            getView().showProgress(false);
-
-            Log.e("_____", throwable.toString());
-            throwable.printStackTrace();
-        }
-
-        @Override
-        public void handleWeb3jError(final String message) {
-            if(!isViewAttached()) return;
-            getView().showError(message);
-        }
-    }
-
     private TransactionType getTransactionTypeByAction(ActionType actionType) {
         switch (actionType) {
             case CREATE_REQUEST:
@@ -168,63 +105,6 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         }
         return null;
     }
-
-    public void startAddToTransactionsTask(final List<String> transactionHash, ActionType actionType) {
-        mAddToTransactionsUseCase.setData(
-                getTransactionTypeByAction(actionType),
-                mReceiver.getId(),
-                mSenderAmount,
-                mReceiverAmount,
-                transactionHash);
-        mAddToTransactionsUseCase.execute(new AddToTransactionsSubscriber());
-    }
-
-    private Action mAddToTransactionsAction = new Action() {
-        @Override
-        public void run() throws Exception {
-            mAddToTransactionsUseCase.execute(new AddToTransactionsSubscriber());
-        }
-    };
-
-    private class AddToTransactionsSubscriber extends DefaultInternetSubscriber<TransactionEntity> {
-
-//        @Override
-//        protected void onStart() {
-//            if (!isViewAttached()) return;
-//            getView().showProgress(true);
-//        }
-
-        @Override
-        public void onNext(@NonNull final TransactionEntity transactionEntity) {
-            if (!isViewAttached()) return;
-            getView().showNextScreen();
-        }
-
-        @Override
-        public void onComplete() {
-            if (!isViewAttached()) return;
-            getView().showProgress(false);
-        }
-
-        @Override
-        public void onError(@NonNull final Throwable throwable) {
-            super.onError(throwable);
-            if (!isViewAttached()) return;
-            getView().showProgress(false);
-        }
-
-        @Override
-        public void handleUnprocessableEntity(ErrorModel errorModel) {
-            getView().showError(errorModel.getError());
-        }
-
-        @Override
-        public void handleNetworkError(final RetrofitException retrofitException) {
-            getView().showErrorWithRetry(new RetryAction(mAddToTransactionsAction));
-        }
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     public void startCreateRawTransactionTask(final String pinCode) {
         if (pinCode == null || pinCode.isEmpty()) {
@@ -269,9 +149,22 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
 
         @Override
         public void onError(final Throwable throwable) {
+            Log.e("_____", throwable.toString());
+            throwable.printStackTrace();
+
             super.onError(throwable);
             if (!isViewAttached()) return;
             getView().showProgress(false);
+        }
+
+        @Override
+        public void handleWalletError(final FileNotFoundException fileNotFoundException) {
+            getView().showError(R.string.web3j_error_message_no_wallet);
+        }
+
+        @Override
+        public void handlePinError(final CipherException cipherException) {
+            getView().showError(R.string.web3j_error_message_wrong_password);
         }
 
         @Override
@@ -289,6 +182,13 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
                 rawTransactions);
         mSendRawTransactionUseCase.execute(new SendRawTransactionSubscriber());
     }
+
+    private Action mSendRawTransactionAction = new Action() {
+        @Override
+        public void run() throws Exception {
+            mSendRawTransactionUseCase.execute(new SendRawTransactionSubscriber());
+        }
+    };
 
     private class SendRawTransactionSubscriber extends DefaultInternetSubscriber<TransactionEntity> {
 
@@ -324,7 +224,7 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
 
         @Override
         public void handleNetworkError(final RetrofitException retrofitException) {
-            getView().showErrorWithRetry(new RetryAction(mAddToTransactionsAction));
+            getView().showErrorWithRetry(new RetryAction(mSendRawTransactionAction));
         }
     }
 
@@ -392,8 +292,6 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
 
     @Override
     public void onDetachView() {
-        mSendTransactionUseCase.dispose();
-        mAddToTransactionsUseCase.dispose();
         mDeleteRequestUseCase.dispose();
         mCreateRawTransactionUseCase.dispose();
         mSendRawTransactionUseCase.dispose();

@@ -39,12 +39,10 @@ public class ThirdStepPresenter  extends BasePresenter<ThirdStepView> {
                 break;
             case VIEW_MODE_CONFIRM:
                 if (!mPinCode.equals(pinCode)) {
-                    if(!isViewAttached()) return;
                     getView().showPinCodeDoesNotMatch();
                     return;
                 }
                 mRegistrationPrefHelper.storePin(pinCode);
-                if(!isViewAttached()) return;
                 getView().showNextScreen();
                 break;
         }

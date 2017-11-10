@@ -3,11 +3,11 @@ package com.kora.android.presentation.ui.registration.step4;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -52,14 +52,18 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
     TextInputLayout mElUserName;
     @BindView(R.id.edit_layout_email)
     TextInputLayout mElEmail;
-    @BindView(R.id.text_view_date_of_birth)
-    TextView mTvDateOfBirth;
-    @BindView(R.id.text_view_date_of_birth_error)
-    TextView mTvDateOfBirthError;
+
+    @BindView(R.id.edit_layout_date_of_birth)
+    TextInputLayout mElDateOfBirth;
+    @BindView(R.id.edit_text_date_of_birth)
+    TextInputEditText mEtDateOfBirth;
+
     @BindView(R.id.image_view_country_flag)
     ImageView mIvCountryFlag;
-    @BindView(R.id.text_view_currency)
-    TextView mTvCurrency;
+    @BindView(R.id.edit_text_currency)
+    TextInputEditText mEtCurrency;
+
+
     @BindView(R.id.edit_layout_password)
     TextInputLayout mElPassword;
     @BindView(R.id.edit_layout_confirm_password)
@@ -91,17 +95,6 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
         getPresenter().startGetCountryTask();
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        showDialogMessage(
-//                R.string.registration_dialog_title_back_pressed,
-//                R.string.registration_dialog_message_back_pressed,
-//                R.string.registration_dialog_positive_back_pressed,
-//                (dialogInterface, i) -> super.onBackPressed(),
-//                R.string.registration_dialog_negative_back_pressed,
-//                (dialogInterface, i) -> dialogInterface.dismiss());
-//    }
-
     private void initDate() {
         final Calendar calendar = Calendar.getInstance();
         final String formattedDate = DateUtils.getFormattedDate(
@@ -113,7 +106,7 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH));
-        mTvDateOfBirth.setText(prettyDate);
+        mEtDateOfBirth.setText(prettyDate);
     }
 
     @Override
@@ -121,12 +114,12 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
         Glide.with(this)
                 .load(API_BASE_URL + countryEntity.getFlag())
                 .into(mIvCountryFlag);
-        mTvCurrency.setText(countryEntity.getCurrency());
+        mEtCurrency.setText(getString(R.string.registration_currency_different, countryEntity.getCurrency()));
     }
 
     @Override
     public void showDateOfBirth(final String dateOfBirth) {
-        mTvDateOfBirth.setText(dateOfBirth);
+        mEtDateOfBirth.setText(dateOfBirth);
     }
 
     @OnClick({R.id.image_view_avatar, R.id.text_view_upload_photo})
@@ -203,39 +196,37 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
         ViewUtils.scrollToView(mSvContainer, mRlContainer, mElEmail);
     }
 
-    @OnClick(R.id.linear_layout_select_date)
-    void onClickSelectDate() {
-        mTvDateOfBirthError.setVisibility(View.GONE);
-        final String prettyDate = mTvDateOfBirth.getText().toString().trim();
+    @OnClick(R.id.edit_text_date_of_birth)
+    void onClickDateOfBirth() {
+        mElDateOfBirth.setError(null);
+        final String prettyDate = mEtDateOfBirth.getText().toString().trim();
         final Calendar calendar = DateUtils.getCalendarFromPrettyDate(prettyDate);
         new DatePickerDialog(this, R.style.AppTheme_DatePicker, (view, selectedYear, selectedMonth, selectedDay) -> {
             getPresenter().setDateOfBirth(DateUtils.getFormattedDate(selectedYear, selectedMonth, selectedDay));
-            mTvDateOfBirth.setText(DateUtils.getPrettyDate(selectedYear, selectedMonth, selectedDay));
+            mEtDateOfBirth.setText(DateUtils.getPrettyDate(selectedYear, selectedMonth, selectedDay));
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
     @Override
     public void showIncorrectDate() {
-        mTvDateOfBirthError.setVisibility(View.VISIBLE);
+        mElDateOfBirth.setError(getString(R.string.registration_date_of_birth_incorrect));
     }
 
-    @OnClick(R.id.relative_layout_select_currency)
-    void OnClickSelectCurrency() {
+    @OnClick({R.id.edit_text_currency, R.id.image_view_country_flag})
+    void OnClickCurrency() {
         startActivityForResult(CurrenciesActivity.getLaunchIntent(this), SELECT_CURRENCY_REQUEST_CODE);
     }
 
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-        if (requestCode == SELECT_CURRENCY_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                final CountryEntity countryEntity = data.getParcelableExtra(SELECT_CURRENCY_EXTRA);
-                getPresenter().setCurrency(countryEntity.getCurrency());
-                getPresenter().setCountryCode(countryEntity.getCountryCode());
-                Glide.with(this)
-                        .load(API_BASE_URL + countryEntity.getFlag())
-                        .into(mIvCountryFlag);
-                mTvCurrency.setText(countryEntity.getCurrency());
-            }
+        if (requestCode == SELECT_CURRENCY_REQUEST_CODE && resultCode == RESULT_OK) {
+            final CountryEntity countryEntity = data.getParcelableExtra(SELECT_CURRENCY_EXTRA);
+            getPresenter().setCurrency(countryEntity.getCurrency());
+            getPresenter().setCountryCode(countryEntity.getCountryCode());
+            Glide.with(this)
+                    .load(API_BASE_URL + countryEntity.getFlag())
+                    .into(mIvCountryFlag);
+            mEtCurrency.setText(getString(R.string.registration_currency_different, countryEntity.getCurrency()));
         }
     }
 

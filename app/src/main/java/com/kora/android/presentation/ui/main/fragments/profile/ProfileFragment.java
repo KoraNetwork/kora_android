@@ -104,6 +104,9 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
     @BindView(R.id.relative_layout_container) RelativeLayout mRlContainer;
     @BindView(R.id.returned_container) LinearLayout mLlContainer;
 
+    @BindView(R.id.button_export_wallet) TextView mTvExportWallet;
+    @BindView(R.id.button_import_wallet) TextView mTvImportWallet;
+
     private ViewMode mViewMode = VIEW_MODE;
 
     public static BaseFragment getNewInstance() {
@@ -218,6 +221,8 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
             setTitle(R.string.title_edit_profile);
             setDrawerListener(true);
             setRequirements(true);
+            mTvExportWallet.setVisibility(View.GONE);
+            mTvImportWallet.setVisibility(View.GONE);
         } else {
             mEtUserName.setEnabled(false);
             mEtEmail.setEnabled(false);
@@ -232,6 +237,8 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
             setTitle(R.string.title_profile);
             setDrawerListener(false);
             setRequirements(false);
+            mTvExportWallet.setVisibility(View.VISIBLE);
+            mTvImportWallet.setVisibility(View.VISIBLE);
         }
     }
 

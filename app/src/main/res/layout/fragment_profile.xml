@@ -7,9 +7,9 @@
     android:focusableInTouchMode="true"
     android:orientation="vertical">
 
-<include
+    <include
         android:id="@+id/toolbar_container"
-        layout="@layout/toolbar"/>
+        layout="@layout/toolbar" />
 
     <ScrollView
         android:id="@+id/scroll_view_container"

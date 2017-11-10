@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:focusableInTouchMode="true">
 
     <android.support.v7.widget.Toolbar
@@ -30,7 +31,7 @@
                 android:text="@string/registration_create_pin_code"
                 android:textColor="@color/color_text_title"
                 android:textSize="24sp"
-                app:fontFamily="@font/muli_semi_bold" />
+                android:fontFamily="@font/muli_semi_bold" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_view_create_confirm_4_digit_pin_code"
@@ -39,13 +40,14 @@
                 android:layout_below="@+id/text_view_create_confirm_pin_code"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="8dp"
                 android:text="@string/registration_create_4_digit_pin_code"
                 android:textColor="@color/color_text_text"
                 android:textSize="16sp"
-                app:fontFamily="@font/muli_normal" />
+                android:fontFamily="@font/muli_normal" />
 
             <android.support.design.widget.TextInputLayout
+                android:fontFamily="@font/muli_regular"
                 android:id="@+id/edit_layout_create_pin_code"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -53,7 +55,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginTop="46dp"
+                android:layout_marginTop="48dp"
                 app:errorEnabled="true">
 
                 <LinearLayout
@@ -65,51 +67,69 @@
                         android:id="@+id/edit_text_pin_first_digit"
                         android:layout_width="45dp"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/muli_regular"
                         android:gravity="center"
-                        android:inputType="number"
+                        android:inputType="numberPassword"
                         android:maxLength="1"
                         android:maxLines="1"
                         android:textColor="@color/color_edit_text"
-                        android:textSize="24sp" />
+                        android:textSize="24sp"
+                        tools:text="1" />
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/edit_text_pin_second_digit"
                         android:layout_width="45dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
                         android:layout_marginStart="15dp"
+                        android:fontFamily="@font/muli_regular"
                         android:gravity="center"
-                        android:inputType="number"
+                        android:inputType="numberPassword"
                         android:maxLength="1"
                         android:maxLines="1"
                         android:textColor="@color/color_edit_text"
-                        android:textSize="24sp" />
+                        android:textSize="24sp"
+                        tools:text="1" />
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/edit_text_pin_third_digit"
                         android:layout_width="45dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
                         android:layout_marginStart="15dp"
+                        android:fontFamily="@font/muli_regular"
                         android:gravity="center"
-                        android:inputType="number"
+                        android:inputType="numberPassword"
                         android:maxLength="1"
                         android:maxLines="1"
                         android:textColor="@color/color_edit_text"
-                        android:textSize="24sp" />
+                        android:textSize="24sp"
+                        tools:text="1" />
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/edit_text_pin_fourth_digit"
                         android:layout_width="45dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
                         android:layout_marginStart="15dp"
+                        android:fontFamily="@font/muli_regular"
                         android:gravity="center"
-                        android:inputType="number"
+                        android:inputType="numberPassword"
                         android:maxLength="1"
                         android:maxLines="1"
                         android:textColor="@color/color_edit_text"
-                        android:textSize="24sp" />
+                        android:textSize="24sp"
+                        tools:text="1" />
+
+                    <android.support.v7.widget.AppCompatCheckBox
+                        android:id="@+id/check_box_visibility"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:button="@null"
+                        android:checked="false"
+                        android:drawableLeft="@drawable/checkbox_visibility"
+                        android:gravity="center"
+                        android:padding="10dp" />
+
                 </LinearLayout>
 
             </android.support.design.widget.TextInputLayout>
@@ -144,7 +164,7 @@
                         android:text="@string/registration_next"
                         android:textColor="@color/color_button_text_white"
                         android:textSize="14sp"
-                        app:fontFamily="@font/muli_bold" />
+                        android:fontFamily="@font/muli_bold" />
                 </RelativeLayout>
 
             </android.support.v7.widget.CardView>

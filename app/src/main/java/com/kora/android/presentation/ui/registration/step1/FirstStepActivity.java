@@ -6,10 +6,9 @@ import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
+import com.kora.android.GlideApp;
 import com.kora.android.R;
 import com.kora.android.common.permission.PermissionCheckerActivity;
 import com.kora.android.common.utils.ViewUtils;
@@ -27,7 +26,7 @@ import butterknife.OnTextChanged;
 
 import static android.Manifest.permission.READ_SMS;
 import static android.Manifest.permission.RECEIVE_SMS;
-import static com.kora.android.common.Keys.PermissionChecker.PERMISSION_REQUEST_CODE_READ_SMS;
+import static com.kora.android.common.Keys.PermissionChecker.PERMISSION_REQUEST_CODE_RECEIVE_READ_SMS;
 import static com.kora.android.common.Keys.SelectCountry.SELECT_COUNTRY_EXTRA;
 import static com.kora.android.common.Keys.SelectCountry.SELECT_COUNTRY_REQUEST_CODE;
 import static com.kora.android.data.network.Constants.API_BASE_URL;
@@ -41,8 +40,8 @@ public class FirstStepActivity extends BaseActivity<FirstStepPresenter> implemen
     Toolbar mToolbar;
     @BindView(R.id.image_view_country_flag)
     ImageView mIvCountryFlag;
-    @BindView(R.id.text_view_phone_code)
-    TextView mTvPhoneCode;
+    @BindView(R.id.edit_text_phone_code)
+    TextInputEditText mEtPhoneCode;
     @BindView(R.id.edit_layout_phone_number)
     TextInputLayout mElPhoneNumber;
     @BindView(R.id.edit_text_phone_number)
@@ -66,38 +65,30 @@ public class FirstStepActivity extends BaseActivity<FirstStepPresenter> implemen
     protected void onViewReady(final Bundle savedInstanceState) {
         setToolbar(mToolbar, R.drawable.ic_back_grey);
 
-//        getPresenter().startDeleteWalletsTask();
-        requestPermission();
-    }
-
-    @Override
-    public void showNextViews() {
         requestPermission();
     }
 
     private void requestPermission() {
-        mPermissionCheckerActivity.requestPermissions(PERMISSION_REQUEST_CODE_READ_SMS, READ_SMS, RECEIVE_SMS);
+        mPermissionCheckerActivity.requestPermissions(PERMISSION_REQUEST_CODE_RECEIVE_READ_SMS, RECEIVE_SMS, READ_SMS);
     }
 
-    @OnClick(R.id.relative_layout_select_country)
-    public void onClickSelectCountry() {
+    @OnClick({R.id.edit_text_phone_code, R.id.image_view_country_flag})
+    public void onClickPhoneCode() {
         startActivityForResult(CountriesActivity.getLaunchIntent(this), SELECT_COUNTRY_REQUEST_CODE);
     }
 
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-        if (requestCode == SELECT_COUNTRY_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                final CountryEntity countryEntity = data.getParcelableExtra(SELECT_COUNTRY_EXTRA);
-                getPresenter().setCountry(countryEntity);
-                Glide.with(this)
-                        .load(API_BASE_URL + countryEntity.getFlag())
-                        .into(mIvCountryFlag);
-                mTvPhoneCode.setText(countryEntity.getPhoneCode());
-                mElPhoneNumber.setError(null);
-                mEtPhoneNumber.setText(null);
-                ViewUtils.setMaxLength(mEtPhoneNumber, countryEntity.getPhoneCode());
-            }
+        if (requestCode == SELECT_COUNTRY_REQUEST_CODE && resultCode == RESULT_OK) {
+            final CountryEntity countryEntity = data.getParcelableExtra(SELECT_COUNTRY_EXTRA);
+            getPresenter().setCountry(countryEntity);
+            GlideApp.with(this)
+                    .load(API_BASE_URL + countryEntity.getFlag())
+                    .into(mIvCountryFlag);
+            mEtPhoneCode.setText(countryEntity.getPhoneCode());
+            mElPhoneNumber.setError(null);
+            mEtPhoneNumber.setText(null);
+            ViewUtils.setMaxLength(mEtPhoneNumber, countryEntity.getPhoneCode());
         }
     }
 

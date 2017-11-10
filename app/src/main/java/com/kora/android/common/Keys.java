@@ -15,19 +15,6 @@ public interface Keys {
     String WALLET_LIST_FILE_NAME = "wallets";
     String FILE_PROVIDER = ".file_provider";
 
-    interface ProxyHelperKeys {
-        String PROXY_HELPER_FILE_NAME = "com_kora_android_proxy_helper_file_name";
-        String PROXY_HELPER_PASSWORD = "com_kora_android_proxy_helper_password";
-        String PROXY_HELPER_ADDRESS = "com_kora_android_proxy_helper_address";
-    }
-
-    interface SessionHelperKeys {
-        String SESSION_HELPER_FILE_NAME = "SESSION_HELPER_FILE_NAME";
-        String SESSION_HELPER_PASSWORD = "SESSION_HELPER_PASSWORD";
-        String SESSION_HELPER_SESSION_TOKEN = "SESSION_HELPER_SESSION_TOKEN";
-        String SESSION_HELPER_USER = "SESSION_HELPER_USER";
-    }
-
     interface RegistrationHelperKeys {
         String REGISTRATION_HELPER_FILE_NAME = "REGISTRATION_HELPER_FILE_NAME";
         String REGISTRATION_HELPER_FILE_PASSWORD = "REGISTRATION_HELPER_FILE_PASSWORD";
@@ -41,7 +28,7 @@ public interface Keys {
     }
 
     interface PermissionChecker {
-        int PERMISSION_REQUEST_CODE_READ_SMS = 111;
+        int PERMISSION_REQUEST_CODE_RECEIVE_READ_SMS = 111;
         int PERMISSION_REQUEST_CODE_WRITE_EXTERNAL_STORAGE = 222;
     }
 

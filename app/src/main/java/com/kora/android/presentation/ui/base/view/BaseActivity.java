@@ -160,6 +160,11 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     }
 
     @Override
+    public void showError(@StringRes final  int stringId) {
+        showDialogMessage(R.string.error_title, stringId);
+    }
+
+    @Override
     public void showDialogMessage(@StringRes int title,
                                   final String message) {
 

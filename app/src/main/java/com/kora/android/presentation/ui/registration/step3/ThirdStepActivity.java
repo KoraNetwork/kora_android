@@ -8,6 +8,10 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.TextWatcher;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.kora.android.R;
@@ -17,8 +21,8 @@ import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.registration.step4.FourthStepActivity;
 
 import butterknife.BindView;
+import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
-import butterknife.OnTextChanged;
 
 public class ThirdStepActivity extends BaseActivity<ThirdStepPresenter> implements ThirdStepView {
 
@@ -45,6 +49,8 @@ public class ThirdStepActivity extends BaseActivity<ThirdStepPresenter> implemen
     TextView mTvCreateConfirm4DigitPin;
     @BindView(R.id.text_view_next_finish)
     TextView mTvNextFinish;
+    @BindView(R.id.check_box_visibility)
+    CheckBox mCbVisibility;
 
     public static Intent getLaunchIntent(final BaseActivity baseActivity) {
         return new Intent(baseActivity, ThirdStepActivity.class);
@@ -64,6 +70,7 @@ public class ThirdStepActivity extends BaseActivity<ThirdStepPresenter> implemen
     protected void onViewReady(final Bundle savedInstanceState) {
         setToolbar(mToolbar, R.drawable.ic_back_grey);
 
+        initUI();
         getPresenter().setViewMode(VIEW_MODE_ENTER);
     }
 
@@ -75,30 +82,84 @@ public class ThirdStepActivity extends BaseActivity<ThirdStepPresenter> implemen
             showAnotherMode();
     }
 
-    @OnTextChanged(R.id.edit_text_pin_first_digit)
-    void onChangedPinFirstDigit(final Editable editable) {
-        mElCreatePinCode.setError(null);
-        if (editable.toString().length() == 1)
-            mEtPinSecondDigit.requestFocus();
+    private void initUI() {
+        mEtPinFirstDigit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                mElCreatePinCode.setError(null);
+                if (s.toString().length() == 1) {
+                    mEtPinFirstDigit.clearFocus();
+                    mEtPinSecondDigit.requestFocus();
+                }
+            }
+        });
+        mEtPinSecondDigit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                mElCreatePinCode.setError(null);
+                if (s.toString().length() == 1) {
+                    mEtPinSecondDigit.clearFocus();
+                    mEtPinThirdDigit.requestFocus();
+                }
+            }
+        });
+        mEtPinThirdDigit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                mElCreatePinCode.setError(null);
+                if (s.toString().length() == 1) {
+                    mEtPinThirdDigit.clearFocus();
+                    mEtPinFourthDigit.requestFocus();
+                }
+            }
+        });
+        mEtPinFourthDigit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                mElCreatePinCode.setError(null);
+                if (s.toString().length() == 1)
+                    mEtPinFourthDigit.clearFocus();
+            }
+        });
     }
 
-    @OnTextChanged(R.id.edit_text_pin_second_digit)
-    void onChangedPinSecondDigit(final Editable editable) {
-        mElCreatePinCode.setError(null);
-        if (editable.toString().length() == 1)
-            mEtPinThirdDigit.requestFocus();
-    }
-
-    @OnTextChanged(R.id.edit_text_pin_third_digit)
-    void onChangedPinThirdDigit(final Editable editable) {
-        mElCreatePinCode.setError(null);
-        if (editable.toString().length() == 1)
-            mEtPinFourthDigit.requestFocus();
-    }
-
-    @OnTextChanged(R.id.edit_text_pin_fourth_digit)
-    void onChangedPinFourthDigit() {
-        mElCreatePinCode.setError(null);
+    @OnCheckedChanged(R.id.check_box_visibility)
+    public void onCheckChangedVisibility(boolean isChecked) {
+        if (isChecked) {
+            mEtPinFirstDigit.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+            mEtPinSecondDigit.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+            mEtPinThirdDigit.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+            mEtPinFourthDigit.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+        } else {
+            mEtPinFirstDigit.setTransformationMethod(PasswordTransformationMethod.getInstance());
+            mEtPinSecondDigit.setTransformationMethod(PasswordTransformationMethod.getInstance());
+            mEtPinThirdDigit.setTransformationMethod(PasswordTransformationMethod.getInstance());
+            mEtPinFourthDigit.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        }
     }
 
     @Override
@@ -161,6 +222,7 @@ public class ThirdStepActivity extends BaseActivity<ThirdStepPresenter> implemen
         mEtPinSecondDigit.clearFocus();
         mEtPinThirdDigit.clearFocus();
         mEtPinFourthDigit.clearFocus();
+        mCbVisibility.setChecked(false);
         ViewUtils.hideKeyboard(this);
     }
 

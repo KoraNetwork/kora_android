@@ -50,11 +50,6 @@ public class FirstStepPresenter extends BasePresenter<FirstStepView> {
                 .addFlag(DEFAULT_COUNTRY_FLAG);
     }
 
-    public void startDeleteWalletsTask() {
-        mRegistrationPrefHelper.clear();
-        mDeleteWalletsUseCase.execute(new DeleteWalletsObserver());
-    }
-
     public void startSendPhoneNumberTask() {
         if (mPhoneNumber == null || mPhoneNumber.isEmpty()) {
             getView().showEmptyPhoneNumber();
@@ -84,37 +79,6 @@ public class FirstStepPresenter extends BasePresenter<FirstStepView> {
 
     public void setPhoneNumber(final String phoneNumber) {
         mPhoneNumber = phoneNumber;
-    }
-
-    private class DeleteWalletsObserver extends DefaultInternetSubscriber {
-
-        @Override
-        protected void onStart() {
-            super.onStart();
-            if (!isViewAttached()) return;
-            getView().showProgress(true);
-        }
-
-        @Override
-        public void onComplete() {
-            if (!isViewAttached()) return;
-            getView().showProgress(false);
-            getView().showNextViews();
-        }
-
-        @Override
-        public void onError(@NonNull final Throwable throwable) {
-            super.onError(throwable);
-            if (!isViewAttached()) return;
-            getView().showProgress(false);
-
-        }
-
-        @Override
-        public void handleUnprocessableEntity(ErrorModel errorModel) {
-            if (!isViewAttached()) return;
-            getView().showError(errorModel.getError());
-        }
     }
 
     private class SendPhoneNumberObserver extends DefaultInternetSubscriber<Object> {

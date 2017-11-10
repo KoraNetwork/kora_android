@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -30,10 +31,10 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="16dp"
+                android:fontFamily="@font/muli_semi_bold"
                 android:text="@string/registration_personal_info"
                 android:textColor="@color/color_text_title"
-                android:textSize="24sp"
-                app:fontFamily="@font/muli_semi_bold" />
+                android:textSize="24sp" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_view_enter_personal_info"
@@ -42,11 +43,11 @@
                 android:layout_below="@+id/text_view_personal_info"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/muli_normal"
                 android:text="@string/registration_enter_personal_info"
                 android:textColor="@color/color_text_text"
-                android:textSize="16sp"
-                app:fontFamily="@font/muli_normal" />
+                android:textSize="16sp" />
 
             <ImageView
                 android:id="@+id/image_view_avatar"
@@ -54,28 +55,33 @@
                 android:layout_height="100dp"
                 android:layout_below="@+id/text_view_enter_personal_info"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="38dp"
+                android:layout_marginTop="36dp"
+                android:background="?android:attr/selectableItemBackground"
                 android:src="@drawable/ic_user_default" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_view_upload_photo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/image_view_avatar"
+                android:layout_alignStart="@+id/image_view_avatar"
                 android:layout_below="@+id/image_view_avatar"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="8dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:gravity="center"
                 android:text="@string/registration_upload_photo"
                 android:textColor="@color/color_text_blue"
                 app:fontFamily="@font/muli_semi_bold" />
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_view_required_user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignTop="@+id/edit_layout_user_name"
                 android:layout_marginEnd="25dp"
-                android:layout_marginRight="25dp"
+                android:fontFamily="@font/muli_regular"
                 android:text="@string/registration_required"
                 android:textColor="@color/color_text_blue"
                 android:textSize="20sp" />
@@ -88,18 +94,21 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="24dp"
+                android:fontFamily="muli_regular"
                 app:errorEnabled="true">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/edit_text_user_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="muli_regular"
                     android:hint="@string/registration_user_name"
                     android:inputType="text"
                     android:maxLength="35"
                     android:maxLines="1"
                     android:textColor="@color/color_edit_text"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    tools:text="adel" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -109,152 +118,174 @@
                 android:layout_below="@+id/edit_layout_user_name"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
+                android:fontFamily="muli_regular"
                 app:errorEnabled="true">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/edit_text_legal_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="muli_regular"
                     android:hint="@string/registration_legal_name"
                     android:inputType="text"
                     android:maxLength="35"
                     android:maxLines="1"
                     android:textColor="@color/color_edit_text"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    tools:text="Adel Adel" />
             </android.support.design.widget.TextInputLayout>
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_view_required_email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignTop="@+id/edit_layout_email"
                 android:layout_marginEnd="25dp"
-                android:layout_marginRight="25dp"
+                android:fontFamily="@font/muli_regular"
                 android:text="@string/registration_required"
                 android:textColor="@color/color_text_blue"
                 android:textSize="20sp" />
-
             <android.support.design.widget.TextInputLayout
+
                 android:id="@+id/edit_layout_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edit_layout_legal_name"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
+                android:fontFamily="muli_regular"
                 app:errorEnabled="true">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/edit_text_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="muli_regular"
                     android:hint="@string/registration_email"
                     android:inputType="text"
                     android:maxLength="35"
                     android:maxLines="1"
                     android:textColor="@color/color_edit_text"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    tools:text="adel@mail.com" />
             </android.support.design.widget.TextInputLayout>
 
-            <LinearLayout
-                android:id="@+id/linear_layout_select_date"
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_view_required_date_of_birth"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/edit_layout_date_of_birth"
+                android:layout_marginEnd="25dp"
+                android:fontFamily="@font/muli_regular"
+                android:text="@string/registration_required"
+                android:textColor="@color/color_text_blue"
+                android:textSize="20sp" />
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/edit_layout_date_of_birth"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edit_layout_email"
-                android:layout_marginLeft="20dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="16dp"
-                android:orientation="vertical">
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:fontFamily="muli_regular"
+                app:errorEnabled="true">
 
-                <TextView
-                    android:id="@+id/text_view_date_of_birth_label"
-                    android:layout_width="wrap_content"
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/edit_text_date_of_birth"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/registration_date_of_birth"
-                    android:textColor="@color/color_text_grey"
-                    android:textSize="12sp" />
+                    android:clickable="true"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:fontFamily="muli_regular"
+                    android:hint="@string/registration_date_of_birth"
+                    android:inputType="text"
+                    android:maxLength="35"
+                    android:maxLines="1"
+                    android:textColor="@color/color_edit_text"
+                    android:textSize="16sp"
+                    tools:text="01 Jan 1990" />
+            </android.support.design.widget.TextInputLayout>
 
-                <TextView
-                    android:id="@+id/text_view_date_of_birth"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:textColor="@color/color_text_black"
-                    android:textSize="18sp"
-                    tools:text="01 January 1980" />
-
-                <TextView
-                    android:id="@+id/text_view_date_of_birth_error"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="@string/registration_date_of_birth_incorrect"
-                    android:textColor="@color/color_text_red"
-                    android:textSize="12sp"
-                    android:visibility="gone" />
-            </LinearLayout>
-
-            <RelativeLayout
-                android:id="@+id/relative_layout_select_currency"
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_view_required_currency"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/linear_layout_select_date"
-                android:layout_marginLeft="20dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:clickable="true">
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/relative_layout_currency"
+                android:layout_marginEnd="25dp"
+                android:fontFamily="@font/muli_regular"
+                android:text="@string/registration_required"
+                android:textColor="@color/color_text_blue"
+                android:textSize="20sp" />
 
-                <TextView
-                    android:id="@+id/text_view_currency_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/registration_currency"
-                    android:textColor="@color/color_text_grey"
-                    android:textSize="12sp" />
+            <RelativeLayout
+                android:id="@+id/relative_layout_currency"
+                android:layout_width="match_parent"
+                android:layout_height="86dp"
+                android:layout_below="@+id/edit_layout_date_of_birth"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp">
 
                 <ImageView
                     android:id="@+id/image_view_country_flag"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_below="@+id/text_view_currency_label"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="18dp"
                     android:src="@drawable/ic_flag_usa" />
 
-                <TextView
-                    android:id="@+id/text_view_currency"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/image_view_country_flag"
-                    android:layout_alignTop="@+id/image_view_country_flag"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_toEndOf="@+id/image_view_country_flag"
-                    android:layout_toRightOf="@+id/image_view_country_flag"
-                    android:gravity="center"
-                    android:text="@string/registration_currency_usa"
-                    android:textColor="@color/color_button_text_black"
-                    android:textSize="18sp" />
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/edit_layout_currency"
+                    android:layout_width="match_parent"
+                    android:layout_height="86dp"
+                    android:fontFamily="muli_regular"
+                    app:errorEnabled="true">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/edit_text_currency"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:fontFamily="@font/muli_regular"
+                        android:hint="@string/registration_currency"
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:text="@string/registration_currency_usa"
+                        android:textColor="@color/color_edit_text"
+                        android:textSize="16sp" />
+                </android.support.design.widget.TextInputLayout>
             </RelativeLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/edit_layout_postal_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/relative_layout_select_currency"
+                android:layout_below="@+id/relative_layout_currency"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginTop="20dp"
+                android:fontFamily="muli_regular"
                 app:errorEnabled="true">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/edit_text_postal_code"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="muli_regular"
                     android:hint="@string/registration_postal_code"
                     android:inputType="text"
                     android:maxLength="10"
                     android:maxLines="1"
                     android:textColor="@color/color_edit_text"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    tools:text="88000" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -264,28 +295,31 @@
                 android:layout_below="@+id/edit_layout_postal_code"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
+                android:fontFamily="muli_regular"
                 app:errorEnabled="true">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/edit_text_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="muli_regular"
                     android:hint="@string/registration_address"
                     android:inputType="text"
                     android:maxLength="35"
                     android:maxLines="1"
                     android:textColor="@color/color_edit_text"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    tools:text="Uzh Varosh" />
             </android.support.design.widget.TextInputLayout>
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_view_required_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignTop="@+id/edit_layout_password"
                 android:layout_marginEnd="25dp"
-                android:layout_marginRight="25dp"
+                android:fontFamily="@font/muli_regular"
                 android:text="@string/registration_required"
                 android:textColor="@color/color_text_blue"
                 android:textSize="20sp" />
@@ -297,6 +331,7 @@
                 android:layout_below="@+id/edit_layout_address"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
+                android:fontFamily="muli_regular"
                 app:errorEnabled="true"
                 app:passwordToggleEnabled="true">
 
@@ -304,22 +339,24 @@
                     android:id="@+id/edit_text_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="muli_regular"
                     android:hint="@string/registration_password"
                     android:inputType="textPassword"
                     android:maxLength="20"
                     android:maxLines="1"
                     android:textColor="@color/color_edit_text"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    tools:text="1234QWERasdf" />
             </android.support.design.widget.TextInputLayout>
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_view_required_confirm_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignTop="@+id/edit_layout_confirm_password"
                 android:layout_marginEnd="25dp"
-                android:layout_marginRight="25dp"
+                android:fontFamily="@font/muli_regular"
                 android:text="@string/registration_required"
                 android:textColor="@color/color_text_blue"
                 android:textSize="20sp" />
@@ -331,6 +368,7 @@
                 android:layout_below="@+id/edit_layout_password"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
+                android:fontFamily="muli_regular"
                 app:errorEnabled="true"
                 app:passwordToggleEnabled="true">
 
@@ -338,12 +376,14 @@
                     android:id="@+id/edit_text_confirm_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="muli_regular"
                     android:hint="@string/registration_confirm_password"
                     android:inputType="textPassword"
                     android:maxLength="20"
                     android:maxLines="1"
                     android:textColor="@color/color_edit_text"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    tools:text="1234QWERasdf" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.v7.widget.CardView
@@ -372,10 +412,10 @@
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
+                        android:fontFamily="@font/muli_bold"
                         android:text="@string/registration_confirm"
                         android:textColor="@color/color_button_text_white"
-                        android:textSize="14sp"
-                        app:fontFamily="@font/muli_bold" />
+                        android:textSize="14sp" />
                 </RelativeLayout>
 
             </android.support.v7.widget.CardView>

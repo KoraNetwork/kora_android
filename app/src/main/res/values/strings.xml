@@ -30,6 +30,7 @@
     <!-- Registration step 1 activity -->
     <string name="registration_registration">Registration</string>
     <string name="registration_enter_phone_number">Please, enter your phone number and we will send you an SMS to verify your number</string>
+    <string name="registration_phone_code">Phone code</string>
     <string name="registration_phone_number">Phone number</string>
     <string name="registration_phone_code_usa">+1</string>
     <string name="registration_phone_number_empty">Phone number filed is empty</string>
@@ -82,7 +83,8 @@
     <string name="registration_email_empty">Email field is empty</string>
     <string name="registration_email_incorrect">Email is incorrect</string>
     <string name="registration_date_of_birth_incorrect">You are too young, must be at least 18 years old</string>
-    <string name="registration_currency_usa">USD</string>
+    <string name="registration_currency_usa">"       USD"</string>
+    <string name="registration_currency_different">"       %s"</string>
     <string name="registration_password_empty">Password field is empty</string>
     <string name="registration_password_incorrect">Password is incorrect, at least one upper case letter, one lower case letter, one number, length at least 8 symbols</string>
     <string name="registration_password_too_short">Password is too short, at least 8 symbols</string>
@@ -207,6 +209,7 @@
     <string name="web3j_error_message_identity_balance" formatted="false">You can not send %s eFiats. Proxy balance is %s.</string>
     <string name="web3j_error_message_no_wallet" formatted="false">No such wallet file on this device.</string>
     <string name="web3j_error_message_wrong_wallet" formatted="false">Wrong wallet file is selected.</string>
+    <string name="web3j_error_message_wrong_password" formatted="false">Wrong password is entered.</string>
 
     <!-- Transaction History -->
     <string name="transaction_history_to">To: %s</string>

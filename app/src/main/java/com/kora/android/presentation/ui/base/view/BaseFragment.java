@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.kora.android.KoraApplication;
+import com.kora.android.R;
 import com.kora.android.di.component.ConfigPersistentComponent;
 import com.kora.android.di.component.DaggerConfigPersistentComponent;
 import com.kora.android.di.component.FragmentComponent;
@@ -111,6 +112,11 @@ public abstract class BaseFragment<P extends Presenter> extends Fragment impleme
     @Override
     public void showError(String error) {
         getBaseActivity().showError(error);
+    }
+
+    @Override
+    public void showError(@StringRes final  int stringId) {
+        showDialogMessage(R.string.error_title, stringId);
     }
 
     @Override
