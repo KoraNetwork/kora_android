@@ -24,31 +24,7 @@ public class UserEntity implements Parcelable {
     private String mERC20Token;
     private String mFlag;
     private String mCurrencyNameFull;
-
-    @Override
-    public String toString() {
-        return "UserEntity{" + "\n" +
-                "mId=" + mId + "\n" +
-                "mAvatar=" + mAvatar + "\n" +
-                "mPhoneNumber=" + mPhoneNumber + "\n" +
-                "mIdentity=" + mIdentity + "\n" +
-                "mCreator=" + mCreator + "\n" +
-                "mRecoveryKey=" + mRecoveryKey + "\n" +
-                "mOwner=" + mOwner + "\n" +
-                "mUserName=" + mUserName + "\n" +
-                "mLegalName=" + mLegalName + "\n" +
-                "mEmail=" + mEmail + "\n" +
-                "mDateOfBirth=" + mDateOfBirth + "\n" +
-                "mCurrency=" + mCurrency + "\n" +
-                "mPostalCode=" + mPostalCode + "\n" +
-                "mAddress=" + mAddress + "\n" +
-                "mPassword=" + mPassword + "\n" +
-                "mCountryCode=" + mCountryCode + "\n" +
-                "mERC20Token=" + mERC20Token + "\n" +
-                "mFlag=" + mFlag + "\n" +
-                "mCurrencyNameFull=" + mCurrencyNameFull + "\n" +
-                "}";
-    }
+    private Boolean mAgreed;
 
     public UserEntity addId(final String id) {
         mId = id;
@@ -137,6 +113,11 @@ public class UserEntity implements Parcelable {
 
     public UserEntity addCurrencyNameFull(final String currencyNameFull) {
         mCurrencyNameFull = currencyNameFull;
+        return this;
+    }
+
+    public UserEntity addAgree(final Boolean agreed) {
+        mAgreed = agreed;
         return this;
     }
 
@@ -292,6 +273,14 @@ public class UserEntity implements Parcelable {
         this.mCurrencyNameFull = mCurrencyNameFull;
     }
 
+    public Boolean getAgreed() {
+        return mAgreed;
+    }
+
+    public void setAgreed(Boolean agreed) {
+        mAgreed = agreed;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -318,6 +307,7 @@ public class UserEntity implements Parcelable {
         dest.writeString(this.mERC20Token);
         dest.writeString(this.mFlag);
         dest.writeString(this.mCurrencyNameFull);
+        dest.writeInt(mAgreed == null ? -1 : mAgreed ? 1 : 0);
     }
 
     public UserEntity() {
@@ -343,6 +333,8 @@ public class UserEntity implements Parcelable {
         this.mERC20Token = in.readString();
         this.mFlag = in.readString();
         this.mCurrencyNameFull = in.readString();
+        int agr = in.readInt();
+        mAgreed = agr == -1 ? null : agr == 1;
     }
 
     public static final Creator<UserEntity> CREATOR = new Creator<UserEntity>() {

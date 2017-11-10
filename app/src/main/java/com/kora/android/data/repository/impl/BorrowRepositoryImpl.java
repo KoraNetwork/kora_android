@@ -1,6 +1,7 @@
 package com.kora.android.data.repository.impl;
 
 import com.kora.android.common.Keys;
+import com.kora.android.data.network.model.request.BorrowAgreedRequest;
 import com.kora.android.data.network.model.request.BorrowRequest;
 import com.kora.android.data.network.service.BorrowService;
 import com.kora.android.data.repository.BorrowRepository;
@@ -53,6 +54,12 @@ public class BorrowRepositoryImpl implements BorrowRepository {
                 getGuarantorId(guaranters, GUARANTOR_2),
                 getGuarantorId(guaranters, GUARANTOR_3)
         )).compose(mBorrowMapper.transformResponseToEntity());
+    }
+
+    @Override
+    public Observable<BorrowEntity> agree(String borrowId, boolean isAgreed) {
+        return mBorrowService.agree(borrowId, new BorrowAgreedRequest(isAgreed))
+                .compose(mBorrowMapper.transformResponseToEntity());
     }
 
     private String getGuarantorId(List<UserEntity> guaranters, int pos) {

@@ -13,7 +13,7 @@ import com.kora.android.presentation.model.UserEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GuarantorsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
+public class GuarantorsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public static final int MAX_SIZE = 3;
     @Nullable
@@ -91,6 +91,17 @@ public class GuarantorsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void removeItem(int position) {
         mUsers.remove(position);
         notifyItemRemoved(position);
+    }
+
+    public void changeItem(UserEntity user) {
+        for (int position = 0; position < mUsers.size(); position++) {
+            UserEntity entity = mUsers.get(position);
+            if (entity.getId().equals(user.getId())) {
+                mUsers.set(position, user);
+                notifyItemChanged(position);
+                return;
+            }
+        }
     }
 
     public interface OnItemClickListener extends com.kora.android.presentation.ui.base.adapter.OnItemClickListener {

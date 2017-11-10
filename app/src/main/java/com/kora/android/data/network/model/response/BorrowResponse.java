@@ -8,7 +8,9 @@ import com.kora.android.data.network.model.converter.RequestStateConverter;
 import com.kora.android.presentation.enums.Direction;
 import com.kora.android.presentation.enums.RequestState;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @JsonObject
 public class BorrowResponse {
@@ -25,9 +27,7 @@ public class BorrowResponse {
     @JsonField(name = "createdAt", typeConverter = DateTypeCustomConverter.class) private Date mCreatedAt;
     @JsonField(name = "from") private UserResponse mSender;
     @JsonField(name = "to") private UserResponse mReceiver;
-    @JsonField(name = "guarantor1") private UserResponse mGuarantor1 = new UserResponse();
-    @JsonField(name = "guarantor2") private UserResponse mGuarantor2 = new UserResponse();
-    @JsonField(name = "guarantor3") private UserResponse mGuarantor3 = new UserResponse();
+    @JsonField(name = "guarantors") private List<UserResponse> mGuarantors = new ArrayList<>();
 
     public String getId() {
         return mId;
@@ -125,27 +125,11 @@ public class BorrowResponse {
         mReceiver = receiver;
     }
 
-    public UserResponse getGuarantor1() {
-        return mGuarantor1;
+    public List<UserResponse> getGuarantors() {
+        return mGuarantors;
     }
 
-    public void setGuarantor1(UserResponse guarantor1) {
-        mGuarantor1 = guarantor1;
-    }
-
-    public UserResponse getGuarantor2() {
-        return mGuarantor2;
-    }
-
-    public void setGuarantor2(UserResponse guarantor2) {
-        mGuarantor2 = guarantor2;
-    }
-
-    public UserResponse getGuarantor3() {
-        return mGuarantor3;
-    }
-
-    public void setGuarantor3(UserResponse guarantor3) {
-        mGuarantor3 = guarantor3;
+    public void setGuarantors(List<UserResponse> guarantors) {
+        mGuarantors = guarantors;
     }
 }

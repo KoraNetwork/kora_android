@@ -3,10 +3,8 @@ package com.kora.android.data.repository.mapper;
 import com.kora.android.data.network.model.response.BorrowListResponse;
 import com.kora.android.data.network.model.response.BorrowResponse;
 import com.kora.android.presentation.model.BorrowEntity;
-import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.model.builder.BorrowEntityBuilder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -28,10 +26,8 @@ public class BorrowMapper {
                 .flatMap(borrowResponse -> Observable.zip(
                         mUserMapper.transformResponseToEntityUser(borrowResponse.getSender()),
                         mUserMapper.transformResponseToEntityUser(borrowResponse.getReceiver()),
-                        mUserMapper.transformResponseToEntityUser(borrowResponse.getGuarantor1()),
-                        mUserMapper.transformResponseToEntityUser(borrowResponse.getGuarantor2()),
-                        mUserMapper.transformResponseToEntityUser(borrowResponse.getGuarantor3()),
-                        (sender, receiver, guarantor1, guarantor2, guarantor3) -> new BorrowEntityBuilder()
+                        mUserMapper.transformUserListResponseToEntityUserList(borrowResponse.getGuarantors()),
+                        (sender, receiver, guarantors) -> new BorrowEntityBuilder()
                                 .setId(borrowResponse.getId())
                                 .setDirection(borrowResponse.getDirection())
                                 .setRate(borrowResponse.getRate())
@@ -44,20 +40,9 @@ public class BorrowMapper {
                                 .setMaturityDate(borrowResponse.getMaturityDate())
                                 .setSender(sender)
                                 .setReceiver(receiver)
-                                .setGuarantors(combineLists(guarantor1, guarantor2, guarantor3))
+                                .setGuarantors(guarantors)
                                 .createBorrowEntity()));
     }
-
-    private List<UserEntity> combineLists(UserEntity... guarantor) {
-        List<UserEntity> users = new ArrayList<>();
-        for (UserEntity entity : guarantor) {
-            if (entity.getId() != null)
-                users.add(entity);
-        }
-
-        return users;
-    }
-
 
     public ObservableTransformer<BorrowListResponse, List<BorrowEntity>> transformBorrowListResponseToBorrowEntityList() {
         return upstream -> upstream

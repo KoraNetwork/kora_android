@@ -72,4 +72,28 @@ public class BorrowAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if (mBorrows == null || mBorrows.size() == 0) return null;
         return mBorrows.get(position);
     }
+
+    public void updateItem(BorrowEntity borrow) {
+        if (mBorrows == null) return;
+        for (int position = 0; position < mBorrows.size(); position++) {
+            BorrowEntity entity = mBorrows.get(position);
+            if (entity.getId().equals(borrow.getId())) {
+                mBorrows.set(position, borrow);
+                notifyItemChanged(position);
+                return;
+            }
+        }
+    }
+
+    public void deleteItem(BorrowEntity borrow) {
+        if (mBorrows == null) return;
+        for (int position = 0; position < mBorrows.size(); position++) {
+            BorrowEntity entity = mBorrows.get(position);
+            if (entity.getId().equals(borrow.getId())) {
+                mBorrows.remove(position);
+                notifyItemRemoved(position);
+                return;
+            }
+        }
+    }
 }

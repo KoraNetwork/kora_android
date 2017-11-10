@@ -6,6 +6,8 @@ import com.kora.android.presentation.ui.base.view.BaseView;
 
 public interface BorrowMoneyView extends BaseView<BorrowMoneyPresenter> {
 
+    String test = "";
+
     void showCurrentUser(UserEntity userEntity);
 
     void showConvertedCurrency(Double amount);
@@ -28,30 +30,7 @@ public interface BorrowMoneyView extends BaseView<BorrowMoneyPresenter> {
 
     void onBorrowRequestAdded(BorrowEntity borrowEntity);
 
+    void onBorrowRequestUpdated(BorrowEntity borrowEntity);
 
-//    void showSender(UserEntity lender);
-//
-//    void showReceiver(UserEntity lender);
-//
-//    void showConvertedCurrency(double amount);
-//
-//    void showNoGuarantersError();
-//
-//    void showInvalidAmountError();
-//
-//    void showInvalidConvertedAmountError();
-//
-//    void showEmptyRateError();
-//
-//    void showEmptyStartDateError();
-//
-//    void showEmptyMaturityDateError();
-//
-//    void onBorrowRequestAdded(BorrowEntity borrowEntity);
-//
-//    void showPastStartDateError();
-//
-//    void showPastMaturityDateError();
-//
-//    void showBorrowRequest(BorrowEntity borrowEntity);
+    void setupGuarantor(UserEntity user);
 }
