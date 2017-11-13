@@ -10,10 +10,8 @@ import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.base.DefaultWeb3jSubscriber;
 import com.kora.android.domain.usecase.request.DeleteRequestUseCase;
-import com.kora.android.domain.usecase.transaction.AddToTransactionsUseCase;
 import com.kora.android.domain.usecase.transaction.CreateRawTransactionUseCase;
 import com.kora.android.domain.usecase.transaction.SendRawTransactionUseCase;
-import com.kora.android.domain.usecase.transaction.SendTransactionUseCase;
 import com.kora.android.presentation.enums.ActionType;
 import com.kora.android.presentation.enums.Direction;
 import com.kora.android.presentation.enums.TransactionType;
@@ -165,6 +163,11 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         @Override
         public void handlePinError(final CipherException cipherException) {
             getView().showError(R.string.web3j_error_message_wrong_password);
+        }
+
+        @Override
+        public void handleNetworkError(final Throwable throwable) {
+            getView().showError(R.string.web3j_error_message_network_problems);
         }
 
         @Override

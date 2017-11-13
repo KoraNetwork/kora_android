@@ -6,7 +6,7 @@
     <string name="dialog_progress_loading">Loading</string>
 
     <string name="dialog_retry_alert_title">Please try again later</string>
-    <string name="dialog_retry_message">The Internet connection appears to be offline.</string>
+    <string name="dialog_retry_message">The internet connection appears to be offline.</string>
     <string name="dialog_retry_positive_btn">Retry</string>
     <string name="dialog_retry_negative_btn">Cancel</string>
 
@@ -202,7 +202,8 @@
     <string name="enter_pin_transaction_is_sent">Transaction is sent</string>
 
     <!-- Web3j error messages -->
-    <string name="web3j_error_message_no_network">The Internet connection appears to be offline.</string>
+    <string name="web3j_error_message_no_network">The internet connection appears to be offline.</string>
+    <string name="web3j_error_message_network_problems">Problems with internet connection. Try again later.</string>
     <string name="web3j_error_message_preferences">Preferences mistake.</string>
     <string name="web3j_error_message_no_identity">Identity is not created yet. Try again later.</string>
     <string name="web3j_error_message_owner_balance" formatted="false">You need to have at least %s ETH to make transactions. Owner balance is %s.</string>

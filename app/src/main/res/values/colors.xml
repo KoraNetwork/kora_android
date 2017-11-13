@@ -52,4 +52,7 @@
     <color name="color_request_state_in_progress">#2b74a5</color>
     <color name="color_request_state_rejected">#e62f60</color>
 
+    <color name="color_progress_dialog_background">#cc000000</color>
+    <color name="color_progress_dialog_background_transparent">#00000000</color>
+
 </resources>

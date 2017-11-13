@@ -35,7 +35,7 @@ ext {
     buildToolsVersion = '26.0.2'
 
     // App dependencies
-    supportLibraryVersion = '26.0.2'
+    supportLibraryVersion = '26.1.0'
     rxAndroidVersion='2.0.1'
     rxJavaVersion='2.1.2'
     javaxAnnotationVerison='1.0'

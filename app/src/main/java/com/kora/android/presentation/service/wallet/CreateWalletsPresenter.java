@@ -2,6 +2,7 @@ package com.kora.android.presentation.service.wallet;
 
 import android.util.Log;
 
+import com.kora.android.R;
 import com.kora.android.common.helper.RegistrationPrefHelper;
 import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.data.web3j.model.response.IdentityCreatedResponse;
@@ -102,9 +103,15 @@ public class CreateWalletsPresenter extends BaseServicePresenter<CreateWalletsCo
         }
 
         @Override
+        public void handleNetworkError(final Throwable throwable) {
+            if (!isServiceAttached()) return;
+            getService().showError(R.string.web3j_error_message_network_problems, new RetryAction(mCreateIdentityAction));
+        }
+
+        @Override
         public void handleWeb3jError(final String message) {
             if (!isServiceAttached()) return;
-            getService().showError(message,  new RetryAction(mCreateIdentityAction));
+            getService().showError(message, new RetryAction(mCreateIdentityAction));
         }
     }
 
@@ -210,6 +217,12 @@ public class CreateWalletsPresenter extends BaseServicePresenter<CreateWalletsCo
             super.onError(throwable);
             Log.e("_____", throwable.toString());
             throwable.printStackTrace();
+        }
+
+        @Override
+        public void handleNetworkError(final Throwable throwable) {
+            if (!isServiceAttached()) return;
+            getService().showError(R.string.web3j_error_message_network_problems, new RetryAction(mCreateIdentityAction));
         }
 
         @Override

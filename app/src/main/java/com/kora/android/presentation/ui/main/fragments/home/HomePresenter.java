@@ -1,5 +1,6 @@
 package com.kora.android.presentation.ui.main.fragments.home;
 
+import com.kora.android.R;
 import com.kora.android.data.network.config.ErrorModel;
 import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.di.annotation.ConfigPersistent;
@@ -149,7 +150,13 @@ public class HomePresenter extends BasePresenter<HomeView> {
         }
 
         @Override
-        public void handleWeb3jError(String message) {
+        public void handleNetworkError(final Throwable throwable) {
+            if(!isViewAttached()) return;
+            getView().showError(R.string.web3j_error_message_network_problems);
+        }
+
+        @Override
+        public void handleWeb3jError(final String message) {
             if(!isViewAttached()) return;
             getView().showError(message);
         }

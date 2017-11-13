@@ -2,23 +2,26 @@ package com.kora.android.presentation.ui.base.view;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
-import android.support.annotation.StyleRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.kora.android.KoraApplication;
 import com.kora.android.R;
 import com.kora.android.di.component.ActivityComponent;
@@ -107,17 +110,20 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
                              @StringRes final int stringId) {
         if (isVisible) {
             if (mProgressDialog == null || !mProgressDialog.isShowing()) {
-                mProgressDialog = new ProgressDialog(this, R.style.AppTheme_Dialog);
+                mProgressDialog = new ProgressDialog(this, R.style.AppTheme_Dialog_Fullscreen );
                 mProgressDialog.setCancelable(isCancelable);
-                mProgressDialog.show();
-                mProgressDialog.setContentView(R.layout.progress_view);
-                final TextView tvMessage = mProgressDialog.findViewById(R.id.text_view_message);
-                tvMessage.setText(stringId);
-            } else {
-                mProgressDialog.show();
-                mProgressDialog.setContentView(R.layout.progress_view);
-                final TextView tvMessage = mProgressDialog.findViewById(R.id.text_view_message);
-                tvMessage.setText(stringId);
+            }
+            mProgressDialog.show();
+            mProgressDialog.setContentView(R.layout.view_progress);
+//            final TextView tvMessage = mProgressDialog.findViewById(R.id.text_view_message);
+//            tvMessage.setText(stringId);
+            final LottieAnimationView avLoading = mProgressDialog.findViewById(R.id.animation_view_loading);
+            avLoading.setAnimation("animation_loading.json");
+            avLoading.loop(true);
+            avLoading.playAnimation();
+            if (isCancelable) {
+                final RelativeLayout rlContainer = mProgressDialog.findViewById(R.id.relative_layout_container);
+                rlContainer.setOnClickListener(v -> mProgressDialog.dismiss());
             }
         } else if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();

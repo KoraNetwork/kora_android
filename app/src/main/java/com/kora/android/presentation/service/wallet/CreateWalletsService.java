@@ -52,7 +52,13 @@ public class CreateWalletsService extends BaseService<CreateWalletsPresenter> im
     }
 
     @Override
-    public void showError(String message, RetryAction createIdentityAction) {
+    public void showError(final String message, final RetryAction createIdentityAction) {
+        showNotification(NOTIFICATION_ID, message, true);
+    }
+
+    @Override
+    public void showError(final int stringId, final RetryAction retryAction) {
+        final String message = getString(stringId);
         showNotification(NOTIFICATION_ID, message, true);
     }
 
