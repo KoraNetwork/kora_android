@@ -106,6 +106,9 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
             getView().showIncorrectEmail();
             return;
         }
+        if (mUpdatedUserEntity.getDateOfBirth() == null || mUpdatedUserEntity.getDateOfBirth().isEmpty()) {
+            mUpdatedUserEntity.setDateOfBirth(mUserEntity.getDateOfBirth());
+        }
         if (!DateUtils.isDateValid(mUpdatedUserEntity.getDateOfBirth())) {
             getView().showIncorrectDate();
             return;
@@ -132,11 +135,9 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
     public void onChangeMode(ViewMode viewMode) {
         switch (viewMode) {
             case EDIT_MODE:
-
                 break;
-
             case VIEW_MODE:
-                mUpdatedUserEntity = mUserEntity;
+                mUpdatedUserEntity = new UserEntity();
                 if (!isViewAttached()) return;
                 getView().retrieveUserData(mUserEntity);
                 break;
@@ -158,7 +159,7 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
     private Action mUpdateUserAction = new Action() {
         @Override
         public void run() throws Exception {
-            mUpdateUserUseCase.execute(new GetUserSubscriber());
+            mUpdateUserUseCase.execute(new UpdateUserSubscriber());
         }
     };
 
@@ -180,7 +181,6 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
         @Override
         public void onNext(UserEntity userEntity) {
             mUserEntity = userEntity;
-            mUpdatedUserEntity = userEntity;
             if (!isViewAttached()) return;
             getView().retrieveUserData(userEntity);
         }
