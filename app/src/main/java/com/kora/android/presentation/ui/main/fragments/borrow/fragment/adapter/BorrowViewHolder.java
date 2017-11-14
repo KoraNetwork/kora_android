@@ -1,8 +1,10 @@
 package com.kora.android.presentation.ui.main.fragments.borrow.fragment.adapter;
 
 import android.content.Context;
+import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -48,33 +50,34 @@ public class BorrowViewHolder extends RecyclerView.ViewHolder {
     public void bind(BorrowEntity borrowEntity) {
         switch (borrowEntity.getDirection()) {
             case FROM:
-                mDirectionIcon.setImageResource(R.drawable.ic_arrow_gr);
+                mDirectionIcon.setImageResource(R.drawable.ic_arrow_red);
                 mSenderName.setText(mContext.getString(R.string.transaction_history_from_me));
                 mReceiverName.setText(mContext.getString(R.string.transaction_history_to, borrowEntity.getReceiver().getFullName()));
-                mAmount.setText(mContext.getString(R.string.transactions_amount, mFormatter.format(borrowEntity.getToAmount()), borrowEntity.getReceiver().getCurrency()));
+                mAmount.setText(mContext.getString(R.string.transactions_amount, mFormatter.format(borrowEntity.getFromAmount()), borrowEntity.getSender().getCurrency()));
                 break;
             case TO:
-                mDirectionIcon.setImageResource(R.drawable.ic_arrow_red);
+                mDirectionIcon.setImageResource(R.drawable.ic_arrow_green);
                 mSenderName.setText(mContext.getString(R.string.transaction_history_from, borrowEntity.getSender().getUserName()));
                 mReceiverName.setText(mContext.getString(R.string.transaction_history_to_me));
                 mAmount.setText(mContext.getString(R.string.transactions_amount, mFormatter.format(borrowEntity.getToAmount()), borrowEntity.getReceiver().getCurrency()));
                 break;
             case GUARANTOR:
-                mDirectionIcon.setImageResource(R.drawable.ic_arrow_red);
+                mDirectionIcon.setImageResource(R.drawable.ic_arrow_green);
                 mSenderName.setText(mContext.getString(R.string.transaction_history_from, borrowEntity.getSender().getUserName()));
-                mReceiverName.setText(mContext.getString(R.string.transaction_history_to_me));
-                mAmount.setText(mContext.getString(R.string.transactions_amount, mFormatter.format(borrowEntity.getToAmount()), borrowEntity.getReceiver().getCurrency()));
+                mReceiverName.setText(mContext.getString(R.string.transaction_history_to, borrowEntity.getReceiver().getFullName()));
+                mAmount.setText(mContext.getString(R.string.transactions_amount, mFormatter.format(borrowEntity.getFromAmount()), borrowEntity.getSender().getCurrency()));
                 break;
         }
 
-        mType.setText(getTypeResource(borrowEntity.getState()));
+        mType.setVisibility(View.GONE);
+        mState.setText(getStateString(borrowEntity.getState()));
+        mState.setTextColor(ContextCompat.getColor(mContext, getStateColor(borrowEntity.getState())));
         mDate.setText(DateUtils.getFormattedDate("dd.MM.yyyy", borrowEntity.getCreatedAt()));
         mTime.setText(DateUtils.getFormattedDate("hh:mm aa", borrowEntity.getCreatedAt()));
-        mState.setVisibility(View.GONE);
     }
 
     @StringRes
-    private int getTypeResource(RequestState requestState) {
+    private int getStateString(final RequestState requestState) {
         switch (requestState) {
             case REJECTED:
                 return R.string.request_money_status_rejected;
@@ -88,6 +91,23 @@ public class BorrowViewHolder extends RecyclerView.ViewHolder {
                 return R.string.request_money_status_pending;
         }
         return R.string.empty_string;
+    }
+
+    @ColorRes
+    private int getStateColor(final RequestState requestState) {
+        switch (requestState) {
+            case REJECTED:
+                return R.color.color_request_state_rejected;
+//            case REQUESTED:
+//                return R.color.color_request_state_rejected;
+//            case INPROGRESS:
+//                return R.color.color_request_state_rejected;
+//            case BORROWED:
+//                return R.color.color_request_state_rejected;
+            case PENDING:
+                return R.color.color_request_state_in_progress;
+        }
+        return 0;
     }
 
     @OnClick(R.id.root_view)

@@ -59,7 +59,7 @@ public final class TransactionViewHolder extends RecyclerView.ViewHolder {
                 mAmount.setText(mContext.getString(R.string.transactions_amount, mFormatter.format(transactionEntity.getFromAmount()), transactionEntity.getSender().getCurrency()));
                 break;
             case TO:
-                mDirectionIcon.setImageResource(R.drawable.ic_arrow_gr);
+                mDirectionIcon.setImageResource(R.drawable.ic_arrow_green);
                 mSenderName.setText(mContext.getString(R.string.transaction_history_from, transactionEntity.getSender().getUserName()));
                 mReceiverName.setText(mContext.getString(R.string.transaction_history_to_me));
                 mAmount.setText(mContext.getString(R.string.transactions_amount, mFormatter.format(transactionEntity.getToAmount()), transactionEntity.getReceiver().getCurrency()));

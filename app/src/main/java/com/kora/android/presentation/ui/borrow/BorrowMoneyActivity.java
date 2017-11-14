@@ -35,6 +35,7 @@ import com.kora.android.common.utils.StringUtils;
 import com.kora.android.common.utils.ViewUtils;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.enums.Action;
+import com.kora.android.presentation.enums.Direction;
 import com.kora.android.presentation.enums.RequestState;
 import com.kora.android.presentation.enums.ViewMode;
 import com.kora.android.presentation.model.BorrowEntity;
@@ -539,26 +540,63 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
     }
 
     private void calculateTotals() {
-        double amount = mReceiverAmount.getAmount();
-        String rateString = mRateEditText.getText().toString();
-
-        if (amount == 0 || rateString.isEmpty()) {
-            mTotalInterest.setText("");
-            mTotalAmount.setText("");
-            return;
+        if (mViewMode == ViewMode.EDIT_MODE && getPresenter().getBorrow() == null) {
+            double amount = mSenderAmount.getAmount();
+            String rateString = mRateEditText.getText().toString();
+            if (amount == 0 || rateString.isEmpty()) {
+                mTotalInterest.setText("");
+                mTotalAmount.setText("");
+                return;
+            }
+            try {
+                double rate = Double.valueOf(rateString);
+                double totalInterest = amount * rate / 100;
+                double totalAmount = amount + totalInterest;
+                mTotalInterest.setText(getString(R.string.borrow_amount, totalInterest, mSenderAmount.getCurrency()));
+                mTotalAmount.setText(getString(R.string.borrow_amount, totalAmount, mSenderAmount.getCurrency()));
+            } catch (Exception e) {
+            }
+        } else if (mViewMode == ViewMode.VIEW_MODE && getPresenter().getBorrow() != null) {
+            final Direction direction = getPresenter().getBorrow().getDirection();
+            switch (direction) {
+                case FROM: {
+                    double amount = mSenderAmount.getAmount();
+                    String rateString = mRateEditText.getText().toString();
+                    if (amount == 0 || rateString.isEmpty()) {
+                        mTotalInterest.setText("");
+                        mTotalAmount.setText("");
+                        return;
+                    }
+                    try {
+                        double rate = Double.valueOf(rateString);
+                        double totalInterest = amount * rate / 100;
+                        double totalAmount = amount + totalInterest;
+                        mTotalInterest.setText(getString(R.string.borrow_amount, totalInterest, mSenderAmount.getCurrency()));
+                        mTotalAmount.setText(getString(R.string.borrow_amount, totalAmount, mSenderAmount.getCurrency()));
+                    } catch (Exception e) {
+                    }
+                    break;
+                }
+                case TO: {
+                    double amount = mReceiverAmount.getAmount();
+                    String rateString = mRateEditText.getText().toString();
+                    if (amount == 0 || rateString.isEmpty()) {
+                        mTotalInterest.setText("");
+                        mTotalAmount.setText("");
+                        return;
+                    }
+                    try {
+                        double rate = Double.valueOf(rateString);
+                        double totalInterest = amount * rate / 100;
+                        double totalAmount = amount + totalInterest;
+                        mTotalInterest.setText(getString(R.string.borrow_amount, totalInterest, mReceiverAmount.getCurrency()));
+                        mTotalAmount.setText(getString(R.string.borrow_amount, totalAmount, mReceiverAmount.getCurrency()));
+                    } catch (Exception e) {
+                    }
+                    break;
+                }
+            }
         }
-        try {
-            double rate = Double.valueOf(rateString);
-
-            double totalInterest = amount * rate / 100;
-            double totalAmount = amount + totalInterest;
-
-            mTotalInterest.setText(getString(R.string.borrow_amount, totalInterest, mReceiverAmount.getCurrency()));
-            mTotalAmount.setText(getString(R.string.borrow_amount, totalAmount, mReceiverAmount.getCurrency()));
-
-        } catch (Exception e) {
-        }
-
     }
 
     private void setupFromDirection(BorrowEntity borrow) {

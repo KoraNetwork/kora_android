@@ -44,7 +44,7 @@ public final class CashViewHolder extends RecyclerView.ViewHolder {
                 mCashAmount.setText(String.format(Locale.ENGLISH, "%1$.2f %2$s", transactionEntity.getFromAmount(), transactionEntity.getSender().getCurrency()));
                 break;
             case TO:
-                mDirectionIcon.setImageResource(R.drawable.ic_arrow_gr);
+                mDirectionIcon.setImageResource(R.drawable.ic_arrow_green);
                 mCashType.setText(mContext.getString(R.string.transaction_history_cash_out));
                 mCashAmount.setText(String.format(Locale.ENGLISH, "%1$.2f %2$s", transactionEntity.getToAmount(), transactionEntity.getReceiver().getCurrency()));
 

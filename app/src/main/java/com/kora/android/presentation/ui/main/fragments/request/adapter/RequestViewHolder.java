@@ -51,7 +51,7 @@ public class RequestViewHolder extends RecyclerView.ViewHolder {
                 mRequestName.setText(mContext.getString(R.string.request_money_ask_money_label, requestEntity.getTo().getFullName()));
                 break;
             case TO:
-                mDirectionIcon.setImageResource(R.drawable.ic_arrow_gr);
+                mDirectionIcon.setImageResource(R.drawable.ic_arrow_green);
                 mSenderName.setText(mContext.getString(R.string.request_money_from_label, requestEntity.getFrom().getFullName()));
                 mAmount.setText(mContext.getString(R.string.transactions_amount, mFormatter.format(requestEntity.getToAmount()), requestEntity.getTo().getCurrency()));
                 mRequestName.setText(R.string.request_money_ask_to_me);
