@@ -70,20 +70,9 @@ public class RepositoryModule {
 
     @Singleton
     @Provides
-    public TransactionRepository provideTransactionRepository(final Context context,
-                                                              final PreferenceHandler preferenceHandler,
-                                                              final Web3jConnection web3jConnection,
-                                                              final EtherWalletStorage etherWalletStorage,
-                                                              final TransactionService transactionService,
+    public TransactionRepository provideTransactionRepository(final TransactionService transactionService,
                                                               final TransactionMapper transactionMapper) {
-        return new TransactionRepositoryImpl(
-                context,
-                preferenceHandler,
-                web3jConnection,
-                etherWalletStorage,
-                transactionService,
-                transactionMapper
-        );
+        return new TransactionRepositoryImpl(transactionService, transactionMapper);
     }
 
     @Singleton
@@ -103,9 +92,16 @@ public class RepositoryModule {
     @Singleton
     @Provides
     public Web3jRepository provideWalletRepository(final Context context,
+                                                   final PreferenceHandler preferenceHandler,
                                                    final Web3jConnection web3jConnection,
                                                    final EtherWalletUtils etherWalletUtils,
                                                    final EtherWalletStorage etherWalletStorage) {
-        return new Web3jRepositoryImpl(context, web3jConnection, etherWalletUtils, etherWalletStorage);
+        return new Web3jRepositoryImpl(
+                context,
+                preferenceHandler,
+                web3jConnection,
+                etherWalletUtils,
+                etherWalletStorage
+        );
     }
 }

@@ -26,4 +26,7 @@ public interface Constants {
 
     String FUNCTION_TRANSFER = "transfer";
     String FUNCTION_FORWARD_TO = "forwardTo";
+
+    String RINKEBY_KORA_LOAN_ADDRESS = "0x4f2309d5e066e7d3b7bde6604248a7ab4cc71397";
+    String FUNCTION_CREATE_LOAN = "createLoan";
 }

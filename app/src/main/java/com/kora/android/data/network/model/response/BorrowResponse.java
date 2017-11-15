@@ -2,11 +2,11 @@ package com.kora.android.data.network.model.response;
 
 import com.bluelinelabs.logansquare.annotation.JsonField;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
+import com.kora.android.data.network.model.converter.BorrowStateConverter;
 import com.kora.android.data.network.model.converter.DateTypeCustomConverter;
 import com.kora.android.data.network.model.converter.DirectionTypeConverter;
-import com.kora.android.data.network.model.converter.RequestStateConverter;
+import com.kora.android.presentation.enums.BorrowState;
 import com.kora.android.presentation.enums.Direction;
-import com.kora.android.presentation.enums.RequestState;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,10 +17,10 @@ public class BorrowResponse {
 
     @JsonField(name = "id") private String mId;
     @JsonField(name = "direction", typeConverter = DirectionTypeConverter.class) private Direction mDirection;
-    @JsonField(name = "state", typeConverter = RequestStateConverter.class) private RequestState mState;
+    @JsonField(name = "state", typeConverter = BorrowStateConverter.class) private BorrowState mState;
     @JsonField(name = "fromAmount") private double mFromAmount;
     @JsonField(name = "toAmount") private double mToAmount;
-    @JsonField(name = "rate") private int mRate;
+    @JsonField(name = "interestRate") private int mRate;
     @JsonField(name = "additionalNote") private String mAdditionalNote;
     @JsonField(name = "startDate", typeConverter = DateTypeCustomConverter.class) private Date mStartDate;
     @JsonField(name = "maturityDate", typeConverter = DateTypeCustomConverter.class) private Date mMaturityDate;
@@ -45,11 +45,11 @@ public class BorrowResponse {
         mDirection = direction;
     }
 
-    public RequestState getState() {
+    public BorrowState getState() {
         return mState;
     }
 
-    public void setState(RequestState state) {
+    public void setState(BorrowState state) {
         mState = state;
     }
 

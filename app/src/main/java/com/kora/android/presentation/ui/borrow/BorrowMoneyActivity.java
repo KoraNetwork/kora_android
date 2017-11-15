@@ -35,6 +35,8 @@ import com.kora.android.common.utils.StringUtils;
 import com.kora.android.common.utils.ViewUtils;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.enums.Action;
+import com.kora.android.presentation.enums.ActionType;
+import com.kora.android.presentation.enums.BorrowState;
 import com.kora.android.presentation.enums.Direction;
 import com.kora.android.presentation.enums.RequestState;
 import com.kora.android.presentation.enums.ViewMode;
@@ -45,6 +47,7 @@ import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.base.view.ToolbarActivity;
 import com.kora.android.presentation.ui.borrow.adapter.GuarantorsAdapter;
 import com.kora.android.presentation.ui.common.add_contact.GetContactActivity;
+import com.kora.android.presentation.ui.common.enter_pin.EnterPinActivity;
 import com.kora.android.views.currency.CurrencyEditText;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
@@ -422,6 +425,11 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
 
     }
 
+    @Override
+    public void showEnterPinScreen(final BorrowEntity borrowEntity, final ActionType actionType) {
+        startActivity(EnterPinActivity.getLaunchIntent(this, borrowEntity, actionType));
+    }
+
     // ================= HELPERS
 
     private void changeAddGuarantorButtonState() {
@@ -606,9 +614,9 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
 
         setupBasicFields(borrow);
 
-        if (borrow.getState() == RequestState.REJECTED) {
+        if (borrow.getState() == BorrowState.REJECTED) {
             mActionButton.setVisibility(View.GONE);
-            mBorrowRequestStatusLender.setText(borrow.getState().text());
+            mBorrowRequestStatusLender.setText(borrow.getState().getText());
             mBorrowRequestStatusLender.setTextColor(getResources().getColor(R.color.color_text_red));
 
             if (borrow.getReceiver().getAgreed() != null && !borrow.getReceiver().getAgreed()) {
@@ -651,12 +659,12 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
 
         setupBasicFields(borrow);
 
-        if (borrow.getState() == RequestState.REJECTED) {
+        if (borrow.getState() == BorrowState.REJECTED) {
             mActionButton.setVisibility(View.GONE);
-            mBorrowRequestStatusBorower.setText(borrow.getState().text());
+            mBorrowRequestStatusBorower.setText(borrow.getState().getText());
             mBorrowRequestStatusBorower.setTextColor(getResources().getColor(R.color.color_text_red));
         } else {
-            if (borrow.getState() == RequestState.PENDING) {
+            if (borrow.getState() == BorrowState.ONGOING) {
                 boolean isAgree = checkAllUserAgreed(borrow, false);
                 mActionButton.setEnabled(isAgree);
                 mDisagreeButton.setEnabled(isAgree);
@@ -668,7 +676,7 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
                 } else if (borrow.getReceiver().getAgreed()) {
                     mActionButton.setEnabled(false);
                     mActionButton.setBackgroundResource(R.drawable.green_button_background);
-                    mActionButton.setOnClickListener(v -> getPresenter().lentMoney());
+                    mActionButton.setOnClickListener(v -> getPresenter().lendMoney());
                 } else {
                     mDisagreeButton.setVisibility(View.GONE);
                     mActionButton.setVisibility(View.GONE);
@@ -698,9 +706,9 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
             mCheckedIcon.setImageResource(R.drawable.ic_delete);
         }
 
-        if (borrow.getState() == RequestState.REJECTED) {
+        if (borrow.getState() == BorrowState.REJECTED) {
             mActionButton.setVisibility(View.GONE);
-            mBorrowRequestStatusBorower.setText(borrow.getState().text());
+            mBorrowRequestStatusBorower.setText(borrow.getState().getText());
             mBorrowRequestStatusBorower.setTextColor(getResources().getColor(R.color.color_text_red));
         } else {
 

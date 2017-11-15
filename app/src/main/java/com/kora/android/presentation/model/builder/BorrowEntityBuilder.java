@@ -1,7 +1,7 @@
 package com.kora.android.presentation.model.builder;
 
+import com.kora.android.presentation.enums.BorrowState;
 import com.kora.android.presentation.enums.Direction;
-import com.kora.android.presentation.enums.RequestState;
 import com.kora.android.presentation.model.BorrowEntity;
 import com.kora.android.presentation.model.UserEntity;
 
@@ -11,7 +11,7 @@ import java.util.List;
 public class BorrowEntityBuilder {
     private String mId;
     private Direction mDirection;
-    private RequestState mState;
+    private BorrowState mState;
     private double mFromAmount;
     private double mToAmount;
     private int mRate;
@@ -33,7 +33,7 @@ public class BorrowEntityBuilder {
         return this;
     }
 
-    public BorrowEntityBuilder setState(RequestState state) {
+    public BorrowEntityBuilder setState(BorrowState state) {
         mState = state;
         return this;
     }

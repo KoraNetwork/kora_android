@@ -11,7 +11,7 @@ public class BorrowRequest {
 
     @JsonField(name = "fromAmount") private double mFromAmount;
     @JsonField(name = "toAmount") private double mToAmount;
-    @JsonField(name = "rate") private int mRate;
+    @JsonField(name = "interestRate") private int mRate;
     @JsonField(name = "additionalNote") private String mAdditionalNote;
     @JsonField(name = "startDate", typeConverter = DateTypeCustomConverter.class) private Date mStartDate;
     @JsonField(name = "maturityDate", typeConverter = DateTypeCustomConverter.class) private Date mMaturityDate;

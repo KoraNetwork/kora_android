@@ -1,15 +1,12 @@
 package com.kora.android.data.repository.impl;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
-import android.provider.OpenableColumns;
-import android.util.Log;
 
 import com.kora.android.R;
+import com.kora.android.common.preferences.PreferenceHandler;
 import com.kora.android.common.utils.CommonUtils;
 import com.kora.android.common.utils.Web3jUtils;
 import com.kora.android.data.repository.Web3jRepository;
@@ -28,6 +25,8 @@ import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.FunctionReturnDecoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Address;
+import org.web3j.abi.datatypes.DynamicArray;
+import org.web3j.abi.datatypes.DynamicBytes;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.generated.Uint256;
@@ -39,16 +38,18 @@ import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.RawTransaction;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthCall;
+import org.web3j.protocol.core.methods.response.EthGetBalance;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.utils.Numeric;
 
 import java.io.File;
-import java.io.InputStream;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -59,21 +60,25 @@ import io.reactivex.Observable;
 import static com.kora.android.common.Keys.ADDRESS_PREFIX;
 import static com.kora.android.common.Keys.EXPORT_FOLDER_NAME;
 import static com.kora.android.common.Keys.JSON_FILE_EXTENSION;
+import static com.kora.android.common.Keys.Shared.USER;
 
 @Singleton
 public class Web3jRepositoryImpl implements Web3jRepository {
 
     private final Context mContext;
+    private final PreferenceHandler mPreferenceHandler;
     private final Web3jConnection mWeb3jConnection;
     private final EtherWalletUtils mEtherWalletUtils;
     private final EtherWalletStorage mEtherWalletStorage;
 
     @Inject
     public Web3jRepositoryImpl(final Context context,
+                               final PreferenceHandler preferenceHandler,
                                final Web3jConnection web3jConnection,
                                final EtherWalletUtils etherWalletUtils,
                                final EtherWalletStorage etherWalletStorage) {
         mContext = context;
+        mPreferenceHandler = preferenceHandler;
         mWeb3jConnection = web3jConnection;
         mEtherWalletUtils = etherWalletUtils;
         mEtherWalletStorage = etherWalletStorage;
@@ -303,6 +308,293 @@ public class Web3jRepositoryImpl implements Web3jRepository {
             mEtherWalletStorage.addWallet(koraEtherWallet);
 
             return a;
+        });
+    }
+
+    @Override
+    public Observable<List<String>> createRawTransaction(final UserEntity receiver,
+                                                         final double senderAmount,
+                                                         final double receiverAmount,
+                                                         final String pinCode) {
+        return Observable.just(true).map(a -> {
+
+            if (!CommonUtils.isNetworkConnected(mContext))
+                throw new Exception(mContext.getString(R.string.web3j_error_message_no_network));
+
+            final UserEntity sender = mPreferenceHandler.remindObject(USER, UserEntity.class);
+            if (sender == null)
+                throw new Exception(mContext.getString(R.string.web3j_error_message_preferences));
+
+            if (sender.getIdentity() == null || sender.getIdentity().isEmpty())
+                throw new Exception(mContext.getString(R.string.web3j_error_message_no_identity));
+
+            final Web3j web3j = mWeb3jConnection.getWeb3jRinkeby();
+
+            final Credentials senderCredentials = mEtherWalletStorage.getCredentials(
+                    Web3jUtils.getKeystoreFileNameFromAddress(sender.getOwner()),
+                    pinCode);
+
+            ////////////////////////////////////////////////////////////////////////////////////////
+
+            final EthGetBalance ethGetBalance = web3j
+                    .ethGetBalance(sender.getOwner(), DefaultBlockParameterName.LATEST)
+                    .sendAsync()
+                    .get();
+            final BigInteger balanceOwnerWei = ethGetBalance.getBalance();
+            final double balanceOwnerEth = Web3jUtils.convertWeiToEth(balanceOwnerWei);
+
+            if (balanceOwnerEth < mWeb3jConnection.getMinOwnerBalance())
+                throw new Exception(mContext.getString(R.string.web3j_error_message_owner_balance,
+                        String.valueOf(mWeb3jConnection.getMinOwnerBalance()),
+                        String.valueOf(balanceOwnerEth)));
+
+            ////////////////////////////////////////////////////////////////////////////////////////
+
+            final Function getBalanceFunction = new Function(
+                    mWeb3jConnection.getGetBalabceFunction(),
+                    Collections.singletonList(new Address(sender.getIdentity())),
+                    Collections.singletonList(new TypeReference<Uint256>() {
+                    })
+            );
+            final String encodedFunction = FunctionEncoder.encode(getBalanceFunction);
+
+            final EthCall response = web3j
+                    .ethCall(
+                            Transaction.createEthCallTransaction(sender.getIdentity(), sender.getERC20Token(), encodedFunction),
+                            DefaultBlockParameterName.LATEST)
+                    .sendAsync()
+                    .get();
+            final List<Type> someTypes = FunctionReturnDecoder.decode(response.getValue(), getBalanceFunction.getOutputParameters());
+            final BigInteger balanceIdentityBigInteger = (BigInteger) someTypes.get(0).getValue();
+            final double balanceIdentityToken = Web3jUtils.convertBigIntegerToToken(balanceIdentityBigInteger);
+
+            if (senderAmount > balanceIdentityToken)
+                throw new Exception(mContext.getString(R.string.web3j_error_message_identity_balance,
+                        String.valueOf(senderAmount),
+                        String.valueOf(balanceIdentityToken)));
+
+            ////////////////////////////////////////////////////////////////////////////////////////
+
+            if (!CommonUtils.isNetworkConnected(mContext))
+                throw new Exception(mContext.getString(R.string.web3j_error_message_no_network));
+
+            final EthGetTransactionCount senderEthGetTransactionCount = web3j
+                    .ethGetTransactionCount(sender.getOwner(), DefaultBlockParameterName.LATEST)
+                    .sendAsync()
+                    .get();
+            final BigInteger senderTransactionCount = senderEthGetTransactionCount.getTransactionCount();
+
+            ////////////////////////////////////////////////////////////////////////////////////////
+
+            if (sender.getCurrency().equals(receiver.getCurrency())) {
+
+                final Function transferFunction = new Function(
+                        mWeb3jConnection.getGetTransferFunction(),
+                        Arrays.asList(
+                                new Address(receiver.getIdentity()),
+                                new Uint256(Web3jUtils.convertTokenToBigInteger(senderAmount))
+                        ),
+                        Collections.emptyList()
+                );
+                final String senderTransferFunctionString = FunctionEncoder.encode(transferFunction);
+                final byte[] senderTransferFunctionByteArray = Numeric.hexStringToByteArray(senderTransferFunctionString);
+
+                final Function forwardToFunction = new Function(
+                        mWeb3jConnection.getForwardToFunction(),
+                        Arrays.asList(
+                                new Address(sender.getOwner()),
+                                new Address(sender.getIdentity()),
+                                new Address(sender.getERC20Token()),
+                                Uint256.DEFAULT,
+                                new DynamicBytes(senderTransferFunctionByteArray)
+                        ),
+                        Collections.emptyList()
+                );
+                final String senderForwardToFunctionString = FunctionEncoder.encode(forwardToFunction);
+
+                final RawTransaction senderRawTransaction = RawTransaction.createTransaction(
+                        senderTransactionCount,
+                        mWeb3jConnection.getGasPrice(),
+                        mWeb3jConnection.getGasLimit(),
+                        mWeb3jConnection.getMetaIdentityManagerRinkeby(),
+                        senderForwardToFunctionString);
+
+                final byte[] senderSignedMessage = TransactionEncoder.signMessage(senderRawTransaction, senderCredentials);
+                final String senderHexValue = Numeric.toHexString(senderSignedMessage);
+
+                return Collections.singletonList(senderHexValue);
+
+            } else {
+
+                final Function senderTransferFunction = new Function(
+                        mWeb3jConnection.getGetTransferFunction(),
+                        Arrays.asList(
+                                new Address(mWeb3jConnection.getKoraWalletAddress()),
+                                new Uint256(Web3jUtils.convertTokenToBigInteger(senderAmount))
+                        ),
+                        Collections.emptyList()
+                );
+                final String senderTransferFunctionString = FunctionEncoder.encode(senderTransferFunction);
+                final byte[] senderTransferFunctionByteArray = Numeric.hexStringToByteArray(senderTransferFunctionString);
+
+                final Function forwardToFunction = new Function(
+                        mWeb3jConnection.getForwardToFunction(),
+                        Arrays.asList(
+                                new Address(sender.getOwner()),
+                                new Address(sender.getIdentity()),
+                                new Address(sender.getERC20Token()),
+                                Uint256.DEFAULT,
+                                new DynamicBytes(senderTransferFunctionByteArray)
+                        ),
+                        Collections.emptyList()
+                );
+                final String senderForwardToFunctionString = FunctionEncoder.encode(forwardToFunction);
+
+                final RawTransaction senderRawTransaction = RawTransaction.createTransaction(
+                        senderTransactionCount,
+                        mWeb3jConnection.getGasPrice(),
+                        mWeb3jConnection.getGasLimit(),
+                        mWeb3jConnection.getMetaIdentityManagerRinkeby(),
+                        senderForwardToFunctionString);
+
+                final byte[] senderSignedMessage = TransactionEncoder.signMessage(senderRawTransaction, senderCredentials);
+                final String senderHexValue = Numeric.toHexString(senderSignedMessage);
+
+
+
+                final Credentials koraCredentials = mEtherWalletStorage.getCredentials(
+                        mWeb3jConnection.getKoraWalletFileName(),
+                        mWeb3jConnection.getKoraWalletPassword());
+
+                final EthGetTransactionCount koraEthGetTransactionCount = web3j
+                        .ethGetTransactionCount(mWeb3jConnection.getKoraWalletAddress(), DefaultBlockParameterName.LATEST)
+                        .sendAsync()
+                        .get();
+                final BigInteger koraTransactionCount = koraEthGetTransactionCount.getTransactionCount();
+
+                final Function koraTransferFunction = new Function(
+                        mWeb3jConnection.getGetTransferFunction(),
+                        Arrays.asList(
+                                new Address(receiver.getIdentity()),
+                                new Uint256(Web3jUtils.convertTokenToBigInteger(receiverAmount))
+                        ),
+                        Collections.emptyList()
+                );
+                final String koraTransferFunctionString = FunctionEncoder.encode(koraTransferFunction);
+
+                final RawTransaction koraRawTransaction = RawTransaction.createTransaction(
+                        koraTransactionCount,
+                        mWeb3jConnection.getGasPrice(),
+                        mWeb3jConnection.getGasLimit(),
+                        receiver.getERC20Token(),
+                        koraTransferFunctionString);
+
+                final byte[] koraSignedMessage = TransactionEncoder.signMessage(koraRawTransaction, koraCredentials);
+                final String koraHexValue = Numeric.toHexString(koraSignedMessage);
+
+                return Arrays.asList(senderHexValue, koraHexValue);
+            }
+        });
+    }
+
+    @Override
+    public Observable<String> createLoan(final UserEntity lender,
+                                         final List<UserEntity> guarantors,
+                                         final double borrowerAmount,
+                                         final double lenderAmount,
+                                         final int rate,
+                                         final Date startDate,
+                                         final Date maturityDate,
+                                         final String pinCode) {
+        return Observable.just(true).map(a -> {
+
+            if (!CommonUtils.isNetworkConnected(mContext))
+                throw new Exception(mContext.getString(R.string.web3j_error_message_no_network));
+
+            final UserEntity sender = mPreferenceHandler.remindObject(USER, UserEntity.class);
+            if (sender == null)
+                throw new Exception(mContext.getString(R.string.web3j_error_message_preferences));
+
+            if (sender.getIdentity() == null || sender.getIdentity().isEmpty())
+                throw new Exception(mContext.getString(R.string.web3j_error_message_no_identity));
+
+            final Web3j web3j = mWeb3jConnection.getWeb3jRinkeby();
+
+            final Credentials credentials = mEtherWalletStorage.getCredentials(
+                    Web3jUtils.getKeystoreFileNameFromAddress(sender.getOwner()),
+                    pinCode);
+
+            ////////////////////////////////////////////////////////////////////////////////////////
+
+            if (!CommonUtils.isNetworkConnected(mContext))
+                throw new Exception(mContext.getString(R.string.web3j_error_message_no_network));
+
+            final EthGetBalance ethGetBalance = web3j
+                    .ethGetBalance(sender.getOwner(), DefaultBlockParameterName.LATEST)
+                    .sendAsync()
+                    .get();
+            final BigInteger balanceOwnerWei = ethGetBalance.getBalance();
+            final double balanceOwnerEth = Web3jUtils.convertWeiToEth(balanceOwnerWei);
+
+            if (balanceOwnerEth < mWeb3jConnection.getMinOwnerBalance())
+                throw new Exception(mContext.getString(R.string.web3j_error_message_owner_balance,
+                        String.valueOf(mWeb3jConnection.getMinOwnerBalance()),
+                        String.valueOf(balanceOwnerEth)));
+
+            ////////////////////////////////////////////////////////////////////////////////////////
+
+            if (!CommonUtils.isNetworkConnected(mContext))
+                throw new Exception(mContext.getString(R.string.web3j_error_message_no_network));
+
+            final EthGetTransactionCount senderEthGetTransactionCount = web3j
+                    .ethGetTransactionCount(sender.getOwner(), DefaultBlockParameterName.LATEST)
+                    .sendAsync()
+                    .get();
+            final BigInteger senderTransactionCount = senderEthGetTransactionCount.getTransactionCount();
+
+            ////////////////////////////////////////////////////////////////////////////////////////
+
+            final Function createLoanFunction = new Function(
+                    mWeb3jConnection.getCreateLoanFunction(),
+                    Arrays.asList(
+                            new Address(lender.getIdentity()),
+                            new DynamicArray<>(Web3jUtils.getAddressesFromUserEntities(guarantors)),
+                            new Uint256(Web3jUtils.convertTokenToBigInteger(borrowerAmount)),
+                            new Uint256(Web3jUtils.convertTokenToBigInteger(lenderAmount)),
+                            new Uint256(Web3jUtils.convertRateToBigInteger(rate)),
+                            new Uint256(Web3jUtils.convertDateToMs(startDate)),
+                            new Uint256(Web3jUtils.convertDateToMs(maturityDate))
+                    ),
+                    Collections.emptyList()
+            );
+
+            final String createLoanFunctionString = FunctionEncoder.encode(createLoanFunction);
+            final byte[] createLoanFunctionByteArray = Numeric.hexStringToByteArray(createLoanFunctionString);
+
+            final Function forwardToFunction = new Function(
+                    mWeb3jConnection.getForwardToFunction(),
+                    Arrays.asList(
+                            new Address(sender.getOwner()),
+                            new Address(sender.getIdentity()),
+                            new Address(mWeb3jConnection.getKoraLendRinkeby()),
+                            Uint256.DEFAULT,
+                            new DynamicBytes(createLoanFunctionByteArray)
+                    ),
+                    Collections.emptyList()
+            );
+            final String forwardToFunctionString = FunctionEncoder.encode(forwardToFunction);
+
+            final RawTransaction createLoanRawTransaction = RawTransaction.createTransaction(
+                    senderTransactionCount,
+                    mWeb3jConnection.getGasPrice(),
+                    mWeb3jConnection.getGasLimit(),
+                    mWeb3jConnection.getMetaIdentityManagerRinkeby(),
+                    forwardToFunctionString);
+
+            final byte[] crateLoanSignedMessage = TransactionEncoder.signMessage(createLoanRawTransaction, credentials);
+            final String createLoanHexValue = Numeric.toHexString(crateLoanSignedMessage);
+
+            return createLoanHexValue;
         });
     }
 }

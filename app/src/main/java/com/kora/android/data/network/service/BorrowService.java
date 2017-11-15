@@ -2,6 +2,7 @@ package com.kora.android.data.network.service;
 
 import com.kora.android.data.network.model.request.BorrowAgreedRequest;
 import com.kora.android.data.network.model.request.BorrowRequest;
+import com.kora.android.data.network.model.request.SendCreateLoanRequest;
 import com.kora.android.data.network.model.response.BorrowListResponse;
 import com.kora.android.data.network.model.response.BorrowResponse;
 
@@ -25,4 +26,8 @@ public interface BorrowService {
 
     @PUT("borrow/{id}")
     Observable<BorrowResponse> agree(@Path("id") String borrowId, @Body BorrowAgreedRequest borrowAgreedRequest);
+
+    @PUT("borrow/{id}")
+    Observable<BorrowResponse> sendCreateLoan(@Path("id") final String borrowId,
+                                              @Body final SendCreateLoanRequest sendCreateLoanRequest);
 }

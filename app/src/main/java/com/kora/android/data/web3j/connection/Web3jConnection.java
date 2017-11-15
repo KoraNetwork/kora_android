@@ -7,6 +7,7 @@ import org.web3j.protocol.infura.InfuraHttpService;
 import java.math.BigInteger;
 
 import static com.kora.android.data.web3j.Constants.DEFAULT_OWNER_BALANCE;
+import static com.kora.android.data.web3j.Constants.FUNCTION_CREATE_LOAN;
 import static com.kora.android.data.web3j.Constants.FUNCTION_FORWARD_TO;
 import static com.kora.android.data.web3j.Constants.FUNCTION_GET_BALANCE;
 import static com.kora.android.data.web3j.Constants.FUNCTION_TRANSFER;
@@ -16,6 +17,7 @@ import static com.kora.android.data.web3j.Constants.KORA_WALLET_PASSWORD;
 import static com.kora.android.data.web3j.Constants.KORA_WALLET_PRIVATE_KEY;
 import static com.kora.android.data.web3j.Constants.MIN_OWNER_BALANCE;
 import static com.kora.android.data.web3j.Constants.RINKEBY_IDENTITY_MANAGER_ADDRESS;
+import static com.kora.android.data.web3j.Constants.RINKEBY_KORA_LOAN_ADDRESS;
 import static com.kora.android.data.web3j.Constants.RINKEBY_META_IDENTITY_MANAGER_ADDRESS;
 import static com.kora.android.data.web3j.Constants.ROPSTEN_TESTNET_CLIENT;
 import static com.kora.android.data.web3j.Constants.RINKEBY_TESTNET_CLIENT;
@@ -93,4 +95,8 @@ public class Web3jConnection {
     public String getForwardToFunction() {
         return FUNCTION_FORWARD_TO;
     }
+
+    public String getKoraLendRinkeby() { return RINKEBY_KORA_LOAN_ADDRESS; }
+
+    public String getCreateLoanFunction() { return FUNCTION_CREATE_LOAN; }
 }

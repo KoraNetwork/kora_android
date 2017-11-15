@@ -3,6 +3,7 @@ package com.kora.android.data.repository.impl;
 import com.kora.android.common.Keys;
 import com.kora.android.data.network.model.request.BorrowAgreedRequest;
 import com.kora.android.data.network.model.request.BorrowRequest;
+import com.kora.android.data.network.model.request.SendCreateLoanRequest;
 import com.kora.android.data.network.service.BorrowService;
 import com.kora.android.data.repository.BorrowRepository;
 import com.kora.android.data.repository.mapper.BorrowMapper;
@@ -42,18 +43,25 @@ public class BorrowRepositoryImpl implements BorrowRepository {
     }
 
     @Override
-    public Observable<BorrowEntity> addBorrowRequest(UserEntity lender, List<UserEntity> guaranters, double amount, double convertedAmount, int rate, String note, Date startDate, Date maturityDate) {
-        return mBorrowService.addBorrowRequest(new BorrowRequest(amount,
+    public Observable<BorrowEntity> addBorrowRequest(UserEntity lender,
+                                                     List<UserEntity> guarantors,
+                                                     double amount,
+                                                     double convertedAmount,
+                                                     int rate, String note,
+                                                     Date startDate,
+                                                     Date maturityDate) {
+        return mBorrowService.addBorrowRequest(new BorrowRequest(
+                amount,
                 convertedAmount,
                 rate,
                 note,
                 startDate,
                 maturityDate,
                 lender.getId(),
-                getGuarantorId(guaranters, GUARANTOR_1),
-                getGuarantorId(guaranters, GUARANTOR_2),
-                getGuarantorId(guaranters, GUARANTOR_3)
-        )).compose(mBorrowMapper.transformResponseToEntity());
+                getGuarantorId(guarantors, GUARANTOR_1),
+                getGuarantorId(guarantors, GUARANTOR_2),
+                getGuarantorId(guarantors, GUARANTOR_3))
+        ).compose(mBorrowMapper.transformResponseToEntity());
     }
 
     @Override
@@ -65,5 +73,14 @@ public class BorrowRepositoryImpl implements BorrowRepository {
     private String getGuarantorId(List<UserEntity> guaranters, int pos) {
         if (guaranters == null) return null;
         return guaranters.size() < pos ? null : guaranters.get(pos - 1).getId();
+    }
+
+    @Override
+    public Observable<BorrowEntity> sendCreateLoan(final String borrowId,
+                                                   final String rawCreateLoan) {
+        final SendCreateLoanRequest sendCreateLoanRequest = new SendCreateLoanRequest()
+                .addRawCreateLoan(rawCreateLoan);
+        return mBorrowService.sendCreateLoan(borrowId, sendCreateLoanRequest)
+                .compose(mBorrowMapper.transformResponseToEntity());
     }
 }

@@ -1,5 +1,6 @@
 package com.kora.android.presentation.ui.borrow;
 
+import com.kora.android.presentation.enums.ActionType;
 import com.kora.android.presentation.model.BorrowEntity;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.view.BaseView;
@@ -33,4 +34,6 @@ public interface BorrowMoneyView extends BaseView<BorrowMoneyPresenter> {
     void onBorrowRequestUpdated(BorrowEntity borrowEntity);
 
     void setupGuarantor(UserEntity user);
+
+    void showEnterPinScreen(final BorrowEntity borrowEntity, final ActionType actionType);
 }

@@ -9,12 +9,15 @@ import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.base.DefaultWeb3jSubscriber;
+import com.kora.android.domain.usecase.borrow.SendCreateLoanUseCase;
 import com.kora.android.domain.usecase.request.DeleteRequestUseCase;
-import com.kora.android.domain.usecase.transaction.CreateRawTransactionUseCase;
+import com.kora.android.domain.usecase.web3j.CreateRawTransactionUseCase;
 import com.kora.android.domain.usecase.transaction.SendRawTransactionUseCase;
+import com.kora.android.domain.usecase.web3j.CreateLoanUseCase;
 import com.kora.android.presentation.enums.ActionType;
 import com.kora.android.presentation.enums.Direction;
 import com.kora.android.presentation.enums.TransactionType;
+import com.kora.android.presentation.model.BorrowEntity;
 import com.kora.android.presentation.model.RequestEntity;
 import com.kora.android.presentation.model.TransactionEntity;
 import com.kora.android.presentation.model.UserEntity;
@@ -37,20 +40,27 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
     private final CreateRawTransactionUseCase mCreateRawTransactionUseCase;
     private final SendRawTransactionUseCase mSendRawTransactionUseCase;
     private final DeleteRequestUseCase mDeleteRequestUseCase;
+    private final CreateLoanUseCase mCreateLoanUseCase;
+    private final SendCreateLoanUseCase mSendCreateLoanUseCase;
 
     private ActionType mActionType;
     private UserEntity mReceiver;
     private double mSenderAmount;
     private double mReceiverAmount;
-    private RequestEntity mRequest;
+    private RequestEntity mRequestEntity;
+    private BorrowEntity mBorrowEntity;
 
     @Inject
     public EnterPinPresenter(final CreateRawTransactionUseCase createRawTransactionUseCase,
                              final SendRawTransactionUseCase sendRawTransactionUseCase,
-                             final DeleteRequestUseCase deleteRequestUseCase) {
+                             final DeleteRequestUseCase deleteRequestUseCase,
+                             final CreateLoanUseCase createLoanUseCase,
+                             final SendCreateLoanUseCase sendCreateLoanUseCase) {
         mCreateRawTransactionUseCase = createRawTransactionUseCase;
         mSendRawTransactionUseCase = sendRawTransactionUseCase;
         mDeleteRequestUseCase = deleteRequestUseCase;
+        mCreateLoanUseCase = createLoanUseCase;
+        mSendCreateLoanUseCase = sendCreateLoanUseCase;
     }
 
     public ActionType getActionType() {
@@ -85,17 +95,24 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         return mReceiverAmount;
     }
 
-    public RequestEntity getRequest() {
-        return mRequest;
+    public RequestEntity getRequestEntity() {
+        return mRequestEntity;
     }
 
-    public void setRequest(RequestEntity requestId) {
-        this.mRequest = requestId;
+    public void setRequestEntity(final RequestEntity requestId) {
+        mRequestEntity = requestId;
+    }
+
+    public BorrowEntity getBorrowEntity() {
+        return mBorrowEntity;
+    }
+
+    public void setBorrowEntity(final BorrowEntity borrowEntity) {
+        mBorrowEntity = borrowEntity;
     }
 
     private TransactionType getTransactionTypeByAction(ActionType actionType) {
         switch (actionType) {
-            case CREATE_REQUEST:
             case SHOW_REQUEST:
                 return TransactionType.REQUEST;
             case SEND_MONEY:
@@ -114,12 +131,29 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
             return;
         }
 
-        mCreateRawTransactionUseCase.setData(
-                mReceiver,
-                mSenderAmount,
-                mReceiverAmount,
-                pinCode);
-        mCreateRawTransactionUseCase.execute(new CreateRawTransactionSubscriber());
+        switch (mActionType) {
+            case SEND_MONEY:
+            case SHOW_REQUEST:
+                mCreateRawTransactionUseCase.setData(
+                        mReceiver,
+                        mSenderAmount,
+                        mReceiverAmount,
+                        pinCode);
+                mCreateRawTransactionUseCase.execute(new CreateRawTransactionSubscriber());
+                break;
+            case CREATE_BORROW:
+                mCreateLoanUseCase.setData(
+                        mBorrowEntity.getReceiver(),
+                        mBorrowEntity.getGuarantors(),
+                        mBorrowEntity.getFromAmount(),
+                        mBorrowEntity.getToAmount(),
+                        mBorrowEntity.getRate(),
+                        mBorrowEntity.getStartDate(),
+                        mBorrowEntity.getMaturityDate(),
+                        pinCode);
+                mCreateLoanUseCase.execute(new CreateLoanSubscriber());
+                break;
+        }
     }
 
     private class CreateRawTransactionSubscriber extends DefaultWeb3jSubscriber<List<String>> {
@@ -232,15 +266,15 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
     }
 
     public void startDeleteRequestTask(final List<String> rawTransactions) {
-        if (mRequest.getDirection().equals(Direction.TO)) {
+        if (mRequestEntity.getDirection().equals(Direction.TO)) {
             mDeleteRequestUseCase.setData(
-                    mRequest.getId(),
+                    mRequestEntity.getId(),
                     mReceiverAmount,
                     mSenderAmount,
                     rawTransactions);
-        } else if (mRequest.getDirection().equals(Direction.FROM)) {
+        } else if (mRequestEntity.getDirection().equals(Direction.FROM)) {
             mDeleteRequestUseCase.setData(
-                    mRequest.getId(),
+                    mRequestEntity.getId(),
                     mSenderAmount,
                     mReceiverAmount,
                     rawTransactions);
@@ -293,10 +327,113 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         }
     }
 
+    private class CreateLoanSubscriber extends DefaultWeb3jSubscriber<String> {
+
+        @Override
+        protected void onStart() {
+            if (!isViewAttached()) return;
+            getView().showProgress(true);
+        }
+
+        @Override
+        public void onNext(final String rawCreateLoan) {
+            if (!isViewAttached()) return;
+            startSendCreateLoanTask(rawCreateLoan);
+        }
+
+//        @Override
+//        public void onComplete() {
+//            if (!isViewAttached()) return;
+//            getView().showProgress(false);
+//        }
+
+        @Override
+        public void onError(final Throwable throwable) {
+            Log.e("_____", throwable.toString());
+            throwable.printStackTrace();
+
+            super.onError(throwable);
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+        }
+
+        @Override
+        public void handleWalletError(final FileNotFoundException fileNotFoundException) {
+            getView().showError(R.string.web3j_error_message_no_wallet);
+        }
+
+        @Override
+        public void handlePinError(final CipherException cipherException) {
+            getView().showError(R.string.web3j_error_message_wrong_password);
+        }
+
+        @Override
+        public void handleNetworkError(final Throwable throwable) {
+            getView().showError(R.string.web3j_error_message_network_problems);
+        }
+
+        @Override
+        public void handleWeb3jError(final String message) {
+            getView().showError(message);
+        }
+    }
+
+    public void startSendCreateLoanTask(final String rawCreateLoan) {
+        mSendCreateLoanUseCase.setData(mBorrowEntity.getId(), rawCreateLoan);
+        mSendCreateLoanUseCase.execute(new SendCreateLoanSubscriber ());
+    }
+
+    private Action mSendCreateLoanAction = new Action() {
+        @Override
+        public void run() throws Exception {
+            mSendCreateLoanUseCase.execute(new SendCreateLoanSubscriber());
+        }
+    };
+
+    private class SendCreateLoanSubscriber extends DefaultInternetSubscriber<BorrowEntity> {
+
+//        @Override
+//        protected void onStart() {
+//            if (!isViewAttached()) return;
+//            getView().showProgress(true);
+//        }
+
+        @Override
+        public void onNext(@NonNull final BorrowEntity borrowEntity) {
+            if (!isViewAttached()) return;
+            Log.e("_____", borrowEntity.getState().toString());
+        }
+
+        @Override
+        public void onComplete() {
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+        }
+
+        @Override
+        public void onError(@NonNull final Throwable throwable) {
+            super.onError(throwable);
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+        }
+
+        @Override
+        public void handleUnprocessableEntity(final ErrorModel errorModel) {
+            getView().showError(errorModel.getError());
+        }
+
+        @Override
+        public void handleNetworkError(final RetrofitException retrofitException) {
+            getView().showErrorWithRetry(new RetryAction(mSendCreateLoanAction));
+        }
+    }
+
     @Override
     public void onDetachView() {
         mDeleteRequestUseCase.dispose();
         mCreateRawTransactionUseCase.dispose();
         mSendRawTransactionUseCase.dispose();
+        mCreateLoanUseCase.dispose();
+        mSendCreateLoanUseCase.dispose();
     }
 }

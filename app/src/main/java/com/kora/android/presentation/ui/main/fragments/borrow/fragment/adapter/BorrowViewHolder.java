@@ -3,7 +3,6 @@ package com.kora.android.presentation.ui.main.fragments.borrow.fragment.adapter;
 import android.content.Context;
 import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -12,7 +11,7 @@ import android.widget.TextView;
 
 import com.kora.android.R;
 import com.kora.android.common.utils.DateUtils;
-import com.kora.android.presentation.enums.RequestState;
+import com.kora.android.presentation.enums.BorrowState;
 import com.kora.android.presentation.model.BorrowEntity;
 import com.kora.android.presentation.ui.base.adapter.OnItemClickListener;
 
@@ -70,42 +69,27 @@ public class BorrowViewHolder extends RecyclerView.ViewHolder {
         }
 
         mType.setVisibility(View.GONE);
-        mState.setText(getStateString(borrowEntity.getState()));
+        mState.setText(borrowEntity.getState().getText());
         mState.setTextColor(ContextCompat.getColor(mContext, getStateColor(borrowEntity.getState())));
         mDate.setText(DateUtils.getFormattedDate("dd.MM.yyyy", borrowEntity.getCreatedAt()));
         mTime.setText(DateUtils.getFormattedDate("hh:mm aa", borrowEntity.getCreatedAt()));
     }
 
-    @StringRes
-    private int getStateString(final RequestState requestState) {
-        switch (requestState) {
-            case REJECTED:
-                return R.string.request_money_status_rejected;
-            case REQUESTED:
-                return R.string.request_money_status_requested;
-            case INPROGRESS:
-                return R.string.request_money_status_in_progress;
-            case BORROWED:
-                return R.string.request_money_status_borrowed;
-            case PENDING:
-                return R.string.request_money_status_pending;
-        }
-        return R.string.empty_string;
-    }
-
     @ColorRes
-    private int getStateColor(final RequestState requestState) {
-        switch (requestState) {
+    private int getStateColor(final BorrowState borrowState) {
+        switch (borrowState) {
+            case ONGOING:
+                return R.color.color_borrow_state_ongoing;
+            case AGREED:
+                return R.color.color_borrow_state_agreed;
             case REJECTED:
-                return R.color.color_request_state_rejected;
-//            case REQUESTED:
-//                return R.color.color_request_state_rejected;
-//            case INPROGRESS:
-//                return R.color.color_request_state_rejected;
-//            case BORROWED:
-//                return R.color.color_request_state_rejected;
+                return R.color.color_borrow_state_rejected;
+            case EXPIRED:
+                return R.color.color_borrow_state_expired;
             case PENDING:
-                return R.color.color_request_state_in_progress;
+                return R.color.color_borrow_state_pending;
+            case OVERDUE:
+                return R.color.color_borrow_state_overdue;
         }
         return 0;
     }

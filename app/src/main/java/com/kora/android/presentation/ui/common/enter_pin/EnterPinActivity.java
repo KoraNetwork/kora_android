@@ -16,6 +16,7 @@ import com.kora.android.R;
 import com.kora.android.common.utils.ViewUtils;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.enums.ActionType;
+import com.kora.android.presentation.model.BorrowEntity;
 import com.kora.android.presentation.model.RequestEntity;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
@@ -26,6 +27,7 @@ import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 
 import static com.kora.android.common.Keys.Args.ACTION_TYPE;
+import static com.kora.android.common.Keys.Args.BORROW_ENTITY;
 import static com.kora.android.common.Keys.Args.RECEIVER_AMOUNT;
 import static com.kora.android.common.Keys.Args.REQUEST_ENTITY;
 import static com.kora.android.common.Keys.Args.SENDER_AMOUNT;
@@ -67,13 +69,22 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
                                          final double senderAmount,
                                          final double receiverAmount,
                                          final ActionType actionType,
-                                         final RequestEntity request) {
+                                         final RequestEntity requestEntity) {
         final Intent intent = new Intent(baseActivity, EnterPinActivity.class);
         intent.putExtra(USER_ENTITY, receiver);
         intent.putExtra(SENDER_AMOUNT, senderAmount);
         intent.putExtra(RECEIVER_AMOUNT, receiverAmount);
         intent.putExtra(ACTION_TYPE, actionType);
-        intent.putExtra(REQUEST_ENTITY, request);
+        intent.putExtra(REQUEST_ENTITY, requestEntity);
+        return intent;
+    }
+
+    public static Intent getLaunchIntent(final BaseActivity baseActivity,
+                                         final BorrowEntity borrowEntity,
+                                         final ActionType actionType) {
+        final Intent intent = new Intent(baseActivity, EnterPinActivity.class);
+        intent.putExtra(BORROW_ENTITY, borrowEntity);
+        intent.putExtra(ACTION_TYPE, actionType);
         return intent;
     }
 
@@ -107,14 +118,17 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
             if (bundle.containsKey(ACTION_TYPE))
                 getPresenter().setActionType((ActionType) bundle.getSerializable(ACTION_TYPE));
             if (bundle.containsKey(REQUEST_ENTITY))
-                getPresenter().setRequest(bundle.getParcelable(REQUEST_ENTITY));
+                getPresenter().setRequestEntity(bundle.getParcelable(REQUEST_ENTITY));
+            if (bundle.containsKey(BORROW_ENTITY))
+                getPresenter().setBorrowEntity(bundle.getParcelable(BORROW_ENTITY));
         }
         if (getIntent() != null) {
             getPresenter().setReceiver(getIntent().getParcelableExtra(USER_ENTITY));
             getPresenter().setSenderAmount(getIntent().getDoubleExtra(SENDER_AMOUNT, 0));
             getPresenter().setReceiverAmount(getIntent().getDoubleExtra(RECEIVER_AMOUNT, 0));
             getPresenter().setActionType((ActionType) getIntent().getSerializableExtra(ACTION_TYPE));
-            getPresenter().setRequest(getIntent().getParcelableExtra(REQUEST_ENTITY));
+            getPresenter().setRequestEntity(getIntent().getParcelableExtra(REQUEST_ENTITY));
+            getPresenter().setBorrowEntity(getIntent().getParcelableExtra(BORROW_ENTITY));
         }
     }
 
@@ -125,7 +139,8 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
         outState.putDouble(SENDER_AMOUNT, getPresenter().getSenderAmount());
         outState.putDouble(RECEIVER_AMOUNT, getPresenter().getReceiverAmount());
         outState.putSerializable(TRANSACTION_TYPE, getPresenter().getActionType());
-        outState.putParcelable(REQUEST_ENTITY, getPresenter().getRequest());
+        outState.putParcelable(REQUEST_ENTITY, getPresenter().getRequestEntity());
+        outState.putParcelable(BORROW_ENTITY, getPresenter().getBorrowEntity());
     }
 
     private void initUI() {

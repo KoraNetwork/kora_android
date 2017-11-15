@@ -12,6 +12,7 @@ import com.kora.android.domain.usecase.borrow.AddBorrowRequestUseCase;
 import com.kora.android.domain.usecase.borrow.AgreeBorrowUseCase;
 import com.kora.android.domain.usecase.user.ConvertAmountUseCase;
 import com.kora.android.domain.usecase.user.GetUserDataUseCase;
+import com.kora.android.presentation.enums.ActionType;
 import com.kora.android.presentation.model.BorrowEntity;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
@@ -159,12 +160,11 @@ public class BorrowMoneyPresenter extends BasePresenter<BorrowMoneyView> {
         mAgreeBorrowUseCase.execute(new UpdateBorrowRequestSubscriber());
     }
 
-    public void lentMoney() {
-
+    public void lendMoney() {
     }
 
     public void borrowNow() {
-
+        getView().showEnterPinScreen(mBorrowRequest, ActionType.CREATE_BORROW);
     }
 
     private class GetUserSubscriber extends DefaultInternetSubscriber<UserEntity> {

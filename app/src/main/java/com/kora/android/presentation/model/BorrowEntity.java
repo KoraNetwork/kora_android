@@ -3,8 +3,8 @@ package com.kora.android.presentation.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.kora.android.presentation.enums.BorrowState;
 import com.kora.android.presentation.enums.Direction;
-import com.kora.android.presentation.enums.RequestState;
 
 import java.util.Date;
 import java.util.List;
@@ -13,7 +13,7 @@ public class BorrowEntity implements Parcelable {
 
     private String id;
     private Direction direction;
-    private RequestState state;
+    private BorrowState state;
     private double fromAmount;
     private double toAmount;
     private int rate;
@@ -25,7 +25,7 @@ public class BorrowEntity implements Parcelable {
     private UserEntity receiver;
     private List<UserEntity> guarantors;
 
-    public BorrowEntity(String id, Direction direction, RequestState state,
+    public BorrowEntity(String id, Direction direction, BorrowState state,
                         double fromAmount, double toAmount,
                         int rate, String additionalNote,
                         Date startDate, Date maturityDate,
@@ -51,7 +51,7 @@ public class BorrowEntity implements Parcelable {
         fromAmount = in.readDouble();
         toAmount = in.readDouble();
         rate = in.readInt();
-        state = RequestState.valueOf(in.readString());
+        state = BorrowState.valueOf(in.readString());
         direction = Direction.valueOf(in.readString());
         additionalNote = in.readString();
         sender = in.readParcelable(UserEntity.class.getClassLoader());
@@ -93,11 +93,11 @@ public class BorrowEntity implements Parcelable {
         this.direction = direction;
     }
 
-    public RequestState getState() {
+    public BorrowState getState() {
         return state;
     }
 
-    public void setState(RequestState state) {
+    public void setState(BorrowState state) {
         this.state = state;
     }
 
