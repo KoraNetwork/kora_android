@@ -13,13 +13,19 @@ public class LogoutUseCase extends AsyncUseCase {
 
     private final AuthRepository mAuthRepository;
 
+    private boolean mFromNetwork;
+
     @Inject
     public LogoutUseCase(AuthRepository loginRepository) {
         mAuthRepository = loginRepository;
     }
 
+    public void setData(final boolean fromNetwork) {
+        mFromNetwork = fromNetwork;
+    }
+
     @Override
     protected Observable buildObservableTask() {
-        return mAuthRepository.logout();
+        return mAuthRepository.logout(mFromNetwork);
     }
 }

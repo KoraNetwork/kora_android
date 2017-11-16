@@ -13,19 +13,26 @@ import io.fabric.sdk.android.Fabric;
 
 public class KoraApplication extends Application {
 
+    private static KoraApplication mInstance;
+
     protected ApplicationComponent mApplicationComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
-
-        RxPaparazzo.register(this);
+        mInstance = this;
 
         getComponent().inject(this);
+
+        RxPaparazzo.register(this);
 
 //        if (!BuildConfig.DEBUG) {
             Fabric.with(this, new Crashlytics());
 //        }
+    }
+
+    public static KoraApplication getContext() {
+        return mInstance;
     }
 
     public static KoraApplication get(final Context context) {

@@ -81,6 +81,8 @@ public interface Keys {
         String SENDER_ENTITY_EXTRA = "com.kora.android.extra_sender_entity";
         String RECEIVER_ENTITY_EXTRA = "com.kora.android.extra_receiver_entity";
         String BORROW_REQUEST_EXTRA = "com.kora.android.extra_borrow_request";
+
+        String LOGOUT_EXTRA = "com.kora.android.extra_logout";
     }
 
     interface Args {

@@ -1,5 +1,6 @@
 package com.kora.android.presentation.ui.login;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -14,6 +15,8 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 
+import static com.kora.android.common.Keys.Extras.LOGOUT_EXTRA;
+
 public class LoginActivity extends BaseActivity<LoginPresenter> implements LoginView {
 
     @BindView(R.id.edit_layout_identifier)
@@ -25,6 +28,13 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         final Intent intent = new Intent(baseActivity, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         return intent;
+    }
+
+    public static void startLogoutIntent(final Context context) {
+        final Intent intent = new Intent(context, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(LOGOUT_EXTRA, true);
+        context.startActivity(intent);
     }
 
     @Override
@@ -39,7 +49,9 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @Override
     protected void onViewReady(final Bundle savedInstanceState) {
-
+        if (getIntent() != null && getIntent().hasExtra(LOGOUT_EXTRA)) {
+            getPresenter().startLogoutTask();
+        }
     }
 
     @OnTextChanged(R.id.edit_text_identifier)

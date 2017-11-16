@@ -2,9 +2,11 @@ package com.kora.android.domain.base;
 
 import android.support.annotation.CallSuper;
 
+import com.kora.android.KoraApplication;
 import com.kora.android.data.network.config.ErrorModel;
 import com.kora.android.data.network.enumclass.Kind;
 import com.kora.android.data.network.exception.RetrofitException;
+import com.kora.android.presentation.ui.login.LoginActivity;
 
 import java.io.IOException;
 
@@ -67,6 +69,8 @@ public abstract class DefaultInternetSubscriber<T> extends DefaultDisposableObse
     }
 
     public void handleUnauthorizedException() {
+        final KoraApplication context = KoraApplication.getContext();
+        LoginActivity.startLogoutIntent(context);
     }
 
     public void handleUnexpectedError(final RetrofitException retrofitException) {

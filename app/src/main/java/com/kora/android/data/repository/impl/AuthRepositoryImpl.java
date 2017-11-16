@@ -63,12 +63,19 @@ public class AuthRepositoryImpl implements AuthRepository {
     }
 
     @Override
-    public Observable<Object> logout() {
-        return mAuthService.logout()
-                .map(o -> {
-                    mPreferenceHandler.forgetAll();
-                    return o;
-                });
+    public Observable<Object> logout(final boolean fromNetwork) {
+        if (fromNetwork) {
+            return mAuthService.logout()
+                    .map(o -> {
+                        mPreferenceHandler.forgetAll();
+                        return o;
+                    });
+        } else {
+            return Observable.just(true).map(a -> {
+                mPreferenceHandler.forgetAll();
+                return a;
+            });
+        }
     }
 
     @Override
