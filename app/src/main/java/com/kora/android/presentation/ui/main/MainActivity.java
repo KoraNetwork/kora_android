@@ -73,10 +73,10 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
         return getLaunchIntent(baseActivity, TAB_HOME_POSITION);
     }
 
-    public static Intent getLaunchIntent(final BaseActivity baseActivity, final int currentTab) {
+    public static Intent getLaunchIntent(final BaseActivity baseActivity, final int tabId) {
         final Intent intent = new Intent(baseActivity, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.putExtra(EXTRA_CURRENT_TAB, currentTab);
+        intent.putExtra(EXTRA_CURRENT_TAB, tabId);
         return intent;
     }
 
@@ -126,9 +126,9 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
     private void initArgs() {
         if (getIntent() != null) {
             if (getIntent().hasExtra(EXTRA_CURRENT_TAB)) {
-                final int currentTab = getIntent().getIntExtra(EXTRA_CURRENT_TAB, 0);
-                final MenuItem item = mNavigationView.getMenu().getItem(currentTab);
-                mNavigationView.getMenu().performIdentifierAction(item.getItemId(), currentTab);
+                final int tabId = getIntent().getIntExtra(EXTRA_CURRENT_TAB, 0);
+                final MenuItem item = mNavigationView.getMenu().getItem(tabId);
+                mNavigationView.getMenu().performIdentifierAction(item.getItemId(), tabId);
                 item.setChecked(true);
             }
         }
@@ -282,6 +282,10 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
 
     public DrawerLayout getDrawerLayout() {
         return mDrawerLayout;
+    }
+
+    public NavigationView getNavigationView() {
+        return mNavigationView;
     }
 
     @Override
