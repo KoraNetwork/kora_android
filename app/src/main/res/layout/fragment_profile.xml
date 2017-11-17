@@ -255,6 +255,55 @@
                         android:textSize="16sp"/>
                 </android.support.design.widget.TextInputLayout>
 
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_agent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:fontFamily="@font/muli_normal"
+                        android:gravity="start|center_vertical"
+                        android:paddingBottom="8dp"
+                        android:paddingTop="8dp"
+                        android:text="@string/profile_agent_switch"
+                        android:textAllCaps="false"
+                        android:textColor="@color/color_text_grey_2"
+                        android:textSize="16sp" />
+
+                    <android.support.v7.widget.SwitchCompat
+                        android:id="@+id/switch_agent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:checked="false" />
+                </RelativeLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/edit_layout_interest_rate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/muli_regular"
+                    android:visibility="gone"
+                    app:errorEnabled="true">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/edit_text_interest_rate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/muli_regular"
+                        android:hint="@string/profile_interest_rate"
+                        android:inputType="number"
+                        android:maxLength="2"
+                        android:maxLines="1"
+                        android:textColor="@color/color_edit_text"
+                        android:textSize="16sp" />
+                </android.support.design.widget.TextInputLayout>
+
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/button_export_wallet"
                     style="@style/Widget.AppCompat.Button.Borderless"
@@ -269,7 +318,6 @@
                     android:textAllCaps="false"
                     android:textColor="@color/color_text_grey_2"
                     android:textSize="16sp" />
-
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/button_import_wallet"

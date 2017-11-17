@@ -144,11 +144,12 @@
     <string name="requests_money">Request Money</string>
     <string name="menu_borrow_money">Borrow Money</string>
     <string name="menu_deposit">Deposit</string>
-    <string name="menu_withdrawal">Withdrawal</string>
+    <string name="menu_withdrawal">Withdraw</string>
     <string name="menu_transactions_history">Transactions History</string>
     <string name="menu_user_profile">User Profile</string>
     <string name="menu_sand_a_feedback">Send a Feedback</string>
     <string name="menu_logout">Log out</string>
+    <string name="menu_agent_functions">Agent functions</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -161,6 +162,8 @@
     <string name="required_asterisk"> *</string>
     <string name="profile_export_wallet">Export wallet</string>
     <string name="profile_import_wallet">Import wallet</string>
+    <string name="profile_agent_switch">Agent open in</string>
+    <string name="profile_interest_rate">Annual Interest Rate (%)</string>
 
     <!-- Send Money -->
     <string name="send_money_title">Send money</string>

@@ -18,6 +18,7 @@ import com.kora.android.presentation.model.TransactionEntity;
 import com.kora.android.presentation.ui.adapter.TransactionAdapter;
 import com.kora.android.presentation.ui.base.backstack.StackFragment;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
+import com.kora.android.presentation.ui.main.MainActivity;
 import com.kora.android.presentation.ui.main.fragments.transactions.TransactionsFragment;
 import com.kora.android.views.DividerItemDecoration;
 
@@ -127,6 +128,6 @@ public class HomeFragment extends StackFragment<HomePresenter> implements HomeVi
 
     @OnClick(R.id.card_view_show_all_transactions)
     public void onClickShowTransactions() {
-        getNavigator().showFragment(TransactionsFragment.getNewInstance());
+        getNavigator().showFragment(TransactionsFragment.getNewInstance(), MainActivity.TAB_TRANSACTIONS_HISTORY_POSITION);
     }
 }

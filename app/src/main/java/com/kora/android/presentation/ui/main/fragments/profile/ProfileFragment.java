@@ -56,6 +56,7 @@ import java.util.Calendar;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import butterknife.OnFocusChange;
 import butterknife.OnTextChanged;
@@ -107,6 +108,8 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
     @BindView(R.id.button_export_wallet) TextView mTvExportWallet;
     @BindView(R.id.button_import_wallet) TextView mTvImportWallet;
 
+    @BindView(R.id.edit_layout_interest_rate) TextInputLayout mElInterestRate;
+
     private ViewMode mViewMode = VIEW_MODE;
 
     public static BaseFragment getNewInstance() {
@@ -144,7 +147,7 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
         mEtCurrency.setKeyListener(null);
         mEtDateOfBirth.setKeyListener(null);
 
-        setRequirements(false);
+//        setRequirements(false);
 
         if (savedInstanceState == null) {
             getPresenter().loadUserData();
@@ -208,7 +211,12 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
         getActivity().invalidateOptionsMenu();
 
         if (mViewMode == EDIT_MODE) {
-            mEtUserName.setEnabled(true);
+            mLlContainer.setVisibility(View.INVISIBLE);
+            mTvUploadPhoto.setVisibility(View.VISIBLE);
+            setTitle(R.string.title_edit_profile);
+            setDrawerListener(true);
+//            setRequirements(true);
+//            mEtUserName.setEnabled(true);
 //            mEtEmail.setEnabled(true);
 //            mEtPhoneNumber.setEnabled(true);
             mEtLegalName.setEnabled(true);
@@ -216,14 +224,14 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
             mEtPostalCode.setEnabled(true);
             mEtDateOfBirth.setEnabled(true);
             mEtAddress.setEnabled(true);
-            mLlContainer.setVisibility(View.INVISIBLE);
-            mTvUploadPhoto.setVisibility(View.VISIBLE);
-            setTitle(R.string.title_edit_profile);
-            setDrawerListener(true);
-            setRequirements(true);
             mTvExportWallet.setVisibility(View.GONE);
             mTvImportWallet.setVisibility(View.GONE);
         } else {
+            mLlContainer.setVisibility(View.VISIBLE);
+            mTvUploadPhoto.setVisibility(View.INVISIBLE);
+            setTitle(R.string.title_profile);
+//            setRequirements(false);
+            setDrawerListener(false);
             mEtUserName.setEnabled(false);
             mEtEmail.setEnabled(false);
             mEtPhoneNumber.setEnabled(false);
@@ -232,11 +240,8 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
             mEtPostalCode.setEnabled(false);
             mEtDateOfBirth.setEnabled(false);
             mEtAddress.setEnabled(false);
-            mLlContainer.setVisibility(View.VISIBLE);
-            mTvUploadPhoto.setVisibility(View.INVISIBLE);
-            setTitle(R.string.title_profile);
-            setDrawerListener(false);
-            setRequirements(false);
+            ViewUtils.clearFocus(mEtLegalName, mEtPostalCode, mEtDateOfBirth, mEtAddress);
+            ViewUtils.deleteErrors(mElDateOfBirth);
             mTvExportWallet.setVisibility(View.VISIBLE);
             mTvImportWallet.setVisibility(View.VISIBLE);
         }
@@ -390,8 +395,12 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
 
     @Override
     protected void onBackPressed() {
-        changeMode(VIEW_MODE);
-        getPresenter().onChangeMode(VIEW_MODE);
+        if (mViewMode == EDIT_MODE) {
+            changeMode(VIEW_MODE);
+            getPresenter().onChangeMode(VIEW_MODE);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @OnClick({R.id.image_view_avatar, R.id.text_view_upload_photo})
@@ -528,5 +537,13 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
     @Override
     public void showImportedWalletMessage() {
         Toast.makeText(getBaseActivity(), R.string.import_wallet_imported, Toast.LENGTH_LONG).show();
+    }
+
+    @OnCheckedChanged(R.id.switch_agent)
+    public void OnCheckedChangedSwitchAgent(boolean isChecked) {
+        if (isChecked)
+            mElInterestRate.setVisibility(View.VISIBLE);
+        else
+            mElInterestRate.setVisibility(View.GONE);
     }
 }

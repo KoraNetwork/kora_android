@@ -60,4 +60,16 @@ public class ViewUtils {
                 : hint
         );
     }
+
+    public static void clearFocus(final View ... viewArray) {
+        for (View view : viewArray) {
+            view.clearFocus();
+        }
+    }
+
+    public static void deleteErrors(final TextInputLayout ... textInputLayoutArray) {
+        for (TextInputLayout textInputLayout : textInputLayoutArray) {
+            textInputLayout.setError(null);
+        }
+    }
 }

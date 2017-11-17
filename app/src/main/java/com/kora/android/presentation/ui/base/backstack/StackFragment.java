@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.kora.android.R;
+import com.kora.android.presentation.navigation.MultiBackStackNavigation;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
 import com.kora.android.presentation.ui.main.MainActivity;
@@ -109,6 +110,10 @@ public abstract class StackFragment<P extends BasePresenter> extends BaseFragmen
 
     protected Toolbar getToolbar() {
         return null;
+    }
+
+    public MultiBackStackNavigation getNavigator() {
+        return ((BackStackActivity) getActivity()).getNavigator();
     }
 
 }

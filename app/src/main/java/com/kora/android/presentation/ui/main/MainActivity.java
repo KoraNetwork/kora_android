@@ -19,7 +19,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.kora.android.R;
-import com.kora.android.common.Keys;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.service.wallet.CreateWalletsService;
@@ -119,6 +118,9 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
         }
 
         initArgs();
+
+        // if user is agent set group visibility to true
+        mNavigationView.getMenu().setGroupVisible(R.id.nav_group_agent, true);
     }
 
     private void initArgs() {
@@ -286,7 +288,6 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         getNavigator().saveState(outState);
-
     }
 
     @Override
