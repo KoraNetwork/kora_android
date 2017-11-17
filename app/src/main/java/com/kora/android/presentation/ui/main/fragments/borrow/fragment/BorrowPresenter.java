@@ -1,11 +1,13 @@
 package com.kora.android.presentation.ui.main.fragments.borrow.fragment;
 
+import android.util.Log;
+
 import com.kora.android.data.network.config.ErrorModel;
 import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.usecase.borrow.GetBorrowUseCase;
-import com.kora.android.presentation.enums.BorrowType;
+import com.kora.android.presentation.enums.BorrowListType;
 import com.kora.android.presentation.model.BorrowEntity;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
@@ -21,7 +23,7 @@ import io.reactivex.functions.Action;
 public class BorrowPresenter extends BasePresenter<BorrowView> {
 
     private final GetBorrowUseCase mGetBorrowUseCase;
-    private BorrowType mBorrowType;
+    private BorrowListType mBorrowListType;
 
     @Inject
     public BorrowPresenter(final GetBorrowUseCase getBorrowUseCase) {
@@ -34,16 +36,16 @@ public class BorrowPresenter extends BasePresenter<BorrowView> {
     }
 
     public void retrieveBorrowList(int skip) {
-        mGetBorrowUseCase.setData(skip, mBorrowType);
+        mGetBorrowUseCase.setData(skip, mBorrowListType);
         mGetBorrowUseCase.execute(new GetBorrowsSubscriber());
     }
 
-    public void setBorrowType(BorrowType borrowType) {
-        mBorrowType = borrowType;
+    public void setBorrowType(BorrowListType borrowListType) {
+        mBorrowListType = borrowListType;
     }
 
-    public BorrowType getBorrowType() {
-        return mBorrowType;
+    public BorrowListType getBorrowType() {
+        return mBorrowListType;
     }
 
     private Action mGetBorrowsListAction = new Action() {

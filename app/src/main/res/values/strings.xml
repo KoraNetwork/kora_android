@@ -200,6 +200,7 @@
     <string name="enter_pin_pin_too_short">Pin code is too short</string>
     <string name="enter_pin_sending_transaction_wait">App is sending transaction. Please wait for a while. Please do not exit the app.</string>
     <string name="enter_pin_transaction_is_sent">Transaction is sent</string>
+    <string name="enter_pin_borrow_is_sent">Borrow request is sent</string>
 
     <!-- Web3j error messages -->
     <string name="web3j_error_message_no_network">The internet connection appears to be offline.</string>
@@ -210,7 +211,7 @@
     <string name="web3j_error_message_identity_balance" formatted="false">You can not send %s eFiats. Proxy balance is %s.</string>
     <string name="web3j_error_message_no_wallet" formatted="false">No such wallet file on this device.</string>
     <string name="web3j_error_message_wrong_wallet" formatted="false">Wrong wallet file is selected.</string>
-    <string name="web3j_error_message_wrong_password" formatted="false">Wrong password is entered.</string>
+    <string name="web3j_error_message_wrong_pin_code" formatted="false">Wrong pin code is entered.</string>
 
     <!-- Transaction History -->
     <string name="transaction_history_to">To: %s</string>

@@ -38,6 +38,7 @@ import com.kora.android.views.DividerItemDecoration;
 
 import butterknife.BindView;
 
+import static com.kora.android.common.Keys.Extras.EXTRA_CURRENT_TAB;
 import static com.kora.android.data.network.Constants.API_BASE_URL;
 
 public class MainActivity extends BackStackActivity<MainPresenter> implements MainView,
@@ -76,7 +77,7 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
     public static Intent getLaunchIntent(final BaseActivity baseActivity, final int currentTab) {
         final Intent intent = new Intent(baseActivity, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.putExtra(Keys.Extras.EXTRA_CURRENT_TAB, currentTab);
+        intent.putExtra(EXTRA_CURRENT_TAB, currentTab);
         return intent;
     }
 
@@ -115,6 +116,19 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
             final MenuItem item = mNavigationView.getMenu().getItem(TAB_HOME_POSITION);
             mNavigationView.getMenu().performIdentifierAction(item.getItemId(), TAB_HOME_POSITION);
             item.setChecked(true);
+        }
+
+        initArgs();
+    }
+
+    private void initArgs() {
+        if (getIntent() != null) {
+            if (getIntent().hasExtra(EXTRA_CURRENT_TAB)) {
+                final int currentTab = getIntent().getIntExtra(EXTRA_CURRENT_TAB, 0);
+                final MenuItem item = mNavigationView.getMenu().getItem(currentTab);
+                mNavigationView.getMenu().performIdentifierAction(item.getItemId(), currentTab);
+                item.setChecked(true);
+            }
         }
     }
 

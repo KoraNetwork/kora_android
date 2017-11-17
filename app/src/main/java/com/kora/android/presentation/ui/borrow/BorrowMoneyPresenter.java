@@ -167,6 +167,10 @@ public class BorrowMoneyPresenter extends BasePresenter<BorrowMoneyView> {
         getView().showEnterPinScreen(mBorrowRequest, ActionType.CREATE_BORROW);
     }
 
+    public void agree() {
+        getView().showEnterPinScreen(mBorrowRequest, ActionType.AGREE_LOAN);
+    }
+
     private class GetUserSubscriber extends DefaultInternetSubscriber<UserEntity> {
 
         private boolean isGuarantor = false;

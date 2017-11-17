@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.kora.android.R;
-import com.kora.android.presentation.enums.BorrowType;
+import com.kora.android.presentation.enums.BorrowListType;
 import com.kora.android.presentation.ui.main.fragments.borrow.fragment.BorrowFragment;
 
 public class BorrowPageAdapter extends FragmentStatePagerAdapter {
@@ -26,11 +26,11 @@ public class BorrowPageAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case POSITION_REQUEST:
-                return BorrowFragment.getNewInstance(BorrowType.REQUEST);
+                return BorrowFragment.getNewInstance(BorrowListType.REQUESTS);
             case POSITION_LOANS:
-                return BorrowFragment.getNewInstance(BorrowType.LOANS);
+                return BorrowFragment.getNewInstance(BorrowListType.LOANS);
             case POSITION_IN_PROGRESS:
-                return BorrowFragment.getNewInstance(BorrowType.IN_PROGRESS);
+                return BorrowFragment.getNewInstance(BorrowListType.IN_PROGRESS);
         }
         return null;
     }

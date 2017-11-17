@@ -3,9 +3,11 @@ package com.kora.android.data.network.model.response;
 import com.bluelinelabs.logansquare.annotation.JsonField;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
 import com.kora.android.data.network.model.converter.BorrowStateConverter;
+import com.kora.android.data.network.model.converter.BorrowTypeConverter;
 import com.kora.android.data.network.model.converter.DateTypeCustomConverter;
 import com.kora.android.data.network.model.converter.DirectionTypeConverter;
 import com.kora.android.presentation.enums.BorrowState;
+import com.kora.android.presentation.enums.BorrowType;
 import com.kora.android.presentation.enums.Direction;
 
 import java.util.ArrayList;
@@ -28,6 +30,8 @@ public class BorrowResponse {
     @JsonField(name = "from") private UserResponse mSender;
     @JsonField(name = "to") private UserResponse mReceiver;
     @JsonField(name = "guarantors") private List<UserResponse> mGuarantors = new ArrayList<>();
+    @JsonField(name = "loanId") private String mLoanId;
+    @JsonField(name = "type", typeConverter = BorrowTypeConverter.class) private BorrowType mType;
 
     public String getId() {
         return mId;
@@ -131,5 +135,21 @@ public class BorrowResponse {
 
     public void setGuarantors(List<UserResponse> guarantors) {
         mGuarantors = guarantors;
+    }
+
+    public String getLoanId() {
+        return mLoanId;
+    }
+
+    public void setLoanId(String mLoanId) {
+        this.mLoanId = mLoanId;
+    }
+
+    public BorrowType getType() {
+        return mType;
+    }
+
+    public void setType(BorrowType mType) {
+        this.mType = mType;
     }
 }

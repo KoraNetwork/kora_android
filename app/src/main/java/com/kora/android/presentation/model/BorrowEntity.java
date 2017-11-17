@@ -4,6 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.kora.android.presentation.enums.BorrowState;
+import com.kora.android.presentation.enums.BorrowListType;
+import com.kora.android.presentation.enums.BorrowType;
 import com.kora.android.presentation.enums.Direction;
 
 import java.util.Date;
@@ -24,13 +26,16 @@ public class BorrowEntity implements Parcelable {
     private UserEntity sender;
     private UserEntity receiver;
     private List<UserEntity> guarantors;
+    private String loanId;
+    private BorrowType type;
 
     public BorrowEntity(String id, Direction direction, BorrowState state,
                         double fromAmount, double toAmount,
                         int rate, String additionalNote,
                         Date startDate, Date maturityDate,
                         Date createdAt, UserEntity sender,
-                        UserEntity receiver, List<UserEntity> guarantors) {
+                        UserEntity receiver, List<UserEntity> guarantors,
+                        String loanId, BorrowType type) {
         this.id = id;
         this.direction = direction;
         this.state = state;
@@ -44,6 +49,8 @@ public class BorrowEntity implements Parcelable {
         this.sender = sender;
         this.receiver = receiver;
         this.guarantors = guarantors;
+        this.loanId = loanId;
+        this.type = type;
     }
 
     protected BorrowEntity(Parcel in) {
@@ -63,6 +70,8 @@ public class BorrowEntity implements Parcelable {
         maturityDate = maturityDateLong == -1 ? null : new Date(maturityDateLong);
         long createdAtLong = in.readLong();
         createdAt = createdAtLong == -1 ? null : new Date(createdAtLong);
+        loanId = in.readString();
+        type = BorrowType.valueOf(in.readString());
     }
 
     public static final Creator<BorrowEntity> CREATOR = new Creator<BorrowEntity>() {
@@ -181,6 +190,22 @@ public class BorrowEntity implements Parcelable {
         this.guarantors = guarantors;
     }
 
+    public String getLoanId() {
+        return loanId;
+    }
+
+    public void setLoanId(String loanId) {
+        this.loanId = loanId;
+    }
+
+    public BorrowType getType() {
+        return type;
+    }
+
+    public void setType(BorrowType type) {
+        this.type = type;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -201,5 +226,7 @@ public class BorrowEntity implements Parcelable {
         dest.writeLong(startDate == null ? -1 : startDate.getTime());
         dest.writeLong(maturityDate == null ? -1 : maturityDate.getTime());
         dest.writeLong(createdAt == null ? -1 : createdAt.getTime());
+        dest.writeString(loanId);
+        dest.writeString(type.name());
     }
 }

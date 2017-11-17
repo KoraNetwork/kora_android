@@ -244,9 +244,16 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
     }
 
     @Override
-    public void showNextScreen() {
+    public void showTransactionScreen() {
         ViewUtils.hideKeyboard(this);
         Toast.makeText(this, R.string.enter_pin_transaction_is_sent, Toast.LENGTH_SHORT).show();
         startActivity(MainActivity.getLaunchIntent(this));
+    }
+
+    @Override
+    public void showBorrowScreen() {
+        ViewUtils.hideKeyboard(this);
+        Toast.makeText(this, R.string.enter_pin_borrow_is_sent, Toast.LENGTH_SHORT).show();
+        startActivity(MainActivity.getLaunchIntent(this, MainActivity.TAB_BORROW_MONEY_POSITION));
     }
 }

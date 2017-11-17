@@ -1,6 +1,8 @@
 package com.kora.android.presentation.model.builder;
 
 import com.kora.android.presentation.enums.BorrowState;
+import com.kora.android.presentation.enums.BorrowListType;
+import com.kora.android.presentation.enums.BorrowType;
 import com.kora.android.presentation.enums.Direction;
 import com.kora.android.presentation.model.BorrowEntity;
 import com.kora.android.presentation.model.UserEntity;
@@ -22,6 +24,8 @@ public class BorrowEntityBuilder {
     private UserEntity mSender;
     private UserEntity mReceiver;
     private List<UserEntity> mGuarantors;
+    private String mLoanId;
+    private BorrowType mType;
 
     public BorrowEntityBuilder setId(String id) {
         mId = id;
@@ -88,9 +92,19 @@ public class BorrowEntityBuilder {
         return this;
     }
 
+    public BorrowEntityBuilder setLoanId(String loanId) {
+        mLoanId = loanId;
+        return this;
+    }
+
+    public BorrowEntityBuilder setType(BorrowType type) {
+        mType = type;
+        return this;
+    }
+
     public BorrowEntity createBorrowEntity() {
         return new BorrowEntity(mId, mDirection, mState, mFromAmount, mToAmount,
                 mRate, mAdditionalNote, mStartDate, mMaturityDate, mCreatedAt,
-                mSender, mReceiver, mGuarantors);
+                mSender, mReceiver, mGuarantors, mLoanId, mType);
     }
 }

@@ -9,11 +9,13 @@ import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.base.DefaultWeb3jSubscriber;
+import com.kora.android.domain.usecase.borrow.SendAgreeLoanUseCase;
 import com.kora.android.domain.usecase.borrow.SendCreateLoanUseCase;
 import com.kora.android.domain.usecase.request.DeleteRequestUseCase;
+import com.kora.android.domain.usecase.web3j.CreateAgreeLoanUseCase;
+import com.kora.android.domain.usecase.web3j.CreateCreateLoanUseCase;
 import com.kora.android.domain.usecase.web3j.CreateRawTransactionUseCase;
 import com.kora.android.domain.usecase.transaction.SendRawTransactionUseCase;
-import com.kora.android.domain.usecase.web3j.CreateLoanUseCase;
 import com.kora.android.presentation.enums.ActionType;
 import com.kora.android.presentation.enums.Direction;
 import com.kora.android.presentation.enums.TransactionType;
@@ -40,8 +42,10 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
     private final CreateRawTransactionUseCase mCreateRawTransactionUseCase;
     private final SendRawTransactionUseCase mSendRawTransactionUseCase;
     private final DeleteRequestUseCase mDeleteRequestUseCase;
-    private final CreateLoanUseCase mCreateLoanUseCase;
+    private final CreateCreateLoanUseCase mCreateCreateLoanUseCase;
     private final SendCreateLoanUseCase mSendCreateLoanUseCase;
+    private final CreateAgreeLoanUseCase mCreateAgreeLoanUseCase;
+    private final SendAgreeLoanUseCase mSendAgreeLoanUseCase;
 
     private ActionType mActionType;
     private UserEntity mReceiver;
@@ -54,13 +58,17 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
     public EnterPinPresenter(final CreateRawTransactionUseCase createRawTransactionUseCase,
                              final SendRawTransactionUseCase sendRawTransactionUseCase,
                              final DeleteRequestUseCase deleteRequestUseCase,
-                             final CreateLoanUseCase createLoanUseCase,
-                             final SendCreateLoanUseCase sendCreateLoanUseCase) {
+                             final CreateCreateLoanUseCase createCreateLoanUseCase,
+                             final SendCreateLoanUseCase sendCreateLoanUseCase,
+                             final CreateAgreeLoanUseCase createAgreeLoanUseCase,
+                             final SendAgreeLoanUseCase sendAgreeLoanUseCase) {
         mCreateRawTransactionUseCase = createRawTransactionUseCase;
         mSendRawTransactionUseCase = sendRawTransactionUseCase;
         mDeleteRequestUseCase = deleteRequestUseCase;
-        mCreateLoanUseCase = createLoanUseCase;
+        mCreateCreateLoanUseCase = createCreateLoanUseCase;
         mSendCreateLoanUseCase = sendCreateLoanUseCase;
+        mCreateAgreeLoanUseCase = createAgreeLoanUseCase;
+        mSendAgreeLoanUseCase = sendAgreeLoanUseCase;
     }
 
     public ActionType getActionType() {
@@ -142,7 +150,7 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
                 mCreateRawTransactionUseCase.execute(new CreateRawTransactionSubscriber());
                 break;
             case CREATE_BORROW:
-                mCreateLoanUseCase.setData(
+                mCreateCreateLoanUseCase.setData(
                         mBorrowEntity.getReceiver(),
                         mBorrowEntity.getGuarantors(),
                         mBorrowEntity.getFromAmount(),
@@ -151,7 +159,11 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
                         mBorrowEntity.getStartDate(),
                         mBorrowEntity.getMaturityDate(),
                         pinCode);
-                mCreateLoanUseCase.execute(new CreateLoanSubscriber());
+                mCreateCreateLoanUseCase.execute(new CreateCreateLoanSubscriber());
+                break;
+            case AGREE_LOAN:
+                mCreateAgreeLoanUseCase.setData(mBorrowEntity.getLoanId(), pinCode);
+                mCreateAgreeLoanUseCase.execute(new CreateAgreeLoanSubscriber());
                 break;
         }
     }
@@ -196,7 +208,7 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
 
         @Override
         public void handlePinError(final CipherException cipherException) {
-            getView().showError(R.string.web3j_error_message_wrong_password);
+            getView().showError(R.string.web3j_error_message_wrong_pin_code);
         }
 
         @Override
@@ -238,7 +250,7 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         @Override
         public void onNext(@NonNull final TransactionEntity transactionEntity) {
             if (!isViewAttached()) return;
-            getView().showNextScreen();
+            getView().showTransactionScreen();
         }
 
         @Override
@@ -300,7 +312,7 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         @Override
         public void onNext(@NonNull final Object object) {
             if (!isViewAttached()) return;
-            getView().showNextScreen();
+            getView().showTransactionScreen();
         }
 
         @Override
@@ -327,7 +339,7 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         }
     }
 
-    private class CreateLoanSubscriber extends DefaultWeb3jSubscriber<String> {
+    private class CreateCreateLoanSubscriber extends DefaultWeb3jSubscriber<String> {
 
         @Override
         protected void onStart() {
@@ -364,7 +376,7 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
 
         @Override
         public void handlePinError(final CipherException cipherException) {
-            getView().showError(R.string.web3j_error_message_wrong_password);
+            getView().showError(R.string.web3j_error_message_wrong_pin_code);
         }
 
         @Override
@@ -401,7 +413,108 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         @Override
         public void onNext(@NonNull final BorrowEntity borrowEntity) {
             if (!isViewAttached()) return;
-            Log.e("_____", borrowEntity.getState().toString());
+            getView().showBorrowScreen();
+        }
+
+        @Override
+        public void onComplete() {
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+        }
+
+        @Override
+        public void onError(@NonNull final Throwable throwable) {
+            super.onError(throwable);
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+        }
+
+        @Override
+        public void handleUnprocessableEntity(final ErrorModel errorModel) {
+            getView().showError(errorModel.getError());
+        }
+
+        @Override
+        public void handleNetworkError(final RetrofitException retrofitException) {
+            getView().showErrorWithRetry(new RetryAction(mSendCreateLoanAction));
+        }
+    }
+
+    private class CreateAgreeLoanSubscriber extends DefaultWeb3jSubscriber<String> {
+
+        @Override
+        protected void onStart() {
+            if (!isViewAttached()) return;
+            getView().showProgress(true);
+        }
+
+        @Override
+        public void onNext(final String rawCreateLoan) {
+            if (!isViewAttached()) return;
+            startSendAgreeLoanTask(rawCreateLoan);
+        }
+
+//        @Override
+//        public void onComplete() {
+//            if (!isViewAttached()) return;
+//            getView().showProgress(false);
+//        }
+
+        @Override
+        public void onError(final Throwable throwable) {
+            Log.e("_____", throwable.toString());
+            throwable.printStackTrace();
+
+            super.onError(throwable);
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+        }
+
+        @Override
+        public void handleWalletError(final FileNotFoundException fileNotFoundException) {
+            getView().showError(R.string.web3j_error_message_no_wallet);
+        }
+
+        @Override
+        public void handlePinError(final CipherException cipherException) {
+            getView().showError(R.string.web3j_error_message_wrong_pin_code);
+        }
+
+        @Override
+        public void handleNetworkError(final Throwable throwable) {
+            getView().showError(R.string.web3j_error_message_network_problems);
+        }
+
+        @Override
+        public void handleWeb3jError(final String message) {
+            getView().showError(message);
+        }
+    }
+
+    public void startSendAgreeLoanTask(final String rawAgreeLoan) {
+        mSendAgreeLoanUseCase.setData(mBorrowEntity.getId(), rawAgreeLoan);
+        mSendAgreeLoanUseCase.execute(new SendAgreeLoanSubscriber());
+    }
+
+    private Action mSendAgreeLoanAction = new Action() {
+        @Override
+        public void run() throws Exception {
+            mSendAgreeLoanUseCase.execute(new SendAgreeLoanSubscriber());
+        }
+    };
+
+    private class SendAgreeLoanSubscriber extends DefaultInternetSubscriber<BorrowEntity> {
+
+        //        @Override
+//        protected void onStart() {
+//            if (!isViewAttached()) return;
+//            getView().showProgress(true);
+//        }
+
+        @Override
+        public void onNext(@NonNull final BorrowEntity borrowEntity) {
+            if (!isViewAttached()) return;
+            getView().showBorrowScreen();
         }
 
         @Override
@@ -433,7 +546,8 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         mDeleteRequestUseCase.dispose();
         mCreateRawTransactionUseCase.dispose();
         mSendRawTransactionUseCase.dispose();
-        mCreateLoanUseCase.dispose();
+        mCreateCreateLoanUseCase.dispose();
         mSendCreateLoanUseCase.dispose();
+        mSendAgreeLoanUseCase.dispose();
     }
 }

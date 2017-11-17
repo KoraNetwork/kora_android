@@ -23,12 +23,12 @@ public class SendCreateLoanUseCase extends AsyncUseCase {
 
     public void setData(final String borrowId,
                         final String rawCreateLoan) {
-        mRawCreateLoan = rawCreateLoan;
         mBorrowId = borrowId;
+        mRawCreateLoan = rawCreateLoan;
     }
 
     @Override
     protected Observable buildObservableTask() {
-        return mBorrowRepository.sendCreateLoan(mRawCreateLoan, mBorrowId);
+        return mBorrowRepository.sendCreateLoan(mBorrowId, mRawCreateLoan);
     }
 }

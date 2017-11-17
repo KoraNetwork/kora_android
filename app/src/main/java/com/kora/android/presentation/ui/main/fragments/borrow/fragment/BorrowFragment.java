@@ -11,7 +11,7 @@ import com.kora.android.R;
 import com.kora.android.common.Keys;
 import com.kora.android.di.component.FragmentComponent;
 import com.kora.android.presentation.enums.Action;
-import com.kora.android.presentation.enums.BorrowType;
+import com.kora.android.presentation.enums.BorrowListType;
 import com.kora.android.presentation.model.BorrowEntity;
 import com.kora.android.presentation.ui.base.adapter.OnItemClickListener;
 import com.kora.android.presentation.ui.base.adapter.RecyclerViewScrollListener;
@@ -39,9 +39,9 @@ public class BorrowFragment extends BaseFragment<BorrowPresenter> implements Bor
 
     private BorrowAdapter mBorrowAdapter;
 
-    public static BaseFragment getNewInstance(final BorrowType borrowType) {
+    public static BaseFragment getNewInstance(final BorrowListType borrowListType) {
         final Bundle args = new Bundle();
-        args.putSerializable(Keys.Args.ARG_BORROW_TYPE, borrowType);
+        args.putSerializable(Keys.Args.ARG_BORROW_TYPE, borrowListType);
         final BorrowFragment borrowFragment = new BorrowFragment();
         borrowFragment.setArguments(args);
         return borrowFragment;
@@ -77,7 +77,7 @@ public class BorrowFragment extends BaseFragment<BorrowPresenter> implements Bor
         } else {
             ArrayList<BorrowEntity> entities = savedInstanceState.getParcelableArrayList(Keys.Args.BORROW_LIST);
             mBorrowAdapter.addItems(entities);
-            BorrowType type = (BorrowType) savedInstanceState.getSerializable(Keys.Args.BORROW_TYPE);
+            BorrowListType type = (BorrowListType) savedInstanceState.getSerializable(Keys.Args.BORROW_TYPE);
             getPresenter().setBorrowType(type);
         }
 
@@ -86,8 +86,8 @@ public class BorrowFragment extends BaseFragment<BorrowPresenter> implements Bor
     private void initArguments() {
         final Bundle arguments = getArguments();
         if (arguments == null) return;
-        BorrowType borrowType = (BorrowType) arguments.getSerializable(Keys.Args.ARG_BORROW_TYPE);
-        getPresenter().setBorrowType(borrowType);
+        BorrowListType borrowListType = (BorrowListType) arguments.getSerializable(Keys.Args.ARG_BORROW_TYPE);
+        getPresenter().setBorrowType(borrowListType);
     }
 
     @Override

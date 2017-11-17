@@ -41,6 +41,8 @@ public class BorrowMapper {
                                 .setSender(sender)
                                 .setReceiver(receiver)
                                 .setGuarantors(guarantors)
+                                .setLoanId(borrowResponse.getLoanId())
+                                .setType(borrowResponse.getType())
                                 .createBorrowEntity()));
     }
 

@@ -7,6 +7,7 @@ import org.web3j.protocol.infura.InfuraHttpService;
 import java.math.BigInteger;
 
 import static com.kora.android.data.web3j.Constants.DEFAULT_OWNER_BALANCE;
+import static com.kora.android.data.web3j.Constants.FUNCTION_AGREE_LOAN;
 import static com.kora.android.data.web3j.Constants.FUNCTION_CREATE_LOAN;
 import static com.kora.android.data.web3j.Constants.FUNCTION_FORWARD_TO;
 import static com.kora.android.data.web3j.Constants.FUNCTION_GET_BALANCE;
@@ -99,4 +100,6 @@ public class Web3jConnection {
     public String getKoraLendRinkeby() { return RINKEBY_KORA_LOAN_ADDRESS; }
 
     public String getCreateLoanFunction() { return FUNCTION_CREATE_LOAN; }
+
+    public String getAgreeLoanFunction() { return FUNCTION_AGREE_LOAN; }
 }

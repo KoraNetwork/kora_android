@@ -13,7 +13,7 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 
 @ConfigPersistent
-public class CreateLoanUseCase extends AsyncUseCase {
+public class CreateCreateLoanUseCase extends AsyncUseCase {
 
     private final Web3jRepository mWeb3jRepository;
 
@@ -27,7 +27,7 @@ public class CreateLoanUseCase extends AsyncUseCase {
     private String mPinCode;
 
     @Inject
-    public CreateLoanUseCase(final Web3jRepository web3jRepository) {
+    public CreateCreateLoanUseCase(final Web3jRepository web3jRepository) {
         mWeb3jRepository = web3jRepository;
     }
 
@@ -51,7 +51,7 @@ public class CreateLoanUseCase extends AsyncUseCase {
 
     @Override
     protected Observable buildObservableTask() {
-        return mWeb3jRepository.createLoan(
+        return mWeb3jRepository.createCreateLoan(
                 mLender,
                 mGuarantors,
                 mBorrowerAmount,

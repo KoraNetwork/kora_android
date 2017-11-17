@@ -3,32 +3,32 @@ package com.kora.android.domain.usecase.borrow;
 import com.kora.android.data.repository.BorrowRepository;
 import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.AsyncUseCase;
-import com.kora.android.presentation.enums.BorrowListType;
 
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
 
 @ConfigPersistent
-public class GetBorrowUseCase extends AsyncUseCase {
+public class SendAgreeLoanUseCase extends AsyncUseCase {
 
     private final BorrowRepository mBorrowRepository;
 
-    private int mSkip = 0;
-    private BorrowListType mBorrowListType;
+    private String mBorrowId;
+    private String mRawAgreeLoan;
 
     @Inject
-    public GetBorrowUseCase(BorrowRepository borrowRepository) {
+    public SendAgreeLoanUseCase(final BorrowRepository borrowRepository) {
         mBorrowRepository = borrowRepository;
     }
 
-    public void setData(int skip, BorrowListType borrowListType) {
-        mSkip = skip;
-        mBorrowListType = borrowListType;
+    public void setData(final String borrowId,
+                        final String rawAgreeLoan) {
+        mBorrowId = borrowId;
+        mRawAgreeLoan = rawAgreeLoan;
     }
 
     @Override
     protected Observable buildObservableTask() {
-        return mBorrowRepository.loadBorrowList(mSkip, mBorrowListType);
+        return mBorrowRepository.sendAgreeLoan(mBorrowId, mRawAgreeLoan);
     }
 }

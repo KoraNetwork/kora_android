@@ -35,7 +35,7 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
 //        startActivity(FourthStepActivity.getLaunchIntent(this));
 
 //        startActivity(LoginActivity.getLaunchIntent(this));
-//
+
 //        startActivity(HomeActivity.getLaunchIntent(this));
 
 //        startActivity(MainActivity.getLaunchIntent(this));

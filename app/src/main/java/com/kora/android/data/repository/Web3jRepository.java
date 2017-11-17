@@ -34,12 +34,15 @@ public interface Web3jRepository {
                                                   final double receiverAmount,
                                                   final String pinCode);
 
-    Observable<String> createLoan(final UserEntity lender,
-                                  final List<UserEntity> guarantors,
-                                  final double borrowerAmount,
-                                  final double lenderAmount,
-                                  final int rate,
-                                  final Date startDate,
-                                  final Date maturityDate,
-                                  final String pinCode);
+    Observable<String> createCreateLoan(final UserEntity lender,
+                                        final List<UserEntity> guarantors,
+                                        final double borrowerAmount,
+                                        final double lenderAmount,
+                                        final int rate,
+                                        final Date startDate,
+                                        final Date maturityDate,
+                                        final String pinCode);
+
+    Observable<String> createAgreeLoan(final String loanId,
+                                       final String pinCode);
 }

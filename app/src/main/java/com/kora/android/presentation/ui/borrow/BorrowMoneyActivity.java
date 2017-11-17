@@ -37,8 +37,8 @@ import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.enums.Action;
 import com.kora.android.presentation.enums.ActionType;
 import com.kora.android.presentation.enums.BorrowState;
+import com.kora.android.presentation.enums.BorrowType;
 import com.kora.android.presentation.enums.Direction;
-import com.kora.android.presentation.enums.RequestState;
 import com.kora.android.presentation.enums.ViewMode;
 import com.kora.android.presentation.model.BorrowEntity;
 import com.kora.android.presentation.model.UserEntity;
@@ -127,6 +127,8 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
 
     @BindView(R.id.action_button) Button mActionButton;
     @BindView(R.id.disagree_button) Button mDisagreeButton;
+
+    @BindView(R.id.text_pending) TextView mTvPending;
 
     private GuarantorsAdapter mUserAdapter;
     private int mAmountEditTextWidth = 0;
@@ -614,28 +616,38 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
 
         setupBasicFields(borrow);
 
-        if (borrow.getState() == BorrowState.REJECTED) {
-            mActionButton.setVisibility(View.GONE);
-            mBorrowRequestStatusLender.setText(borrow.getState().getText());
-            mBorrowRequestStatusLender.setTextColor(getResources().getColor(R.color.color_text_red));
+        switch (borrow.getState()) {
+            case REJECTED:
+                mActionButton.setVisibility(View.GONE);
+                mBorrowRequestStatusLender.setText(borrow.getState().getText());
+                mBorrowRequestStatusLender.setTextColor(getResources().getColor(R.color.color_text_red));
 
-            if (borrow.getReceiver().getAgreed() != null && !borrow.getReceiver().getAgreed()) {
-                mCheckedIcon.setVisibility(View.VISIBLE);
-                mCheckedIcon.setImageResource(R.drawable.ic_delete);
-            }
+                if (borrow.getReceiver().getAgreed() != null && !borrow.getReceiver().getAgreed()) {
+                    mCheckedIcon.setVisibility(View.VISIBLE);
+                    mCheckedIcon.setImageResource(R.drawable.ic_delete);
+                }
+                break;
+            case PENDING:
+                mActionButton.setVisibility(View.GONE);
+                mTvPending.setVisibility(View.VISIBLE);
+                mTvPending.setText(borrow.getState().getText());
+                break;
+            default:
+                if (borrow.getType() == BorrowType.REQUEST) {
+                    boolean isAgree = checkAllUserAgreed(borrow, true);
 
-        } else {
-            boolean isAgree = checkAllUserAgreed(borrow, true);
+                    mActionButton.setText(R.string.borrow_borrow_borrow_now);
+                    mActionButton.setEnabled(isAgree);
+                    mActionButton.setOnClickListener(v -> getPresenter().borrowNow());
 
-            mActionButton.setText(R.string.borrow_borrow_borrow_now);
-            mActionButton.setEnabled(isAgree);
-            mActionButton.setOnClickListener(v -> getPresenter().borrowNow());
-
-            if (borrow.getReceiver().getAgreed() != null && borrow.getReceiver().getAgreed()) {
-                mCheckedIcon.setVisibility(View.VISIBLE);
-            }
+                    if (borrow.getReceiver().getAgreed() != null && borrow.getReceiver().getAgreed()) {
+                        mCheckedIcon.setVisibility(View.VISIBLE);
+                    }
+                } else if (borrow.getType() == BorrowType.LOAN) {
+                    mActionButton.setVisibility(View.GONE);
+                }
+                break;
         }
-
     }
 
     private boolean checkAllUserAgreed(BorrowEntity borrow, boolean useReceiver) {
@@ -659,31 +671,39 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
 
         setupBasicFields(borrow);
 
-        if (borrow.getState() == BorrowState.REJECTED) {
-            mActionButton.setVisibility(View.GONE);
-            mBorrowRequestStatusBorower.setText(borrow.getState().getText());
-            mBorrowRequestStatusBorower.setTextColor(getResources().getColor(R.color.color_text_red));
-        } else {
-            if (borrow.getState() == BorrowState.ONGOING) {
-                boolean isAgree = checkAllUserAgreed(borrow, false);
-                mActionButton.setEnabled(isAgree);
-                mDisagreeButton.setEnabled(isAgree);
-                mActionButton.setText(R.string.borrow_borrow_confirm);
-                if (borrow.getReceiver().getAgreed() == null) {
-                    mDisagreeButton.setVisibility(View.VISIBLE);
-                    mActionButton.setBackgroundResource(R.drawable.blue_button_background);
-                    mActionButton.setOnClickListener(v -> getPresenter().agree(true));
-                } else if (borrow.getReceiver().getAgreed()) {
-                    mActionButton.setEnabled(false);
-                    mActionButton.setBackgroundResource(R.drawable.green_button_background);
-                    mActionButton.setOnClickListener(v -> getPresenter().lendMoney());
-                } else {
-                    mDisagreeButton.setVisibility(View.GONE);
-                    mActionButton.setVisibility(View.GONE);
+        switch (borrow.getState()) {
+            case REJECTED:
+                mActionButton.setVisibility(View.GONE);
+                mBorrowRequestStatusBorower.setText(borrow.getState().getText());
+                mBorrowRequestStatusBorower.setTextColor(getResources().getColor(R.color.color_text_red));
+                break;
+            case PENDING:
+                mActionButton.setVisibility(View.GONE);
+                mTvPending.setVisibility(View.VISIBLE);
+                mTvPending.setText(borrow.getState().getText());
+                break;
+            default:
+                if (borrow.getState() == BorrowState.ONGOING) {
+                    boolean isAgree = checkAllUserAgreed(borrow, false);
+                    mActionButton.setEnabled(isAgree);
+                    mDisagreeButton.setEnabled(isAgree);
+                    mActionButton.setText(R.string.borrow_borrow_confirm);
+                    if (borrow.getReceiver().getAgreed() == null) {
+                        mDisagreeButton.setVisibility(View.VISIBLE);
+                        mActionButton.setBackgroundResource(R.drawable.blue_button_background);
+                        mActionButton.setOnClickListener(v -> getPresenter().agree(true));
+                    } else if (borrow.getReceiver().getAgreed()) {
+                        mActionButton.setEnabled(false);
+                        mActionButton.setBackgroundResource(R.drawable.green_button_background);
+                        mActionButton.setOnClickListener(v -> getPresenter().lendMoney());
+                    } else {
+                        mDisagreeButton.setVisibility(View.GONE);
+                        mActionButton.setVisibility(View.GONE);
+                    }
                 }
-            }
 
-            mGuarantorsTitle.setText(getString(R.string.borrow_which_guarantors_label, borrow.getSender().getFullName()));
+                mGuarantorsTitle.setText(getString(R.string.borrow_which_guarantors_label, borrow.getSender().getFullName()));
+                break;
         }
 
     }
@@ -706,19 +726,37 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
             mCheckedIcon.setImageResource(R.drawable.ic_delete);
         }
 
-        if (borrow.getState() == BorrowState.REJECTED) {
-            mActionButton.setVisibility(View.GONE);
-            mBorrowRequestStatusBorower.setText(borrow.getState().getText());
-            mBorrowRequestStatusBorower.setTextColor(getResources().getColor(R.color.color_text_red));
-        } else {
-
-            mActionButton.setText(R.string.borrow_guarantor_agree_label);
-            mActionButton.setBackgroundResource(R.drawable.green_button_background);
-            mActionButton.setOnClickListener(v -> getPresenter().agree(true));
+        switch (borrow.getState()) {
+            case REJECTED:
+                mActionButton.setVisibility(View.GONE);
+                mDisagreeButton.setVisibility(View.GONE);
+                mBorrowRequestStatusBorower.setText(borrow.getState().getText());
+                mBorrowRequestStatusBorower.setTextColor(getResources().getColor(R.color.color_text_red));
+                break;
+            case PENDING:
+                mActionButton.setVisibility(View.GONE);
+                mDisagreeButton.setVisibility(View.GONE);
+                mTvPending.setVisibility(View.VISIBLE);
+                mTvPending.setText(borrow.getState().getText());
+                break;
+            case ONGOING:
+                switch (borrow.getType()) {
+                    case REQUEST:
+                        mActionButton.setText(R.string.borrow_guarantor_agree_label);
+                        mActionButton.setBackgroundResource(R.drawable.green_button_background);
+                        mActionButton.setOnClickListener(v ->
+                                getPresenter().agree(true));
+                        break;
+                    case LOAN:
+                        mDisagreeButton.setVisibility(View.GONE);
+                        mActionButton.setOnClickListener(v ->
+                                getPresenter().agree());
+                        break;
+                }
+                break;
         }
 
         getPresenter().loadCurrentUser(true);
-
     }
 
 

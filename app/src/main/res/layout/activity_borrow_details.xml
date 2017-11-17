@@ -22,6 +22,20 @@
             android:orientation="vertical"
             android:paddingTop="19dp">
 
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_pending"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginStart="16dp"
+                android:fontFamily="@font/muli_normal"
+                android:text="Pending"
+                android:textColor="@color/color_text_blue"
+                android:textSize="16sp"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="19dp"
+                android:visibility="gone"/>
+
             <LinearLayout
                 android:id="@+id/borrower_container"
                 android:layout_width="match_parent"

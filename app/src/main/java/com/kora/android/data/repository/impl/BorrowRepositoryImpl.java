@@ -3,11 +3,12 @@ package com.kora.android.data.repository.impl;
 import com.kora.android.common.Keys;
 import com.kora.android.data.network.model.request.BorrowAgreedRequest;
 import com.kora.android.data.network.model.request.BorrowRequest;
+import com.kora.android.data.network.model.request.SendAgreeLoanRequest;
 import com.kora.android.data.network.model.request.SendCreateLoanRequest;
 import com.kora.android.data.network.service.BorrowService;
 import com.kora.android.data.repository.BorrowRepository;
 import com.kora.android.data.repository.mapper.BorrowMapper;
-import com.kora.android.presentation.enums.BorrowType;
+import com.kora.android.presentation.enums.BorrowListType;
 import com.kora.android.presentation.model.BorrowEntity;
 import com.kora.android.presentation.model.UserEntity;
 
@@ -37,8 +38,8 @@ public class BorrowRepositoryImpl implements BorrowRepository {
     }
 
     @Override
-    public Observable<List<BorrowEntity>> loadBorrowList(int skip, BorrowType borrowType) {
-        return mBorrowService.loadBorrowList(borrowType.text(), skip, Keys.ITEMS_PER_PAGE)
+    public Observable<List<BorrowEntity>> loadBorrowList(int skip, BorrowListType borrowListType) {
+        return mBorrowService.loadBorrowList(borrowListType.text(), skip, Keys.ITEMS_PER_PAGE)
                 .compose(mBorrowMapper.transformBorrowListResponseToBorrowEntityList());
     }
 
@@ -81,6 +82,15 @@ public class BorrowRepositoryImpl implements BorrowRepository {
         final SendCreateLoanRequest sendCreateLoanRequest = new SendCreateLoanRequest()
                 .addRawCreateLoan(rawCreateLoan);
         return mBorrowService.sendCreateLoan(borrowId, sendCreateLoanRequest)
+                .compose(mBorrowMapper.transformResponseToEntity());
+    }
+
+    @Override
+    public Observable<BorrowEntity> sendAgreeLoan(final String borrowId,
+                                                  final String rawAgreeLoan) {
+        final SendAgreeLoanRequest sendAgreeLoanRequest = new SendAgreeLoanRequest()
+                .addRawCreateLoan(rawAgreeLoan);
+        return mBorrowService.sendAgreeLoan(borrowId, sendAgreeLoanRequest)
                 .compose(mBorrowMapper.transformResponseToEntity());
     }
 }
