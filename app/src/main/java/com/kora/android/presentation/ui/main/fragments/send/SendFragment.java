@@ -1,14 +1,15 @@
 package com.kora.android.presentation.ui.main.fragments.send;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.os.Handler;
+import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.widget.TextView;
+import android.util.Log;
 
 import com.kora.android.R;
 import com.kora.android.common.Keys;
@@ -17,32 +18,31 @@ import com.kora.android.presentation.enums.ActionType;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.adapter.UserAdapter;
 import com.kora.android.presentation.ui.base.adapter.OnItemClickListener;
+import com.kora.android.presentation.ui.base.adapter.RecyclerViewScrollListener;
 import com.kora.android.presentation.ui.base.backstack.StackFragment;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
-import com.kora.android.presentation.ui.common.add_contact.GetContactActivity;
 import com.kora.android.presentation.ui.common.send_to.RequestDetailsActivity;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.OnClick;
-
-import static android.app.Activity.RESULT_OK;
+import butterknife.OnTextChanged;
 
 public class SendFragment extends StackFragment<SendPresenter> implements SendView,
         OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
-    private static final int REQUEST_CREATE = 555;
-    private static final int REQUEST_GET_CONTACT = 556;
-    @BindView(R.id.toolbar) Toolbar mToolbar;
-
-    @BindView(R.id.user_list) RecyclerView mUserList;
-    @BindView(R.id.swipe_layout) SwipeRefreshLayout swipeRefreshLayout;
-    @BindView(R.id.text_add_new_contact) TextView mAddContactButton;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.edit_text_search)
+    AppCompatEditText mEtSearch;
+    @BindView(R.id.recycler_view_users)
+    RecyclerView mRvUsers;
+    @BindView(R.id.swipe_layout)
+    SwipeRefreshLayout mSrlRefresh;
 
     private UserAdapter mUserAdapter;
+    private Handler mHandler = new Handler();
 
     public static BaseFragment getNewInstance() {
         return new SendFragment();
@@ -55,7 +55,7 @@ public class SendFragment extends StackFragment<SendPresenter> implements SendVi
 
     @Override
     public int getLayoutResource() {
-        return R.layout.fragment_send;
+        return R.layout.activity_get_contact;
     }
 
     @Override
@@ -69,75 +69,93 @@ public class SendFragment extends StackFragment<SendPresenter> implements SendVi
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        mUserAdapter = new UserAdapter();
-        mUserAdapter.setOnUserClickListener(this);
-    }
-
-    @Override
     protected void onViewReady(final Bundle savedInstanceState) {
-        mUserList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mUserList.setAdapter(mUserAdapter);
-        mUserList.setItemAnimator(new DefaultItemAnimator());
-        swipeRefreshLayout.setOnRefreshListener(this);
+        initUI();
 
         if (savedInstanceState == null) {
-            getPresenter().getUserList();
+            getPresenter().getUsers();
         } else {
-            ArrayList<UserEntity> users = savedInstanceState.getParcelableArrayList(Keys.Args.USER_LIST);
+            List<UserEntity> users = savedInstanceState.getParcelableArrayList(Keys.Args.USER_LIST);
             mUserAdapter.addUsers(users);
         }
-
     }
 
     @Override
-    public void showUserList(List<UserEntity> users) {
-        Collections.sort(users, (o1, o2) -> o1.getFullName().compareTo(o2.getFullName()));
-        mUserAdapter.addUsers(users);
-        mUserList.invalidate();
-    }
-
-    @Override
-    public void onItemClicked(int position) {
-        startActivityForResult(RequestDetailsActivity.getLaunchIntent(getBaseActivity(),
-                mUserAdapter.getItem(position), ActionType.SEND_MONEY), REQUEST_CREATE);
-    }
-
-    @OnClick(R.id.text_add_new_contact)
-    public void onAddContactClicked() {
-        startActivityForResult(GetContactActivity.getLaunchIntent(getBaseActivity(), getString(R.string.send_money_title)), REQUEST_GET_CONTACT);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-                case REQUEST_CREATE:
-
-                    break;
-
-                case REQUEST_GET_CONTACT:
-                    UserEntity user = data.getParcelableExtra(Keys.Extras.EXTRA_USER);
-                    startActivityForResult(RequestDetailsActivity.getLaunchIntent(getBaseActivity(),
-                            user, ActionType.SEND_MONEY), REQUEST_CREATE);
-                    break;
-            }
-        }
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(Keys.Args.USER_LIST, (ArrayList<UserEntity>) mUserAdapter.getItems());
     }
 
+    private void initUI() {
+        mUserAdapter = new UserAdapter();
+        mUserAdapter.setOnUserClickListener(this);
+
+        mSrlRefresh.setOnRefreshListener(this);
+        mRvUsers.setLayoutManager(new LinearLayoutManager(getBaseActivity()));
+        mRvUsers.setAdapter(mUserAdapter);
+        mRvUsers.setItemAnimator(new DefaultItemAnimator());
+    }
+
+    @Override
+    public void showUsers(final Pair<List<UserEntity>, List<UserEntity>> pair) {
+        if (pair.first != null && pair.first.size() > 0) {
+            mUserAdapter.addUser(new UserEntity.Section(getString(R.string.add_contact_recent_title)));
+            mUserAdapter.addUsers(pair.first);
+        }
+        if (pair.second != null && pair.second.size() > 0) {
+            int size = pair.first == null ? 0 : pair.first.size();
+            if (mUserAdapter.getRawItemsCount() == size)
+                mUserAdapter.addUser(new UserEntity.Section(getString(R.string.add_contact_all_title)));
+            mUserAdapter.addUsers(pair.second);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mRvUsers.addOnScrollListener(mRecyclerViewScrollListener);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mRvUsers.removeOnScrollListener(mRecyclerViewScrollListener);
+    }
+
+    private final RecyclerViewScrollListener mRecyclerViewScrollListener = new RecyclerViewScrollListener() {
+        @Override
+        public void onLoadMore(final int totalItemsCount) {
+            getPresenter().getUsers(mUserAdapter.getRawItemsCount());
+        }
+    };
+
+
+    @OnTextChanged(R.id.edit_text_search)
+    public void onSearchKeyChanged() {
+        mHandler.removeCallbacks(runnable);
+        mHandler.postDelayed(runnable, 500);
+    }
+
+    private Runnable runnable = () -> {
+        mRecyclerViewScrollListener.resetParams();
+        final String search = mEtSearch.getText().toString().trim();
+        getPresenter().setSearch(search);
+        mUserAdapter.clearAll();
+        getPresenter().getUsers();
+    };
+
+    @Override
+    public void onItemClicked(final int position) {
+        getPresenter().setAsRecent(mUserAdapter.getItem(position));
+        startActivity(RequestDetailsActivity.getLaunchIntent(getBaseActivity(),
+                mUserAdapter.getItem(position),
+                ActionType.SEND_MONEY));
+    }
+
     @Override
     public void onRefresh() {
-        swipeRefreshLayout.setRefreshing(false);
         mUserAdapter.clearAll();
-        getPresenter().getUserList();
+        mSrlRefresh.setRefreshing(false);
+        getPresenter().getUsers();
     }
 }

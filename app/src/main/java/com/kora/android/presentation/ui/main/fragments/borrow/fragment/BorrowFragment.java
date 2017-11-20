@@ -15,6 +15,7 @@ import com.kora.android.presentation.enums.BorrowListType;
 import com.kora.android.presentation.model.BorrowEntity;
 import com.kora.android.presentation.ui.base.adapter.OnItemClickListener;
 import com.kora.android.presentation.ui.base.adapter.RecyclerViewScrollListener;
+import com.kora.android.presentation.ui.base.backstack.StackFragment;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
 import com.kora.android.presentation.ui.borrow.BorrowMoneyActivity;
 import com.kora.android.presentation.ui.main.fragments.borrow.fragment.adapter.BorrowAdapter;
@@ -29,7 +30,7 @@ import static android.app.Activity.RESULT_OK;
 import static com.kora.android.common.Keys.Extras.BORROW_REQUEST_EXTRA;
 import static com.kora.android.common.Keys.Extras.EXTRA_ACTION;
 
-public class BorrowFragment extends BaseFragment<BorrowPresenter> implements BorrowView,
+public class BorrowFragment extends StackFragment<BorrowPresenter> implements BorrowView,
         SwipeRefreshLayout.OnRefreshListener, OnItemClickListener {
 
     private static final int BORROW_DETAILS = 225;
