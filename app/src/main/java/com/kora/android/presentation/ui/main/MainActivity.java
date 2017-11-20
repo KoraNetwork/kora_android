@@ -279,20 +279,12 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
     @Override
     public void selectHostById(final int hostId) {
         final MenuItem item = mNavigationView.getMenu().getItem(hostId);
-        mNavigationView.getMenu().performIdentifierAction(item.getItemId(), hostId);
         item.setChecked(true);
+        mSelectedItemPosition = hostId;
     }
 
     public DrawerLayout getDrawerLayout() {
         return mDrawerLayout;
-    }
-
-    public NavigationView getNavigationView() {
-        return mNavigationView;
-    }
-
-    public void setSelectedItemPosition(final int selectedItemPosition) {
-        mSelectedItemPosition = selectedItemPosition;
     }
 
     @Override

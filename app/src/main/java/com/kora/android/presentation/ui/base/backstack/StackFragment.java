@@ -116,11 +116,9 @@ public abstract class StackFragment<P extends BasePresenter> extends BaseFragmen
         return ((BackStackActivity) getActivity()).getNavigator();
     }
 
-    public void setSelectedItem(final int tabId) {
+    public void selectHostById(final int tabId) {
         if (getBaseActivity() instanceof MainActivity) {
-            final MainActivity mainActivity = (MainActivity) getActivity();
-            mainActivity.getNavigationView().getMenu().getItem(tabId).setChecked(true);
-            mainActivity.setSelectedItemPosition(tabId);
+            ((MainActivity) getBaseActivity()).selectHostById(tabId);
         }
     }
 }
