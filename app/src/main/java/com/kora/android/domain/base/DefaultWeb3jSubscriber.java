@@ -45,7 +45,11 @@ public abstract class DefaultWeb3jSubscriber<T> extends DefaultDisposableObserve
     }
 
     private boolean isThrowableNetworkException(final Throwable throwable) {
-        return (throwable instanceof RuntimeException && throwable.getMessage().contains("java.net.UnknownHostException")) ||
+        return
+                (throwable instanceof RuntimeException && throwable.getMessage().contains(TimeoutException.class.getName())) ||
+                (throwable instanceof RuntimeException && throwable.getMessage().contains(ConnectException.class.getName())) ||
+                (throwable instanceof RuntimeException && throwable.getMessage().contains(SocketTimeoutException.class.getName())) ||
+                (throwable instanceof RuntimeException && throwable.getMessage().contains(UnknownHostException.class.getName())) ||
                 throwable instanceof TimeoutException ||
                 throwable instanceof ConnectException ||
                 throwable instanceof SocketTimeoutException ||
