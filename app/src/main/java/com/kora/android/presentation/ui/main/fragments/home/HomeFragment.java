@@ -129,6 +129,6 @@ public class HomeFragment extends StackFragment<HomePresenter> implements HomeVi
     @OnClick(R.id.card_view_show_all_transactions)
     public void onClickShowTransactions() {
         getNavigator().showFragment(TransactionsFragment.getNewInstance(), MainActivity.TAB_TRANSACTIONS_HISTORY_POSITION);
-        setItemChecked(MainActivity.TAB_TRANSACTIONS_HISTORY_POSITION);
+        setSelectedItem(MainActivity.TAB_TRANSACTIONS_HISTORY_POSITION);
     }
 }

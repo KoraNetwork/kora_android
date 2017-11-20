@@ -187,6 +187,9 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
         int position = TAB_HOME_POSITION;
 
         switch (item.getItemId()) {
+            case R.id.nav_home:
+                position = TAB_HOME_POSITION;
+                break;
             case R.id.nav_send_money:
                 position = TAB_SEND_MONEY_POSITION;
                 break;
@@ -286,6 +289,10 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
 
     public NavigationView getNavigationView() {
         return mNavigationView;
+    }
+
+    public void setSelectedItemPosition(final int selectedItemPosition) {
+        mSelectedItemPosition = selectedItemPosition;
     }
 
     @Override

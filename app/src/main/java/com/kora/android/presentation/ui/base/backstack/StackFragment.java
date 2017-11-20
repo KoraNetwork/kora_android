@@ -22,7 +22,6 @@ public abstract class StackFragment<P extends BasePresenter> extends BaseFragmen
     private Toolbar mToolbar;
     ActionBarDrawerToggle mDrawerToggle;
     DrawerLayout mDrawerLayout;
-    NavigationView mNavigationView;
 
     @Override
     public void onActivityCreated(@Nullable final Bundle savedInstanceState) {
@@ -34,7 +33,6 @@ public abstract class StackFragment<P extends BasePresenter> extends BaseFragmen
             setTitle();
             if (getBaseActivity() instanceof MainActivity) {
                 mDrawerLayout = ((MainActivity) getBaseActivity()).getDrawerLayout();
-                mNavigationView = ((MainActivity) getBaseActivity()).getNavigationView();
             }
             setupDrawerToggle();
         }
@@ -118,10 +116,11 @@ public abstract class StackFragment<P extends BasePresenter> extends BaseFragmen
         return ((BackStackActivity) getActivity()).getNavigator();
     }
 
-    public void setItemChecked(int tabId) {
+    public void setSelectedItem(final int tabId) {
         if (getBaseActivity() instanceof MainActivity) {
-            final MenuItem item = mNavigationView.getMenu().getItem(tabId);
-            item.setChecked(true);
+            final MainActivity mainActivity = (MainActivity) getActivity();
+            mainActivity.getNavigationView().getMenu().getItem(tabId).setChecked(true);
+            mainActivity.setSelectedItemPosition(tabId);
         }
     }
 }
