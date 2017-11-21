@@ -17,7 +17,13 @@ public interface BorrowRepository {
 
     Observable<BorrowEntity> agree(String borrowId, boolean isAgreed);
 
-    Observable<BorrowEntity> sendCreateLoan(final String borrowId, final String rawCreateLoan);
+    Observable<BorrowEntity> sendCreateLoan(final String borrowId,
+                                            final String rawCreateLoan);
 
-    Observable<BorrowEntity> sendAgreeLoan(final String borrowId, final String rawAgreeLoan);
+    Observable<BorrowEntity> sendAgreeLoan(final String borrowId,
+                                           final String rawAgreeLoan);
+
+    Observable<BorrowEntity> sendFundLoan(final String borrowId,
+                                          final List<String> rawApproves,
+                                          final String rawFundLoan);
 }

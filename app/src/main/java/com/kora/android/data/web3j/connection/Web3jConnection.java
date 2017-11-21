@@ -8,8 +8,10 @@ import java.math.BigInteger;
 
 import static com.kora.android.data.web3j.Constants.DEFAULT_OWNER_BALANCE;
 import static com.kora.android.data.web3j.Constants.FUNCTION_AGREE_LOAN;
+import static com.kora.android.data.web3j.Constants.FUNCTION_APPROVE;
 import static com.kora.android.data.web3j.Constants.FUNCTION_CREATE_LOAN;
 import static com.kora.android.data.web3j.Constants.FUNCTION_FORWARD_TO;
+import static com.kora.android.data.web3j.Constants.FUNCTION_FUND_LOAN;
 import static com.kora.android.data.web3j.Constants.FUNCTION_GET_BALANCE;
 import static com.kora.android.data.web3j.Constants.FUNCTION_TRANSFER;
 import static com.kora.android.data.web3j.Constants.KORA_WALLET_ADDRESS;
@@ -85,7 +87,7 @@ public class Web3jConnection {
         return MIN_OWNER_BALANCE;
     }
 
-    public String getGetBalabceFunction() {
+    public String getGetBalanceFunction() {
         return FUNCTION_GET_BALANCE;
     }
 
@@ -97,9 +99,15 @@ public class Web3jConnection {
         return FUNCTION_FORWARD_TO;
     }
 
+    public String getApproveFunction() {
+        return FUNCTION_APPROVE;
+    }
+
     public String getKoraLendRinkeby() { return RINKEBY_KORA_LOAN_ADDRESS; }
 
     public String getCreateLoanFunction() { return FUNCTION_CREATE_LOAN; }
 
     public String getAgreeLoanFunction() { return FUNCTION_AGREE_LOAN; }
+
+    public String getFundLoanFunction() { return FUNCTION_FUND_LOAN; }
 }

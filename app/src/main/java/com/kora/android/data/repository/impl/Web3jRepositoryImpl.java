@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
+import android.support.v4.util.Pair;
 
 import com.kora.android.R;
 import com.kora.android.common.preferences.PreferenceHandler;
@@ -149,7 +150,7 @@ public class Web3jRepositoryImpl implements Web3jRepository {
             final Web3j web3j = mWeb3jConnection.getWeb3jRinkeby();
 
             final Function function = new Function(
-                    mWeb3jConnection.getGetBalabceFunction(),
+                    mWeb3jConnection.getGetBalanceFunction(),
                     Collections.singletonList(new Address(proxyAddress)),
                     Collections.singletonList(new TypeReference<Uint256>() {
                     })
@@ -351,7 +352,7 @@ public class Web3jRepositoryImpl implements Web3jRepository {
             ////////////////////////////////////////////////////////////////////////////////////////
 
             final Function getBalanceFunction = new Function(
-                    mWeb3jConnection.getGetBalabceFunction(),
+                    mWeb3jConnection.getGetBalanceFunction(),
                     Collections.singletonList(new Address(sender.getIdentity())),
                     Collections.singletonList(new TypeReference<Uint256>() {
                     })
@@ -599,7 +600,7 @@ public class Web3jRepositoryImpl implements Web3jRepository {
 
     @Override
     public Observable<String> createAgreeLoan(final String loanId,
-                                      final String pinCode) {
+                                              final String pinCode) {
         return Observable.just(true).map(a -> {
 
             if (!CommonUtils.isNetworkConnected(mContext))
@@ -683,6 +684,224 @@ public class Web3jRepositoryImpl implements Web3jRepository {
             final String agreeLoanHexValue = Numeric.toHexString(agreeLoanSignedMessage);
 
             return agreeLoanHexValue;
+        });
+    }
+
+    @Override
+    public Observable<Pair<List<String>, String>> createFundLoan(final String borrowerErc20Token,
+                                                                 final String lenderErc20Token,
+                                                                 final double borrowerAmount,
+                                                                 final double lenderAmount,
+                                                                 final String loanId,
+                                                                 final String pinCode) {
+        return Observable.just(true).map(a -> {
+
+            if (!CommonUtils.isNetworkConnected(mContext))
+                throw new Exception(mContext.getString(R.string.web3j_error_message_no_network));
+
+            final UserEntity sender = mPreferenceHandler.remindObject(USER, UserEntity.class);
+            if (sender == null)
+                throw new Exception(mContext.getString(R.string.web3j_error_message_preferences));
+
+            if (sender.getIdentity() == null || sender.getIdentity().isEmpty())
+                throw new Exception(mContext.getString(R.string.web3j_error_message_no_identity));
+
+            final Web3j web3j = mWeb3jConnection.getWeb3jRinkeby();
+
+            final Credentials senderCredentials = mEtherWalletStorage.getCredentials(
+                    Web3jUtils.getKeystoreFileNameFromAddress(sender.getOwner()),
+                    pinCode);
+
+            ////////////////////////////////////////////////////////////////////////////////////////
+
+            final EthGetBalance ethGetBalance = web3j
+                    .ethGetBalance(sender.getOwner(), DefaultBlockParameterName.LATEST)
+                    .sendAsync()
+                    .get();
+            final BigInteger balanceOwnerWei = ethGetBalance.getBalance();
+            final double balanceOwnerEth = Web3jUtils.convertWeiToEth(balanceOwnerWei);
+
+            if (balanceOwnerEth < mWeb3jConnection.getMinOwnerBalance())
+                throw new Exception(mContext.getString(R.string.web3j_error_message_owner_balance,
+                        String.valueOf(mWeb3jConnection.getMinOwnerBalance()),
+                        String.valueOf(balanceOwnerEth)));
+
+            ////////////////////////////////////////////////////////////////////////////////////////
+
+            final Function getBalanceFunction = new Function(
+                    mWeb3jConnection.getGetBalanceFunction(),
+                    Collections.singletonList(new Address(sender.getIdentity())),
+                    Collections.singletonList(new TypeReference<Uint256>() {
+                    })
+            );
+            final String encodedFunction = FunctionEncoder.encode(getBalanceFunction);
+
+            final EthCall response = web3j
+                    .ethCall(
+                            Transaction.createEthCallTransaction(
+                                    sender.getIdentity(),
+                                    sender.getERC20Token(),
+                                    encodedFunction),
+                            DefaultBlockParameterName.LATEST)
+                    .sendAsync()
+                    .get();
+            final List<Type> someTypes = FunctionReturnDecoder.decode(response.getValue(), getBalanceFunction.getOutputParameters());
+            final BigInteger balanceIdentityBigInteger = (BigInteger) someTypes.get(0).getValue();
+            final double balanceIdentityToken = Web3jUtils.convertBigIntegerToToken(balanceIdentityBigInteger);
+
+            if (lenderAmount > balanceIdentityToken)
+                throw new Exception(mContext.getString(R.string.web3j_error_message_identity_balance,
+                        String.valueOf(lenderAmount),
+                        String.valueOf(balanceIdentityToken)));
+
+            ////////////////////////////////////////////////////////////////////////////////////////
+
+            final EthGetTransactionCount senderEthGetTransactionCount = web3j
+                    .ethGetTransactionCount(sender.getOwner(), DefaultBlockParameterName.LATEST)
+                    .sendAsync()
+                    .get();
+            final BigInteger senderTransactionCount = senderEthGetTransactionCount.getTransactionCount();
+
+            ////////////////////////////////////////////////////////////////////////////////////////
+
+            final List<String> rawApproves = new ArrayList<>();
+
+            ////////////////////////////////////////////////////////////////////////////////////////
+
+            final Function lenderApproveFunction = new Function(
+                    mWeb3jConnection.getApproveFunction(),
+                    Arrays.asList(
+                            new Address(mWeb3jConnection.getKoraLendRinkeby()),
+                            new Uint256(Web3jUtils.convertTokenToBigInteger(lenderAmount))),
+                    Collections.emptyList());
+
+            final String lenderApproveFunctionString = FunctionEncoder.encode(lenderApproveFunction);
+            final byte[] lenderApproveFunctionByteArray = Numeric.hexStringToByteArray(lenderApproveFunctionString);
+
+            final Function lenderApproveForwardToFunction = new Function(
+                    mWeb3jConnection.getForwardToFunction(),
+                    Arrays.asList(
+                            new Address(sender.getOwner()),
+                            new Address(sender.getIdentity()),
+                            new Address(lenderErc20Token),
+                            Uint256.DEFAULT,
+                            new DynamicBytes(lenderApproveFunctionByteArray)
+                    ),
+                    Collections.emptyList()
+            );
+            final String lenderApproveForwardToFunctionString = FunctionEncoder.encode(lenderApproveForwardToFunction);
+
+            final RawTransaction lenderApproveRawTransaction = RawTransaction.createTransaction(
+                    senderTransactionCount,
+                    mWeb3jConnection.getGasPrice(),
+                    mWeb3jConnection.getGasLimit(),
+                    mWeb3jConnection.getMetaIdentityManagerRinkeby(),
+                    lenderApproveForwardToFunctionString);
+
+            final byte[] lenderApproveSignedMessage = TransactionEncoder.signMessage(
+                    lenderApproveRawTransaction,
+                    senderCredentials);
+            final String lenderApproveHexValue = Numeric.toHexString(lenderApproveSignedMessage);
+
+            rawApproves.add(lenderApproveHexValue);
+
+            ////////////////////////////////////////////////////////////////////////////////////////
+
+            if (!borrowerErc20Token.equals(lenderErc20Token)) {
+
+                if (!CommonUtils.isNetworkConnected(mContext))
+                    throw new Exception(mContext.getString(R.string.web3j_error_message_no_network));
+
+                final Credentials koraCredentials = mEtherWalletStorage.getCredentials(
+                        mWeb3jConnection.getKoraWalletFileName(),
+                        mWeb3jConnection.getKoraWalletPassword());
+
+                final EthGetTransactionCount koraEthGetTransactionCount = web3j
+                        .ethGetTransactionCount(mWeb3jConnection.getKoraWalletAddress(), DefaultBlockParameterName.LATEST)
+                        .sendAsync()
+                        .get();
+                final BigInteger koraTransactionCount = koraEthGetTransactionCount.getTransactionCount();
+
+                final Function koraApproveFunction = new Function(
+                        mWeb3jConnection.getApproveFunction(),
+                        Arrays.asList(
+                                new Address(mWeb3jConnection.getKoraLendRinkeby()),
+                                new Uint256(Web3jUtils.convertTokenToBigInteger(borrowerAmount))),
+                        Collections.emptyList());
+
+                final String koraApproveFunctionString = FunctionEncoder.encode(koraApproveFunction);
+                final byte[] koraApproveFunctionByteArray = Numeric.hexStringToByteArray(koraApproveFunctionString);
+
+                final Function koraApproveForwardToFunction = new Function(
+                        mWeb3jConnection.getForwardToFunction(),
+                        Arrays.asList(
+                                new Address(sender.getOwner()),
+                                new Address(sender.getIdentity()),
+                                new Address(borrowerErc20Token),
+                                Uint256.DEFAULT,
+                                new DynamicBytes(koraApproveFunctionByteArray)
+                        ),
+                        Collections.emptyList()
+                );
+                final String koraApproveForwardToFunctionString = FunctionEncoder.encode(koraApproveForwardToFunction);
+
+                final RawTransaction koraApproveRawTransaction = RawTransaction.createTransaction(
+                        koraTransactionCount,
+                        mWeb3jConnection.getGasPrice(),
+                        mWeb3jConnection.getGasLimit(),
+                        mWeb3jConnection.getMetaIdentityManagerRinkeby(),
+                        koraApproveForwardToFunctionString);
+
+                final byte[] koraApproveSignedMessage = TransactionEncoder.signMessage(
+                        koraApproveRawTransaction,
+                        koraCredentials);
+                final String koraApproveHexValue = Numeric.toHexString(koraApproveSignedMessage);
+
+                rawApproves.add(koraApproveHexValue);
+            }
+
+            ////////////////////////////////////////////////////////////////////////////////////////
+
+            final Function lenderFundLoanFunction = new Function(
+                    mWeb3jConnection.getFundLoanFunction(),
+                    Arrays.asList(
+                            new Uint256(new BigInteger(loanId)),
+                            new Address(borrowerErc20Token),
+                            new Address(lenderErc20Token),
+                            new Address(mWeb3jConnection.getKoraWalletAddress())),
+                    Collections.emptyList());
+
+            final String lenderFundLoanFunctionString = FunctionEncoder.encode(lenderFundLoanFunction);
+            final byte[] lenderFundLoanFunctionByteArray = Numeric.hexStringToByteArray(lenderFundLoanFunctionString);
+
+            final Function lenderFundLoanForwardToFunction = new Function(
+                    mWeb3jConnection.getForwardToFunction(),
+                    Arrays.asList(
+                            new Address(sender.getOwner()),
+                            new Address(sender.getIdentity()),
+                            new Address(mWeb3jConnection.getKoraLendRinkeby()),
+                            Uint256.DEFAULT,
+                            new DynamicBytes(lenderFundLoanFunctionByteArray)
+                    ),
+                    Collections.emptyList()
+            );
+            final String lenderFundLoanForwardToFunctionString = FunctionEncoder.encode(lenderFundLoanForwardToFunction);
+
+            final RawTransaction lenderFundLoanRawTransaction = RawTransaction.createTransaction(
+                    Web3jUtils.increaseTransactionCount(senderTransactionCount),
+                    mWeb3jConnection.getGasPrice(),
+                    mWeb3jConnection.getGasLimit(),
+                    mWeb3jConnection.getMetaIdentityManagerRinkeby(),
+                    lenderFundLoanForwardToFunctionString);
+
+            final byte[] lenderFundLoanSignedMessage = TransactionEncoder.signMessage(
+                    lenderFundLoanRawTransaction,
+                    senderCredentials);
+            final String lenderFundLoanHexValue = Numeric.toHexString(lenderFundLoanSignedMessage);
+
+            ////////////////////////////////////////////////////////////////////////////////////////
+
+            return new Pair<>(rawApproves, lenderFundLoanHexValue);
         });
     }
 }

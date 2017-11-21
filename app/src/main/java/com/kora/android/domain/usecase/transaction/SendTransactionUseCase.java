@@ -114,7 +114,7 @@ public class SendTransactionUseCase extends AsyncUseCase {
 
 
             final Function getBalanceFunction = new Function(
-                    mWeb3jConnection.getGetBalabceFunction(),
+                    mWeb3jConnection.getGetBalanceFunction(),
                     Collections.singletonList(new Address(sender.getIdentity())),
                     Collections.singletonList(new TypeReference<Uint256>() {
                     })

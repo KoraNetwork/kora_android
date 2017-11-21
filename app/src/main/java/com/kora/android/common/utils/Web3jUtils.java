@@ -56,4 +56,8 @@ public class Web3jUtils {
     public static BigInteger convertRateToBigInteger(final double d) {
         return BigInteger.valueOf((long) (d * 100));
     }
+
+    public static BigInteger increaseTransactionCount(final BigInteger transactionCount) {
+        return transactionCount.add(BigInteger.ONE);
+    }
 }

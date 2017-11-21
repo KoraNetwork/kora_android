@@ -4,11 +4,8 @@ import java.math.BigInteger;
 
 public interface Constants {
 
-    String RINKEBY_IDENTITY_MANAGER_ADDRESS = "0xabbcd5b340c80b5f1c0545c04c987b87310296ae";
-    String RINKEBY_META_IDENTITY_MANAGER_ADDRESS = "0x7c338672f483795eCA47106dC395660D95041DBe";
-
-    String ROPSTEN_TESTNET_CLIENT = "https://ropsten.infura.io/Q86Oq3CueCrb1idXkNGW";
     String RINKEBY_TESTNET_CLIENT = "https://rinkeby.infura.io/Q86Oq3CueCrb1idXkNGW";
+    String ROPSTEN_TESTNET_CLIENT = "https://ropsten.infura.io/Q86Oq3CueCrb1idXkNGW";
     String KOVAN_TESTNET_CLIENT = "https://kovan.infura.io/Q86Oq3CueCrb1idXkNGW";
 
     BigInteger GAS_PRICE = BigInteger.valueOf(21000000000L);
@@ -22,12 +19,18 @@ public interface Constants {
     double DEFAULT_OWNER_BALANCE = 0.12;
     double MIN_OWNER_BALANCE = 0.1;
 
-    String FUNCTION_GET_BALANCE = "balanceOf";
+    String RINKEBY_IDENTITY_MANAGER_ADDRESS = "0xabbcd5b340c80b5f1c0545c04c987b87310296ae";
+    String RINKEBY_META_IDENTITY_MANAGER_ADDRESS = "0x7c338672f483795eCA47106dC395660D95041DBe";
 
     String FUNCTION_TRANSFER = "transfer";
     String FUNCTION_FORWARD_TO = "forwardTo";
 
+    String FUNCTION_GET_BALANCE = "balanceOf";
+    String FUNCTION_APPROVE = "approve";
+
     String RINKEBY_KORA_LOAN_ADDRESS = "0x683ca4eb5e3d34cda515995598c0f719281ce872";
+
     String FUNCTION_CREATE_LOAN = "createLoan";
     String FUNCTION_AGREE_LOAN = "agreeLoan";
+    String FUNCTION_FUND_LOAN = "agreeLoan";
 }

@@ -748,9 +748,11 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
                                 getPresenter().agree(true));
                         break;
                     case LOAN:
-                        mDisagreeButton.setVisibility(View.GONE);
+                        mActionButton.setText(R.string.borrow_guarantor_agree_label);
+                        mActionButton.setBackgroundResource(R.drawable.green_button_background);
                         mActionButton.setOnClickListener(v ->
                                 getPresenter().agree());
+                        mDisagreeButton.setVisibility(View.GONE);
                         break;
                 }
                 break;

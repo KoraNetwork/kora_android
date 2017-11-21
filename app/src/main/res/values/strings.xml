@@ -240,7 +240,7 @@
     <string name="transaction_filter_show_upcoming_label">Upcoming</string>
     <string name="transaction_filter_type_label">Type:</string>
     <string name="transaction_filter_type_sent_label">Sent</string>
-    <string name="transaction_filter_type_requested_label">Requesed</string>
+    <string name="transaction_filter_type_requested_label">Requested</string>
     <string name="transaction_filter_type_borrowed_label">Borrowed</string>
     <string name="transaction_filter_type_deposit_label">Deposit</string>
     <string name="transaction_filter_state_label">State:</string>

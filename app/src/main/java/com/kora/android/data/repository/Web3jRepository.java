@@ -1,6 +1,7 @@
 package com.kora.android.data.repository;
 
 import android.net.Uri;
+import android.support.v4.util.Pair;
 
 import com.kora.android.data.web3j.model.response.IdentityCreatedResponse;
 import com.kora.android.presentation.model.UserEntity;
@@ -45,4 +46,11 @@ public interface Web3jRepository {
 
     Observable<String> createAgreeLoan(final String loanId,
                                        final String pinCode);
+
+    Observable<Pair<List<String>, String>> createFundLoan(final String borrowerErc20Token,
+                                                                final String lenderErc20Token,
+                                                                final double borrowerAmount,
+                                                                final double lenderAmount,
+                                                                final String loanId,
+                                                                final String pinCode);
 }

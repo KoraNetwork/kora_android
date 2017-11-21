@@ -5,6 +5,7 @@ import com.kora.android.data.network.model.request.BorrowAgreedRequest;
 import com.kora.android.data.network.model.request.BorrowRequest;
 import com.kora.android.data.network.model.request.SendAgreeLoanRequest;
 import com.kora.android.data.network.model.request.SendCreateLoanRequest;
+import com.kora.android.data.network.model.request.SendFundLoanRequest;
 import com.kora.android.data.network.service.BorrowService;
 import com.kora.android.data.repository.BorrowRepository;
 import com.kora.android.data.repository.mapper.BorrowMapper;
@@ -91,6 +92,17 @@ public class BorrowRepositoryImpl implements BorrowRepository {
         final SendAgreeLoanRequest sendAgreeLoanRequest = new SendAgreeLoanRequest()
                 .addRawCreateLoan(rawAgreeLoan);
         return mBorrowService.sendAgreeLoan(borrowId, sendAgreeLoanRequest)
+                .compose(mBorrowMapper.transformResponseToEntity());
+    }
+
+    @Override
+    public Observable<BorrowEntity> sendFundLoan(final String borrowId,
+                                                 final List<String> rawApproves,
+                                                 final String rawFundLoan) {
+        final SendFundLoanRequest sendFundLoanRequest = new SendFundLoanRequest()
+                .addRawApproves(rawApproves)
+                .addRawFundLoan(rawFundLoan);
+        return mBorrowService.sendFundLoan(borrowId, sendFundLoanRequest)
                 .compose(mBorrowMapper.transformResponseToEntity());
     }
 }

@@ -4,6 +4,7 @@ import com.kora.android.data.network.model.request.BorrowAgreedRequest;
 import com.kora.android.data.network.model.request.BorrowRequest;
 import com.kora.android.data.network.model.request.SendAgreeLoanRequest;
 import com.kora.android.data.network.model.request.SendCreateLoanRequest;
+import com.kora.android.data.network.model.request.SendFundLoanRequest;
 import com.kora.android.data.network.model.response.BorrowListResponse;
 import com.kora.android.data.network.model.response.BorrowResponse;
 
@@ -35,4 +36,8 @@ public interface BorrowService {
     @PUT("borrow/{id}")
     Observable<BorrowResponse> sendAgreeLoan(@Path("id") final String borrowId,
                                              @Body final SendAgreeLoanRequest sendAgreeLoanRequest);
+
+    @PUT("borrow/{id}")
+    Observable<BorrowResponse> sendFundLoan(@Path("id") final String borrowId,
+                                            @Body final SendFundLoanRequest sendFundLoanRequest);
 }
