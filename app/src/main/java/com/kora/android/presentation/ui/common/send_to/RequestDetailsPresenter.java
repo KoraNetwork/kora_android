@@ -73,53 +73,44 @@ public class RequestDetailsPresenter extends BasePresenter<RequestDetailsView> {
         getView().retrieveSender(sender);
     }
 
-    public void convertIfNeed(String amountString) {
+    public void convertIfNeed(Double val) {
         if (mSender == null || mReceiver == null) return;
-        double amount = Double.valueOf(amountString);
         if (mSender.getCurrency().equals(mReceiver.getCurrency())) {
             if (getView() == null) return;
-            getView().showConvertedCurrency(amount, mReceiver.getCurrency());
+            getView().showConvertedCurrency(val, mReceiver.getCurrency());
             return;
         }
-        mConvertAmountUseCase.setData(amount, mSender.getCurrency(), mReceiver.getCurrency());
+        mConvertAmountUseCase.setData(val, mSender.getCurrency(), mReceiver.getCurrency());
         mConvertAmountUseCase.execute(new ConvertSubscriber());
     }
 
-    public void sendMoney(String senderAmount, String receiverAmount, String additionalNote) {
+    public void sendMoney(double senderAmount, double receiverAmount, String additionalNote) {
+        if (!validateForm(senderAmount, receiverAmount)) return;
 
-        if (validateForm(senderAmount, receiverAmount)) return;
-
-        Double sAmount = Double.valueOf(senderAmount);
-        Double rAmount = Double.valueOf(receiverAmount);
-
-        getView().openPinScreen(mReceiver, sAmount, rAmount, null);
+        getView().openPinScreen(mReceiver, senderAmount, receiverAmount, null);
     }
 
-    private boolean validateForm(String senderAmount, String receiverAmount) {
-        if (Validator.isEmpty(senderAmount)) {
-            if (getView() == null) return true;
+    private boolean validateForm(double senderAmount, double receiverAmount) {
+        if (!Validator.isValidPrice(senderAmount)) {
+            if (!isViewAttached()) return false;
             getView().emptySenderAmountError();
-            return true;
+            return false;
         }
-        if (Validator.isEmpty(receiverAmount)) {
-            if (getView() == null) return true;
+        if (!Validator.isValidPrice(receiverAmount)) {
+            if (!isViewAttached()) return false;
             getView().emptyReceiverAmountError();
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
-    public void sendRequest(String senderAmount, String receiverAmount, String additionalNote) {
-
-        if (validateForm(senderAmount, receiverAmount)) return;
-
-        Double sAmount = Double.valueOf(senderAmount);
-        Double rAmount = Double.valueOf(receiverAmount);
+    public void sendRequest(double senderAmount, double receiverAmount, String additionalNote) {
+        if (!validateForm(senderAmount, receiverAmount)) return;
 
         mAddToRequestsUseCase.setData(
                 mReceiver.getId(),
-                sAmount,
-                rAmount,
+                senderAmount,
+                receiverAmount,
                 additionalNote);
         mAddToRequestsUseCase.execute(new AddToRequestsSubscriber());
     }
@@ -141,7 +132,6 @@ public class RequestDetailsPresenter extends BasePresenter<RequestDetailsView> {
             setReceiver(mRequest.getFrom());
             setSender(mRequest.getTo());
         }
-
     }
 
     public UserEntity getReceiver() {

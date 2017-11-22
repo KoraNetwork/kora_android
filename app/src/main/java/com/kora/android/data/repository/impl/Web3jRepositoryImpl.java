@@ -372,7 +372,9 @@ public class Web3jRepositoryImpl implements Web3jRepository {
             if (senderAmount > balanceIdentityToken)
                 throw new Exception(mContext.getString(R.string.web3j_error_message_identity_balance,
                         String.valueOf(senderAmount),
-                        String.valueOf(balanceIdentityToken)));
+                        sender.getCurrency(),
+                        String.valueOf(balanceIdentityToken),
+                        sender.getCurrency()));
 
             ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -752,7 +754,9 @@ public class Web3jRepositoryImpl implements Web3jRepository {
             if (lenderAmount > balanceIdentityToken)
                 throw new Exception(mContext.getString(R.string.web3j_error_message_identity_balance,
                         String.valueOf(lenderAmount),
-                        String.valueOf(balanceIdentityToken)));
+                        sender.getCurrency(),
+                        String.valueOf(balanceIdentityToken),
+                        sender.getCurrency()));
 
             ////////////////////////////////////////////////////////////////////////////////////////
 

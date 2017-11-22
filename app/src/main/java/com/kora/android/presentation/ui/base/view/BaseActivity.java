@@ -116,7 +116,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
 //            tvMessage.setText(stringId);
             final LottieAnimationView avLoading = mProgressDialog.findViewById(R.id.animation_view_loading);
 //            avLoading.setImageAssetsFolder("images/");
-            avLoading.setAnimation("animation_sasha_4.json");
+            avLoading.setAnimation("animation_loading.json");
             avLoading.loop(true);
             avLoading.playAnimation();
             if (isCancelable) {

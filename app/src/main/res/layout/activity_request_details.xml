@@ -119,61 +119,65 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/amount_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
                 <RelativeLayout
-                    android:layout_marginTop="12dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="bottom">
 
                     <com.kora.android.views.currency.CurrencyInputLayout
-                        android:fontFamily="@font/muli_regular"
-                        android:layout_toLeftOf="@+id/my_suffix"
-                        android:layout_toStartOf="@+id/my_suffix"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
                         android:id="@+id/edit_layout_amount"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
                         app:errorEnabled="true">
 
-                        <android.support.design.widget.TextInputEditText
-                            android:fontFamily="@font/muli_regular"
-                            tools:text="100"
+                        <com.kora.android.views.currency.CurrencyEditText
                             android:id="@+id/edit_text_sender_amount"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:fontFamily="@font/muli_regular"
                             android:hint="@string/send_money_amount_label"
                             android:inputType="numberDecimal"
                             android:maxLines="1"
+                            android:maxLength="22"
                             android:textColor="@color/color_edit_text"
-                            android:textSize="16sp"/>
-
+                            android:textSize="16sp"
+                            app:allow_negative_values="false"
+                            app:decimal_digits="2"
+                            tools:text="100" />
                     </com.kora.android.views.currency.CurrencyInputLayout>
 
                     <android.support.v7.widget.AppCompatTextView
-                        android:fontFamily="@font/muli_regular"
-                        android:layout_marginTop="25dp"
                         android:id="@+id/my_suffix"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginRight="16dp"
+                        android:layout_centerInParent="true"
+                        android:fontFamily="@font/muli_regular"
+                        android:paddingBottom="12dp"
+                        android:paddingEnd="24dp"
+                        android:paddingRight="24dp"
                         android:textColor="@color/color_edit_text"
                         android:textSize="16sp"
-                        tools:text="USD" />
+                        tools:text="USD"/>
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="bottom">
 
                     <com.kora.android.views.currency.CurrencyInputLayout
-                        android:fontFamily="@font/muli_regular"
-                        android:layout_toLeftOf="@+id/his_suffix"
-                        android:layout_toStartOf="@+id/his_suffix"
                         android:id="@+id/edit_layout_converted_amount"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -181,43 +185,41 @@
                         android:layout_marginRight="16dp"
                         app:errorEnabled="true">
 
-                        <android.support.design.widget.TextInputEditText
-
-                            android:clickable="false"
-                            android:cursorVisible="false"
-                            android:focusable="false"
-                            android:focusableInTouchMode="false"
-
-                            android:fontFamily="@font/muli_regular"
-                            tools:text="2700"
-                            android:layout_toLeftOf="@+id/my_suffix"
-                            android:layout_toStartOf="@+id/my_suffix"
+                        <com.kora.android.views.currency.CurrencyEditText
                             android:id="@+id/edit_text_receiver_amount"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:fontFamily="@font/muli_regular"
                             android:hint="@string/send_money_amount_in_users_currency_label"
+                            android:inputType="numberDecimal"
                             android:maxLines="1"
+                            android:maxLength="22"
                             android:textColor="@color/color_edit_text"
-                            android:textSize="16sp"/>
+                            android:textSize="16sp"
+                            app:allow_negative_values="false"
+                            app:decimal_digits="2"
+                            tools:text="2750" />
                     </com.kora.android.views.currency.CurrencyInputLayout>
 
                     <android.support.v7.widget.AppCompatTextView
-                        android:layout_marginTop="25dp"
-                        android:fontFamily="@font/muli_regular"
                         android:id="@+id/his_suffix"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
                         android:layout_centerInParent="true"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginRight="16dp"
+                        android:fontFamily="@font/muli_regular"
+                        android:paddingBottom="12dp"
+                        android:paddingEnd="24dp"
+                        android:paddingRight="24dp"
                         android:textColor="@color/color_edit_text"
                         android:textSize="16sp"
-                        tools:text="UAH" />
+                        tools:text="UAH"/>
                 </RelativeLayout>
 
-            <com.kora.android.views.currency.CurrencyInputLayout
+            </LinearLayout>
+
+            <android.support.design.widget.TextInputLayout
                 android:fontFamily="@font/muli_regular"
                 android:id="@+id/edit_layout_additional"
                 android:layout_width="match_parent"
@@ -235,7 +237,7 @@
                     android:inputType="textMultiLine"
                     android:textColor="@color/color_edit_text"
                     android:textSize="16sp"/>
-            </com.kora.android.views.currency.CurrencyInputLayout>
+            </android.support.design.widget.TextInputLayout>
 
 
             <android.support.v7.widget.AppCompatButton

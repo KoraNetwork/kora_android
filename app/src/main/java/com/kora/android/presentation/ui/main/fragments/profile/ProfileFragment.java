@@ -13,16 +13,20 @@ import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -108,6 +112,8 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
     @BindView(R.id.button_export_wallet) TextView mTvExportWallet;
     @BindView(R.id.button_import_wallet) TextView mTvImportWallet;
 
+    @BindView(R.id.text_agent_on_off) TextView mTvAgentOnOff;
+    @BindView(R.id.switch_agent) SwitchCompat mScAgentSwitch;
     @BindView(R.id.edit_layout_interest_rate) TextInputLayout mElInterestRate;
 
     private ViewMode mViewMode = VIEW_MODE;
@@ -226,6 +232,9 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
             mEtAddress.setEnabled(true);
             mTvExportWallet.setVisibility(View.GONE);
             mTvImportWallet.setVisibility(View.GONE);
+
+            mTvAgentOnOff.setVisibility(View.GONE);
+            mScAgentSwitch.setVisibility(View.VISIBLE);
         } else {
             mLlContainer.setVisibility(View.VISIBLE);
             mTvUploadPhoto.setVisibility(View.INVISIBLE);
@@ -244,6 +253,9 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
             ViewUtils.deleteErrors(mElDateOfBirth);
             mTvExportWallet.setVisibility(View.VISIBLE);
             mTvImportWallet.setVisibility(View.VISIBLE);
+
+            mTvAgentOnOff.setVisibility(View.VISIBLE);
+            mScAgentSwitch.setVisibility(View.GONE);
         }
     }
 
@@ -541,9 +553,11 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
 
     @OnCheckedChanged(R.id.switch_agent)
     public void OnCheckedChangedSwitchAgent(boolean isChecked) {
-        if (isChecked)
+        if (isChecked) {
             mElInterestRate.setVisibility(View.VISIBLE);
-        else
+            ViewUtils.scrollToView(mSvContainer, mLlContainer, mElInterestRate);
+        } else {
             mElInterestRate.setVisibility(View.GONE);
+        }
     }
 }

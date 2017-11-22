@@ -10,9 +10,12 @@ import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextPaint;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +36,7 @@ import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.base.view.ToolbarActivity;
 import com.kora.android.presentation.ui.common.enter_pin.EnterPinActivity;
+import com.kora.android.views.currency.CurrencyEditText;
 
 import java.util.Locale;
 
@@ -49,17 +53,21 @@ public class RequestDetailsActivity extends ToolbarActivity<RequestDetailsPresen
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.user_name) TextView mUserName;
     @BindView(R.id.user_phone) TextView mUserPhone;
-    @BindView(R.id.his_suffix) TextView mHisSuffixText;
-    @BindView(R.id.my_suffix) TextView mMySuffixText;
+
     @BindView(R.id.status) TextView mRequestStatus;
     @BindView(R.id.user_image) AppCompatImageView mUserImage;
-    @BindView(R.id.edit_text_sender_amount) TextInputEditText mSenderAmount;
+
+    @BindView(R.id.amount_container) LinearLayout mAmountContainer;
+    @BindView(R.id.edit_text_sender_amount) CurrencyEditText mSenderAmount;
     @BindView(R.id.edit_layout_amount) TextInputLayout mSenderAmountContainer;
-    @BindView(R.id.edit_text_receiver_amount) TextInputEditText mReceiverAmount;
+    @BindView(R.id.edit_text_receiver_amount) CurrencyEditText mReceiverAmount;
     @BindView(R.id.edit_layout_converted_amount) TextInputLayout mReceiverAmountContainer;
+
     @BindView(R.id.edit_text_additional) EditText mEtAdditional;
     @BindView(R.id.action_button) Button mActionButton;
     @BindView(R.id.reject_button) TextView mRejectButton;
+
+    private int mAmountEditTextWidth = 0;
 
     private ActionType mActionType;
 
@@ -151,7 +159,7 @@ public class RequestDetailsActivity extends ToolbarActivity<RequestDetailsPresen
                         mRequestStatus.setVisibility(View.VISIBLE);
                         mRequestStatus.setText(request.getState().text());
                         mReceiverAmount.setText(String.format(Locale.ENGLISH, "%1$.2f", request.getToAmount()));
-                        mHisSuffixText.setText(request.getTo().getCurrency());
+                        mReceiverAmount.setCurrency(request.getTo().getCurrency());
                         mSenderAmount.setText(String.format(Locale.ENGLISH, "%1$.2f", request.getFromAmount()));
 
                         if (request.getState() == RequestState.REJECTED) {
@@ -163,7 +171,7 @@ public class RequestDetailsActivity extends ToolbarActivity<RequestDetailsPresen
                     case TO:
                         setTitle(getString(R.string.send_money_request_to, request.getFrom().getFullName()));
                         mSenderAmount.setText(String.format(Locale.ENGLISH, "%1$.2f", request.getToAmount()));
-                        mHisSuffixText.setText(request.getFrom().getCurrency());
+                        mReceiverAmount.setCurrency(request.getFrom().getCurrency());
                         mReceiverAmount.setText(String.format(Locale.ENGLISH, "%1$.2f", request.getFromAmount()));
 
                         if (request.getState() == RequestState.REJECTED) {
@@ -185,6 +193,7 @@ public class RequestDetailsActivity extends ToolbarActivity<RequestDetailsPresen
                 mEtAdditional.setEnabled(false);
                 mReceiverAmount.setEnabled(false);
 
+                changeAmountContainerOrientation();
                 break;
         }
     }
@@ -203,7 +212,7 @@ public class RequestDetailsActivity extends ToolbarActivity<RequestDetailsPresen
     }
 
     public void retrieveReceiver(UserEntity user) {
-        mHisSuffixText.setText(user.getCurrency());
+        mReceiverAmount.setCurrency(user.getCurrency());
 
         setTitle(getString(R.string.send_money_send_title, user.getFullName()));
         mUserName.setText(user.getFullName());
@@ -223,7 +232,8 @@ public class RequestDetailsActivity extends ToolbarActivity<RequestDetailsPresen
     @Override
     public void showConvertedCurrency(Double amount, String currency) {
         mReceiverAmount.setText(String.format(Locale.ENGLISH, "%1$.2f", amount));
-//        mHisSuffixText.setText(currency);
+
+        changeAmountContainerOrientation();
     }
 
     @Override
@@ -269,7 +279,7 @@ public class RequestDetailsActivity extends ToolbarActivity<RequestDetailsPresen
 
     @Override
     public void retrieveSender(UserEntity userEntity) {
-        mMySuffixText.setText(userEntity.getCurrency());
+        mSenderAmount.setCurrency(userEntity.getCurrency());
         Glide.with(this)
                 .asBitmap()
                 .load(API_BASE_URL + userEntity.getFlag())
@@ -290,15 +300,15 @@ public class RequestDetailsActivity extends ToolbarActivity<RequestDetailsPresen
         mReceiverAmountContainer.setError(null);
         timer.removeCallbacks(converter);
         timer.postDelayed(converter, 500);
+
+        changeAmountContainerOrientation();
     }
 
     Runnable converter = new Runnable() {
         @Override
         public void run() {
-            String val = mSenderAmount.getText().toString().trim();
-            if (val.equals("")) mReceiverAmount.setText("");
-            else
-                getPresenter().convertIfNeed(val);
+            double val = mSenderAmount.getAmount();
+            getPresenter().convertIfNeed(val);
         }
     };
 
@@ -306,15 +316,19 @@ public class RequestDetailsActivity extends ToolbarActivity<RequestDetailsPresen
     public void onActionButtonClicked() {
         switch (mActionType) {
             case CREATE_REQUEST:
+                mReceiverAmountContainer.setError(null);
+                mSenderAmountContainer.setError(null);
                 getPresenter().sendRequest(
-                        mSenderAmount.getText().toString().trim(),
-                        mReceiverAmount.getText().toString().trim(),
+                        mSenderAmount.getAmount(),
+                        mReceiverAmount.getAmount(),
                         mEtAdditional.getText().toString().trim());
                 break;
             case SEND_MONEY:
+                mSenderAmountContainer.setError(null);
+                mReceiverAmountContainer.setError(null);
                 getPresenter().sendMoney(
-                        mSenderAmount.getText().toString().trim(),
-                        mReceiverAmount.getText().toString().trim(),
+                        mSenderAmount.getAmount(),
+                        mReceiverAmount.getAmount(),
                         mEtAdditional.getText().toString().trim());
                 break;
             case SHOW_REQUEST:
@@ -339,6 +353,34 @@ public class RequestDetailsActivity extends ToolbarActivity<RequestDetailsPresen
 
         outState.putSerializable(ACTION_TYPE, mActionType);
         outState.putParcelable(REQUEST_ENTITY, getPresenter().getRequest());
+    }
+
+    private void changeAmountContainerOrientation() {
+        if (isTextLonger(mSenderAmount) || isTextLonger(mReceiverAmount)) {
+            if (mAmountContainer.getOrientation() != LinearLayout.VERTICAL)
+                mAmountContainer.setOrientation(LinearLayout.VERTICAL);
+        } else {
+            if (mAmountContainer.getOrientation() != LinearLayout.HORIZONTAL)
+                mAmountContainer.setOrientation(LinearLayout.HORIZONTAL);
+        }
+    }
+
+    private boolean isTextLonger(TextInputEditText editText) {
+        Editable text = editText.getText();
+        TextPaint paint = editText.getPaint();
+        float textSize = paint.measureText(text.toString());
+        int width = editText.getMeasuredWidth();
+        width -= editText.getPaddingRight();
+        width -= editText.getPaddingLeft();
+//        width -= editText.getCompoundDrawables().length > 0 ? editText.getCompoundDrawables()[0].getMinimumWidth() : 0;
+        width -= editText.getCompoundDrawablePadding();
+        if (mAmountEditTextWidth > 0 && textSize >= mAmountEditTextWidth)
+            return true;
+        if (textSize >= width && width > 0) {
+            mAmountEditTextWidth = width;
+            return true;
+        }
+        return false;
     }
 
 }

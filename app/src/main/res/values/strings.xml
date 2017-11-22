@@ -163,6 +163,8 @@
     <string name="profile_export_wallet">Export wallet</string>
     <string name="profile_import_wallet">Import wallet</string>
     <string name="profile_agent_switch">Agent open in</string>
+    <string name="profile_agent_on">On</string>
+    <string name="profile_agent_off">Off</string>
     <string name="profile_interest_rate">Annual Interest Rate (%)</string>
 
     <!-- Send Money -->
@@ -211,7 +213,7 @@
     <string name="web3j_error_message_preferences">Preferences mistake.</string>
     <string name="web3j_error_message_no_identity">Identity is not created yet. Try again later.</string>
     <string name="web3j_error_message_owner_balance" formatted="false">You need to have at least %s ETH to make transactions. Owner balance is %s.</string>
-    <string name="web3j_error_message_identity_balance" formatted="false">You can not send %s eFiats. Proxy balance is %s.</string>
+    <string name="web3j_error_message_identity_balance" formatted="false">You can not send %s %s. Identity balance is %s %s.</string>
     <string name="web3j_error_message_no_wallet" formatted="false">No such wallet file on this device.</string>
     <string name="web3j_error_message_wrong_wallet" formatted="false">Wrong wallet file is selected.</string>
     <string name="web3j_error_message_wrong_pin_code" formatted="false">Wrong pin code is entered.</string>
