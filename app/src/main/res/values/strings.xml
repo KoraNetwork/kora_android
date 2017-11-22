@@ -345,5 +345,11 @@
     <string name="import_wallet_select">Select wallet file to import:</string>
     <string name="import_wallet_imported">Wallet file is imported on internal storage</string>
 
+    <!-- Return dialog -->
+    <string name="dialog_return_title">Return</string>
+    <string name="dialog_return_text" formatted="false">Enter amount, part or full.\nYour amount is %s %s.</string>
+    <string name="dialog_return_edit_hint" formatted="false">Amount %s</string>
+    <string name="dialog_return_negative" formatted="false">Cancel</string>
+    <string name="dialog_return_positive" formatted="false">OK</string>
 
 </resources>
