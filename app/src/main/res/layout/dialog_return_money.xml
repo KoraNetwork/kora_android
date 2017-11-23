@@ -27,7 +27,7 @@
         android:textColor="@color/color_dialog_text"
         android:textSize="18sp" />
 
-    <android.support.design.widget.TextInputLayout
+    <com.kora.android.views.currency.CurrencyInputLayout
         android:id="@+id/edit_layout_amount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -35,19 +35,20 @@
         android:fontFamily="muli_regular"
         app:errorEnabled="true">
 
-        <android.support.design.widget.TextInputEditText
+        <com.kora.android.views.currency.CurrencyEditText
             android:id="@+id/edit_text_amount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="muli_regular"
             android:hint="@string/dialog_return_edit_hint"
             android:inputType="number"
-            android:maxLength="10"
+            android:maxLength="18"
             android:maxLines="1"
             android:textColor="@color/color_edit_text"
             android:textSize="16sp"
-            tools:text="750" />
-    </android.support.design.widget.TextInputLayout>
+            app:allow_negative_values="false"
+            app:decimal_digits="2" />
+    </com.kora.android.views.currency.CurrencyInputLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

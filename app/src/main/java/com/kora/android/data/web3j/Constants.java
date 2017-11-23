@@ -28,9 +28,10 @@ public interface Constants {
     String FUNCTION_GET_BALANCE = "balanceOf";
     String FUNCTION_APPROVE = "approve";
 
-    String RINKEBY_KORA_LOAN_ADDRESS = "0x683ca4eb5e3d34cda515995598c0f719281ce872";
+    String RINKEBY_KORA_LOAN_ADDRESS = "0x181790fdb1934fa0b616f2e5c4e0fce5f98443fe";
 
     String FUNCTION_CREATE_LOAN = "createLoan";
     String FUNCTION_AGREE_LOAN = "agreeLoan";
     String FUNCTION_FUND_LOAN = "agreeLoan";
+    String FUNCTION_PAY_BACK_LOAN = "payBackLoan";
 }

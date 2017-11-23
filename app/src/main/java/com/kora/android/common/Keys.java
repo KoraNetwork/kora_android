@@ -108,6 +108,7 @@ public interface Keys {
         String ARG_BORROW_TYPE = "borrow_type_args";
         String BORROW_LIST = "borrow_list_args";
         String BORROW_TYPE = "borrow_type";
+        String PAY_BACK_VALUE = "pay_back_value";
     }
 
     interface Users {

@@ -160,16 +160,20 @@ public class BorrowMoneyPresenter extends BasePresenter<BorrowMoneyView> {
         mAgreeBorrowUseCase.execute(new UpdateBorrowRequestSubscriber());
     }
 
-    public void lendNow() {
-        getView().showEnterPinScreen(mBorrowRequest, ActionType.FUND_LOAN);
-    }
-
     public void borrowNow() {
         getView().showEnterPinScreen(mBorrowRequest, ActionType.CREATE_LOAN);
     }
 
     public void agree() {
         getView().showEnterPinScreen(mBorrowRequest, ActionType.AGREE_LOAN);
+    }
+
+    public void lendNow() {
+        getView().showEnterPinScreen(mBorrowRequest, ActionType.FUND_LOAN);
+    }
+
+    public void returnNow(final double payBackValue) {
+        getView().showEnterPinScreen(mBorrowRequest, payBackValue, ActionType.PAY_BACK_LOAN);
     }
 
     private class GetUserSubscriber extends DefaultInternetSubscriber<UserEntity> {

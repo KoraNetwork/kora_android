@@ -26,4 +26,7 @@ public interface BorrowRepository {
     Observable<BorrowEntity> sendFundLoan(final String borrowId,
                                           final List<String> rawApproves,
                                           final String rawFundLoan);
+
+    Observable <BorrowEntity>sendPayBackLoan(final String borrowId,
+                                             final String rawPayBackLoan);
 }

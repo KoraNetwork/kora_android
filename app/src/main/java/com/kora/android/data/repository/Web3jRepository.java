@@ -53,4 +53,10 @@ public interface Web3jRepository {
                                                                 final double lenderAmount,
                                                                 final String loanId,
                                                                 final String pinCode);
+
+    Observable<String> createPayBackLoan(final String loanId,
+                                         final String borrowerErc20Token,
+                                         final String lenderErc20Token,
+                                         final double payBackValue,
+                                         final String pinCode);
 }

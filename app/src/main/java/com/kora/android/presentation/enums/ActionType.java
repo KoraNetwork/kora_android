@@ -7,5 +7,6 @@ public enum ActionType {
 
     CREATE_LOAN,
     AGREE_LOAN,
-    FUND_LOAN
+    FUND_LOAN,
+    PAY_BACK_LOAN
 }

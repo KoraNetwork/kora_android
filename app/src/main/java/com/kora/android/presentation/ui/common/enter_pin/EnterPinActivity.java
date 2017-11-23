@@ -30,6 +30,7 @@ import static com.kora.android.common.Keys.Args.ACTION_TYPE;
 import static com.kora.android.common.Keys.Args.BORROW_ENTITY;
 import static com.kora.android.common.Keys.Args.RECEIVER_AMOUNT;
 import static com.kora.android.common.Keys.Args.REQUEST_ENTITY;
+import static com.kora.android.common.Keys.Args.PAY_BACK_VALUE;
 import static com.kora.android.common.Keys.Args.SENDER_AMOUNT;
 import static com.kora.android.common.Keys.Args.TRANSACTION_TYPE;
 import static com.kora.android.common.Keys.Args.USER_ENTITY;
@@ -88,6 +89,17 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
         return intent;
     }
 
+    public static Intent getLaunchIntent(final BaseActivity baseActivity,
+                                         final BorrowEntity borrowEntity,
+                                         final double payBackValue,
+                                         final ActionType actionType) {
+        final Intent intent = new Intent(baseActivity, EnterPinActivity.class);
+        intent.putExtra(BORROW_ENTITY, borrowEntity);
+        intent.putExtra(PAY_BACK_VALUE, payBackValue);
+        intent.putExtra(ACTION_TYPE, actionType);
+        return intent;
+    }
+
     @Override
     public void injectToComponent(final ActivityComponent activityComponent) {
         activityComponent.inject(this);
@@ -121,6 +133,8 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
                 getPresenter().setRequestEntity(bundle.getParcelable(REQUEST_ENTITY));
             if (bundle.containsKey(BORROW_ENTITY))
                 getPresenter().setBorrowEntity(bundle.getParcelable(BORROW_ENTITY));
+            if (bundle.containsKey(PAY_BACK_VALUE))
+                getPresenter().setPayBackValue(bundle.getDouble(PAY_BACK_VALUE));
         }
         if (getIntent() != null) {
             getPresenter().setReceiver(getIntent().getParcelableExtra(USER_ENTITY));
@@ -129,6 +143,7 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
             getPresenter().setActionType((ActionType) getIntent().getSerializableExtra(ACTION_TYPE));
             getPresenter().setRequestEntity(getIntent().getParcelableExtra(REQUEST_ENTITY));
             getPresenter().setBorrowEntity(getIntent().getParcelableExtra(BORROW_ENTITY));
+            getPresenter().setPayBackValue(getIntent().getDoubleExtra(PAY_BACK_VALUE, 0));
         }
     }
 
@@ -141,6 +156,7 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
         outState.putSerializable(TRANSACTION_TYPE, getPresenter().getActionType());
         outState.putParcelable(REQUEST_ENTITY, getPresenter().getRequestEntity());
         outState.putParcelable(BORROW_ENTITY, getPresenter().getBorrowEntity());
+        outState.putDouble(PAY_BACK_VALUE, getPresenter().getPayBackValue());
     }
 
     private void initUI() {

@@ -303,6 +303,8 @@
     <string name="borrow_add_guarantor_title">Add your guarantors</string>
     <string name="borrow_be_guarantors_label">Can you be my guarantor?</string>
     <string name="borrow_lend_now">Lend now</string>
+    <string name="borrow_returned_money">Returned money:</string>
+    <string name="borrow_return">Return</string>
 
     <string name="dialog_remove_guarantor_title">Alert</string>
     <string name="dialog_remove_guarantor_message">Are you sure you want to remove this guarantor?</string>

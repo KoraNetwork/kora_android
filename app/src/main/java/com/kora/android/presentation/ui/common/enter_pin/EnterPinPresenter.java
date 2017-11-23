@@ -13,10 +13,12 @@ import com.kora.android.domain.base.DefaultWeb3jSubscriber;
 import com.kora.android.domain.usecase.borrow.SendAgreeLoanUseCase;
 import com.kora.android.domain.usecase.borrow.SendCreateLoanUseCase;
 import com.kora.android.domain.usecase.borrow.SendFundLoanUseCase;
+import com.kora.android.domain.usecase.borrow.SendPayBackLoanUseCase;
 import com.kora.android.domain.usecase.request.DeleteRequestUseCase;
 import com.kora.android.domain.usecase.web3j.CreateAgreeLoanUseCase;
 import com.kora.android.domain.usecase.web3j.CreateCreateLoanUseCase;
 import com.kora.android.domain.usecase.web3j.CreateFundLoanUseCase;
+import com.kora.android.domain.usecase.web3j.CreatePayBackLoanUseCase;
 import com.kora.android.domain.usecase.web3j.CreateRawTransactionUseCase;
 import com.kora.android.domain.usecase.transaction.SendRawTransactionUseCase;
 import com.kora.android.presentation.enums.ActionType;
@@ -51,6 +53,8 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
     private final SendAgreeLoanUseCase mSendAgreeLoanUseCase;
     private final CreateFundLoanUseCase mCreateFundLoanUseCase;
     private final SendFundLoanUseCase mSendFundLoanUseCase;
+    private final CreatePayBackLoanUseCase mCreatePayBackLoanUseCase;
+    private final SendPayBackLoanUseCase mSendPayBackLoanUseCase;
 
     private ActionType mActionType;
     private UserEntity mReceiver;
@@ -58,6 +62,7 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
     private double mReceiverAmount;
     private RequestEntity mRequestEntity;
     private BorrowEntity mBorrowEntity;
+    private double mPayBackValue;
 
     @Inject
     public EnterPinPresenter(final CreateRawTransactionUseCase createRawTransactionUseCase,
@@ -68,7 +73,9 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
                              final CreateAgreeLoanUseCase createAgreeLoanUseCase,
                              final SendAgreeLoanUseCase sendAgreeLoanUseCase,
                              final CreateFundLoanUseCase createFundLoanUseCase,
-                             final SendFundLoanUseCase sendFundLoanUseCase) {
+                             final SendFundLoanUseCase sendFundLoanUseCase,
+                             final CreatePayBackLoanUseCase createPayBackLoanUseCase,
+                             final SendPayBackLoanUseCase sendPayBackLoanUseCase) {
         mCreateRawTransactionUseCase = createRawTransactionUseCase;
         mSendRawTransactionUseCase = sendRawTransactionUseCase;
         mDeleteRequestUseCase = deleteRequestUseCase;
@@ -78,6 +85,8 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         mSendAgreeLoanUseCase = sendAgreeLoanUseCase;
         mCreateFundLoanUseCase = createFundLoanUseCase;
         mSendFundLoanUseCase = sendFundLoanUseCase;
+        mCreatePayBackLoanUseCase = createPayBackLoanUseCase;
+        mSendPayBackLoanUseCase = sendPayBackLoanUseCase;
     }
 
     public ActionType getActionType() {
@@ -126,6 +135,14 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
 
     public void setBorrowEntity(final BorrowEntity borrowEntity) {
         mBorrowEntity = borrowEntity;
+    }
+
+    public double getPayBackValue() {
+        return mPayBackValue;
+    }
+
+    public void setPayBackValue(final double payBackValue) {
+        mPayBackValue = payBackValue;
     }
 
     private TransactionType getTransactionTypeByAction(ActionType actionType) {
@@ -183,6 +200,15 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
                         mBorrowEntity.getLoanId(),
                         pinCode);
                 mCreateFundLoanUseCase.execute(new CreateFundLoanSubscriber());
+            case PAY_BACK_LOAN:
+                mCreatePayBackLoanUseCase.setData(
+                        mBorrowEntity.getLoanId(),
+                        mBorrowEntity.getSender().getERC20Token(),
+                        mBorrowEntity.getReceiver().getERC20Token(),
+                        mPayBackValue,
+                        pinCode);
+                mCreatePayBackLoanUseCase.execute(new CreatePayBackLoanSubscriber());
+                break;
         }
     }
 
@@ -221,21 +247,25 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
 
         @Override
         public void handleWalletError(final FileNotFoundException fileNotFoundException) {
+            if (!isViewAttached()) return;
             getView().showError(R.string.web3j_error_message_no_wallet);
         }
 
         @Override
         public void handlePinError(final CipherException cipherException) {
+            if (!isViewAttached()) return;
             getView().showError(R.string.web3j_error_message_wrong_pin_code);
         }
 
         @Override
         public void handleNetworkError(final Throwable throwable) {
+            if (!isViewAttached()) return;
             getView().showError(R.string.web3j_error_message_network_problems);
         }
 
         @Override
         public void handleWeb3jError(final String message) {
+            if (!isViewAttached()) return;
             getView().showError(message);
         }
     }
@@ -286,11 +316,13 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
 
         @Override
         public void handleUnprocessableEntity(final ErrorModel errorModel) {
+            if (!isViewAttached()) return;
             getView().showError(errorModel.getError());
         }
 
         @Override
         public void handleNetworkError(final RetrofitException retrofitException) {
+            if (!isViewAttached()) return;
             getView().showErrorWithRetry(new RetryAction(mSendRawTransactionAction));
         }
     }
@@ -348,11 +380,13 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
 
         @Override
         public void handleUnprocessableEntity(final ErrorModel errorModel) {
+            if (!isViewAttached()) return;
             getView().showError(errorModel.getError());
         }
 
         @Override
         public void handleNetworkError(final RetrofitException retrofitException) {
+            if (!isViewAttached()) return;
             getView().showErrorWithRetry(new RetryAction(mDeleteRequestAction));
         }
     }
@@ -389,21 +423,25 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
 
         @Override
         public void handleWalletError(final FileNotFoundException fileNotFoundException) {
+            if (!isViewAttached()) return;
             getView().showError(R.string.web3j_error_message_no_wallet);
         }
 
         @Override
         public void handlePinError(final CipherException cipherException) {
+            if (!isViewAttached()) return;
             getView().showError(R.string.web3j_error_message_wrong_pin_code);
         }
 
         @Override
         public void handleNetworkError(final Throwable throwable) {
+            if (!isViewAttached()) return;
             getView().showError(R.string.web3j_error_message_network_problems);
         }
 
         @Override
         public void handleWeb3jError(final String message) {
+            if (!isViewAttached()) return;
             getView().showError(message);
         }
     }
@@ -449,11 +487,13 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
 
         @Override
         public void handleUnprocessableEntity(final ErrorModel errorModel) {
+            if (!isViewAttached()) return;
             getView().showError(errorModel.getError());
         }
 
         @Override
         public void handleNetworkError(final RetrofitException retrofitException) {
+            if (!isViewAttached()) return;
             getView().showErrorWithRetry(new RetryAction(mSendCreateLoanAction));
         }
     }
@@ -490,21 +530,25 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
 
         @Override
         public void handleWalletError(final FileNotFoundException fileNotFoundException) {
+            if (!isViewAttached()) return;
             getView().showError(R.string.web3j_error_message_no_wallet);
         }
 
         @Override
         public void handlePinError(final CipherException cipherException) {
+            if (!isViewAttached()) return;
             getView().showError(R.string.web3j_error_message_wrong_pin_code);
         }
 
         @Override
         public void handleNetworkError(final Throwable throwable) {
+            if (!isViewAttached()) return;
             getView().showError(R.string.web3j_error_message_network_problems);
         }
 
         @Override
         public void handleWeb3jError(final String message) {
+            if (!isViewAttached()) return;
             getView().showError(message);
         }
     }
@@ -550,11 +594,13 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
 
         @Override
         public void handleUnprocessableEntity(final ErrorModel errorModel) {
+            if (!isViewAttached()) return;
             getView().showError(errorModel.getError());
         }
 
         @Override
         public void handleNetworkError(final RetrofitException retrofitException) {
+            if (!isViewAttached()) return;
             getView().showErrorWithRetry(new RetryAction(mSendAgreeLoanAction));
         }
     }
@@ -591,21 +637,25 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
 
         @Override
         public void handleWalletError(final FileNotFoundException fileNotFoundException) {
+            if (!isViewAttached()) return;
             getView().showError(R.string.web3j_error_message_no_wallet);
         }
 
         @Override
         public void handlePinError(final CipherException cipherException) {
+            if (!isViewAttached()) return;
             getView().showError(R.string.web3j_error_message_wrong_pin_code);
         }
 
         @Override
         public void handleNetworkError(final Throwable throwable) {
+            if (!isViewAttached()) return;
             getView().showError(R.string.web3j_error_message_network_problems);
         }
 
         @Override
         public void handleWeb3jError(final String message) {
+            if (!isViewAttached()) return;
             getView().showError(message);
         }
     }
@@ -651,12 +701,121 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
 
         @Override
         public void handleUnprocessableEntity(final ErrorModel errorModel) {
+            if (!isViewAttached()) return;
             getView().showError(errorModel.getError());
         }
 
         @Override
         public void handleNetworkError(final RetrofitException retrofitException) {
+            if (!isViewAttached()) return;
             getView().showErrorWithRetry(new RetryAction(mSendFundLoanAction));
+        }
+    }
+
+    private class CreatePayBackLoanSubscriber extends DefaultWeb3jSubscriber<String> {
+
+        @Override
+        protected void onStart() {
+            if (!isViewAttached()) return;
+            getView().showProgress(true);
+        }
+
+        @Override
+        public void onNext(final String rawPayBackLoan) {
+            if (!isViewAttached()) return;
+            startSendPayBackLoanTask(rawPayBackLoan);
+        }
+
+//        @Override
+//        public void onComplete() {
+//            if (!isViewAttached()) return;
+//            getView().showProgress(false);
+//        }
+
+        @Override
+        public void onError(final Throwable throwable) {
+            Log.e("_____", throwable.toString());
+            throwable.printStackTrace();
+
+            super.onError(throwable);
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+        }
+
+        @Override
+        public void handleWalletError(final FileNotFoundException fileNotFoundException) {
+            if (!isViewAttached()) return;
+            getView().showError(R.string.web3j_error_message_no_wallet);
+        }
+
+        @Override
+        public void handlePinError(final CipherException cipherException) {
+            if (!isViewAttached()) return;
+            getView().showError(R.string.web3j_error_message_wrong_pin_code);
+        }
+
+        @Override
+        public void handleNetworkError(final Throwable throwable) {
+            if (!isViewAttached()) return;
+            getView().showError(R.string.web3j_error_message_network_problems);
+        }
+
+        @Override
+        public void handleWeb3jError(final String message) {
+            if (!isViewAttached()) return;
+            getView().showError(message);
+        }
+    }
+
+    public void startSendPayBackLoanTask(final String rawPayBackLoan) {
+        mSendPayBackLoanUseCase.setData(mBorrowEntity.getId(), rawPayBackLoan);
+        mSendPayBackLoanUseCase.execute(new SendPayBackLoanSubscriber());
+    }
+
+    private Action mSendPayBackLoanAction = new Action() {
+        @Override
+        public void run() throws Exception {
+            mSendPayBackLoanUseCase.execute(new SendPayBackLoanSubscriber());
+        }
+    };
+
+    private class SendPayBackLoanSubscriber extends DefaultInternetSubscriber<BorrowEntity> {
+
+//        @Override
+//        protected void onStart() {
+//            if (!isViewAttached()) return;
+//            getView().showProgress(true);
+//        }
+
+        @Override
+        public void onNext(@NonNull final BorrowEntity borrowEntity) {
+            if (!isViewAttached()) return;
+            getView().showBorrowScreen();
+        }
+
+        @Override
+        public void onComplete() {
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+        }
+
+        @Override
+        public void onError(@NonNull final Throwable throwable) {
+            super.onError(throwable);
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+        }
+
+        @Override
+        public void handleUnprocessableEntity(final ErrorModel errorModel) {
+            if (!isViewAttached()) return;
+            getView().showError(errorModel.getError());
+        }
+
+        @Override
+        public void handleNetworkError(final RetrofitException retrofitException) {
+            if (!isViewAttached()) return;
+            getView().showErrorWithRetry(new RetryAction(mSendPayBackLoanAction));
         }
     }
 
@@ -670,5 +829,7 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         mSendAgreeLoanUseCase.dispose();
         mCreateFundLoanUseCase.dispose();
         mSendFundLoanUseCase.dispose();
+        mCreatePayBackLoanUseCase.dispose();
+        mSendPayBackLoanUseCase.dispose();
     }
 }

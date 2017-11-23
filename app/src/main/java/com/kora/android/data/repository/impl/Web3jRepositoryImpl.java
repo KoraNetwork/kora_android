@@ -908,4 +908,126 @@ public class Web3jRepositoryImpl implements Web3jRepository {
             return new Pair<>(rawApproves, lenderFundLoanHexValue);
         });
     }
+
+    @Override
+    public Observable<String> createPayBackLoan(final String loanId,
+                                                final String borrowerErc20Token,
+                                                final String lenderErc20Token,
+                                                final double payBackValue,
+                                                final String pinCode) {
+        return Observable.just(true).map(a -> {
+
+            if (!CommonUtils.isNetworkConnected(mContext))
+                throw new Exception(mContext.getString(R.string.web3j_error_message_no_network));
+
+            final UserEntity sender = mPreferenceHandler.remindObject(USER, UserEntity.class);
+            if (sender == null)
+                throw new Exception(mContext.getString(R.string.web3j_error_message_preferences));
+
+            if (sender.getIdentity() == null || sender.getIdentity().isEmpty())
+                throw new Exception(mContext.getString(R.string.web3j_error_message_no_identity));
+
+            final Web3j web3j = mWeb3jConnection.getWeb3jRinkeby();
+
+            final Credentials senderCredentials = mEtherWalletStorage.getCredentials(
+                    Web3jUtils.getKeystoreFileNameFromAddress(sender.getOwner()),
+                    pinCode);
+
+            ////////////////////////////////////////////////////////////////////////////////////////
+
+            final EthGetBalance ethGetBalance = web3j
+                    .ethGetBalance(sender.getOwner(), DefaultBlockParameterName.LATEST)
+                    .sendAsync()
+                    .get();
+            final BigInteger balanceOwnerWei = ethGetBalance.getBalance();
+            final double balanceOwnerEth = Web3jUtils.convertWeiToEth(balanceOwnerWei);
+
+            if (balanceOwnerEth < mWeb3jConnection.getMinOwnerBalance())
+                throw new Exception(mContext.getString(R.string.web3j_error_message_owner_balance,
+                        String.valueOf(mWeb3jConnection.getMinOwnerBalance()),
+                        String.valueOf(balanceOwnerEth)));
+
+            ////////////////////////////////////////////////////////////////////////////////////////
+
+            final Function getBalanceFunction = new Function(
+                    mWeb3jConnection.getGetBalanceFunction(),
+                    Collections.singletonList(new Address(sender.getIdentity())),
+                    Collections.singletonList(new TypeReference<Uint256>() {
+                    })
+            );
+            final String encodedFunction = FunctionEncoder.encode(getBalanceFunction);
+
+            final EthCall response = web3j
+                    .ethCall(
+                            Transaction.createEthCallTransaction(
+                                    sender.getIdentity(),
+                                    sender.getERC20Token(),
+                                    encodedFunction),
+                            DefaultBlockParameterName.LATEST)
+                    .sendAsync()
+                    .get();
+            final List<Type> someTypes = FunctionReturnDecoder.decode(response.getValue(), getBalanceFunction.getOutputParameters());
+            final BigInteger balanceIdentityBigInteger = (BigInteger) someTypes.get(0).getValue();
+            final double balanceIdentityToken = Web3jUtils.convertBigIntegerToToken(balanceIdentityBigInteger);
+
+            if (payBackValue > balanceIdentityToken)
+                throw new Exception(mContext.getString(R.string.web3j_error_message_identity_balance,
+                        String.valueOf(payBackValue),
+                        sender.getCurrency(),
+                        String.valueOf(balanceIdentityToken),
+                        sender.getCurrency()));
+
+            ////////////////////////////////////////////////////////////////////////////////////////
+
+            final EthGetTransactionCount senderEthGetTransactionCount = web3j
+                    .ethGetTransactionCount(sender.getOwner(), DefaultBlockParameterName.LATEST)
+                    .sendAsync()
+                    .get();
+            final BigInteger senderTransactionCount = senderEthGetTransactionCount.getTransactionCount();
+
+            ////////////////////////////////////////////////////////////////////////////////////////
+
+            final Function payBackLoanFunction = new Function(
+                    mWeb3jConnection.getPayBackLoanFunction(),
+                    Arrays.asList(
+                            new Uint256(new BigInteger(loanId)),
+                            new Address(borrowerErc20Token),
+                            new Address(lenderErc20Token),
+                            new Address(mWeb3jConnection.getKoraWalletAddress()),
+                            new Uint256(Web3jUtils.convertTokenToBigInteger(payBackValue))),
+                    Collections.emptyList());
+
+            final String payBackLonaFunctionString = FunctionEncoder.encode(payBackLoanFunction);
+            final byte[] payBackLoanFunctionByteArray = Numeric.hexStringToByteArray(payBackLonaFunctionString);
+
+            final Function forwardToFunction = new Function(
+                    mWeb3jConnection.getForwardToFunction(),
+                    Arrays.asList(
+                            new Address(sender.getOwner()),
+                            new Address(sender.getIdentity()),
+                            new Address(mWeb3jConnection.getKoraLendRinkeby()),
+                            Uint256.DEFAULT,
+                            new DynamicBytes(payBackLoanFunctionByteArray)
+                    ),
+                    Collections.emptyList()
+            );
+            final String forwardToFunctionString = FunctionEncoder.encode(forwardToFunction);
+
+            final RawTransaction payBackLoanRawTransaction = RawTransaction.createTransaction(
+                    Web3jUtils.increaseTransactionCount(senderTransactionCount),
+                    mWeb3jConnection.getGasPrice(),
+                    mWeb3jConnection.getGasLimit(),
+                    mWeb3jConnection.getMetaIdentityManagerRinkeby(),
+                    forwardToFunctionString);
+
+            final byte[] payBackLoanSignedMessage = TransactionEncoder.signMessage(
+                    payBackLoanRawTransaction,
+                    senderCredentials);
+            final String payBackLoanHexValue = Numeric.toHexString(payBackLoanSignedMessage);
+
+            ////////////////////////////////////////////////////////////////////////////////////////
+
+            return payBackLoanHexValue;
+        });
+    }
 }

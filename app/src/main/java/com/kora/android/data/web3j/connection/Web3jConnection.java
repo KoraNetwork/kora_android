@@ -13,6 +13,7 @@ import static com.kora.android.data.web3j.Constants.FUNCTION_CREATE_LOAN;
 import static com.kora.android.data.web3j.Constants.FUNCTION_FORWARD_TO;
 import static com.kora.android.data.web3j.Constants.FUNCTION_FUND_LOAN;
 import static com.kora.android.data.web3j.Constants.FUNCTION_GET_BALANCE;
+import static com.kora.android.data.web3j.Constants.FUNCTION_PAY_BACK_LOAN;
 import static com.kora.android.data.web3j.Constants.FUNCTION_TRANSFER;
 import static com.kora.android.data.web3j.Constants.KORA_WALLET_ADDRESS;
 import static com.kora.android.data.web3j.Constants.KORA_WALLET_FILE_NAME;
@@ -110,4 +111,6 @@ public class Web3jConnection {
     public String getAgreeLoanFunction() { return FUNCTION_AGREE_LOAN; }
 
     public String getFundLoanFunction() { return FUNCTION_FUND_LOAN; }
+
+    public String getPayBackLoanFunction() { return FUNCTION_PAY_BACK_LOAN; }
 }

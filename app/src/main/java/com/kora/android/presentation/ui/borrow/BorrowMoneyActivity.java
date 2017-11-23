@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,7 +37,6 @@ import com.kora.android.common.utils.ViewUtils;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.enums.Action;
 import com.kora.android.presentation.enums.ActionType;
-import com.kora.android.presentation.enums.BorrowState;
 import com.kora.android.presentation.enums.BorrowType;
 import com.kora.android.presentation.enums.Direction;
 import com.kora.android.presentation.enums.ViewMode;
@@ -107,7 +107,7 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
     @BindView(R.id.add_guarantor_button) ImageButton mAddGuarantorBtn;
 
     @BindView(R.id.amount_container) LinearLayout mAmountContainer;
-    @BindView(R.id.total_amount_container) RelativeLayout mTotalAmountContainer;
+    @BindView(R.id.total_amount_container) LinearLayout mTotalAmountContainer;
     @BindView(R.id.text_total_interest) TextView mTotalInterest;
     @BindView(R.id.text_total_amount) TextView mTotalAmount;
     @BindView(R.id.guarantors_title) TextView mGuarantorsTitle;
@@ -129,6 +129,7 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
     @BindView(R.id.disagree_button) Button mDisagreeButton;
 
     @BindView(R.id.text_state) TextView mTvState;
+    @BindView(R.id.returned_money_container) RelativeLayout mRlReturnedMoney;
 
     private GuarantorsAdapter mUserAdapter;
     private int mAmountEditTextWidth = 0;
@@ -265,6 +266,7 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
         final BorrowEntity borrow = getPresenter().getBorrow();
         if (borrow != null) {
             setupState(borrow);
+            setupAmounts(borrow);
 
             switch (borrow.getDirection()) {
                 case GUARANTOR:
@@ -425,12 +427,16 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
 
         switch (getPresenter().getBorrow().getType()) {
             case REQUEST:
-                mDisagreeButton.setVisibility(user.getAgreed() == null ? View.VISIBLE : View.INVISIBLE);
                 mActionButton.setVisibility(user.getAgreed() == null ? View.VISIBLE : View.GONE);
+                mDisagreeButton.setVisibility(user.getAgreed() == null ? View.VISIBLE : View.INVISIBLE);
                 break;
             case LOAN:
                 mActionButton.setVisibility(user.getAgreed() == null ? View.VISIBLE : View.GONE);
+                mDisagreeButton.setVisibility(View.INVISIBLE);
                 break;
+            case INPROGRESS:
+                mActionButton.setVisibility(View.GONE);
+                mDisagreeButton.setVisibility(View.INVISIBLE);
         }
         mUserAdapter.changeItem(user);
     }
@@ -438,6 +444,11 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
     @Override
     public void showEnterPinScreen(final BorrowEntity borrowEntity, final ActionType actionType) {
         startActivity(EnterPinActivity.getLaunchIntent(this, borrowEntity, actionType));
+    }
+
+    @Override
+    public void showEnterPinScreen(final BorrowEntity borrowEntity, final double payBackValue, final ActionType actionType) {
+        startActivity(EnterPinActivity.getLaunchIntent(this, borrowEntity, payBackValue, actionType));
     }
 
     // ================= HELPERS
@@ -634,6 +645,13 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
         }
     }
 
+    private void setupAmounts(final BorrowEntity borrowEntity) {
+        if (borrowEntity.getType() == BorrowType.INPROGRESS) {
+            mRlReturnedMoney.setVisibility(View.VISIBLE);
+            mTotalAmount.setTextColor(getResources().getColor(R.color.color_total_amount_red));
+        }
+    }
+
     private void setupFromDirection(BorrowEntity borrow) {
         setTitle(getString(R.string.borrow_borrow_from, borrow.getReceiver().getFullName()));
         setupSender(borrow.getSender(), false);
@@ -654,6 +672,8 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
                 }
                 break;
             case PENDING:
+            case EXPIRED:
+            case OVERDUE:
                 mActionButton.setVisibility(View.GONE);
                 mDisagreeButton.setVisibility(View.INVISIBLE);
                 break;
@@ -674,10 +694,30 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
                         break;
                     case LOAN:
                         mActionButton.setVisibility(View.GONE);
+                        mDisagreeButton.setVisibility(View.INVISIBLE);
+                        break;
+                    case INPROGRESS:
+                        mActionButton.setText(getString(R.string.borrow_return));
+                        mActionButton.setOnClickListener(v -> {
+                            showReturnMoneyDialog(borrow);
+                        });
                         break;
                 }
                 break;
         }
+    }
+
+    private void showReturnMoneyDialog(final BorrowEntity borrowEntity) {
+        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.show();
+        alertDialog.setContentView(R.layout.dialog_return_money);
+        final TextView tvTitle = alertDialog.findViewById(R.id.text_view_title);
+        tvTitle.setText(R.string.dialog_return_title);
+        final TextView tvText = alertDialog.findViewById(R.id.text_view_text);
+        tvText.setText(R.string.dialog_return_text);
+
+        final double payBackValue = 1.0d;
+        getPresenter().returnNow(payBackValue);
     }
 
     private boolean checkAllUserAgreed(BorrowEntity borrow, boolean useReceiver) {
@@ -707,6 +747,8 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
                 mBorrowRequestStatusBorower.setTextColor(getResources().getColor(R.color.color_text_red));
                 break;
             case PENDING:
+            case EXPIRED:
+            case OVERDUE:
                 mActionButton.setVisibility(View.GONE);
                 mDisagreeButton.setVisibility(View.INVISIBLE);
                 break;
@@ -738,6 +780,9 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
                         mActionButton.setText(getString(R.string.borrow_lend_now));
                         mActionButton.setEnabled(false);
                         break;
+                    case INPROGRESS:
+                        mActionButton.setVisibility(View.GONE);
+                        mDisagreeButton.setVisibility(View.INVISIBLE);
                 }
                 mGuarantorsTitle.setText(getString(R.string.borrow_which_guarantors_label, borrow.getSender().getFullName()));
                 break;
@@ -781,6 +826,8 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
                 mBorrowRequestStatusBorower.setTextColor(getResources().getColor(R.color.color_text_red));
                 break;
             case PENDING:
+            case EXPIRED:
+            case OVERDUE:
                 mActionButton.setVisibility(View.GONE);
                 mDisagreeButton.setVisibility(View.INVISIBLE);
                 break;
@@ -796,6 +843,9 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
                         mActionButton.setOnClickListener(v ->
                                 getPresenter().agree());
                         break;
+                    case INPROGRESS:
+                        mActionButton.setVisibility(View.GONE);
+                        mDisagreeButton.setVisibility(View.INVISIBLE);
                 }
                 break;
         }
@@ -908,6 +958,5 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
             setResult(RESULT_OK, intent);
         }
         super.onBackPressed();
-
     }
 }
