@@ -38,7 +38,6 @@ import javax.inject.Inject;
 
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Action;
-import io.reactivex.observers.DisposableObserver;
 
 @ConfigPersistent
 public class EnterPinPresenter extends BasePresenter<EnterPinView> {
@@ -159,7 +158,7 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
                         pinCode);
                 mCreateRawTransactionUseCase.execute(new CreateRawTransactionSubscriber());
                 break;
-            case CREATE_BORROW:
+            case CREATE_LOAN:
                 mCreateCreateLoanUseCase.setData(
                         mBorrowEntity.getReceiver(),
                         mBorrowEntity.getGuarantors(),

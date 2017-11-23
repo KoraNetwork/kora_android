@@ -160,11 +160,12 @@ public class BorrowMoneyPresenter extends BasePresenter<BorrowMoneyView> {
         mAgreeBorrowUseCase.execute(new UpdateBorrowRequestSubscriber());
     }
 
-    public void lendMoney() {
+    public void lendNow() {
+        getView().showEnterPinScreen(mBorrowRequest, ActionType.FUND_LOAN);
     }
 
     public void borrowNow() {
-        getView().showEnterPinScreen(mBorrowRequest, ActionType.CREATE_BORROW);
+        getView().showEnterPinScreen(mBorrowRequest, ActionType.CREATE_LOAN);
     }
 
     public void agree() {

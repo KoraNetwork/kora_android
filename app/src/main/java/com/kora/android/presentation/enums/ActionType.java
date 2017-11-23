@@ -5,7 +5,7 @@ public enum ActionType {
     CREATE_REQUEST,
     SHOW_REQUEST,
 
-    CREATE_BORROW,
+    CREATE_LOAN,
     AGREE_LOAN,
     FUND_LOAN
 }

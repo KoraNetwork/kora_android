@@ -128,7 +128,7 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
     @BindView(R.id.action_button) Button mActionButton;
     @BindView(R.id.disagree_button) Button mDisagreeButton;
 
-    @BindView(R.id.text_pending) TextView mTvPending;
+    @BindView(R.id.text_state) TextView mTvState;
 
     private GuarantorsAdapter mUserAdapter;
     private int mAmountEditTextWidth = 0;
@@ -262,8 +262,10 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
 
         mEtStartDate.setText(DateUtils.getFormattedDate(DateUtils.PRETTY_DATE_PATTERN, new Date()));
 
-        BorrowEntity borrow = getPresenter().getBorrow();
+        final BorrowEntity borrow = getPresenter().getBorrow();
         if (borrow != null) {
+            setupState(borrow);
+
             switch (borrow.getDirection()) {
                 case GUARANTOR:
                     setupGuarantorDirection(borrow);
@@ -420,11 +422,17 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
     @Override
     public void setupGuarantor(UserEntity user) {
         mBeGuarantorLabel.setVisibility(View.VISIBLE);
-        mDisagreeButton.setVisibility(user.getAgreed() == null ? View.VISIBLE : View.INVISIBLE);
-        mActionButton.setVisibility(user.getAgreed() == null ? View.VISIBLE : View.GONE);
 
+        switch (getPresenter().getBorrow().getType()) {
+            case REQUEST:
+                mDisagreeButton.setVisibility(user.getAgreed() == null ? View.VISIBLE : View.INVISIBLE);
+                mActionButton.setVisibility(user.getAgreed() == null ? View.VISIBLE : View.GONE);
+                break;
+            case LOAN:
+                mActionButton.setVisibility(user.getAgreed() == null ? View.VISIBLE : View.GONE);
+                break;
+        }
         mUserAdapter.changeItem(user);
-
     }
 
     @Override
@@ -569,7 +577,8 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
         } else if (mViewMode == ViewMode.VIEW_MODE && getPresenter().getBorrow() != null) {
             final Direction direction = getPresenter().getBorrow().getDirection();
             switch (direction) {
-                case FROM: {
+                case FROM:
+                case GUARANTOR: {
                     double amount = mSenderAmount.getAmount();
                     String rateString = mRateEditText.getText().toString();
                     if (amount == 0 || rateString.isEmpty()) {
@@ -609,6 +618,22 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
         }
     }
 
+    private void setupState(final BorrowEntity borrowEntity) {
+        mTvState.setText(borrowEntity.getState().getText());
+        switch (borrowEntity.getState()) {
+            case ONGOING:
+            case AGREED:
+            case PENDING:
+                mTvState.setTextColor(getResources().getColor(R.color.color_borrow_state_positive));
+                break;
+            case REJECTED:
+            case EXPIRED:
+            case OVERDUE:
+                mTvState.setTextColor(getResources().getColor(R.color.color_borrow_state_negative));
+                break;
+        }
+    }
+
     private void setupFromDirection(BorrowEntity borrow) {
         setTitle(getString(R.string.borrow_borrow_from, borrow.getReceiver().getFullName()));
         setupSender(borrow.getSender(), false);
@@ -619,6 +644,7 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
         switch (borrow.getState()) {
             case REJECTED:
                 mActionButton.setVisibility(View.GONE);
+                mDisagreeButton.setVisibility(View.INVISIBLE);
                 mBorrowRequestStatusLender.setText(borrow.getState().getText());
                 mBorrowRequestStatusLender.setTextColor(getResources().getColor(R.color.color_text_red));
 
@@ -629,22 +655,26 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
                 break;
             case PENDING:
                 mActionButton.setVisibility(View.GONE);
-                mTvPending.setVisibility(View.VISIBLE);
-                mTvPending.setText(borrow.getState().getText());
+                mDisagreeButton.setVisibility(View.INVISIBLE);
                 break;
             default:
-                if (borrow.getType() == BorrowType.REQUEST) {
-                    boolean isAgree = checkAllUserAgreed(borrow, true);
+                switch (borrow.getType()) {
+                    case REQUEST:
+                        boolean isAgree = checkAllUserAgreed(borrow, true);
 
-                    mActionButton.setText(R.string.borrow_borrow_borrow_now);
-                    mActionButton.setEnabled(isAgree);
-                    mActionButton.setOnClickListener(v -> getPresenter().borrowNow());
+                        mActionButton.setBackgroundResource(R.drawable.green_button_background);
+                        mActionButton.setText(R.string.borrow_borrow_borrow_now);
+                        mActionButton.setEnabled(isAgree);
+                        mActionButton.setOnClickListener(v ->
+                                getPresenter().borrowNow());
 
-                    if (borrow.getReceiver().getAgreed() != null && borrow.getReceiver().getAgreed()) {
-                        mCheckedIcon.setVisibility(View.VISIBLE);
-                    }
-                } else if (borrow.getType() == BorrowType.LOAN) {
-                    mActionButton.setVisibility(View.GONE);
+                        if (borrow.getReceiver().getAgreed() != null && borrow.getReceiver().getAgreed()) {
+                            mCheckedIcon.setVisibility(View.VISIBLE);
+                        }
+                        break;
+                    case LOAN:
+                        mActionButton.setVisibility(View.GONE);
+                        break;
                 }
                 break;
         }
@@ -654,13 +684,11 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
         if (useReceiver && (borrow.getReceiver().getAgreed() == null || !borrow.getReceiver().getAgreed())) {
             return false;
         }
-
         for (UserEntity g : borrow.getGuarantors()) {
             if (g.getAgreed() == null || !g.getAgreed()) {
                 return false;
             }
         }
-
         return true;
     }
 
@@ -674,38 +702,59 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
         switch (borrow.getState()) {
             case REJECTED:
                 mActionButton.setVisibility(View.GONE);
+                mDisagreeButton.setVisibility(View.INVISIBLE);
                 mBorrowRequestStatusBorower.setText(borrow.getState().getText());
                 mBorrowRequestStatusBorower.setTextColor(getResources().getColor(R.color.color_text_red));
                 break;
             case PENDING:
                 mActionButton.setVisibility(View.GONE);
-                mTvPending.setVisibility(View.VISIBLE);
-                mTvPending.setText(borrow.getState().getText());
+                mDisagreeButton.setVisibility(View.INVISIBLE);
                 break;
-            default:
-                if (borrow.getState() == BorrowState.ONGOING) {
-                    boolean isAgree = checkAllUserAgreed(borrow, false);
-                    mActionButton.setEnabled(isAgree);
-                    mDisagreeButton.setEnabled(isAgree);
-                    mActionButton.setText(R.string.borrow_borrow_confirm);
-                    if (borrow.getReceiver().getAgreed() == null) {
-                        mDisagreeButton.setVisibility(View.VISIBLE);
-                        mActionButton.setBackgroundResource(R.drawable.blue_button_background);
-                        mActionButton.setOnClickListener(v -> getPresenter().agree(true));
-                    } else if (borrow.getReceiver().getAgreed()) {
-                        mActionButton.setEnabled(false);
+            case ONGOING:
+                switch (borrow.getType()) {
+                    case REQUEST:
+                        boolean isAgree = checkAllUserAgreed(borrow, false);
+                        mActionButton.setEnabled(isAgree);
+                        mDisagreeButton.setEnabled(isAgree);
+                        mActionButton.setText(R.string.borrow_borrow_confirm);
+                        if (borrow.getReceiver().getAgreed() == null) {
+                            mDisagreeButton.setVisibility(View.VISIBLE);
+                            mActionButton.setBackgroundResource(R.drawable.blue_button_background);
+                            mActionButton.setOnClickListener(v ->
+                                    getPresenter().agree(true));
+                        } else if (borrow.getReceiver().getAgreed()) {
+                            mActionButton.setEnabled(false);
+                            mActionButton.setBackgroundResource(R.drawable.green_button_background);
+                            mActionButton.setOnClickListener(v ->
+                                    getPresenter().lendNow());
+                        } else {
+                            mDisagreeButton.setVisibility(View.INVISIBLE);
+                            mActionButton.setVisibility(View.INVISIBLE);
+                        }
+                        break;
+                    case LOAN:
                         mActionButton.setBackgroundResource(R.drawable.green_button_background);
-                        mActionButton.setOnClickListener(v -> getPresenter().lendMoney());
-                    } else {
-                        mDisagreeButton.setVisibility(View.GONE);
-                        mActionButton.setVisibility(View.GONE);
-                    }
+                        mActionButton.setVisibility(View.VISIBLE);
+                        mActionButton.setText(getString(R.string.borrow_lend_now));
+                        mActionButton.setEnabled(false);
+                        break;
                 }
-
                 mGuarantorsTitle.setText(getString(R.string.borrow_which_guarantors_label, borrow.getSender().getFullName()));
                 break;
+            case AGREED:
+                switch (borrow.getType()) {
+                    case REQUEST:
+                        mActionButton.setVisibility(View.GONE);
+                        mDisagreeButton.setVisibility(View.INVISIBLE);
+                        break;
+                    case LOAN:
+                        mActionButton.setBackgroundResource(R.drawable.green_button_background);
+                        mActionButton.setText(getString(R.string.borrow_lend_now));
+                        mActionButton.setOnClickListener(v ->
+                                getPresenter().lendNow());
+                        break;
+                }
         }
-
     }
 
     private void setupGuarantorDirection(BorrowEntity borrow) {
@@ -713,8 +762,6 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
         setupSender(borrow.getSender(), true);
         setupReceiver(borrow.getReceiver(), true);
 
-        mElRate.setVisibility(View.GONE);
-        mTotalAmountContainer.setVisibility(View.GONE);
         mGuarantorsTitle.setText(getString(R.string.borrow_which_guarantors_label, borrow.getSender().getFullName()));
 
         setupBasicFields(borrow);
@@ -729,30 +776,25 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
         switch (borrow.getState()) {
             case REJECTED:
                 mActionButton.setVisibility(View.GONE);
-                mDisagreeButton.setVisibility(View.GONE);
+                mDisagreeButton.setVisibility(View.INVISIBLE);
                 mBorrowRequestStatusBorower.setText(borrow.getState().getText());
                 mBorrowRequestStatusBorower.setTextColor(getResources().getColor(R.color.color_text_red));
                 break;
             case PENDING:
                 mActionButton.setVisibility(View.GONE);
-                mDisagreeButton.setVisibility(View.GONE);
-                mTvPending.setVisibility(View.VISIBLE);
-                mTvPending.setText(borrow.getState().getText());
+                mDisagreeButton.setVisibility(View.INVISIBLE);
                 break;
             case ONGOING:
                 switch (borrow.getType()) {
                     case REQUEST:
                         mActionButton.setText(R.string.borrow_guarantor_agree_label);
-                        mActionButton.setBackgroundResource(R.drawable.green_button_background);
                         mActionButton.setOnClickListener(v ->
                                 getPresenter().agree(true));
                         break;
                     case LOAN:
                         mActionButton.setText(R.string.borrow_guarantor_agree_label);
-                        mActionButton.setBackgroundResource(R.drawable.green_button_background);
                         mActionButton.setOnClickListener(v ->
                                 getPresenter().agree());
-                        mDisagreeButton.setVisibility(View.GONE);
                         break;
                 }
                 break;

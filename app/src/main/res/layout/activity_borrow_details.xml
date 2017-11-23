@@ -23,18 +23,17 @@
             android:paddingTop="19dp">
 
             <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_pending"
+                android:id="@+id/text_state"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
                 android:layout_marginStart="16dp"
                 android:fontFamily="@font/muli_normal"
-                android:text="Pending"
-                android:textColor="@color/color_text_blue"
+                tools:text="On going"
+                android:textColor="@color/color_borrow_state_positive"
                 android:textSize="16sp"
                 android:layout_marginTop="3dp"
-                android:layout_marginBottom="19dp"
-                android:visibility="gone"/>
+                android:layout_marginBottom="19dp" />
 
             <LinearLayout
                 android:id="@+id/borrower_container"
@@ -549,7 +548,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="24dp"
                 app:errorEnabled="true">
 
                 <android.support.design.widget.TextInputEditText
@@ -616,16 +615,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="0dp"
-                android:text="@string/borrow_borrow_request_now"/>
+                android:text="@string/borrow_borrow_request_now"
+                android:fontFamily="@font/muli_bold"/>
 
             <android.support.v7.widget.AppCompatButton
+                android:fontFamily="@font/muli_bold"
                 android:id="@+id/disagree_button"
-                style="@style/AppTheme.ActionButton.Borderless"
+                style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="0dp"
+                android:layout_marginBottom="24dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:text="@string/borrow_borrow_disagree"
-                android:visibility="invisible"/>
+                android:textColor="@color/color_button_blue"
+                android:visibility="invisible" />
 
         </LinearLayout>
 

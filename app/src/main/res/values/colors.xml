@@ -64,6 +64,9 @@
     <color name="color_borrow_state_pending">#2b74a5</color>
     <color name="color_borrow_state_overdue">#e62f60</color>
 
+    <color name="color_borrow_state_positive">#2b74a5</color>
+    <color name="color_borrow_state_negative">#e62f60</color>
+
     <color name="color_agent_on">#62cd9a</color>
     <color name="color_agent_off">#c6c5c5</color>
 
