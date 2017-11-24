@@ -14,7 +14,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextPaint;
+import android.text.TextWatcher;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -49,6 +51,7 @@ import com.kora.android.presentation.ui.borrow.adapter.GuarantorsAdapter;
 import com.kora.android.presentation.ui.common.add_contact.GetContactActivity;
 import com.kora.android.presentation.ui.common.enter_pin.EnterPinActivity;
 import com.kora.android.views.currency.CurrencyEditText;
+import com.kora.android.views.currency.CurrencyInputLayout;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.util.ArrayList;
@@ -75,9 +78,8 @@ import static com.kora.android.common.Keys.Extras.SENDER_ENTITY_EXTRA;
 import static com.kora.android.data.network.Constants.API_BASE_URL;
 import static com.kora.android.presentation.ui.borrow.adapter.GuarantorsAdapter.MAX_SIZE;
 
-public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
-        implements BorrowMoneyView, GuarantorsAdapter.OnItemClickListener,
-        DatePickerDialog.OnDateSetListener {
+public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter> implements BorrowMoneyView,
+        GuarantorsAdapter.OnItemClickListener, DatePickerDialog.OnDateSetListener {
 
     public static final int REQUEST_ADD_GUARANTOR = 513;
     private static final String START_DATE_PICKER = "start_date_picker";
@@ -107,7 +109,6 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
     @BindView(R.id.add_guarantor_button) ImageButton mAddGuarantorBtn;
 
     @BindView(R.id.amount_container) LinearLayout mAmountContainer;
-    @BindView(R.id.total_amount_container) LinearLayout mTotalAmountContainer;
     @BindView(R.id.text_total_interest) TextView mTotalInterest;
     @BindView(R.id.text_total_amount) TextView mTotalAmount;
     @BindView(R.id.guarantors_title) TextView mGuarantorsTitle;
@@ -129,7 +130,12 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
     @BindView(R.id.disagree_button) Button mDisagreeButton;
 
     @BindView(R.id.text_state) TextView mTvState;
+    @BindView(R.id.total_amount_container) RelativeLayout mRlTotalAmount;
     @BindView(R.id.returned_money_container) RelativeLayout mRlReturnedMoney;
+    @BindView(R.id.loan_balance_container) RelativeLayout mRlLoanBalance;
+    @BindView(R.id.text_returned_money) TextView mTvReturnedMoney;
+    @BindView(R.id.text_loan_balance) TextView mTvLoanBalance;
+
 
     private GuarantorsAdapter mUserAdapter;
     private int mAmountEditTextWidth = 0;
@@ -266,7 +272,6 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
         final BorrowEntity borrow = getPresenter().getBorrow();
         if (borrow != null) {
             setupState(borrow);
-            setupAmounts(borrow);
 
             switch (borrow.getDirection()) {
                 case GUARANTOR:
@@ -431,13 +436,26 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
                 mDisagreeButton.setVisibility(user.getAgreed() == null ? View.VISIBLE : View.INVISIBLE);
                 break;
             case LOAN:
-                mActionButton.setVisibility(user.getAgreed() == null ? View.VISIBLE : View.GONE);
-                mDisagreeButton.setVisibility(View.INVISIBLE);
+                switch (getPresenter().getBorrow().getState()) {
+                    case PENDING:
+                    case REJECTED:
+                    case EXPIRED:
+                    case OVERDUE:
+                        mActionButton.setVisibility(View.GONE);
+                        mDisagreeButton.setVisibility(View.INVISIBLE);
+                        break;
+                    default:
+                        mActionButton.setVisibility(user.getAgreed() == null ? View.VISIBLE : View.GONE);
+                        mDisagreeButton.setVisibility(View.INVISIBLE);
+                        break;
+                }
                 break;
             case INPROGRESS:
                 mActionButton.setVisibility(View.GONE);
                 mDisagreeButton.setVisibility(View.INVISIBLE);
+                break;
         }
+
         mUserAdapter.changeItem(user);
     }
 
@@ -447,8 +465,8 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
     }
 
     @Override
-    public void showEnterPinScreen(final BorrowEntity borrowEntity, final double payBackValue, final ActionType actionType) {
-        startActivity(EnterPinActivity.getLaunchIntent(this, borrowEntity, payBackValue, actionType));
+    public void showEnterPinScreen(final BorrowEntity borrowEntity, final double borrowerValue, final ActionType actionType) {
+        startActivity(EnterPinActivity.getLaunchIntent(this, borrowEntity, borrowerValue, actionType));
     }
 
     // ================= HELPERS
@@ -626,10 +644,33 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
                     break;
                 }
             }
+
+            final BorrowEntity borrowEntity = getPresenter().getBorrow();
+            if (borrowEntity.getType() == BorrowType.INPROGRESS) {
+                mRlTotalAmount.setVisibility(View.GONE);
+                mRlReturnedMoney.setVisibility(View.VISIBLE);
+                mRlLoanBalance.setVisibility(View.VISIBLE);
+                switch (borrowEntity.getDirection()) {
+                    case FROM:
+                    case GUARANTOR: {
+                        final double returnedMoney = borrowEntity.getTotalFromAmount() - borrowEntity.getFromBalance();
+                        mTvReturnedMoney.setText(getString(R.string.borrow_amount, returnedMoney, mSenderAmount.getCurrency()));
+                        mTvLoanBalance.setText(getString(R.string.borrow_amount, borrowEntity.getFromBalance(), mSenderAmount.getCurrency()));
+                        break;
+                    }
+                    case TO: {
+                        final double returnedMoney = borrowEntity.getTotalToAmount() - borrowEntity.getToBalance();
+                        mTvReturnedMoney.setText(getString(R.string.borrow_amount, returnedMoney, mReceiverAmount.getCurrency()));
+                        mTvLoanBalance.setText(getString(R.string.borrow_amount, borrowEntity.getToBalance(), mReceiverAmount.getCurrency()));
+                        break;
+                    }
+                }
+            }
         }
     }
 
     private void setupState(final BorrowEntity borrowEntity) {
+        mTvState.setEnabled(true);
         mTvState.setText(borrowEntity.getState().getText());
         switch (borrowEntity.getState()) {
             case ONGOING:
@@ -642,13 +683,6 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
             case OVERDUE:
                 mTvState.setTextColor(getResources().getColor(R.color.color_borrow_state_negative));
                 break;
-        }
-    }
-
-    private void setupAmounts(final BorrowEntity borrowEntity) {
-        if (borrowEntity.getType() == BorrowType.INPROGRESS) {
-            mRlReturnedMoney.setVisibility(View.VISIBLE);
-            mTotalAmount.setTextColor(getResources().getColor(R.color.color_total_amount_red));
         }
     }
 
@@ -698,26 +732,12 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
                         break;
                     case INPROGRESS:
                         mActionButton.setText(getString(R.string.borrow_return));
-                        mActionButton.setOnClickListener(v -> {
-                            showReturnMoneyDialog(borrow);
-                        });
+                        mActionButton.setOnClickListener(v ->
+                                showReturnMoneyDialog(borrow));
                         break;
                 }
                 break;
         }
-    }
-
-    private void showReturnMoneyDialog(final BorrowEntity borrowEntity) {
-        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.show();
-        alertDialog.setContentView(R.layout.dialog_return_money);
-        final TextView tvTitle = alertDialog.findViewById(R.id.text_view_title);
-        tvTitle.setText(R.string.dialog_return_title);
-        final TextView tvText = alertDialog.findViewById(R.id.text_view_text);
-        tvText.setText(R.string.dialog_return_text);
-
-        final double payBackValue = 1.0d;
-        getPresenter().returnNow(payBackValue);
     }
 
     private boolean checkAllUserAgreed(BorrowEntity borrow, boolean useReceiver) {
@@ -783,6 +803,7 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
                     case INPROGRESS:
                         mActionButton.setVisibility(View.GONE);
                         mDisagreeButton.setVisibility(View.INVISIBLE);
+                        break;
                 }
                 mGuarantorsTitle.setText(getString(R.string.borrow_which_guarantors_label, borrow.getSender().getFullName()));
                 break;
@@ -846,6 +867,7 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
                     case INPROGRESS:
                         mActionButton.setVisibility(View.GONE);
                         mDisagreeButton.setVisibility(View.INVISIBLE);
+                        break;
                 }
                 break;
         }
@@ -958,5 +980,55 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter>
             setResult(RESULT_OK, intent);
         }
         super.onBackPressed();
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private CurrencyInputLayout mElAmount;
+
+    private void showReturnMoneyDialog(final BorrowEntity borrowEntity) {
+        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.show();
+        alertDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+        alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        alertDialog.setContentView(R.layout.dialog_return_money);
+        final TextView tvText = alertDialog.findViewById(R.id.text_view_text);
+        tvText.setText(getString(R.string.dialog_return_text, borrowEntity.getFromBalance(), borrowEntity.getSender().getCurrency()));
+        mElAmount = alertDialog.findViewById(R.id.edit_layout_amount);
+        final CurrencyEditText etAmount = alertDialog.findViewById(R.id.edit_text_amount);
+        etAmount.setCurrency(borrowEntity.getSender().getCurrency());
+        etAmount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mElAmount.setError(null);
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        Glide.with(this)
+                .asBitmap()
+                .load(API_BASE_URL + borrowEntity.getSender().getFlag())
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(final Bitmap resource, final Transition<? super Bitmap> transition) {
+                        etAmount.setCompoundDrawablesRelativeWithIntrinsicBounds(new BitmapDrawable(getResources(), resource), null, null, null);
+                        etAmount.setCompoundDrawablePadding(ViewUtils.convertDpToPixel(12));
+                    }
+                });
+        final TextView tvPositive = alertDialog.findViewById(R.id.text_view_positive);
+        tvPositive.setOnClickListener(v ->
+                getPresenter().returnNow(etAmount.getAmount()));
+        final TextView tvNegative = alertDialog.findViewById(R.id.text_view_negative);
+        tvNegative.setOnClickListener(v ->
+                alertDialog.dismiss());
+    }
+
+    @Override
+    public void showEmptyReturnAmount() {
+        mElAmount.setError(getString(R.string.dialog_return_empty_amount));
     }
 }

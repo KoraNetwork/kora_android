@@ -16,7 +16,9 @@ public class CreatePayBackLoanUseCase extends AsyncUseCase {
     private String mLoanId;
     private String mBorrowerErc20Token;
     private String mLenderErc20Token;
-    private double mPayBackValue;
+    private double mBorrowerValue;
+    private double mBorrowerBalance;
+    private double mLenderBalance;
     private String mPinCode;
 
     @Inject
@@ -27,12 +29,16 @@ public class CreatePayBackLoanUseCase extends AsyncUseCase {
     public void setData(final String loanId,
                         final String borrowerErc20Token,
                         final String lenderErc20Token,
-                        final double payBackValue,
+                        final double borrowerValue,
+                        final double borrowerBalance,
+                        final double lenderBalance,
                         final String pinCode) {
         mLoanId = loanId;
         mBorrowerErc20Token = borrowerErc20Token;
         mLenderErc20Token = lenderErc20Token;
-        mPayBackValue = payBackValue;
+        mBorrowerValue = borrowerValue;
+        mBorrowerBalance = borrowerBalance;
+        mLenderBalance = lenderBalance;
         mPinCode = pinCode;
     }
 
@@ -42,7 +48,9 @@ public class CreatePayBackLoanUseCase extends AsyncUseCase {
                 mLoanId,
                 mBorrowerErc20Token,
                 mLenderErc20Token,
-                mPayBackValue,
+                mBorrowerValue,
+                mBorrowerBalance,
+                mLenderBalance,
                 mPinCode
         );
     }

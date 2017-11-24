@@ -27,13 +27,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
+                android:layout_marginBottom="19dp"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="3dp"
                 android:fontFamily="@font/muli_normal"
-                tools:text="On going"
                 android:textColor="@color/color_borrow_state_positive"
                 android:textSize="16sp"
-                android:layout_marginTop="3dp"
-                android:layout_marginBottom="19dp" />
+                android:visibility="gone"
+                tools:text="On going" />
 
             <LinearLayout
                 android:id="@+id/borrower_container"
@@ -484,7 +485,6 @@
 
             <LinearLayout
                 android:orientation="vertical"
-                android:id="@+id/total_amount_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -519,8 +519,10 @@
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:id="@+id/total_amount_container"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp">
 
                     <TextView
                         android:id="@+id/text_total_amount_label"
@@ -547,9 +549,10 @@
 
                 <RelativeLayout
                     android:id="@+id/returned_money_container"
-                    android:visibility="gone"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/text_returned_money_label"
@@ -574,6 +577,36 @@
                         tools:text="20 USD"/>
                 </RelativeLayout>
 
+                <RelativeLayout
+                    android:id="@+id/loan_balance_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/text_loan_balance_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="@font/muli_regular"
+                        android:text="@string/borrow_loan_balance"
+                        android:textColor="@color/color_text_grey_2"
+                        android:textSize="16sp"/>
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_loan_balance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="@font/muli_semi_bold"
+                        android:textColor="#ff0000"
+                        android:textSize="16sp"
+                        tools:text="20 USD"/>
+                </RelativeLayout>
+
             </LinearLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -582,7 +615,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="36dp"
                 app:errorEnabled="true">
 
                 <android.support.design.widget.TextInputEditText

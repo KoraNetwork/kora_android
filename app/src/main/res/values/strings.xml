@@ -285,7 +285,7 @@
     <string name="borrow_guarantor_agree_label">Agree</string>
     <string name="borrow_guarantor_borrow_now_label">Borrow now</string>
     <string name="borrow_lend_to">Lend to %s</string>
-    <string name="borrow_borrow_interest_rate">Annual Interest Rate (%)</string>
+    <string name="borrow_borrow_interest_rate">Loan Interest Rate (%)</string>
     <string name="borrow_borrow_total_interest">Total interest:</string>
     <string name="borrow_borrow_total_amount">Total amount:</string>
     <string name="borrow_borrow_amount_value">%s USD</string>
@@ -304,6 +304,7 @@
     <string name="borrow_be_guarantors_label">Can you be my guarantor?</string>
     <string name="borrow_lend_now">Lend now</string>
     <string name="borrow_returned_money">Returned money:</string>
+    <string name="borrow_loan_balance">Loan balance:</string>
     <string name="borrow_return">Return</string>
 
     <string name="dialog_remove_guarantor_title">Alert</string>
@@ -350,9 +351,10 @@
 
     <!-- Return dialog -->
     <string name="dialog_return_title">Return</string>
-    <string name="dialog_return_text" formatted="false">Enter amount, part or full.\nYour amount is %s %s.</string>
-    <string name="dialog_return_edit_hint" formatted="false">Amount %s</string>
-    <string name="dialog_return_negative" formatted="false">Cancel</string>
-    <string name="dialog_return_positive" formatted="false">OK</string>
+    <string name="dialog_return_text" formatted="false">Enter amount, part or full. Your loan balance is %.2f %s.</string>
+    <string name="dialog_return_edit_hint">Amount</string>
+    <string name="dialog_return_negative">Cancel</string>
+    <string name="dialog_return_positive">OK</string>
+    <string name="dialog_return_empty_amount">Amount should not be zero</string>
 
 </resources>

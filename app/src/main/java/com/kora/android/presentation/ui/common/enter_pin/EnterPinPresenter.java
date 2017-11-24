@@ -62,7 +62,7 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
     private double mReceiverAmount;
     private RequestEntity mRequestEntity;
     private BorrowEntity mBorrowEntity;
-    private double mPayBackValue;
+    private double mBorrowerValue;
 
     @Inject
     public EnterPinPresenter(final CreateRawTransactionUseCase createRawTransactionUseCase,
@@ -137,12 +137,12 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         mBorrowEntity = borrowEntity;
     }
 
-    public double getPayBackValue() {
-        return mPayBackValue;
+    public double getBorrowerValue() {
+        return mBorrowerValue;
     }
 
-    public void setPayBackValue(final double payBackValue) {
-        mPayBackValue = payBackValue;
+    public void setBorrowerValue(final double borrowerValue) {
+        mBorrowerValue = borrowerValue;
     }
 
     private TransactionType getTransactionTypeByAction(ActionType actionType) {
@@ -200,12 +200,15 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
                         mBorrowEntity.getLoanId(),
                         pinCode);
                 mCreateFundLoanUseCase.execute(new CreateFundLoanSubscriber());
+                break;
             case PAY_BACK_LOAN:
                 mCreatePayBackLoanUseCase.setData(
                         mBorrowEntity.getLoanId(),
                         mBorrowEntity.getSender().getERC20Token(),
                         mBorrowEntity.getReceiver().getERC20Token(),
-                        mPayBackValue,
+                        mBorrowerValue,
+                        mBorrowEntity.getFromBalance(),
+                        mBorrowEntity.getToBalance(),
                         pinCode);
                 mCreatePayBackLoanUseCase.execute(new CreatePayBackLoanSubscriber());
                 break;
@@ -712,7 +715,7 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         }
     }
 
-    private class CreatePayBackLoanSubscriber extends DefaultWeb3jSubscriber<String> {
+    private class CreatePayBackLoanSubscriber extends DefaultWeb3jSubscriber<Pair<List<String>, String>> {
 
         @Override
         protected void onStart() {
@@ -721,9 +724,9 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         }
 
         @Override
-        public void onNext(final String rawPayBackLoan) {
+        public void onNext(Pair<List<String>, String> rawTransactions) {
             if (!isViewAttached()) return;
-            startSendPayBackLoanTask(rawPayBackLoan);
+            startSendPayBackLoanTask(rawTransactions.first, rawTransactions.second);
         }
 
 //        @Override
@@ -767,8 +770,8 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         }
     }
 
-    public void startSendPayBackLoanTask(final String rawPayBackLoan) {
-        mSendPayBackLoanUseCase.setData(mBorrowEntity.getId(), rawPayBackLoan);
+    public void startSendPayBackLoanTask(final List<String> rawApproves, final String rawPayBackLoan) {
+        mSendPayBackLoanUseCase.setData(mBorrowEntity.getId(), rawApproves, rawPayBackLoan);
         mSendPayBackLoanUseCase.execute(new SendPayBackLoanSubscriber());
     }
 

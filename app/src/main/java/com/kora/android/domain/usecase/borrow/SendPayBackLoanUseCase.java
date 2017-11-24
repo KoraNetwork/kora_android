@@ -4,6 +4,8 @@ import com.kora.android.data.repository.BorrowRepository;
 import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.AsyncUseCase;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
@@ -14,6 +16,7 @@ public class SendPayBackLoanUseCase extends AsyncUseCase {
     private BorrowRepository mBorrowRepository;
 
     private String mBorrowId;
+    private List<String> mRawApproves;
     private String mRawPayBackLoan;
 
     @Inject
@@ -22,13 +25,15 @@ public class SendPayBackLoanUseCase extends AsyncUseCase {
     }
 
     public void setData(final String borrowId,
+                        final List<String> rawApproves,
                         final String rawPayBackLoan) {
         mBorrowId = borrowId;
+        mRawApproves = rawApproves;
         mRawPayBackLoan = rawPayBackLoan;
     }
 
     @Override
     protected Observable buildObservableTask() {
-        return mBorrowRepository.sendPayBackLoan(mBorrowId, mRawPayBackLoan);
+        return mBorrowRepository.sendPayBackLoan(mBorrowId, mRawApproves, mRawPayBackLoan);
     }
 }

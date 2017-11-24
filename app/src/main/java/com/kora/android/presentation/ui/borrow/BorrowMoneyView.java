@@ -37,5 +37,7 @@ public interface BorrowMoneyView extends BaseView<BorrowMoneyPresenter> {
 
     void showEnterPinScreen(final BorrowEntity borrowEntity, final ActionType actionType);
 
-    void showEnterPinScreen(final BorrowEntity borrowEntity, final double payBackValue, final ActionType actionType);
+    void showEnterPinScreen(final BorrowEntity borrowEntity, final double borrowerValue, final ActionType actionType);
+
+    void showEmptyReturnAmount();
 }

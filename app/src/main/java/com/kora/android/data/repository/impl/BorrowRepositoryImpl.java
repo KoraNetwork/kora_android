@@ -109,8 +109,10 @@ public class BorrowRepositoryImpl implements BorrowRepository {
 
     @Override
     public Observable<BorrowEntity> sendPayBackLoan(final String borrowId,
+                                                    final List<String> rawApproves,
                                                     final String rawPayBackLoan) {
         final SendPayBackLoanRequest sendPayBackLoanRequest = new SendPayBackLoanRequest()
+                .addRawApproves(rawApproves)
                 .addRawPayBackLoan(rawPayBackLoan);
         return mBorrowService.sendPayBackLoan(borrowId, sendPayBackLoanRequest)
                 .compose(mBorrowMapper.transformResponseToEntity());

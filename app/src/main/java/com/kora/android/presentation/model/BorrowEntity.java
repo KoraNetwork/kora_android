@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.kora.android.presentation.enums.BorrowState;
-import com.kora.android.presentation.enums.BorrowListType;
 import com.kora.android.presentation.enums.BorrowType;
 import com.kora.android.presentation.enums.Direction;
 
@@ -28,14 +27,30 @@ public class BorrowEntity implements Parcelable {
     private List<UserEntity> guarantors;
     private String loanId;
     private BorrowType type;
+    private double totalFromAmount;
+    private double totalToAmount;
+    private double fromBalance;
+    private double toBalance;
 
-    public BorrowEntity(String id, Direction direction, BorrowState state,
-                        double fromAmount, double toAmount,
-                        int rate, String additionalNote,
-                        Date startDate, Date maturityDate,
-                        Date createdAt, UserEntity sender,
-                        UserEntity receiver, List<UserEntity> guarantors,
-                        String loanId, BorrowType type) {
+    public BorrowEntity(String id,
+                        Direction direction,
+                        BorrowState state,
+                        double fromAmount,
+                        double toAmount,
+                        int rate,
+                        String additionalNote,
+                        Date startDate,
+                        Date maturityDate,
+                        Date createdAt,
+                        UserEntity sender,
+                        UserEntity receiver,
+                        List<UserEntity> guarantors,
+                        String loanId,
+                        BorrowType type,
+                        double totalFromAmount,
+                        double totalToAmount,
+                        double fromBalance,
+                        double toBalance) {
         this.id = id;
         this.direction = direction;
         this.state = state;
@@ -51,6 +66,10 @@ public class BorrowEntity implements Parcelable {
         this.guarantors = guarantors;
         this.loanId = loanId;
         this.type = type;
+        this.totalFromAmount = totalFromAmount;
+        this.totalToAmount = totalToAmount;
+        this.fromBalance = fromBalance;
+        this.toBalance = toBalance;
     }
 
     protected BorrowEntity(Parcel in) {
@@ -72,6 +91,10 @@ public class BorrowEntity implements Parcelable {
         createdAt = createdAtLong == -1 ? null : new Date(createdAtLong);
         loanId = in.readString();
         type = BorrowType.valueOf(in.readString());
+        totalFromAmount = in.readDouble();
+        totalToAmount = in.readDouble();
+        fromBalance = in.readDouble();
+        toBalance = in.readDouble();
     }
 
     public static final Creator<BorrowEntity> CREATOR = new Creator<BorrowEntity>() {
@@ -206,6 +229,38 @@ public class BorrowEntity implements Parcelable {
         this.type = type;
     }
 
+    public double getTotalFromAmount() {
+        return totalFromAmount;
+    }
+
+    public void setTotalFromAmount(double totalFromAmount) {
+        this.totalFromAmount = totalFromAmount;
+    }
+
+    public double getTotalToAmount() {
+        return totalToAmount;
+    }
+
+    public void setTotalToAmount(double totalToAmount) {
+        this.totalToAmount = totalToAmount;
+    }
+
+    public double getFromBalance() {
+        return fromBalance;
+    }
+
+    public void setFromBalance(double fromBalance) {
+        this.fromBalance = fromBalance;
+    }
+
+    public double getToBalance() {
+        return toBalance;
+    }
+
+    public void setToBalance(double toBalance) {
+        this.toBalance = toBalance;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -228,5 +283,9 @@ public class BorrowEntity implements Parcelable {
         dest.writeLong(createdAt == null ? -1 : createdAt.getTime());
         dest.writeString(loanId);
         dest.writeString(type.name());
+        dest.writeDouble(totalFromAmount);
+        dest.writeDouble(totalToAmount);
+        dest.writeDouble(fromBalance);
+        dest.writeDouble(toBalance);
     }
 }

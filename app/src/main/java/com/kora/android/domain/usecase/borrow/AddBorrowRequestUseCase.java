@@ -47,7 +47,7 @@ public class AddBorrowRequestUseCase extends AsyncUseCase {
 
         final Calendar startDateCalendar = DateUtils.getCalendarByDatePattern(startDate, DateUtils.PRETTY_DATE_PATTERN);
         mStartDate = startDateCalendar == null ? null : startDateCalendar.getTime();
-        mStartDate = DateUtils.setAlmostMidnight(mStartDate);
+        mStartDate = DateUtils.setPlusFiveMinutes(mStartDate);
 
         final Calendar maturityDateCalendar = DateUtils.getCalendarByDatePattern(maturityDate, DateUtils.PRETTY_DATE_PATTERN);
         mMaturityDate = maturityDateCalendar == null ? null : maturityDateCalendar.getTime();

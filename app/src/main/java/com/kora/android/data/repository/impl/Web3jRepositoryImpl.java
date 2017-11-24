@@ -42,6 +42,7 @@ import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.protocol.core.methods.response.EthGetBalance;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
+import org.web3j.protocol.core.methods.response.Log;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.utils.Numeric;
 
@@ -564,8 +565,8 @@ public class Web3jRepositoryImpl implements Web3jRepository {
                             new Uint256(Web3jUtils.convertTokenToBigInteger(borrowerAmount)),
                             new Uint256(Web3jUtils.convertTokenToBigInteger(lenderAmount)),
                             new Uint256(Web3jUtils.convertRateToBigInteger(rate)),
-                            new Uint256(Web3jUtils.convertDateToMs(startDate)),
-                            new Uint256(Web3jUtils.convertDateToMs(maturityDate))
+                            new Uint256(Web3jUtils.convertDateToSeconds(startDate)),
+                            new Uint256(Web3jUtils.convertDateToSeconds(maturityDate))
                     ),
                     Collections.emptyList()
             );
@@ -834,27 +835,13 @@ public class Web3jRepositoryImpl implements Web3jRepository {
                         Collections.emptyList());
 
                 final String koraApproveFunctionString = FunctionEncoder.encode(koraApproveFunction);
-                final byte[] koraApproveFunctionByteArray = Numeric.hexStringToByteArray(koraApproveFunctionString);
-
-                final Function koraApproveForwardToFunction = new Function(
-                        mWeb3jConnection.getForwardToFunction(),
-                        Arrays.asList(
-                                new Address(sender.getOwner()),
-                                new Address(sender.getIdentity()),
-                                new Address(borrowerErc20Token),
-                                Uint256.DEFAULT,
-                                new DynamicBytes(koraApproveFunctionByteArray)
-                        ),
-                        Collections.emptyList()
-                );
-                final String koraApproveForwardToFunctionString = FunctionEncoder.encode(koraApproveForwardToFunction);
 
                 final RawTransaction koraApproveRawTransaction = RawTransaction.createTransaction(
                         koraTransactionCount,
                         mWeb3jConnection.getGasPrice(),
                         mWeb3jConnection.getGasLimit(),
-                        mWeb3jConnection.getMetaIdentityManagerRinkeby(),
-                        koraApproveForwardToFunctionString);
+                        borrowerErc20Token,
+                        koraApproveFunctionString);
 
                 final byte[] koraApproveSignedMessage = TransactionEncoder.signMessage(
                         koraApproveRawTransaction,
@@ -910,11 +897,13 @@ public class Web3jRepositoryImpl implements Web3jRepository {
     }
 
     @Override
-    public Observable<String> createPayBackLoan(final String loanId,
-                                                final String borrowerErc20Token,
-                                                final String lenderErc20Token,
-                                                final double payBackValue,
-                                                final String pinCode) {
+    public Observable<Pair<List<String>, String>> createPayBackLoan(final String loanId,
+                                                                    final String borrowerErc20Token,
+                                                                    final String lenderErc20Token,
+                                                                    final double borrowerValue,
+                                                                    final double borrowerBalance,
+                                                                    final double lenderBalance,
+                                                                    final String pinCode) {
         return Observable.just(true).map(a -> {
 
             if (!CommonUtils.isNetworkConnected(mContext))
@@ -970,9 +959,9 @@ public class Web3jRepositoryImpl implements Web3jRepository {
             final BigInteger balanceIdentityBigInteger = (BigInteger) someTypes.get(0).getValue();
             final double balanceIdentityToken = Web3jUtils.convertBigIntegerToToken(balanceIdentityBigInteger);
 
-            if (payBackValue > balanceIdentityToken)
+            if (borrowerValue > balanceIdentityToken)
                 throw new Exception(mContext.getString(R.string.web3j_error_message_identity_balance,
-                        String.valueOf(payBackValue),
+                        String.valueOf(borrowerValue),
                         sender.getCurrency(),
                         String.valueOf(balanceIdentityToken),
                         sender.getCurrency()));
@@ -987,6 +976,101 @@ public class Web3jRepositoryImpl implements Web3jRepository {
 
             ////////////////////////////////////////////////////////////////////////////////////////
 
+            final List<String> rawApproves = new ArrayList<>();
+
+            ////////////////////////////////////////////////////////////////////////////////////////
+
+            final Function borrowerApproveFunction = new Function(
+                    mWeb3jConnection.getApproveFunction(),
+                    Arrays.asList(
+                            new Address(mWeb3jConnection.getKoraLendRinkeby()),
+                            new Uint256(Web3jUtils.convertTokenToBigInteger(borrowerValue))),
+                    Collections.emptyList());
+
+            final String borrowerApproveFunctionString = FunctionEncoder.encode(borrowerApproveFunction);
+            final byte[] borrowerApproveFunctionByteArray = Numeric.hexStringToByteArray(borrowerApproveFunctionString);
+
+            final Function borrowerApproveForwardToFunction = new Function(
+                    mWeb3jConnection.getForwardToFunction(),
+                    Arrays.asList(
+                            new Address(sender.getOwner()),
+                            new Address(sender.getIdentity()),
+                            new Address(borrowerErc20Token),
+                            Uint256.DEFAULT,
+                            new DynamicBytes(borrowerApproveFunctionByteArray)
+                    ),
+                    Collections.emptyList()
+            );
+            final String borrowerApproveForwardToFunctionString = FunctionEncoder.encode(borrowerApproveForwardToFunction);
+
+            final RawTransaction borrowerApproveRawTransaction = RawTransaction.createTransaction(
+                    senderTransactionCount,
+                    mWeb3jConnection.getGasPrice(),
+                    mWeb3jConnection.getGasLimit(),
+                    mWeb3jConnection.getMetaIdentityManagerRinkeby(),
+                    borrowerApproveForwardToFunctionString);
+
+            final byte[] borrowerApproveSignedMessage = TransactionEncoder.signMessage(
+                    borrowerApproveRawTransaction,
+                    senderCredentials);
+            final String borrowerApproveHexValue = Numeric.toHexString(borrowerApproveSignedMessage);
+
+            rawApproves.add(borrowerApproveHexValue);
+
+            ////////////////////////////////////////////////////////////////////////////////////////
+
+            if (!borrowerErc20Token.equals(lenderErc20Token)) {
+
+                if (!CommonUtils.isNetworkConnected(mContext))
+                    throw new Exception(mContext.getString(R.string.web3j_error_message_no_network));
+
+                final Credentials koraCredentials = mEtherWalletStorage.getCredentials(
+                        mWeb3jConnection.getKoraWalletFileName(),
+                        mWeb3jConnection.getKoraWalletPassword());
+
+                final EthGetTransactionCount koraEthGetTransactionCount = web3j
+                        .ethGetTransactionCount(mWeb3jConnection.getKoraWalletAddress(), DefaultBlockParameterName.LATEST)
+                        .sendAsync()
+                        .get();
+                final BigInteger koraTransactionCount = koraEthGetTransactionCount.getTransactionCount();
+
+                double lenderValue;
+                if (borrowerValue == borrowerBalance) {
+                    lenderValue = lenderBalance;
+                } else {
+                    final int intBorrowerValue = (int) (borrowerValue * 100);
+                    final int intBorrowerBalance = (int) (borrowerBalance * 100);
+                    final int intLenderBalance = (int) (lenderBalance * 100);
+                    int intLenderValue = intBorrowerValue * intLenderBalance / intBorrowerBalance;
+                    lenderValue = intLenderValue / 100d;
+                }
+
+                final Function koraApproveFunction = new Function(
+                        mWeb3jConnection.getApproveFunction(),
+                        Arrays.asList(
+                                new Address(mWeb3jConnection.getKoraLendRinkeby()),
+                                new Uint256(Web3jUtils.convertTokenToBigInteger(lenderValue))),
+                        Collections.emptyList());
+
+                final String koraApproveFunctionString = FunctionEncoder.encode(koraApproveFunction);
+
+                final RawTransaction koraApproveRawTransaction = RawTransaction.createTransaction(
+                        koraTransactionCount,
+                        mWeb3jConnection.getGasPrice(),
+                        mWeb3jConnection.getGasLimit(),
+                        lenderErc20Token,
+                        koraApproveFunctionString);
+
+                final byte[] koraApproveSignedMessage = TransactionEncoder.signMessage(
+                        koraApproveRawTransaction,
+                        koraCredentials);
+                final String koraApproveHexValue = Numeric.toHexString(koraApproveSignedMessage);
+
+                rawApproves.add(koraApproveHexValue);
+            }
+
+            ////////////////////////////////////////////////////////////////////////////////////////
+
             final Function payBackLoanFunction = new Function(
                     mWeb3jConnection.getPayBackLoanFunction(),
                     Arrays.asList(
@@ -994,7 +1078,7 @@ public class Web3jRepositoryImpl implements Web3jRepository {
                             new Address(borrowerErc20Token),
                             new Address(lenderErc20Token),
                             new Address(mWeb3jConnection.getKoraWalletAddress()),
-                            new Uint256(Web3jUtils.convertTokenToBigInteger(payBackValue))),
+                            new Uint256(Web3jUtils.convertTokenToBigInteger(borrowerValue))),
                     Collections.emptyList());
 
             final String payBackLonaFunctionString = FunctionEncoder.encode(payBackLoanFunction);
@@ -1027,7 +1111,7 @@ public class Web3jRepositoryImpl implements Web3jRepository {
 
             ////////////////////////////////////////////////////////////////////////////////////////
 
-            return payBackLoanHexValue;
+            return new Pair<>(rawApproves, payBackLoanHexValue);
         });
     }
 }

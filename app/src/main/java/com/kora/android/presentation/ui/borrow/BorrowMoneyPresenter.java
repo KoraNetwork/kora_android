@@ -172,8 +172,12 @@ public class BorrowMoneyPresenter extends BasePresenter<BorrowMoneyView> {
         getView().showEnterPinScreen(mBorrowRequest, ActionType.FUND_LOAN);
     }
 
-    public void returnNow(final double payBackValue) {
-        getView().showEnterPinScreen(mBorrowRequest, payBackValue, ActionType.PAY_BACK_LOAN);
+    public void returnNow(final double borrowerValue) {
+        if (!Validator.isValidPrice(borrowerValue)) {
+            getView().showEmptyReturnAmount();
+            return;
+        }
+        getView().showEnterPinScreen(mBorrowRequest, borrowerValue, ActionType.PAY_BACK_LOAN);
     }
 
     private class GetUserSubscriber extends DefaultInternetSubscriber<UserEntity> {

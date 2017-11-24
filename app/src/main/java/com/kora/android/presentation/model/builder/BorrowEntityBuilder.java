@@ -1,7 +1,6 @@
 package com.kora.android.presentation.model.builder;
 
 import com.kora.android.presentation.enums.BorrowState;
-import com.kora.android.presentation.enums.BorrowListType;
 import com.kora.android.presentation.enums.BorrowType;
 import com.kora.android.presentation.enums.Direction;
 import com.kora.android.presentation.model.BorrowEntity;
@@ -26,6 +25,10 @@ public class BorrowEntityBuilder {
     private List<UserEntity> mGuarantors;
     private String mLoanId;
     private BorrowType mType;
+    private double mTotalFromAmount;
+    private double mTotalToAmount;
+    private double mFromBalance;
+    private double mToBalance;
 
     public BorrowEntityBuilder setId(String id) {
         mId = id;
@@ -102,9 +105,30 @@ public class BorrowEntityBuilder {
         return this;
     }
 
+    public BorrowEntityBuilder setTotalFromAmount(double totalFromAmount) {
+        mTotalFromAmount = totalFromAmount;
+        return this;
+    }
+
+    public BorrowEntityBuilder setTotalToAmount(double totalToAmount) {
+        mTotalToAmount = totalToAmount;
+        return this;
+    }
+
+    public BorrowEntityBuilder setFromBalance(double fromBalance) {
+        mFromBalance = fromBalance;
+        return this;
+    }
+
+    public BorrowEntityBuilder setToBalance(double toBalance) {
+        mToBalance = toBalance;
+        return this;
+    }
+
     public BorrowEntity createBorrowEntity() {
         return new BorrowEntity(mId, mDirection, mState, mFromAmount, mToAmount,
                 mRate, mAdditionalNote, mStartDate, mMaturityDate, mCreatedAt,
-                mSender, mReceiver, mGuarantors, mLoanId, mType);
+                mSender, mReceiver, mGuarantors, mLoanId, mType,
+                mTotalFromAmount, mTotalToAmount, mFromBalance, mToBalance);
     }
 }

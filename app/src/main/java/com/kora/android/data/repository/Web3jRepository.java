@@ -48,15 +48,17 @@ public interface Web3jRepository {
                                        final String pinCode);
 
     Observable<Pair<List<String>, String>> createFundLoan(final String borrowerErc20Token,
-                                                                final String lenderErc20Token,
-                                                                final double borrowerAmount,
-                                                                final double lenderAmount,
-                                                                final String loanId,
-                                                                final String pinCode);
+                                                          final String lenderErc20Token,
+                                                          final double borrowerAmount,
+                                                          final double lenderAmount,
+                                                          final String loanId,
+                                                          final String pinCode);
 
-    Observable<String> createPayBackLoan(final String loanId,
-                                         final String borrowerErc20Token,
-                                         final String lenderErc20Token,
-                                         final double payBackValue,
-                                         final String pinCode);
+    Observable<Pair<List<String>, String>> createPayBackLoan(final String loanId,
+                                                             final String borrowerErc20Token,
+                                                             final String lenderErc20Token,
+                                                             final double borrowerValue,
+                                                             final double borrowerBalance,
+                                                             final double lenderBalance,
+                                                             final String pinCode);
 }

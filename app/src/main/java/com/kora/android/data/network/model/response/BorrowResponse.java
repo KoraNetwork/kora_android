@@ -33,6 +33,12 @@ public class BorrowResponse {
     @JsonField(name = "loanId") private String mLoanId;
     @JsonField(name = "type", typeConverter = BorrowTypeConverter.class) private BorrowType mType;
 
+    // borrower and lender all fields !!!
+    @JsonField(name = "totalFromAmount") private double mTotalFromAmount;
+    @JsonField(name = "totalToAmount") private double mTotalToAmount;
+    @JsonField(name = "fromBalance") private double mFromBalance;
+    @JsonField(name = "toBalance") private double mToBalance;
+
     public String getId() {
         return mId;
     }
@@ -151,5 +157,37 @@ public class BorrowResponse {
 
     public void setType(BorrowType mType) {
         this.mType = mType;
+    }
+
+    public double getTotalFromAmount() {
+        return mTotalFromAmount;
+    }
+
+    public void setTotalFromAmount(double mTotalFromAmount) {
+        this.mTotalFromAmount = mTotalFromAmount;
+    }
+
+    public double getTotalToAmount() {
+        return mTotalToAmount;
+    }
+
+    public void setTotalToAmount(double mTotalToAmount) {
+        this.mTotalToAmount = mTotalToAmount;
+    }
+
+    public double getFromBalance() {
+        return mFromBalance;
+    }
+
+    public void setFromBalance(double mFromBalance) {
+        this.mFromBalance = mFromBalance;
+    }
+
+    public double getToBalance() {
+        return mToBalance;
+    }
+
+    public void setToBalance(double mToBalance) {
+        this.mToBalance = mToBalance;
     }
 }

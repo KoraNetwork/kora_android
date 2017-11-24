@@ -12,6 +12,8 @@ import com.kora.android.common.permission.PermissionException;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 
+import java.math.BigInteger;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -64,12 +66,12 @@ public class TestActivity extends BaseActivity<TestPresenter> implements TestVie
 
 //        showExportWalletDialog();
 
-//        getPresenter().sendTransaction(
-//                "5c3D13b00F0fdE8dE60C45aB62EC0125C6b0F890".toLowerCase(),
-//                "123456789",
-//                "0x5c3D13b00F0fdE8dE60C45aB62EC0125C6b0F890".toLowerCase(),
-//                "0x97bb2587B02715e2936b95f36892a457966757FF".toLowerCase(),
-//                new BigInteger("100000000000000000"));
+        getPresenter().sendTransaction(
+                "0x5c3D13b00F0fdE8dE60C45aB62EC0125C6b0F890.json".toLowerCase(),
+                "123456789",
+                "0x5c3D13b00F0fdE8dE60C45aB62EC0125C6b0F890".toLowerCase(),
+                "0x2c4169db0a11e2ba3b0af42ee6a886f6f77e65b6".toLowerCase(),
+                new BigInteger("1000000000000000000"));
 
 //        getPresenter().createIdentity();
 

@@ -42,8 +42,8 @@ public class Web3jUtils {
         return new DecimalFormat("#.##").format(d);
     }
 
-    public static long convertDateToMs(final Date date) {
-        return date.getTime();
+    public static long convertDateToSeconds(final Date date) {
+        return date.getTime() / 1000;
     }
 
     public static List<Address> getAddressesFromUserEntities(final List<UserEntity> userEntityList) {
