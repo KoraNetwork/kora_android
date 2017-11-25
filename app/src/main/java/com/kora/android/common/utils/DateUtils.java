@@ -140,13 +140,4 @@ public class DateUtils {
         calendar.set(Calendar.SECOND, 59);
         return calendar.getTime();
     }
-
-    public static Date setPlusFiveMinutes(final Date date) {
-        final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.set(Calendar.HOUR_OF_DAY, 19);
-        calendar.set(Calendar.MINUTE, 51);
-        calendar.set(Calendar.SECOND, 0);
-        return calendar.getTime();
-    }
 }
