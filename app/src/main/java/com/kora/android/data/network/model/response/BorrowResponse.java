@@ -33,11 +33,12 @@ public class BorrowResponse {
     @JsonField(name = "loanId") private String mLoanId;
     @JsonField(name = "type", typeConverter = BorrowTypeConverter.class) private BorrowType mType;
 
-    // borrower and lender all fields !!!
-    @JsonField(name = "totalFromAmount") private double mTotalFromAmount;
-    @JsonField(name = "totalToAmount") private double mTotalToAmount;
+    @JsonField(name = "fromTotalAmount") private double mFromTotalAmount;
+    @JsonField(name = "toTotalAmount") private double mToTotalAmount;
     @JsonField(name = "fromBalance") private double mFromBalance;
     @JsonField(name = "toBalance") private double mToBalance;
+    @JsonField(name = "fromReturnedMoney") private double mFromReturnedMoney;
+    @JsonField(name = "toReturnedMoney") private double mToReturnedMoney;
 
     public String getId() {
         return mId;
@@ -159,20 +160,36 @@ public class BorrowResponse {
         this.mType = mType;
     }
 
-    public double getTotalFromAmount() {
-        return mTotalFromAmount;
+    public double getFromTotalAmount() {
+        return mFromTotalAmount;
     }
 
-    public void setTotalFromAmount(double mTotalFromAmount) {
-        this.mTotalFromAmount = mTotalFromAmount;
+    public void setFromTotalAmount(double mFromTotalAmount) {
+        this.mFromTotalAmount = mFromTotalAmount;
     }
 
-    public double getTotalToAmount() {
-        return mTotalToAmount;
+    public double getToTotalAmount() {
+        return mToTotalAmount;
     }
 
-    public void setTotalToAmount(double mTotalToAmount) {
-        this.mTotalToAmount = mTotalToAmount;
+    public void setToTotalAmount(double mToTotalAmount) {
+        this.mToTotalAmount = mToTotalAmount;
+    }
+
+    public double getFromReturnedMoney() {
+        return mFromReturnedMoney;
+    }
+
+    public void setFromReturnedMoney(double mFromReturnedMoney) {
+        this.mFromReturnedMoney = mFromReturnedMoney;
+    }
+
+    public double getToReturnedMoney() {
+        return mToReturnedMoney;
+    }
+
+    public void setToReturnedMoney(double mToReturnedMoney) {
+        this.mToReturnedMoney = mToReturnedMoney;
     }
 
     public double getFromBalance() {

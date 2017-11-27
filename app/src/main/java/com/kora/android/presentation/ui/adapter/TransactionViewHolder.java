@@ -77,14 +77,14 @@ public final class TransactionViewHolder extends RecyclerView.ViewHolder {
     @StringRes
     private int getTypeString(final TransactionType transactionType) {
         switch (transactionType) {
-            case BORROW:
-                return R.string.transaction_history_type_borrow;
             case SEND:
                 return R.string.transaction_history_type_send;
             case REQUEST:
                 return R.string.transaction_history_type_request;
-            case DEPOSIT:
-                return R.string.transaction_history_type_deposit;
+            case BORROWFUND:
+                return R.string.transaction_history_type_borrow_fund;
+            case BORROWPAYBACK:
+                return R.string.transaction_history_type_borrow_pay_back;
         }
         return 0;
     }

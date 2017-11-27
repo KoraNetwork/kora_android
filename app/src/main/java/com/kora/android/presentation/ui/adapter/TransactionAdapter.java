@@ -55,7 +55,8 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public int getItemViewType(int position) {
         TransactionEntity transaction = mTransactions.get(position);
         switch (transaction.getTransactionType()) {
-            case BORROW:
+            case BORROWFUND:
+            case BORROWPAYBACK:
             case SEND:
             case REQUEST:
                 return REQUEST_TYPE;

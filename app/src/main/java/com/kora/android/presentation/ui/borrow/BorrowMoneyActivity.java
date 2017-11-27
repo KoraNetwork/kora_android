@@ -428,12 +428,11 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter> i
 
     @Override
     public void setupGuarantor(UserEntity user) {
-        mBeGuarantorLabel.setVisibility(View.VISIBLE);
-
         switch (getPresenter().getBorrow().getType()) {
             case REQUEST:
                 mActionButton.setVisibility(user.getAgreed() == null ? View.VISIBLE : View.GONE);
                 mDisagreeButton.setVisibility(user.getAgreed() == null ? View.VISIBLE : View.INVISIBLE);
+                mBeGuarantorLabel.setVisibility(View.VISIBLE);
                 break;
             case LOAN:
                 switch (getPresenter().getBorrow().getState()) {
@@ -449,10 +448,12 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter> i
                         mDisagreeButton.setVisibility(View.INVISIBLE);
                         break;
                 }
+                mBeGuarantorLabel.setVisibility(View.VISIBLE);
                 break;
             case INPROGRESS:
                 mActionButton.setVisibility(View.GONE);
                 mDisagreeButton.setVisibility(View.INVISIBLE);
+                mBeGuarantorLabel.setVisibility(View.GONE);
                 break;
         }
 
@@ -597,7 +598,7 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter> i
             }
             try {
                 double rate = Double.valueOf(rateString);
-                double totalInterest = amount * rate / 100;
+                double totalInterest = Math.floor(amount * rate) / 100;
                 double totalAmount = amount + totalInterest;
                 mTotalInterest.setText(getString(R.string.borrow_amount, totalInterest, mSenderAmount.getCurrency()));
                 mTotalAmount.setText(getString(R.string.borrow_amount, totalAmount, mSenderAmount.getCurrency()));
@@ -617,7 +618,7 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter> i
                     }
                     try {
                         double rate = Double.valueOf(rateString);
-                        double totalInterest = amount * rate / 100;
+                        double totalInterest = Math.floor(amount * rate) / 100;
                         double totalAmount = amount + totalInterest;
                         mTotalInterest.setText(getString(R.string.borrow_amount, totalInterest, mSenderAmount.getCurrency()));
                         mTotalAmount.setText(getString(R.string.borrow_amount, totalAmount, mSenderAmount.getCurrency()));
@@ -635,7 +636,7 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter> i
                     }
                     try {
                         double rate = Double.valueOf(rateString);
-                        double totalInterest = amount * rate / 100;
+                        double totalInterest = Math.floor(amount * rate) / 100;
                         double totalAmount = amount + totalInterest;
                         mTotalInterest.setText(getString(R.string.borrow_amount, totalInterest, mReceiverAmount.getCurrency()));
                         mTotalAmount.setText(getString(R.string.borrow_amount, totalAmount, mReceiverAmount.getCurrency()));
@@ -653,14 +654,12 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter> i
                 switch (borrowEntity.getDirection()) {
                     case FROM:
                     case GUARANTOR: {
-                        final double returnedMoney = borrowEntity.getTotalFromAmount() - borrowEntity.getFromBalance();
-                        mTvReturnedMoney.setText(getString(R.string.borrow_amount, returnedMoney, mSenderAmount.getCurrency()));
+                        mTvReturnedMoney.setText(getString(R.string.borrow_amount, borrowEntity.getFromReturnedMoney(), mSenderAmount.getCurrency()));
                         mTvLoanBalance.setText(getString(R.string.borrow_amount, borrowEntity.getFromBalance(), mSenderAmount.getCurrency()));
                         break;
                     }
                     case TO: {
-                        final double returnedMoney = borrowEntity.getTotalToAmount() - borrowEntity.getToBalance();
-                        mTvReturnedMoney.setText(getString(R.string.borrow_amount, returnedMoney, mReceiverAmount.getCurrency()));
+                        mTvReturnedMoney.setText(getString(R.string.borrow_amount, borrowEntity.getToReturnedMoney(), mReceiverAmount.getCurrency()));
                         mTvLoanBalance.setText(getString(R.string.borrow_amount, borrowEntity.getToBalance(), mReceiverAmount.getCurrency()));
                         break;
                     }
@@ -670,7 +669,7 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter> i
     }
 
     private void setupState(final BorrowEntity borrowEntity) {
-        mTvState.setEnabled(true);
+        mTvState.setVisibility(View.VISIBLE);
         mTvState.setText(borrowEntity.getState().getText());
         switch (borrowEntity.getState()) {
             case ONGOING:

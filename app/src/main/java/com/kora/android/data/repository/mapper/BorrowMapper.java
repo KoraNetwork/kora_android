@@ -43,10 +43,12 @@ public class BorrowMapper {
                                 .setGuarantors(guarantors)
                                 .setLoanId(borrowResponse.getLoanId())
                                 .setType(borrowResponse.getType())
-                                .setTotalFromAmount(borrowResponse.getTotalFromAmount())
-                                .setTotalToAmount(borrowResponse.getTotalToAmount())
+                                .setFromTotalAmount(borrowResponse.getFromTotalAmount())
+                                .setToTotalAmount(borrowResponse.getToTotalAmount())
                                 .setFromBalance(borrowResponse.getFromBalance())
                                 .setToBalance(borrowResponse.getToBalance())
+                                .setFromReturnedMoney(borrowResponse.getFromReturnedMoney())
+                                .setToReturnedMoney(borrowResponse.getToReturnedMoney())
                                 .createBorrowEntity()));
     }
 

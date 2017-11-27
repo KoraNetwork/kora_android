@@ -25,10 +25,12 @@ public class BorrowEntityBuilder {
     private List<UserEntity> mGuarantors;
     private String mLoanId;
     private BorrowType mType;
-    private double mTotalFromAmount;
-    private double mTotalToAmount;
+    private double mFromTotalAmount;
+    private double mToTotalAmount;
     private double mFromBalance;
     private double mToBalance;
+    private double mFromReturnedMoney;
+    private double mToReturnedMoney;
 
     public BorrowEntityBuilder setId(String id) {
         mId = id;
@@ -105,13 +107,13 @@ public class BorrowEntityBuilder {
         return this;
     }
 
-    public BorrowEntityBuilder setTotalFromAmount(double totalFromAmount) {
-        mTotalFromAmount = totalFromAmount;
+    public BorrowEntityBuilder setFromTotalAmount(double fromTotalAmount) {
+        mFromTotalAmount = fromTotalAmount;
         return this;
     }
 
-    public BorrowEntityBuilder setTotalToAmount(double totalToAmount) {
-        mTotalToAmount = totalToAmount;
+    public BorrowEntityBuilder setToTotalAmount(double toTotalAmount) {
+        mToTotalAmount = toTotalAmount;
         return this;
     }
 
@@ -125,10 +127,21 @@ public class BorrowEntityBuilder {
         return this;
     }
 
+    public BorrowEntityBuilder setFromReturnedMoney(double fromReturnedMoney) {
+        mFromReturnedMoney = fromReturnedMoney;
+        return this;
+    }
+
+    public BorrowEntityBuilder setToReturnedMoney(double toReturnedMoney) {
+        mToReturnedMoney = toReturnedMoney;
+        return this;
+    }
+
     public BorrowEntity createBorrowEntity() {
         return new BorrowEntity(mId, mDirection, mState, mFromAmount, mToAmount,
                 mRate, mAdditionalNote, mStartDate, mMaturityDate, mCreatedAt,
                 mSender, mReceiver, mGuarantors, mLoanId, mType,
-                mTotalFromAmount, mTotalToAmount, mFromBalance, mToBalance);
+                mFromTotalAmount, mToTotalAmount, mFromBalance, mToBalance,
+                mFromReturnedMoney, mToReturnedMoney);
     }
 }

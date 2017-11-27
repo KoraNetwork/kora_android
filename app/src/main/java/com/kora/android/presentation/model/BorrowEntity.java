@@ -27,10 +27,12 @@ public class BorrowEntity implements Parcelable {
     private List<UserEntity> guarantors;
     private String loanId;
     private BorrowType type;
-    private double totalFromAmount;
-    private double totalToAmount;
+    private double fromTotalAmount;
+    private double toFromAmount;
     private double fromBalance;
     private double toBalance;
+    private double fromReturnedMoney;
+    private double toReturnedMoney;
 
     public BorrowEntity(String id,
                         Direction direction,
@@ -47,10 +49,12 @@ public class BorrowEntity implements Parcelable {
                         List<UserEntity> guarantors,
                         String loanId,
                         BorrowType type,
-                        double totalFromAmount,
-                        double totalToAmount,
+                        double fromTotalAmount,
+                        double toFromAmount,
                         double fromBalance,
-                        double toBalance) {
+                        double toBalance,
+                        double fromReturnedMoney,
+                        double toReturnedMoney) {
         this.id = id;
         this.direction = direction;
         this.state = state;
@@ -66,10 +70,12 @@ public class BorrowEntity implements Parcelable {
         this.guarantors = guarantors;
         this.loanId = loanId;
         this.type = type;
-        this.totalFromAmount = totalFromAmount;
-        this.totalToAmount = totalToAmount;
+        this.fromTotalAmount = fromTotalAmount;
+        this.toFromAmount = toFromAmount;
         this.fromBalance = fromBalance;
         this.toBalance = toBalance;
+        this.fromReturnedMoney = fromReturnedMoney;
+        this.toReturnedMoney = toReturnedMoney;
     }
 
     protected BorrowEntity(Parcel in) {
@@ -91,10 +97,12 @@ public class BorrowEntity implements Parcelable {
         createdAt = createdAtLong == -1 ? null : new Date(createdAtLong);
         loanId = in.readString();
         type = BorrowType.valueOf(in.readString());
-        totalFromAmount = in.readDouble();
-        totalToAmount = in.readDouble();
+        fromTotalAmount = in.readDouble();
+        toFromAmount = in.readDouble();
         fromBalance = in.readDouble();
         toBalance = in.readDouble();
+        fromReturnedMoney = in.readDouble();
+        toReturnedMoney = in.readDouble();
     }
 
     public static final Creator<BorrowEntity> CREATOR = new Creator<BorrowEntity>() {
@@ -229,20 +237,20 @@ public class BorrowEntity implements Parcelable {
         this.type = type;
     }
 
-    public double getTotalFromAmount() {
-        return totalFromAmount;
+    public double getFromTotalAmount() {
+        return fromTotalAmount;
     }
 
-    public void setTotalFromAmount(double totalFromAmount) {
-        this.totalFromAmount = totalFromAmount;
+    public void setFromTotalAmount(double fromTotalAmount) {
+        this.fromTotalAmount = fromTotalAmount;
     }
 
-    public double getTotalToAmount() {
-        return totalToAmount;
+    public double getToFromAmount() {
+        return toFromAmount;
     }
 
-    public void setTotalToAmount(double totalToAmount) {
-        this.totalToAmount = totalToAmount;
+    public void setToFromAmount(double toFromAmount) {
+        this.toFromAmount = toFromAmount;
     }
 
     public double getFromBalance() {
@@ -259,6 +267,22 @@ public class BorrowEntity implements Parcelable {
 
     public void setToBalance(double toBalance) {
         this.toBalance = toBalance;
+    }
+
+    public double getFromReturnedMoney() {
+        return fromReturnedMoney;
+    }
+
+    public void setFromReturnedMoney(double fromReturnedMoney) {
+        this.fromReturnedMoney = fromReturnedMoney;
+    }
+
+    public double getToReturnedMoney() {
+        return toReturnedMoney;
+    }
+
+    public void setToReturnedMoney(double toReturnedMoney) {
+        this.toReturnedMoney = toReturnedMoney;
     }
 
     @Override
@@ -283,9 +307,11 @@ public class BorrowEntity implements Parcelable {
         dest.writeLong(createdAt == null ? -1 : createdAt.getTime());
         dest.writeString(loanId);
         dest.writeString(type.name());
-        dest.writeDouble(totalFromAmount);
-        dest.writeDouble(totalToAmount);
+        dest.writeDouble(fromTotalAmount);
+        dest.writeDouble(toFromAmount);
         dest.writeDouble(fromBalance);
         dest.writeDouble(toBalance);
+        dest.writeDouble(fromReturnedMoney);
+        dest.writeDouble(toReturnedMoney);
     }
 }

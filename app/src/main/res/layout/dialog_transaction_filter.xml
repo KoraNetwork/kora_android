@@ -120,7 +120,7 @@
             android:background="#14000000" />
 
         <android.support.v7.widget.AppCompatCheckBox
-            android:id="@+id/type_borrowed"
+            android:id="@+id/type_borrowed_funded"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?android:attr/selectableItemBackground"
@@ -128,7 +128,7 @@
             android:drawableRight="@drawable/btn_checkbox"
             android:paddingBottom="14dp"
             android:paddingTop="14dp"
-            android:text="@string/transaction_filter_type_borrowed_label" />
+            android:text="@string/transaction_filter_type_borrowed_funded_label" />
 
         <View
             android:layout_width="match_parent"
@@ -136,7 +136,7 @@
             android:background="#14000000" />
 
         <android.support.v7.widget.AppCompatCheckBox
-            android:id="@+id/type_deposit"
+            android:id="@+id/type_borrowed_paid_back"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?android:attr/selectableItemBackground"
@@ -144,7 +144,7 @@
             android:drawableRight="@drawable/btn_checkbox"
             android:paddingBottom="14dp"
             android:paddingTop="14dp"
-            android:text="@string/transaction_filter_type_deposit_label" />
+            android:text="@string/transaction_filter_type_borrowed_paid_back_label" />
 
         <View
             android:layout_width="match_parent"

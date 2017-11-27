@@ -31,9 +31,9 @@ public class TransactionFilterModel extends FilterModel implements Parcelable {
         in.readList(strings, null);
         for (String string : strings) {
             if (CommonUtils.isStringInEnum(string, TransactionType.class))
-                mTransactionTypes.add(TransactionType.valueOf(string));
+                mTransactionTypes.add(TransactionType.valueOf(string.toUpperCase()));
             else if (CommonUtils.isStringInEnum(string, TransactionState.class))
-                mTransactionStates.add(TransactionState.valueOf(string));
+                mTransactionStates.add(TransactionState.valueOf(string.toUpperCase()));
         }
     }
 
@@ -80,7 +80,7 @@ public class TransactionFilterModel extends FilterModel implements Parcelable {
     public List<String> getTransactionTypesAsStrings() {
         List strings = new ArrayList();
         for (TransactionType type : mTransactionTypes) {
-            strings.add(type.name().toLowerCase());
+            strings.add(type.getText());
         }
         return strings;
     }
@@ -103,10 +103,10 @@ public class TransactionFilterModel extends FilterModel implements Parcelable {
         dest.writeString(mDirections == null ? "" : mDirections.name());
         final List<String> strings = new ArrayList<>();
         for (TransactionType type : mTransactionTypes) {
-            strings.add(type.name());
+            strings.add(type.name().toLowerCase());
         }
         for (TransactionState state : mTransactionStates) {
-            strings.add(state.name());
+            strings.add(state.name().toLowerCase());
         }
         dest.writeList(strings);
     }
