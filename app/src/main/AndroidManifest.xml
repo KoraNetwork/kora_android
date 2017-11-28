@@ -104,13 +104,13 @@
             android:windowSoftInputMode="stateHidden"/>
 
         <activity
-            android:name=".presentation.ui.common.recent.RecentActivity"
+            android:name=".presentation.ui.borrow.BorrowMoneyActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.MainTheme"
             android:windowSoftInputMode="stateHidden"/>
 
         <activity
-            android:name=".presentation.ui.borrow.BorrowMoneyActivity"
+            android:name=".presentation.ui.coming_soon.ComingSoonActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.MainTheme"
             android:windowSoftInputMode="stateHidden"/>

@@ -3,6 +3,7 @@ package com.kora.android.di.component;
 import com.kora.android.di.annotation.PerActivity;
 import com.kora.android.di.module.ActivityModule;
 import com.kora.android.presentation.ui.borrow.BorrowMoneyActivity;
+import com.kora.android.presentation.ui.coming_soon.ComingSoonActivity;
 import com.kora.android.presentation.ui.common.add_contact.GetContactActivity;
 import com.kora.android.presentation.ui.common.enter_pin.EnterPinActivity;
 import com.kora.android.presentation.ui.common.send_to.RequestDetailsActivity;
@@ -43,4 +44,6 @@ public interface ActivityComponent {
     void inject(RequestDetailsActivity requestDetailsActivity);
 
     void inject(BorrowMoneyActivity borrowMoneyActivity);
+
+    void inject(ComingSoonActivity comingSoonActivity);
 }

@@ -359,4 +359,12 @@
     <string name="dialog_return_positive">OK</string>
     <string name="dialog_return_empty_amount">Amount should not be zero</string>
 
+    <!-- Coming soon -->
+    <string name="coming_soon_coming_soon">COMING SOON</string>
+    <string name="coming_soon_add_new">Add new</string>
+    <string name="coming_soon_agent">Agent</string>
+    <string name="coming_soon_merchant">Merchant</string>
+    <string name="coming_soon_lending">Lending</string>
+    <string name="coming_soon_cooperative">Cooperative</string>
+
 </resources>

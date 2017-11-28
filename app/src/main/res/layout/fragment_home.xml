@@ -14,9 +14,9 @@
         android:background="@color/color_toolbar"
         android:contentInsetLeft="0dp"
         android:contentInsetStart="0dp"
+        android:elevation="4dp"
         app:contentInsetLeft="0dp"
-        app:contentInsetStart="0dp"
-        android:elevation="4dp">
+        app:contentInsetStart="0dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -194,16 +194,30 @@
                     android:layout_marginTop="16dp"
                     android:scrollbars="none">
 
-                    <RelativeLayout
+                    <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:paddingLeft="24dp"
+                        android:paddingRight="24dp">
+
+                        <ImageView
+                            android:id="@+id/image_view_add"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:background="?android:attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:src="@drawable/ic_add_blue" />
 
                         <LinearLayout
                             android:id="@+id/linear_layout_agent"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="24dp"
                             android:layout_marginStart="24dp"
+                            android:background="?android:attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
                             android:gravity="center"
                             android:orientation="vertical">
 
@@ -229,10 +243,10 @@
                             android:id="@+id/linear_layout_merchant"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="24dp"
                             android:layout_marginStart="24dp"
-                            android:layout_toEndOf="@+id/linear_layout_agent"
-                            android:layout_toRightOf="@+id/linear_layout_agent"
+                            android:background="?android:attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
                             android:gravity="center"
                             android:orientation="vertical">
 
@@ -259,10 +273,10 @@
                             android:id="@+id/linear_layout_lending"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="24dp"
                             android:layout_marginStart="24dp"
-                            android:layout_toEndOf="@+id/linear_layout_merchant"
-                            android:layout_toRightOf="@+id/linear_layout_merchant"
+                            android:background="?android:attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
                             android:gravity="center"
                             android:orientation="vertical">
 
@@ -289,10 +303,10 @@
                             android:id="@+id/linear_layout_cooperative"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="24dp"
                             android:layout_marginStart="24dp"
-                            android:layout_toEndOf="@+id/linear_layout_lending"
-                            android:layout_toRightOf="@+id/linear_layout_lending"
+                            android:background="?android:attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
                             android:gravity="center"
                             android:orientation="vertical">
 
@@ -314,19 +328,7 @@
                                 android:textSize="12sp" />
                         </LinearLayout>
 
-                        <ImageView
-                            android:id="@+id/image_view_add"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignTop="@+id/linear_layout_cooperative"
-                            android:layout_marginLeft="24dp"
-                            android:layout_marginRight="24dp"
-                            android:layout_marginTop="20dp"
-                            android:layout_toEndOf="@+id/linear_layout_cooperative"
-                            android:layout_toRightOf="@+id/linear_layout_cooperative"
-                            android:src="@drawable/ic_add_blue" />
-
-                    </RelativeLayout>
+                    </LinearLayout>
 
                 </HorizontalScrollView>
 
@@ -344,15 +346,15 @@
                     android:textSize="16sp" />
 
                 <android.support.v7.widget.RecyclerView
-                    android:visibility="gone"
-                    android:nestedScrollingEnabled="false"
                     android:id="@+id/recycler_view_transactions"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_below="@+id/text_view_transactions"
                     android:layout_marginTop="16dp"
+                    android:nestedScrollingEnabled="false"
                     android:paddingBottom="16dp"
-                    android:scrollbars="none" />
+                    android:scrollbars="none"
+                    android:visibility="gone" />
 
                 <android.support.v7.widget.CardView
                     android:id="@+id/card_view_show_all_transactions"

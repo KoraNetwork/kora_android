@@ -109,6 +109,7 @@ public interface Keys {
         String BORROW_LIST = "borrow_list_args";
         String BORROW_TYPE = "borrow_type";
         String BORROWER_VALUE = "borrower_value";
+        String COMING_SOON_TYPE = "coming_soon_type";
     }
 
     interface Users {
