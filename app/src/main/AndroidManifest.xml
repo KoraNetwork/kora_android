@@ -133,10 +133,13 @@
                 android:resource="@xml/file_provider_paths"/>
         </provider>
 
+        <!--<meta-data-->
+            <!--android:name="io.fabric.ApiKey"-->
+            <!--android:value="f32866bad87d4d45e3341259c5c789f68dd21fd3" />-->
+
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="f32866bad87d4d45e3341259c5c789f68dd21fd3"
-            />
+            android:value="6f3d94ec4d7cdc5f65fbac9e6a13105b3a4ef581" />
 
     </application>
 

@@ -70,7 +70,7 @@ android {
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
-            ext.betaDistributionEmailsFilePath = "app/beta_distribution_emails.txt"
+//            ext.betaDistributionEmailsFilePath = "app/beta_distribution_emails.txt"
         }
 
         debug {
