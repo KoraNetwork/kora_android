@@ -165,7 +165,8 @@
     <string name="profile_agent_switch">Agent open in</string>
     <string name="profile_agent_on">On</string>
     <string name="profile_agent_off">Off</string>
-    <string name="profile_interest_rate">Annual Interest Rate (%)</string>
+    <string name="profile_interest_rate">Interest Rate (%)</string>
+    <string name="profile_incorrect_interest_rate">Interest rate must be from 0 to 10</string>
 
     <!-- Send Money -->
     <string name="send_money_title">Send money</string>
@@ -177,7 +178,7 @@
     <string name="send_money_request_from" formatted="false">Requested by %s</string>
     <string name="send_money_request_to" formatted="false">Requested from %s</string>
     <string name="send_money_request_title" formatted="false">Request from %s</string>
-    <string name="send_money_amount_in_users_currency_label">Amount in the beneficiary's currency</string>
+    <string name="send_money_amount_in_users_currency_label">Amount in the beneficiary\'s currency</string>
     <string name="converted_amount_value">%1$.2f</string>
     <string name="send_money_amount_label">Amount</string>
     <string name="send_money_aditional_label">Additional Note</string>

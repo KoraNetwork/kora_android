@@ -44,6 +44,10 @@ public class UserResponse {
     private String mCurrencyNameFull;
     @JsonField(name = "agree")
     private Boolean mAgreed;
+    @JsonField(name = "agent")
+    private Boolean mAgent;
+    @JsonField(name = "interestRate")
+    private int mInterestRate;
 
     public String getId() {
         return mId;
@@ -195,5 +199,21 @@ public class UserResponse {
 
     public void setAgreed(Boolean agreed) {
         mAgreed = agreed;
+    }
+
+    public Boolean getAgent() {
+        return mAgent;
+    }
+
+    public void setAgent(Boolean mAgent) {
+        this.mAgent = mAgent;
+    }
+
+    public int getInterestRate() {
+        return mInterestRate;
+    }
+
+    public void setInterestRate(int mInterestRate) {
+        this.mInterestRate = mInterestRate;
     }
 }

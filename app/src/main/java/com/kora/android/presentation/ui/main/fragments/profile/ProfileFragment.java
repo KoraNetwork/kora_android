@@ -13,7 +13,6 @@ import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
@@ -21,12 +20,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -115,6 +112,7 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
     @BindView(R.id.text_agent_on_off) TextView mTvAgentOnOff;
     @BindView(R.id.switch_agent) SwitchCompat mScAgentSwitch;
     @BindView(R.id.edit_layout_interest_rate) TextInputLayout mElInterestRate;
+    @BindView(R.id.edit_text_interest_rate) TextInputEditText mEtInterestRate;
 
     private ViewMode mViewMode = VIEW_MODE;
 
@@ -230,9 +228,9 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
             mEtPostalCode.setEnabled(true);
             mEtDateOfBirth.setEnabled(true);
             mEtAddress.setEnabled(true);
+            mEtInterestRate.setEnabled(true);
             mTvExportWallet.setVisibility(View.GONE);
             mTvImportWallet.setVisibility(View.GONE);
-
             mTvAgentOnOff.setVisibility(View.GONE);
             mScAgentSwitch.setVisibility(View.VISIBLE);
         } else {
@@ -249,11 +247,11 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
             mEtPostalCode.setEnabled(false);
             mEtDateOfBirth.setEnabled(false);
             mEtAddress.setEnabled(false);
-            ViewUtils.clearFocus(mEtLegalName, mEtPostalCode, mEtDateOfBirth, mEtAddress);
-            ViewUtils.deleteErrors(mElDateOfBirth);
+            mEtInterestRate.setEnabled(false);
+            ViewUtils.clearFocus(mEtLegalName, mEtPostalCode, mEtDateOfBirth, mEtAddress, mEtInterestRate);
+            ViewUtils.deleteErrors(mElDateOfBirth, mElInterestRate);
             mTvExportWallet.setVisibility(View.VISIBLE);
             mTvImportWallet.setVisibility(View.VISIBLE);
-
             mTvAgentOnOff.setVisibility(View.VISIBLE);
             mScAgentSwitch.setVisibility(View.GONE);
         }
@@ -261,7 +259,9 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
 
     @Override
     public void retrieveUserData(final UserEntity userEntity) {
-        ((MainActivity) getActivity()).showUserData(userEntity);
+        if (getBaseActivity() != null) {
+            ((MainActivity) getBaseActivity()).showUserData(userEntity);
+        }
         Glide.with(this)
                 .load(API_BASE_URL + userEntity.getAvatar())
                 .apply(RequestOptions.circleCropTransform())
@@ -277,6 +277,10 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
         mEtDateOfBirth.setText(DateUtils.getPrettyDateFromFormatted(userEntity.getDateOfBirth()));
         mEtAddress.setText(userEntity.getAddress());
 
+        mTvAgentOnOff.setText(userEntity.isAgent() ? R.string.profile_agent_on : R.string.profile_agent_off);
+        mScAgentSwitch.setChecked(userEntity.isAgent());
+        mElInterestRate.setVisibility(userEntity.isAgent() ? View.VISIBLE : View.GONE);
+        mEtInterestRate.setText(String.valueOf(userEntity.getInterestRate()));
     }
 
     private void retrieveCurrency(String flag, String currency) {
@@ -396,6 +400,28 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
         mEtDateOfBirth.setText(prettyDate);
         final String formattedDate = DateUtils.getFormattedDate(year, month, day);
         getPresenter().setDateOfBirth(formattedDate);
+    }
+
+    @OnCheckedChanged(R.id.switch_agent)
+    public void OnCheckedChangedSwitchAgent(boolean isChecked) {
+        if (isChecked) {
+            getPresenter().setAgent(true);
+            mElInterestRate.setVisibility(View.VISIBLE);
+            ViewUtils.scrollToView(mSvContainer, mLlContainer, mElInterestRate);
+        } else {
+            getPresenter().setAgent(false);
+            mElInterestRate.setVisibility(View.GONE);
+        }
+    }
+
+    @OnTextChanged(R.id.edit_text_interest_rate)
+    void onInterestRateChanged(final CharSequence interestRate) {
+        getPresenter().setInterestRate(interestRate.toString().trim());
+    }
+
+    @Override
+    public void showIncorrectInterestRate() {
+        mElInterestRate.setError(getString(R.string.profile_incorrect_interest_rate));
     }
 
     @Override
@@ -549,15 +575,5 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
     @Override
     public void showImportedWalletMessage() {
         Toast.makeText(getBaseActivity(), R.string.import_wallet_imported, Toast.LENGTH_LONG).show();
-    }
-
-    @OnCheckedChanged(R.id.switch_agent)
-    public void OnCheckedChangedSwitchAgent(boolean isChecked) {
-        if (isChecked) {
-            mElInterestRate.setVisibility(View.VISIBLE);
-            ViewUtils.scrollToView(mSvContainer, mLlContainer, mElInterestRate);
-        } else {
-            mElInterestRate.setVisibility(View.GONE);
-        }
     }
 }

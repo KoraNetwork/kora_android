@@ -25,4 +25,6 @@ public interface ProfileView extends BaseView<ProfilePresenter> {
     void showExportedWalletMessage();
 
     void showImportedWalletMessage();
+
+    void showIncorrectInterestRate();
 }

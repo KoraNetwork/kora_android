@@ -42,6 +42,8 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
     private UserEntity mUpdatedUserEntity = new UserEntity();
     private UserEntity mUserEntity = new UserEntity();
 
+    private int mOriginalInterestRate;
+
     @Inject
     public ProfilePresenter(final GetUserDataUseCase getUserDataUseCase,
                             final UpdateUserUseCase updateUserUseCase,
@@ -89,6 +91,14 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
         mUpdatedUserEntity.setAddress(address);
     }
 
+    public void setAgent(boolean agent) {
+        mUpdatedUserEntity.setAgent(agent);
+    }
+
+    public void setInterestRate(String interestRate) {
+        mUpdatedUserEntity.setInterestRate(StringUtils.convertInterestRate(interestRate));
+    }
+
     public void onSaveClicked() {
         if (mUpdatedUserEntity.getUserName() == null || mUpdatedUserEntity.getUserName().isEmpty()) {
             getView().showEmptyUserName();
@@ -112,6 +122,14 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
         if (!DateUtils.isDateValid(mUpdatedUserEntity.getDateOfBirth())) {
             getView().showIncorrectDate();
             return;
+        }
+        if (mUpdatedUserEntity.isAgent()) {
+            if (!StringUtils.isInterestRateValid(mUpdatedUserEntity.getInterestRate())) {
+                getView().showIncorrectInterestRate();
+                return;
+            }
+        } else {
+            mUpdatedUserEntity.setInterestRate(mOriginalInterestRate);
         }
 
         mUpdateUserUseCase.setData(mUpdatedUserEntity);
@@ -181,6 +199,7 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
         @Override
         public void onNext(UserEntity userEntity) {
             mUserEntity = userEntity;
+            mOriginalInterestRate = userEntity.getInterestRate();
             if (!isViewAttached()) return;
             getView().retrieveUserData(userEntity);
         }
@@ -222,9 +241,9 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
         @Override
         public void onNext(UserEntity userEntity) {
             mUserEntity = userEntity;
+            mOriginalInterestRate = userEntity.getInterestRate();
             if (!isViewAttached()) return;
             getView().retrieveUserData(userEntity);
-
         }
 
         @Override

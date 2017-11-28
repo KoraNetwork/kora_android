@@ -118,7 +118,7 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter> i
     @BindView(R.id.edit_layout_amount) TextInputLayout mSenderAmountContainer;
     @BindView(R.id.edit_text_receiver_amount) CurrencyEditText mReceiverAmount;
     @BindView(R.id.edit_layout_converted_amount) TextInputLayout mReceiverAmountContainer;
-    @BindView(R.id.edit_text_interesr_rate) EditText mRateEditText;
+    @BindView(R.id.edit_text_interest_rate) EditText mRateEditText;
     @BindView(R.id.edit_layout_interest_rate) TextInputLayout mElRate;
     @BindView(R.id.edit_layout_start_date) TextInputLayout mElStartDate;
     @BindView(R.id.edit_text_start_date) EditText mEtStartDate;
@@ -923,7 +923,7 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter> i
         changeAmountContainerOrientation();
     }
 
-    @OnTextChanged(R.id.edit_text_interesr_rate)
+    @OnTextChanged(R.id.edit_text_interest_rate)
     public void onRateChanged() {
         calculateTotals();
     }

@@ -49,6 +49,8 @@ public class UserMapper {
                         .addCountryCode(userResponse.getCountryCode())
                         .addAgree(userResponse.getAgreed())
                         .addCurrencyNameFull(userResponse.getCurrencyNameFull())
+                        .addAgent(userResponse.getAgent())
+                        .addInterestRate(userResponse.getInterestRate())
                 );
     }
 
@@ -84,6 +86,9 @@ public class UserMapper {
                         map.put("password", createPartFromString(model.getPassword()));
                     if (model.getCountryCode() != null)
                         map.put("countryCode", createPartFromString(model.getCountryCode()));
+                    if (model.isAgent() != null)
+                        map.put("agent", createPartFromString(Boolean.toString(model.isAgent())));
+                    map.put("interestRate", createPartFromString(Integer.toString(model.getInterestRate())));
                     return map;
                 });
     }

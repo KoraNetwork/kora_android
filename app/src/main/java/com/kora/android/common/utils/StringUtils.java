@@ -93,4 +93,16 @@ public class StringUtils {
     public static String getSimplePhoneNumber(final String phoneNumber) {
         return phoneNumber.replaceAll("[^0-9]","");
     }
+
+    public static int convertInterestRate(final String interestRate) {
+        try {
+            return Integer.parseInt(interestRate);
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
+    public static boolean isInterestRateValid(final int interestRate) {
+        return interestRate >= 0 && interestRate <= 10;
+    }
 }

@@ -118,9 +118,6 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
         }
 
         initArgs();
-
-        // if user is agent set group visibility to true
-        mNavigationView.getMenu().setGroupVisible(R.id.nav_group_agent, true);
     }
 
     private void initArgs() {
@@ -262,6 +259,9 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
             final Intent launchIntent = CreateWalletsService.getLaunchIntent(this, userEntity);
             startService(launchIntent);
         }
+
+        mNavigationView.getMenu().setGroupVisible(R.id.nav_group_agent, userEntity.isAgent());
+
         Glide.with(this)
                 .load(API_BASE_URL + userEntity.getAvatar())
                 .apply(RequestOptions.circleCropTransform())

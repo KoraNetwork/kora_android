@@ -21,7 +21,7 @@ import retrofit2.http.Query;
 
 public interface UserService {
 
-    @POST("profile")
+    @GET("profile")
     Observable<UserResponse> getUserData();
 
     @Multipart

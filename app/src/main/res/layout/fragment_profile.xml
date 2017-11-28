@@ -309,6 +309,7 @@
                         android:id="@+id/edit_text_interest_rate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:enabled="false"
                         android:fontFamily="@font/muli_regular"
                         android:hint="@string/profile_interest_rate"
                         android:inputType="number"
