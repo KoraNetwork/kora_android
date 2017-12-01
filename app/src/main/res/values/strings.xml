@@ -165,7 +165,7 @@
     <string name="profile_agent_switch">Agent open in</string>
     <string name="profile_agent_on">On</string>
     <string name="profile_agent_off">Off</string>
-    <string name="profile_interest_rate">Agent Interest Rate (%)</string>
+    <string name="profile_interest_rate">Agent Commission (%)</string>
     <string name="profile_incorrect_interest_rate">Interest rate must be from 0 to 10</string>
 
     <!-- Send Money -->
@@ -372,11 +372,9 @@
     <string name="deposit_agent_title">Agent Deposit</string>
     <string name="deposit_agent_details">Agent details</string>
     <string name="deposit_user_details">User details</string>
-    <string name="deposit_agent_interest_rate">Agent Interest Rate</string>
-
+    <string name="deposit_agent_interest_rate">Agent Commission (%)</string>
     <string name="deposit_user_amount">User Amount</string>
     <string name="deposit_agent_amount">Agent Amount</string>
-
     <string name="deposit_total_interest">Total interest:</string>
     <string name="deposit_total_amount">Total amount:</string>
     <string name="deposit_amount">%1$.2f %2$s</string>
