@@ -9,7 +9,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 
 import com.kora.android.R;
 import com.kora.android.common.Keys;
@@ -21,7 +20,7 @@ import com.kora.android.presentation.ui.base.adapter.OnItemClickListener;
 import com.kora.android.presentation.ui.base.adapter.RecyclerViewScrollListener;
 import com.kora.android.presentation.ui.base.backstack.StackFragment;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
-import com.kora.android.presentation.ui.common.send_to.RequestDetailsActivity;
+import com.kora.android.presentation.ui.common.send_request.RequestDetailsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,7 +104,7 @@ public class SendFragment extends StackFragment<SendPresenter> implements SendVi
         if (pair.second != null && pair.second.size() > 0) {
             int size = pair.first == null ? 0 : pair.first.size();
             if (mUserAdapter.getRawItemsCount() == size)
-                mUserAdapter.addUser(new UserEntity.Section(getString(R.string.add_contact_all_title)));
+                mUserAdapter.addUser(new UserEntity.Section(getString(R.string.add_contact_all_contacts_title)));
             mUserAdapter.addUsers(pair.second);
         }
     }

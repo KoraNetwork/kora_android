@@ -89,12 +89,24 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public Observable<Pair<List<UserEntity>, List<UserEntity>>> getUsers(final String search,
                                                                          final int skip,
-                                                                         final String sort, List<String> excluded) {
-        return mUserService.getUsers(search, Keys.ITEMS_PER_PAGE, skip, sort, excluded)
-                .flatMap(userListResponse ->
-                        Observable.zip(mUserMapper.transformUserListResponseToEntityUserList(userListResponse.getRecents()),
-                                mUserMapper.transformUserListResponseToEntityUserList(userListResponse.getContacts()),
-                                Pair::new));
+                                                                         final String sort,
+                                                                         final List<String> excluded,
+                                                                         final boolean getAgents) {
+        if (getAgents) {
+            return mUserService.getAgents(search, Keys.ITEMS_PER_PAGE, skip, sort, excluded)
+                    .flatMap(userListResponse ->
+                            Observable.zip(
+                                    mUserMapper.transformUserListResponseToEntityUserList(userListResponse.getRecents()),
+                                    mUserMapper.transformUserListResponseToEntityUserList(userListResponse.getContacts()),
+                                    Pair::new));
+        } else {
+            return mUserService.getUsers(search, Keys.ITEMS_PER_PAGE, skip, sort, excluded)
+                    .flatMap(userListResponse ->
+                            Observable.zip(
+                                    mUserMapper.transformUserListResponseToEntityUserList(userListResponse.getRecents()),
+                                    mUserMapper.transformUserListResponseToEntityUserList(userListResponse.getContacts()),
+                                    Pair::new));
+        }
     }
 
     public ObservableTransformer<UserEntity, UserEntity> storeUser() {

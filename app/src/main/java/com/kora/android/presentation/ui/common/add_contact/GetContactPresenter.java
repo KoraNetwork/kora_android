@@ -26,9 +26,10 @@ public class GetContactPresenter extends BasePresenter<GetContactView> {
     private final GetUsersUseCase mGetUsersUseCase;
     private final SetAsRecentUseCase mSetAsRecentUseCase;
 
-    ArrayList<String> mExcludedUsers = new ArrayList<>();
-
+    private ArrayList<String> mExcludedUsers = new ArrayList<>();
+    private boolean mGetAgents;
     private String mSearch;
+
     @Inject
     public GetContactPresenter(final GetUsersUseCase getUsersUseCase,
                                final SetAsRecentUseCase setAsRecentUseCase) {
@@ -41,7 +42,7 @@ public class GetContactPresenter extends BasePresenter<GetContactView> {
     }
 
     public void getUsers(final int skip) {
-        mGetUsersUseCase.setData(mSearch, skip, mExcludedUsers);
+        mGetUsersUseCase.setData(mSearch, skip, mExcludedUsers, mGetAgents);
         mGetUsersUseCase.execute(new GetUsersSubscriber());
     }
 
@@ -62,6 +63,14 @@ public class GetContactPresenter extends BasePresenter<GetContactView> {
 
     public List<String> getExcluded() {
         return mExcludedUsers;
+    }
+
+    public boolean isGetAgents() {
+        return mGetAgents;
+    }
+
+    public void setGetAgents(boolean getAgents) {
+        this.mGetAgents = getAgents;
     }
 
     public void setAsRecent(UserEntity item) {

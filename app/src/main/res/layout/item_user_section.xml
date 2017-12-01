@@ -11,7 +11,7 @@
         android:fontFamily="@font/muli_semi_bold"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:text="@string/add_contact_all_title"
+        android:text="@string/add_contact_all_contacts_title"
         android:textColor="@color/color_text_blue"
         android:textSize="16sp"/>
 

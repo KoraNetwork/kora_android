@@ -3,7 +3,6 @@ package com.kora.android.presentation.ui.coming_soon;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 
 import com.kora.android.R;
 import com.kora.android.di.component.ActivityComponent;
@@ -13,7 +12,7 @@ import com.kora.android.presentation.ui.base.view.ToolbarActivity;
 
 import butterknife.BindView;
 
-import static com.kora.android.common.Keys.Args.COMING_SOON_TYPE;
+import static com.kora.android.common.Keys.Extras.COMING_SOON_TYPE;
 
 public class ComingSoonActivity extends ToolbarActivity<ComingSoonPresenter> implements ComingSoonView {
 

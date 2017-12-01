@@ -19,6 +19,7 @@ public class GetUsersUseCase extends AsyncUseCase {
     private int mSkip;
     private String mSort;
     private List<String> mExcluded;
+    private boolean mGetAgents;
 
     @Inject
     public GetUsersUseCase(final UserRepository userRepository) {
@@ -27,14 +28,22 @@ public class GetUsersUseCase extends AsyncUseCase {
 
     public void setData(final String search,
                         final int skip,
-                        final List<String> excluded) {
+                        final List<String> excluded,
+                        final boolean getAgents) {
         mSearch = search;
         mSkip = skip;
         mExcluded = excluded;
+        mGetAgents = getAgents;
     }
 
     @Override
     protected Observable buildObservableTask() {
-        return mUserRepository.getUsers(mSearch, mSkip, mSort, mExcluded);
+        return mUserRepository.getUsers(
+                mSearch,
+                mSkip,
+                mSort,
+                mExcluded,
+                mGetAgents
+        );
     }
 }

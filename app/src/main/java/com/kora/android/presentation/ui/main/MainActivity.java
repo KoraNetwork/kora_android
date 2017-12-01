@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.kora.android.R;
 import com.kora.android.di.component.ActivityComponent;
+import com.kora.android.presentation.enums.Direction;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.service.wallet.CreateWalletsService;
 import com.kora.android.presentation.ui.base.backstack.BackStackActivity;
@@ -28,6 +29,7 @@ import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
 import com.kora.android.presentation.ui.login.LoginActivity;
 import com.kora.android.presentation.ui.main.fragments.borrow.BorrowMainFragment;
+import com.kora.android.presentation.ui.main.fragments.deposit.DepositFragment;
 import com.kora.android.presentation.ui.main.fragments.home.HomeFragment;
 import com.kora.android.presentation.ui.main.fragments.profile.ProfileFragment;
 import com.kora.android.presentation.ui.main.fragments.request.RequestFragment;
@@ -53,7 +55,9 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
     public static final int TAB_TRANSACTIONS_HISTORY_POSITION = 6;
     public static final int TAB_USER_PROFILE_POSITION = 7;
     public static final int TAB_SEND_A_FEEDBACK_POSITION = 8;
-    public static final int TAB_LOG_OUT = 9;
+    public static final int TAB_AGENT_DEPOSIT_POSITION = 9;
+    public static final int TAB_AGENT_WITHDRAW_POSITION = 10;
+    public static final int TAB_LOG_OUT = 11;
 
     @BindView(R.id.root_view) CoordinatorLayout mRootView;
     @BindView(R.id.content_layout) LinearLayout mContentLayout;
@@ -150,7 +154,7 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
             case TAB_BORROW_MONEY_POSITION:
                 return BorrowMainFragment.getNewInstance();
             case TAB_DEPOSIT_POSITION:
-                return TransactionsFragment.getNewInstance();
+                return DepositFragment.getNewInstance(Direction.FROM);
             case TAB_WITHDRAWAL_POSITION:
                 return TransactionsFragment.getNewInstance();
             case TAB_TRANSACTIONS_HISTORY_POSITION:
@@ -158,6 +162,10 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
             case TAB_USER_PROFILE_POSITION:
                 return ProfileFragment.getNewInstance();
             case TAB_SEND_A_FEEDBACK_POSITION:
+                return TransactionsFragment.getNewInstance();
+            case TAB_AGENT_DEPOSIT_POSITION:
+                return DepositFragment.getNewInstance(Direction.TO);
+            case TAB_AGENT_WITHDRAW_POSITION:
                 return TransactionsFragment.getNewInstance();
 
             default:
@@ -210,6 +218,12 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
                 break;
             case R.id.nav_send_a_feedback:
                 position = TAB_SEND_A_FEEDBACK_POSITION;
+                break;
+            case R.id.nav_agent_deposit:
+                position = TAB_AGENT_DEPOSIT_POSITION;
+                break;
+            case R.id.nav_agent_withdrawal:
+                position = TAB_AGENT_WITHDRAW_POSITION;
                 break;
             case R.id.nav_log_out:
                 position = TAB_LOG_OUT;

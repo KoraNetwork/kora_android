@@ -42,7 +42,7 @@ public class SendPresenter extends BasePresenter<SendView> {
     }
 
     public void getUsers(final int skip) {
-        mGetUsersUseCase.setData(mSearch, skip, new ArrayList<>());
+        mGetUsersUseCase.setData(mSearch, skip, new ArrayList<>(), false);
         mGetUsersUseCase.execute(new GetUsersSubscriber());
     }
 

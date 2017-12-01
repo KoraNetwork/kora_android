@@ -165,7 +165,7 @@
     <string name="profile_agent_switch">Agent open in</string>
     <string name="profile_agent_on">On</string>
     <string name="profile_agent_off">Off</string>
-    <string name="profile_interest_rate">Interest Rate (%)</string>
+    <string name="profile_interest_rate">Agent Interest Rate (%)</string>
     <string name="profile_incorrect_interest_rate">Interest rate must be from 0 to 10</string>
 
     <!-- Send Money -->
@@ -196,7 +196,8 @@
     <string name="add_contact_title">Add your contacts</string>
     <string name="add_contact_name_phone_email">receiver name or mobile phone or email</string>
     <string name="add_contact_recent_title">Recent</string>
-    <string name="add_contact_all_title">All contacts</string>
+    <string name="add_contact_all_contacts_title">All contacts</string>
+    <string name="add_contact_all_agents_title">All agents</string>
 
     <!-- Enter pin activity -->
     <string name="enter_pin_enter_pin">"Enter PIN code</string>
@@ -265,8 +266,6 @@
     <string name="request_money_status_in_progress">In progress</string>
     <string name="request_money_status_pending">Pending</string>
     <string name="request_money_status_rejected">Rejected</string>
-    <string name="request_money_status_requested">Requested</string>
-    <string name="request_money_status_borrowed">Borrowed</string>
 
     <!-- Request filter -->
     <string name="request_filter_show_label">Show:</string>
@@ -367,5 +366,35 @@
     <string name="coming_soon_merchant">Merchant</string>
     <string name="coming_soon_lending">Lending</string>
     <string name="coming_soon_cooperative">Cooperative</string>
+
+    <!-- Deposit -->
+    <string name="deposit_user_title">Deposit</string>
+    <string name="deposit_agent_title">Agent Deposit</string>
+    <string name="deposit_agent_details">Agent details</string>
+    <string name="deposit_user_details">User details</string>
+    <string name="deposit_agent_interest_rate">Agent Interest Rate</string>
+
+    <string name="deposit_user_amount">User Amount</string>
+    <string name="deposit_agent_amount">Agent Amount</string>
+
+    <string name="deposit_total_interest">Total interest:</string>
+    <string name="deposit_total_amount">Total amount:</string>
+    <string name="deposit_amount">%1$.2f %2$s</string>
+    <string name="deposit_send_to_agent">SEND TO AGENT</string>
+    <string name="deposit_send_to_user">SEND TO USER</string>
+    <string name="deposit_confirm">CONFIRM</string>
+    <string name="deposit_reject">REJECT</string>
+    <string name="deposit_state_in_progress">In progress</string>
+    <string name="deposit_state_rejected">Rejected</string>
+    <string name="deposit_empty_sender_amount_error">Amount should be not empty</string>
+    <string name="deposit_empty_receiver_amount_error">Receiver amount should be not empty</string>
+    <string name="deposit_reject_success">Deposit is rejected</string>
+    <string name="deposit_send_success">Deposit is sent</string>
+
+    <!-- Deposit filter -->
+    <string name="deposit_filter_state">State:</string>
+    <string name="deposit_filter_show_all">Show all</string>
+    <string name="deposit_filter_in_progress">In progress</string>
+    <string name="deposit_filter_rejected">Rejected</string>
 
 </resources>

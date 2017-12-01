@@ -17,7 +17,8 @@ public interface UserRepository {
     Observable<Pair<List<UserEntity>, List<UserEntity>>> getUsers(final String search,
                                                                   final int skip,
                                                                   final String sort,
-                                                                  List<String> excluded);
+                                                                  final List<String> excluded,
+                                                                  final boolean getAgents);
 
     Observable<UserEntity> updateAvatar(final String avatar);
 

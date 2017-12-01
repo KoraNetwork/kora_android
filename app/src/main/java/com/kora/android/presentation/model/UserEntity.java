@@ -26,7 +26,7 @@ public class UserEntity implements Parcelable {
     private String mCurrencyNameFull;
     private Boolean mAgreed;
     private Boolean mAgent;
-    private int mInterestRate;
+    private Integer mInterestRate;
 
     public UserEntity addId(final String id) {
         mId = id;
@@ -128,7 +128,7 @@ public class UserEntity implements Parcelable {
         return this;
     }
 
-    public UserEntity addInterestRate(final int interestRate) {
+    public UserEntity addInterestRate(final Integer interestRate) {
         mInterestRate = interestRate;
         return this;
     }
@@ -301,11 +301,11 @@ public class UserEntity implements Parcelable {
         this.mAgent = mAgent;
     }
 
-    public int getInterestRate() {
+    public Integer getInterestRate() {
         return mInterestRate;
     }
 
-    public void setInterestRate(int interestRate) {
+    public void setInterestRate(Integer interestRate) {
         this.mInterestRate = interestRate;
     }
 
@@ -337,7 +337,7 @@ public class UserEntity implements Parcelable {
         dest.writeString(this.mCurrencyNameFull);
         dest.writeInt(mAgreed == null ? -1 : mAgreed ? 1 : 0);
         dest.writeInt(mAgent == null ? -1 : mAgent ? 1 : 0);
-        dest.writeInt(mInterestRate);
+        dest.writeInt(mInterestRate == null ? -1 : mInterestRate);
     }
 
     public UserEntity() {
@@ -366,8 +366,9 @@ public class UserEntity implements Parcelable {
         int agr = in.readInt();
         mAgreed = agr == -1 ? null : agr == 1;
         int agent = in.readInt();
-        mAgent = agent == -1 ? null : agr == 1;
-        mInterestRate = in.readInt();
+        mAgent = agent == -1 ? null : agent == 1;
+        int interestRate = in.readInt();
+        mInterestRate = interestRate == -1 ? null : interestRate;
     }
 
     public static final Creator<UserEntity> CREATOR = new Creator<UserEntity>() {

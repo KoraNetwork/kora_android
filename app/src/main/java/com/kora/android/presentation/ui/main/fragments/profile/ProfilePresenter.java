@@ -199,7 +199,12 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
         @Override
         public void onNext(UserEntity userEntity) {
             mUserEntity = userEntity;
-            mOriginalInterestRate = userEntity.getInterestRate();
+
+            if (userEntity.getInterestRate() != null)
+                mOriginalInterestRate = userEntity.getInterestRate();
+            else
+                mOriginalInterestRate = 0;
+
             if (!isViewAttached()) return;
             getView().retrieveUserData(userEntity);
         }
@@ -241,7 +246,12 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
         @Override
         public void onNext(UserEntity userEntity) {
             mUserEntity = userEntity;
-            mOriginalInterestRate = userEntity.getInterestRate();
+
+            if (userEntity.getInterestRate() != null)
+                mOriginalInterestRate = userEntity.getInterestRate();
+            else
+                mOriginalInterestRate = 0;
+
             if (!isViewAttached()) return;
             getView().retrieveUserData(userEntity);
         }

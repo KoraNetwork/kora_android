@@ -66,6 +66,7 @@ import io.reactivex.schedulers.Schedulers;
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.app.Activity.RESULT_OK;
+import static com.kora.android.common.Keys.DEFAULT_AGENT_RATE;
 import static com.kora.android.common.Keys.FILE_PROVIDER;
 import static com.kora.android.common.Keys.PermissionChecker.PERMISSION_REQUEST_CODE_WRITE_EXTERNAL_STORAGE;
 import static com.kora.android.common.Keys.SelectCurrency.SELECT_CURRENCY_EXTRA;
@@ -280,7 +281,10 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
         mTvAgentOnOff.setText(userEntity.isAgent() ? R.string.profile_agent_on : R.string.profile_agent_off);
         mScAgentSwitch.setChecked(userEntity.isAgent());
         mElInterestRate.setVisibility(userEntity.isAgent() ? View.VISIBLE : View.GONE);
-        mEtInterestRate.setText(String.valueOf(userEntity.getInterestRate()));
+        if (userEntity.getInterestRate() != null)
+            mEtInterestRate.setText(String.valueOf(userEntity.getInterestRate()));
+        else
+            mEtInterestRate.setText(String.valueOf(DEFAULT_AGENT_RATE));
     }
 
     private void retrieveCurrency(String flag, String currency) {

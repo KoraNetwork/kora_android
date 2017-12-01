@@ -14,6 +14,7 @@ import com.kora.android.domain.usecase.borrow.SendAgreeLoanUseCase;
 import com.kora.android.domain.usecase.borrow.SendCreateLoanUseCase;
 import com.kora.android.domain.usecase.borrow.SendFundLoanUseCase;
 import com.kora.android.domain.usecase.borrow.SendPayBackLoanUseCase;
+import com.kora.android.domain.usecase.deposit.DeleteDepositUseCase;
 import com.kora.android.domain.usecase.request.DeleteRequestUseCase;
 import com.kora.android.domain.usecase.web3j.CreateAgreeLoanUseCase;
 import com.kora.android.domain.usecase.web3j.CreateCreateLoanUseCase;
@@ -25,6 +26,7 @@ import com.kora.android.presentation.enums.ActionType;
 import com.kora.android.presentation.enums.Direction;
 import com.kora.android.presentation.enums.TransactionType;
 import com.kora.android.presentation.model.BorrowEntity;
+import com.kora.android.presentation.model.DepositEntity;
 import com.kora.android.presentation.model.RequestEntity;
 import com.kora.android.presentation.model.TransactionEntity;
 import com.kora.android.presentation.model.UserEntity;
@@ -40,6 +42,7 @@ import javax.inject.Inject;
 
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Action;
+import io.reactivex.observers.DisposableObserver;
 
 @ConfigPersistent
 public class EnterPinPresenter extends BasePresenter<EnterPinView> {
@@ -55,6 +58,7 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
     private final SendFundLoanUseCase mSendFundLoanUseCase;
     private final CreatePayBackLoanUseCase mCreatePayBackLoanUseCase;
     private final SendPayBackLoanUseCase mSendPayBackLoanUseCase;
+    private final DeleteDepositUseCase mDeleteDepositUseCase;
 
     private ActionType mActionType;
     private UserEntity mReceiver;
@@ -63,6 +67,7 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
     private RequestEntity mRequestEntity;
     private BorrowEntity mBorrowEntity;
     private double mBorrowerValue;
+    private DepositEntity mDepositEntity;
 
     @Inject
     public EnterPinPresenter(final CreateRawTransactionUseCase createRawTransactionUseCase,
@@ -75,7 +80,8 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
                              final CreateFundLoanUseCase createFundLoanUseCase,
                              final SendFundLoanUseCase sendFundLoanUseCase,
                              final CreatePayBackLoanUseCase createPayBackLoanUseCase,
-                             final SendPayBackLoanUseCase sendPayBackLoanUseCase) {
+                             final SendPayBackLoanUseCase sendPayBackLoanUseCase,
+                             final DeleteDepositUseCase deleteDepositUseCase) {
         mCreateRawTransactionUseCase = createRawTransactionUseCase;
         mSendRawTransactionUseCase = sendRawTransactionUseCase;
         mDeleteRequestUseCase = deleteRequestUseCase;
@@ -87,6 +93,7 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         mSendFundLoanUseCase = sendFundLoanUseCase;
         mCreatePayBackLoanUseCase = createPayBackLoanUseCase;
         mSendPayBackLoanUseCase = sendPayBackLoanUseCase;
+        mDeleteDepositUseCase = deleteDepositUseCase;
     }
 
     public ActionType getActionType() {
@@ -145,6 +152,14 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         mBorrowerValue = borrowerValue;
     }
 
+    public DepositEntity getDepositEntity() {
+        return mDepositEntity;
+    }
+
+    public void setDepositEntity(final DepositEntity depositEntity) {
+        mDepositEntity = depositEntity;
+    }
+
     private TransactionType getTransactionTypeByAction(ActionType actionType) {
         switch (actionType) {
             case SHOW_REQUEST:
@@ -168,6 +183,7 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         switch (mActionType) {
             case SEND_MONEY:
             case SHOW_REQUEST:
+            case SHOW_DEPOSIT:
                 mCreateRawTransactionUseCase.setData(
                         mReceiver,
                         mSenderAmount,
@@ -226,10 +242,17 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         @Override
         public void onNext(final List<String> rawTransactions) {
             if (!isViewAttached()) return;
-            if (mActionType.equals(ActionType.SEND_MONEY))
-                startSendRawTransactionTask(rawTransactions);
-            else if (mActionType.equals(ActionType.SHOW_REQUEST))
-                startDeleteRequestTask(rawTransactions);
+            switch (mActionType) {
+                case SEND_MONEY:
+                    startSendRawTransactionTask(rawTransactions);
+                    break;
+                case SHOW_REQUEST:
+                    startDeleteRequestTask(rawTransactions);
+                    break;
+                case SHOW_DEPOSIT:
+                    startDeleteDepositTask(rawTransactions);
+                    break;
+            }
         }
 
 //        @Override
@@ -822,6 +845,62 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         }
     }
 
+    private void startDeleteDepositTask(final List<String> rawTransactions) {
+        mDeleteDepositUseCase.setData(
+                mDepositEntity.getId(),
+                mSenderAmount,
+                mReceiverAmount,
+                rawTransactions);
+        mDeleteDepositUseCase.execute(new DeleteDepositSubscriber());
+    }
+
+    private Action mDeleteDepositAction = new Action() {
+        @Override
+        public void run() throws Exception {
+            mDeleteDepositUseCase.execute(new DeleteDepositSubscriber());
+        }
+    };
+
+    private class DeleteDepositSubscriber extends DefaultInternetSubscriber<Object> {
+
+//        @Override
+//        protected void onStart() {
+//            if (!isViewAttached()) return;
+//            getView().showProgress(true);
+//        }
+
+        @Override
+        public void onNext(@NonNull final Object object) {
+            if (!isViewAttached()) return;
+            getView().showTransactionScreen();
+        }
+
+        @Override
+        public void onComplete() {
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+        }
+
+        @Override
+        public void onError(@NonNull final Throwable throwable) {
+            super.onError(throwable);
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+        }
+
+        @Override
+        public void handleUnprocessableEntity(final ErrorModel errorModel) {
+            if (!isViewAttached()) return;
+            getView().showError(errorModel.getError());
+        }
+
+        @Override
+        public void handleNetworkError(final RetrofitException retrofitException) {
+            if (!isViewAttached()) return;
+            getView().showErrorWithRetry(new RetryAction(mDeleteDepositAction));
+        }
+    }
+
     @Override
     public void onDetachView() {
         mDeleteRequestUseCase.dispose();
@@ -834,5 +913,6 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         mSendFundLoanUseCase.dispose();
         mCreatePayBackLoanUseCase.dispose();
         mSendPayBackLoanUseCase.dispose();
+        mDeleteDepositUseCase.dispose();
     }
 }

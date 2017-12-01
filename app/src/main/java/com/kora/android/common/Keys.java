@@ -8,6 +8,7 @@ public interface Keys {
 
     String CURRENCY_USD = "USD";
     double DEFAULT_USD_BALANCE = 25.00;
+    int DEFAULT_AGENT_RATE = 5;
 
     String ADDRESS_PREFIX = "0x";
     String JSON_FILE_EXTENSION = ".json";
@@ -83,6 +84,11 @@ public interface Keys {
         String BORROW_REQUEST_EXTRA = "com.kora.android.extra_borrow_request";
 
         String LOGOUT_EXTRA = "com.kora.android.extra_logout";
+
+        String COMING_SOON_TYPE = "com.kora.android.coming_soon_type";
+        String REQUEST_SCREEN_TYPE = "com.kora.android.request_screen_type";
+        String GET_AGENTS = "com.kora.android.get_agents";
+        String EXTRA_DEPOSIT_ENTITY = "com.kora.android.extra_deposit_entity";
     }
 
     interface Args {
@@ -109,7 +115,11 @@ public interface Keys {
         String BORROW_LIST = "borrow_list_args";
         String BORROW_TYPE = "borrow_type";
         String BORROWER_VALUE = "borrower_value";
-        String COMING_SOON_TYPE = "coming_soon_type";
+        String DEPOSIT_ENTITY = "deposit_entity_args";
+        String ARG_DEPOSIT_FILTER_MODEL = "deposit_filter_model_arg";
+        String DEPOSIT_LIST = "deposit_list_args";
+        String DEPOSIT_FILTER = "deposit_filter_args";
+        String DEPOSIT_DIRECTION = "deposit_direction_args";
     }
 
     interface Users {

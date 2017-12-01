@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="36dp"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingBottom="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="24dp">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_view_state"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginBottom="12dp"
+                    android:fontFamily="@font/muli_normal"
+                    android:textColor="@color/color_state_positive"
+                    android:textSize="16sp"
+                    android:visibility="gone"
+                    tools:text="In progress" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_marginTop="12dp"
+                    android:id="@+id/text_view_user_role"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/text_view_state"
+                    android:fontFamily="@font/muli_regular"
+                    android:text="@string/deposit_agent_details"
+                    android:textColor="#61000000"
+                    android:textSize="12sp" />
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/image_view_user_avatar"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_below="@+id/text_view_user_role"
+                    android:layout_marginTop="4dp"
+                    tools:src="@drawable/ic_user_default" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_view_user_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/image_view_user_avatar"
+                    android:layout_marginStart="8dp"
+                    android:layout_toEndOf="@+id/image_view_user_avatar"
+                    android:fontFamily="@font/muli_bold"
+                    android:textColor="#3b3d3d"
+                    android:textSize="16sp"
+                    tools:text="User Name" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_view_user_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/text_view_user_name"
+                    android:layout_below="@+id/text_view_user_name"
+                    android:fontFamily="@font/muli_regular"
+                    android:textColor="#696a6b"
+                    android:textSize="14sp"
+                    tools:text="631-270-2352" />
+            </RelativeLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/edit_layout_interest_rate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/muli_regular"
+                app:errorEnabled="true">
+
+                <android.support.design.widget.TextInputEditText
+                    android:enabled="false"
+                    android:id="@+id/edit_text_interest_rate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/muli_regular"
+                    android:hint="@string/deposit_agent_interest_rate"
+                    android:inputType="textMultiLine"
+                    android:textColor="@color/color_edit_text"
+                    android:textSize="16sp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_layout_amount_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="bottom">
+
+                    <com.kora.android.views.currency.CurrencyInputLayout
+                        android:id="@+id/edit_layout_sender_amount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        app:errorEnabled="true">
+
+                        <com.kora.android.views.currency.CurrencyEditText
+                            android:id="@+id/edit_text_sender_amount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/muli_regular"
+                            android:hint="@string/deposit_user_amount"
+                            android:inputType="numberDecimal"
+                            android:maxLength="22"
+                            android:maxLines="1"
+                            android:textColor="@color/color_edit_text"
+                            android:textSize="16sp"
+                            app:allow_negative_values="false"
+                            app:decimal_digits="2"
+                            tools:text="100 USD" />
+                    </com.kora.android.views.currency.CurrencyInputLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="bottom">
+
+                    <com.kora.android.views.currency.CurrencyInputLayout
+                        android:id="@+id/edit_layout_receiver_amount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        app:errorEnabled="true">
+
+                        <com.kora.android.views.currency.CurrencyEditText
+                            android:id="@+id/edit_text_receiver_amount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:fontFamily="@font/muli_regular"
+                            android:hint="@string/deposit_agent_amount"
+                            android:inputType="numberDecimal"
+                            android:maxLines="1"
+                            android:maxLength="22"
+                            android:textColor="@color/color_edit_text"
+                            android:textSize="16sp"
+                            app:allow_negative_values="false"
+                            app:decimal_digits="2"
+                            tools:text="2750 UAH" />
+                    </com.kora.android.views.currency.CurrencyInputLayout>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/text_view_total_interest_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="@font/muli_regular"
+                        android:text="@string/deposit_total_interest"
+                        android:textColor="@color/color_text_grey_2"
+                        android:textSize="16sp" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_view_total_interest"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="@font/muli_semi_bold"
+                        android:textColor="@color/color_text_green"
+                        android:textSize="16sp"
+                        tools:text="5 USD" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp">
+
+                    <TextView
+                        android:id="@+id/text_view_total_amount_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="@font/muli_regular"
+                        android:text="@string/deposit_total_amount"
+                        android:textColor="@color/color_text_grey_2"
+                        android:textSize="16sp" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_view_total_amount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="@font/muli_semi_bold"
+                        android:textColor="#b1b1b1"
+                        android:textSize="16sp"
+                        tools:text="105 USD" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <android.support.v7.widget.AppCompatButton
+                android:layout_marginTop="36dp"
+                android:id="@+id/button_action"
+                style="@style/AppTheme.ActionButton.Blue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0dp" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:layout_marginTop="8dp"
+                android:id="@+id/button_reject"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:fontFamily="@font/muli_bold"
+                android:text="@string/borrow_borrow_disagree"
+                android:textColor="@color/color_button_blue"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

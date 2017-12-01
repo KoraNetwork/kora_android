@@ -17,6 +17,7 @@ import com.kora.android.common.utils.ViewUtils;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.enums.ActionType;
 import com.kora.android.presentation.model.BorrowEntity;
+import com.kora.android.presentation.model.DepositEntity;
 import com.kora.android.presentation.model.RequestEntity;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
@@ -28,6 +29,7 @@ import butterknife.OnClick;
 
 import static com.kora.android.common.Keys.Args.ACTION_TYPE;
 import static com.kora.android.common.Keys.Args.BORROW_ENTITY;
+import static com.kora.android.common.Keys.Args.DEPOSIT_ENTITY;
 import static com.kora.android.common.Keys.Args.RECEIVER_AMOUNT;
 import static com.kora.android.common.Keys.Args.REQUEST_ENTITY;
 import static com.kora.android.common.Keys.Args.BORROWER_VALUE;
@@ -77,6 +79,21 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
         intent.putExtra(RECEIVER_AMOUNT, receiverAmount);
         intent.putExtra(ACTION_TYPE, actionType);
         intent.putExtra(REQUEST_ENTITY, requestEntity);
+        return intent;
+    }
+
+    public static Intent getLaunchIntent(final BaseActivity baseActivity,
+                                         final UserEntity receiver,
+                                         final double senderAmount,
+                                         final double receiverAmount,
+                                         final ActionType actionType,
+                                         final DepositEntity depositEntity) {
+        final Intent intent = new Intent(baseActivity, EnterPinActivity.class);
+        intent.putExtra(USER_ENTITY, receiver);
+        intent.putExtra(SENDER_AMOUNT, senderAmount);
+        intent.putExtra(RECEIVER_AMOUNT, receiverAmount);
+        intent.putExtra(ACTION_TYPE, actionType);
+        intent.putExtra(DEPOSIT_ENTITY, depositEntity);
         return intent;
     }
 
@@ -135,6 +152,8 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
                 getPresenter().setBorrowEntity(bundle.getParcelable(BORROW_ENTITY));
             if (bundle.containsKey(BORROWER_VALUE))
                 getPresenter().setBorrowerValue(bundle.getDouble(BORROWER_VALUE));
+            if (bundle.containsKey(DEPOSIT_ENTITY))
+                getPresenter().setDepositEntity(bundle.getParcelable(DEPOSIT_ENTITY));
         }
         if (getIntent() != null) {
             getPresenter().setReceiver(getIntent().getParcelableExtra(USER_ENTITY));
@@ -144,6 +163,7 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
             getPresenter().setRequestEntity(getIntent().getParcelableExtra(REQUEST_ENTITY));
             getPresenter().setBorrowEntity(getIntent().getParcelableExtra(BORROW_ENTITY));
             getPresenter().setBorrowerValue(getIntent().getDoubleExtra(BORROWER_VALUE, 0));
+            getPresenter().setDepositEntity(getIntent().getParcelableExtra(DEPOSIT_ENTITY));
         }
     }
 
@@ -157,6 +177,7 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
         outState.putParcelable(REQUEST_ENTITY, getPresenter().getRequestEntity());
         outState.putParcelable(BORROW_ENTITY, getPresenter().getBorrowEntity());
         outState.putDouble(BORROWER_VALUE, getPresenter().getBorrowerValue());
+        outState.putParcelable(DEPOSIT_ENTITY, getPresenter().getDepositEntity());
     }
 
     private void initUI() {

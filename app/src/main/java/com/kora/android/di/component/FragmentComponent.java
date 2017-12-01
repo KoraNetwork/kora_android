@@ -4,6 +4,7 @@ import com.kora.android.di.annotation.PerFragment;
 import com.kora.android.di.module.FragmentModule;
 import com.kora.android.presentation.ui.main.fragments.borrow.BorrowMainFragment;
 import com.kora.android.presentation.ui.main.fragments.borrow.fragment.BorrowFragment;
+import com.kora.android.presentation.ui.main.fragments.deposit.DepositFragment;
 import com.kora.android.presentation.ui.main.fragments.home.HomeFragment;
 import com.kora.android.presentation.ui.main.fragments.profile.ProfileFragment;
 import com.kora.android.presentation.ui.main.fragments.request.RequestFragment;
@@ -23,4 +24,5 @@ public interface FragmentComponent {
     void inject(final ProfileFragment profileFragment);
     void inject(final BorrowMainFragment borrowMainFragment);
     void inject(final BorrowFragment fragmentComponent);
+    void inject(DepositFragment depositFragment);
 }

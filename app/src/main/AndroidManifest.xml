@@ -98,7 +98,7 @@
             android:windowSoftInputMode="stateHidden"/>
 
         <activity
-            android:name=".presentation.ui.common.send_to.RequestDetailsActivity"
+            android:name=".presentation.ui.common.send_request.RequestDetailsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.MainTheme"
             android:windowSoftInputMode="stateHidden"/>
@@ -111,6 +111,12 @@
 
         <activity
             android:name=".presentation.ui.coming_soon.ComingSoonActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.MainTheme"
+            android:windowSoftInputMode="stateHidden"/>
+
+        <activity
+            android:name=".presentation.ui.common.deposit_withdraw.DepositDetailsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.MainTheme"
             android:windowSoftInputMode="stateHidden"/>

@@ -76,7 +76,7 @@ public class BorrowMainFragment extends StackFragment<BorrowMainPresenter> imple
     @OnClick(R.id.floating_button_create_borrow)
     public void onClickCreateBorrow() {
         startActivityForResult(
-                GetContactActivity.getLaunchIntent(getBaseActivity(), getString(R.string.borrow_create_request_title)),
+                GetContactActivity.getLaunchIntent(getBaseActivity(), getString(R.string.borrow_create_request_title), false),
                 REQUEST_GET_LENDER);
     }
 

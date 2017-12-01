@@ -675,12 +675,12 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter> i
             case ONGOING:
             case AGREED:
             case PENDING:
-                mTvState.setTextColor(getResources().getColor(R.color.color_borrow_state_positive));
+                mTvState.setTextColor(getResources().getColor(R.color.color_state_positive));
                 break;
             case REJECTED:
             case EXPIRED:
             case OVERDUE:
-                mTvState.setTextColor(getResources().getColor(R.color.color_borrow_state_negative));
+                mTvState.setTextColor(getResources().getColor(R.color.color_state_negative));
                 break;
         }
     }

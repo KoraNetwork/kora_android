@@ -47,7 +47,7 @@ public class UserResponse {
     @JsonField(name = "agent")
     private Boolean mAgent;
     @JsonField(name = "interestRate")
-    private int mInterestRate;
+    private Integer mInterestRate;
 
     public String getId() {
         return mId;
@@ -209,11 +209,11 @@ public class UserResponse {
         this.mAgent = mAgent;
     }
 
-    public int getInterestRate() {
+    public Integer getInterestRate() {
         return mInterestRate;
     }
 
-    public void setInterestRate(int mInterestRate) {
+    public void setInterestRate(Integer mInterestRate) {
         this.mInterestRate = mInterestRate;
     }
 }

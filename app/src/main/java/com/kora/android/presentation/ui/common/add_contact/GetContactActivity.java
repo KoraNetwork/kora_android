@@ -29,6 +29,7 @@ import butterknife.BindView;
 import butterknife.OnTextChanged;
 
 import static com.kora.android.common.Keys.Extras.EXCLUDED_USER_IDS;
+import static com.kora.android.common.Keys.Extras.GET_AGENTS;
 import static com.kora.android.common.Keys.Extras.TITLE;
 
 public class GetContactActivity extends ToolbarActivity<GetContactPresenter> implements GetContactView,
@@ -41,13 +42,18 @@ public class GetContactActivity extends ToolbarActivity<GetContactPresenter> imp
 
     public UserAdapter mUserAdapter;
 
-    public static Intent getLaunchIntent(final BaseActivity baseActivity, final String title) {
+    public static Intent getLaunchIntent(final BaseActivity baseActivity,
+                                         final String title,
+                                         final boolean getAgents) {
         final Intent intent = new Intent(baseActivity, GetContactActivity.class);
         intent.putExtra(TITLE, title);
+        intent.putExtra(GET_AGENTS, getAgents);
         return intent;
     }
 
-    public static Intent getLaunchIntent(final BaseActivity baseActivity, final String title, final List<String> excludedIds) {
+    public static Intent getLaunchIntent(final BaseActivity baseActivity,
+                                         final String title,
+                                         final List<String> excludedIds) {
         final Intent intent = new Intent(baseActivity, GetContactActivity.class);
         intent.putExtra(TITLE, title);
         intent.putStringArrayListExtra(EXCLUDED_USER_IDS, (ArrayList<String>) excludedIds);
@@ -90,6 +96,13 @@ public class GetContactActivity extends ToolbarActivity<GetContactPresenter> imp
     }
 
     private void initArguments(final Bundle bundle) {
+        if (getIntent() != null && getIntent().hasExtra(GET_AGENTS)) {
+            getPresenter().setGetAgents(getIntent().getBooleanExtra(GET_AGENTS, false));
+        }
+        if (bundle != null && bundle.containsKey(GET_AGENTS)) {
+            getPresenter().setGetAgents(bundle.getBoolean(GET_AGENTS));
+        }
+
         if (bundle != null && bundle.containsKey(TITLE)) {
             setTitle(bundle.getString(TITLE));
         }
@@ -100,12 +113,13 @@ public class GetContactActivity extends ToolbarActivity<GetContactPresenter> imp
             setTitle(getIntent().getStringExtra(TITLE));
             getPresenter().setExcluded(getIntent().getStringArrayListExtra(EXCLUDED_USER_IDS));
         }
-
     }
 
     @Override
     protected void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putBoolean(GET_AGENTS, getPresenter().isGetAgents());
+
         outState.putString(TITLE, getTitle().toString());
         outState.putParcelableArrayList(Keys.Args.USER_LIST, (ArrayList<UserEntity>) mUserAdapter.getItems());
         outState.putStringArrayList(EXCLUDED_USER_IDS, (ArrayList<String>) getPresenter().getExcluded());
@@ -129,8 +143,12 @@ public class GetContactActivity extends ToolbarActivity<GetContactPresenter> imp
         }
         if (pair.second != null && pair.second.size() > 0) {
             int size = pair.first == null ? 0 : pair.first.size();
-            if (mUserAdapter.getRawItemsCount() == size)
-                mUserAdapter.addUser(new UserEntity.Section(getString(R.string.add_contact_all_title)));
+            if (mUserAdapter.getRawItemsCount() == size) {
+                if (getPresenter().isGetAgents())
+                    mUserAdapter.addUser(new UserEntity.Section(getString(R.string.add_contact_all_agents_title)));
+                else
+                    mUserAdapter.addUser(new UserEntity.Section(getString(R.string.add_contact_all_contacts_title)));
+            }
             mUserAdapter.addUsers(pair.second);
         }
     }

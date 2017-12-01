@@ -25,7 +25,7 @@ import com.kora.android.presentation.ui.base.adapter.filter.OnFilterListener;
 import com.kora.android.presentation.ui.base.backstack.StackFragment;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
 import com.kora.android.presentation.ui.common.add_contact.GetContactActivity;
-import com.kora.android.presentation.ui.common.send_to.RequestDetailsActivity;
+import com.kora.android.presentation.ui.common.send_request.RequestDetailsActivity;
 import com.kora.android.presentation.ui.main.fragments.request.adapter.RequestAdapter;
 import com.kora.android.presentation.ui.main.fragments.request.filter.RequestFilterDialog;
 import com.kora.android.presentation.ui.main.fragments.request.filter.RequestFilterModel;
@@ -118,7 +118,9 @@ public class RequestFragment extends StackFragment<RequestPresenter> implements 
 
     @OnClick(R.id.floating_button_create_request)
     public void onClickCreateRequest() {
-        startActivityForResult(GetContactActivity.getLaunchIntent(getBaseActivity(), getString(R.string.request_money_title)), REQUEST_CREATE);
+        startActivityForResult(
+                GetContactActivity.getLaunchIntent(getBaseActivity(), getString(R.string.request_money_title), false),
+                REQUEST_CREATE);
     }
 
     @Override
@@ -189,10 +191,12 @@ public class RequestFragment extends StackFragment<RequestPresenter> implements 
                 break;
 
             case REQUEST_CREATE:
-            if (action == Action.CREATE) {
-                UserEntity user = data.getParcelableExtra(Keys.Extras.EXTRA_USER);
-                startActivityForResult(RequestDetailsActivity.getLaunchIntent(getBaseActivity(), user, ActionType.CREATE_REQUEST), REQUEST_DETAILS);
-            }
+                if (action == Action.CREATE) {
+                    UserEntity user = data.getParcelableExtra(Keys.Extras.EXTRA_USER);
+                    startActivityForResult(
+                            RequestDetailsActivity.getLaunchIntent(getBaseActivity(), user, ActionType.CREATE_REQUEST),
+                            REQUEST_DETAILS);
+                }
                 break;
         }
     }
@@ -217,6 +221,7 @@ public class RequestFragment extends StackFragment<RequestPresenter> implements 
     @Override
     public void onFilterChanged(RequestFilterModel requestFilterModel) {
         mRequestAdapter.clearAll();
+        mScrollListener.resetParams();
         getPresenter().retrieveRequestList(requestFilterModel, 0);
     }
 }
