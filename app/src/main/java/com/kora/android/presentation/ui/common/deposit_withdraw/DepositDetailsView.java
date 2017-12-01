@@ -17,6 +17,8 @@ public interface DepositDetailsView extends BaseView<DepositDetailsPresenter> {
 
     void emptyReceiverAmountError();
 
+    void showIncorrectInterestRate();
+
     void openPinScreen(final UserEntity receiver,
                        final double fromAmount,
                        final double toAmount,

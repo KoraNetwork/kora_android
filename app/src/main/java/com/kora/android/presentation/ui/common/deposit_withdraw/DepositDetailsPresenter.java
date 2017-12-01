@@ -1,5 +1,6 @@
 package com.kora.android.presentation.ui.common.deposit_withdraw;
 
+import com.kora.android.common.utils.StringUtils;
 import com.kora.android.common.utils.Validator;
 import com.kora.android.data.network.config.ErrorModel;
 import com.kora.android.data.network.exception.RetrofitException;
@@ -15,13 +16,11 @@ import com.kora.android.presentation.model.DepositEntity;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
-import com.kora.android.presentation.ui.common.send_request.RequestDetailsPresenter;
 
 import javax.inject.Inject;
 
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Action;
-import io.reactivex.observers.DisposableObserver;
 
 @ConfigPersistent
 public class DepositDetailsPresenter extends BasePresenter<DepositDetailsView> {
@@ -152,7 +151,7 @@ public class DepositDetailsPresenter extends BasePresenter<DepositDetailsView> {
         }
     }
 
-    private boolean validateForm(double senderAmount, double receiverAmount) {
+    private boolean validateForm(double senderAmount, double receiverAmount, String interestRate) {
         if (!Validator.isValidPrice(senderAmount)) {
             if (!isViewAttached()) return false;
             getView().emptySenderAmountError();
@@ -163,17 +162,25 @@ public class DepositDetailsPresenter extends BasePresenter<DepositDetailsView> {
             getView().emptyReceiverAmountError();
             return false;
         }
+        if (interestRate == null || interestRate.isEmpty()) {
+            getView().showIncorrectInterestRate();
+            return false;
+        }
+        if (!StringUtils.isInterestRateValid(interestRate)) {
+            getView().showIncorrectInterestRate();
+            return false;
+        }
         return true;
     }
 
-    public void sendDeposit(final double senderAmount, final double receiverAmount, final int interestRate) {
-        if (!validateForm(senderAmount, receiverAmount)) return;
+    public void sendDeposit(final double senderAmount, final double receiverAmount, final String interestRate) {
+        if (!validateForm(senderAmount, receiverAmount, interestRate)) return;
 
         mAddDepositUseCase.setData(
                 mReceiver.getId(),
                 senderAmount,
                 receiverAmount,
-                interestRate);
+                Integer.parseInt(interestRate));
         mAddDepositUseCase.execute(new AddDepositSubscriber());
     }
 
@@ -225,12 +232,7 @@ public class DepositDetailsPresenter extends BasePresenter<DepositDetailsView> {
     public void onConfirmClicked() {
         if (mDepositEntity == null) return;
         if (!isViewAttached()) return;
-
-//        if (mDepositEntity.getDirection().equals(Direction.TO))
-//            getView().openPinScreen(mDepositEntity.getFrom(), mDepositEntity.getToAmount(), mDepositEntity.getFromAmount(), mDepositEntity);
-//        else if (mDepositEntity.getDirection().equals(Direction.FROM))
-
-            getView().openPinScreen(mDepositEntity.getFrom(), mDepositEntity.getToAmount(), mDepositEntity.getFromAmount(), mDepositEntity);
+        getView().openPinScreen(mDepositEntity.getFrom(), mDepositEntity.getToAmount(), mDepositEntity.getFromAmount(), mDepositEntity);
     }
 
     public void onRejectClicked() {

@@ -390,6 +390,7 @@
     <string name="deposit_empty_receiver_amount_error">Receiver amount should be not empty</string>
     <string name="deposit_reject_success">Deposit is rejected</string>
     <string name="deposit_send_success">Deposit is sent</string>
+    <string name="deposit_incorrect_interest_rate">Interest rate must be from 0 to 10</string>
 
     <!-- Deposit filter -->
     <string name="deposit_filter_state">State:</string>

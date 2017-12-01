@@ -105,4 +105,13 @@ public class StringUtils {
     public static boolean isInterestRateValid(final int interestRate) {
         return interestRate >= 0 && interestRate <= 10;
     }
+
+    public static boolean isInterestRateValid(final String interestRate) {
+       try {
+           final int intInterestRate = Integer.parseInt(interestRate);
+           return intInterestRate >= 0 && intInterestRate <= 10;
+       } catch (Exception e) {
+           return false;
+       }
+    }
 }

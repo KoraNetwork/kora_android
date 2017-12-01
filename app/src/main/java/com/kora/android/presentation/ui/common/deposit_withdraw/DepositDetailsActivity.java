@@ -69,6 +69,8 @@ public class DepositDetailsActivity extends ToolbarActivity<DepositDetailsPresen
     @BindView(R.id.image_view_user_avatar)
     ImageView mIvUserAvatar;
 
+    @BindView(R.id.edit_layout_interest_rate)
+    TextInputLayout mElInterestRate;
     @BindView(R.id.edit_text_interest_rate)
     EditText mEtInterestRate;
 
@@ -177,6 +179,7 @@ public class DepositDetailsActivity extends ToolbarActivity<DepositDetailsPresen
                 setTitle(R.string.deposit_user_title);
                 mBtnAction.setText(R.string.deposit_send_to_agent);
                 mEtInterestRate.setText(String.valueOf(getPresenter().getReceiver().getInterestRate()));
+                mEtInterestRate.setEnabled(true);
             case SHOW_DEPOSIT:
                 final DepositEntity depositEntity = getPresenter().getDepositEntity();
                 if (depositEntity == null) return;
@@ -223,22 +226,10 @@ public class DepositDetailsActivity extends ToolbarActivity<DepositDetailsPresen
                     case FROM:
                         setTitle(getString(R.string.deposit_user_title));
 
-//                        mEtSenderAmount.setText(String.format(Locale.ENGLISH, "%1$.2f", depositEntity.getFromAmount()));
-//                        mEtSenderAmount.setCurrency(depositEntity.getFrom().getCurrency());
-//
-//                        mEtReceiverAmount.setText(String.format(Locale.ENGLISH, "%1$.2f", depositEntity.getToAmount()));
-//                        mEtReceiverAmount.setCurrency(depositEntity.getTo().getCurrency());
-
                         mBtnAction.setVisibility(View.GONE);
                         break;
                     case TO:
                         setTitle(getString(R.string.deposit_agent_title));
-
-//                        mEtSenderAmount.setText(String.format(Locale.ENGLISH, "%1$.2f", depositEntity.getToAmount()));
-//                        mEtSenderAmount.setCurrency(depositEntity.getTo().getCurrency());
-//
-//                        mEtReceiverAmount.setText(String.format(Locale.ENGLISH, "%1$.2f", depositEntity.getFromAmount()));
-//                        mEtReceiverAmount.setCurrency(depositEntity.getFrom().getCurrency());
 
                         if (depositEntity.getState() == DepositState.REJECTED) {
                             mBtnAction.setVisibility(View.GONE);
@@ -396,6 +387,11 @@ public class DepositDetailsActivity extends ToolbarActivity<DepositDetailsPresen
     }
 
     @Override
+    public void showIncorrectInterestRate() {
+        mElInterestRate.setError(getString(R.string.deposit_incorrect_interest_rate));
+    }
+
+    @Override
     public void openPinScreen(final UserEntity receiver,
                               final double fromAmount,
                               final double toAmount,
@@ -432,9 +428,15 @@ public class DepositDetailsActivity extends ToolbarActivity<DepositDetailsPresen
 
     private Handler mTimer = new Handler();
 
+    @OnTextChanged(R.id.edit_text_interest_rate)
+    public void onInterestRateChanged() {
+        mElInterestRate.setError(null);
+
+        calculateTotals();
+    }
+
     @OnTextChanged(R.id.edit_text_sender_amount)
     public void onAmountChanged() {
-
         if (getPresenter().getDepositEntity() != null)
             return;
 
@@ -470,7 +472,7 @@ public class DepositDetailsActivity extends ToolbarActivity<DepositDetailsPresen
                 getPresenter().sendDeposit(
                         mEtSenderAmount.getAmount(),
                         mEtReceiverAmount.getAmount(),
-                        Integer.parseInt(mEtInterestRate.getText().toString().trim()));
+                        mEtInterestRate.getText().toString().trim());
                 break;
             case SHOW_DEPOSIT:
                 getPresenter().onConfirmClicked();
