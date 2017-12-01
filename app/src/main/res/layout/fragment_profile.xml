@@ -256,15 +256,14 @@
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp">
+                    android:layout_height="wrap_content">
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/text_agent"
-                        android:layout_width="wrap_content"
+                        style="@style/Widget.AppCompat.Button.Borderless"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerVertical="true"
+                        android:enabled="false"
                         android:fontFamily="@font/muli_normal"
                         android:gravity="start|center_vertical"
                         android:paddingBottom="8dp"
@@ -280,12 +279,13 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
+                        android:layout_marginEnd="8dp"
                         android:fontFamily="@font/muli_bold"
                         android:gravity="start|center_vertical"
                         android:text="@string/profile_agent_off"
                         android:textColor="@color/color_agent_off"
                         android:textSize="16sp"
-                        android:visibility="visible"/>
+                        android:visibility="visible" />
 
                     <android.support.v7.widget.SwitchCompat
                         android:id="@+id/switch_agent"
@@ -293,6 +293,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
+                        android:layout_marginEnd="8dp"
                         android:checked="false"
                         android:visibility="gone" />
                 </RelativeLayout>

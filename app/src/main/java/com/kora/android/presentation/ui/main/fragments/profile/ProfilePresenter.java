@@ -42,7 +42,7 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
     private UserEntity mUpdatedUserEntity = new UserEntity();
     private UserEntity mUserEntity = new UserEntity();
 
-    private int mOriginalInterestRate;
+    private Integer mOriginalInterestRate = null;
 
     @Inject
     public ProfilePresenter(final GetUserDataUseCase getUserDataUseCase,
@@ -123,13 +123,18 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
             getView().showIncorrectDate();
             return;
         }
+
+        if (mUpdatedUserEntity.isAgent() == null) {
+            mUpdatedUserEntity.setAgent(mUserEntity.isAgent());
+        }
         if (mUpdatedUserEntity.isAgent()) {
             if (!StringUtils.isInterestRateValid(mUpdatedUserEntity.getInterestRate())) {
                 getView().showIncorrectInterestRate();
                 return;
             }
         } else {
-            mUpdatedUserEntity.setInterestRate(mOriginalInterestRate);
+            if (mOriginalInterestRate != null)
+                mUpdatedUserEntity.setInterestRate(mOriginalInterestRate);
         }
 
         mUpdateUserUseCase.setData(mUpdatedUserEntity);
@@ -203,7 +208,7 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
             if (userEntity.getInterestRate() != null)
                 mOriginalInterestRate = userEntity.getInterestRate();
             else
-                mOriginalInterestRate = 0;
+                mOriginalInterestRate = null;
 
             if (!isViewAttached()) return;
             getView().retrieveUserData(userEntity);
@@ -250,7 +255,7 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
             if (userEntity.getInterestRate() != null)
                 mOriginalInterestRate = userEntity.getInterestRate();
             else
-                mOriginalInterestRate = 0;
+                mOriginalInterestRate = null;
 
             if (!isViewAttached()) return;
             getView().retrieveUserData(userEntity);

@@ -88,7 +88,8 @@ public class UserMapper {
                         map.put("countryCode", createPartFromString(model.getCountryCode()));
                     if (model.isAgent() != null)
                         map.put("agent", createPartFromString(Boolean.toString(model.isAgent())));
-                    map.put("interestRate", createPartFromString(Integer.toString(model.getInterestRate())));
+                    if (model.getInterestRate() != null)
+                        map.put("interestRate", createPartFromString(Integer.toString(model.getInterestRate())));
                     return map;
                 });
     }

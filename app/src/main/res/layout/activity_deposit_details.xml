@@ -44,6 +44,7 @@
                     tools:text="In progress" />
 
                 <android.support.v7.widget.AppCompatTextView
+                    android:layout_marginStart="4dp"
                     android:layout_marginTop="12dp"
                     android:id="@+id/text_view_user_role"
                     android:layout_width="wrap_content"
@@ -59,7 +60,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_below="@+id/text_view_user_role"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="6dp"
                     tools:src="@drawable/ic_user_default" />
 
                 <android.support.v7.widget.AppCompatTextView
