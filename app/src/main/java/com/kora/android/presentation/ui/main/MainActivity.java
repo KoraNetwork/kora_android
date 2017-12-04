@@ -9,6 +9,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -21,7 +22,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.kora.android.R;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.enums.DepositWithdrawRole;
-import com.kora.android.presentation.enums.Direction;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.service.wallet.CreateWalletsService;
 import com.kora.android.presentation.ui.base.backstack.BackStackActivity;
@@ -56,9 +56,13 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
     public static final int TAB_TRANSACTIONS_HISTORY_POSITION = 6;
     public static final int TAB_USER_PROFILE_POSITION = 7;
     public static final int TAB_SEND_A_FEEDBACK_POSITION = 8;
-    public static final int TAB_AGENT_DEPOSIT_POSITION = 9;
-    public static final int TAB_AGENT_WITHDRAW_POSITION = 10;
-    public static final int TAB_LOG_OUT = 11;
+    public static final int HEADER_AGENT_FUNCTION_POSITION = 9;
+    public static final int TAB_LOG_OUT = 10;
+
+    public static final int TAB_AGENT_DEPOSIT_POSITION = 11;
+    public static final int TAB_AGENT_WITHDRAW_POSITION = 12;
+    public static final int TAB_AGENT_DEPOSIT_SUB_MENU_POSITION = 0;
+    public static final int TAB_AGENT_WITHDRAW_SUB_MENU_POSITION = 1;
 
     @BindView(R.id.root_view) CoordinatorLayout mRootView;
     @BindView(R.id.content_layout) LinearLayout mContentLayout;
@@ -67,9 +71,9 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
     @BindView(R.id.left_nav_view_base) NavigationView mNavigationViewBase;
     @BindView(R.id.frame_layout) FrameLayout mFrameLayout;
 
-    ImageView mUserAvatar;
-    TextView mUserName;
-    TextView mUserEmail;
+    private ImageView mUserAvatar;
+    private TextView mUserName;
+    private TextView mUserEmail;
 
     private int mSelectedItemPosition = TAB_HOME_POSITION;
     private int mNotificationsCount = 0;
@@ -276,6 +280,10 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
         }
 
         mNavigationView.getMenu().setGroupVisible(R.id.nav_group_agent, userEntity.isAgent());
+        if (!userEntity.isAgent()) {
+            getNavigator().clearBackStack(TAB_AGENT_DEPOSIT_POSITION);
+            getNavigator().clearBackStack(TAB_AGENT_WITHDRAW_POSITION);
+        }
 
         Glide.with(this)
                 .load(API_BASE_URL + userEntity.getAvatar())
@@ -293,9 +301,43 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
 
     @Override
     public void selectHostById(final int hostId) {
-        final MenuItem item = mNavigationView.getMenu().getItem(hostId);
+        unCheckAllMenuItems(mNavigationView.getMenu());
+
+        MenuItem item;
+        switch (hostId) {
+            case TAB_AGENT_DEPOSIT_POSITION:
+                item = getAgentSubMenuItem(TAB_AGENT_DEPOSIT_SUB_MENU_POSITION);
+                mSelectedItemPosition = TAB_AGENT_DEPOSIT_POSITION;
+                break;
+            case TAB_AGENT_WITHDRAW_POSITION:
+                item = getAgentSubMenuItem(TAB_AGENT_WITHDRAW_SUB_MENU_POSITION);
+                mSelectedItemPosition = TAB_AGENT_WITHDRAW_POSITION;
+                break;
+            default:
+                item = mNavigationView.getMenu().getItem(hostId);
+                mSelectedItemPosition = hostId;
+                break;
+        }
         item.setChecked(true);
-        mSelectedItemPosition = hostId;
+    }
+
+    private void unCheckAllMenuItems(@NonNull final Menu menu) {
+        for (int i = 0; i < menu.size(); i++) {
+            final MenuItem item = menu.getItem(i);
+            if (item.hasSubMenu()) {
+                unCheckAllMenuItems(item.getSubMenu());
+            } else {
+                item.setChecked(false);
+            }
+        }
+    }
+
+    private MenuItem getAgentSubMenuItem(final int subMenuItemPosition) {
+        return mNavigationView
+                .getMenu()
+                .getItem(HEADER_AGENT_FUNCTION_POSITION)
+                .getSubMenu()
+                .getItem(subMenuItemPosition);
     }
 
     public DrawerLayout getDrawerLayout() {

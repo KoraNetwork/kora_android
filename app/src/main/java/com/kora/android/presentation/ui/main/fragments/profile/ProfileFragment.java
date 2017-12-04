@@ -408,13 +408,15 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
 
     @OnCheckedChanged(R.id.switch_agent)
     public void OnCheckedChangedSwitchAgent(boolean isChecked) {
-        if (isChecked) {
-            getPresenter().setAgent(true);
-            mElInterestRate.setVisibility(View.VISIBLE);
-            ViewUtils.scrollToView(mSvContainer, mLlContainer, mElInterestRate);
-        } else {
-            getPresenter().setAgent(false);
-            mElInterestRate.setVisibility(View.GONE);
+        if (mViewMode == EDIT_MODE) {
+            if (isChecked) {
+                getPresenter().setAgent(true);
+                mElInterestRate.setVisibility(View.VISIBLE);
+                ViewUtils.scrollToView(mSvContainer, mLlContainer, mElInterestRate);
+            } else {
+                getPresenter().setAgent(false);
+                mElInterestRate.setVisibility(View.GONE);
+            }
         }
     }
 

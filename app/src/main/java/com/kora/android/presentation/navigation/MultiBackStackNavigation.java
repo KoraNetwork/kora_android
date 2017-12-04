@@ -7,6 +7,7 @@ import com.kora.android.presentation.ui.base.view.BaseFragment;
 import com.kora.android.presentation.ui.base.view.BaseView;
 
 public interface MultiBackStackNavigation extends Navigation {
+
     int NO_HOST_ID = -1;
 
     void restoreState(final Bundle savedState);
@@ -26,9 +27,9 @@ public interface MultiBackStackNavigation extends Navigation {
     @Nullable
     BaseFragment getFragmentByHostId(final int hostId);
 
-
     boolean handleBack(final BaseView baseView);
 
-    void destroy();
+    boolean clearBackStack(final int hostId);
 
+    void destroy();
 }

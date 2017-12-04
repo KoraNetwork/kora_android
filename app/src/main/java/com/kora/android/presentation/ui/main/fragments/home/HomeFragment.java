@@ -15,12 +15,14 @@ import com.bumptech.glide.Glide;
 import com.kora.android.R;
 import com.kora.android.di.component.FragmentComponent;
 import com.kora.android.presentation.enums.ComingSoonType;
+import com.kora.android.presentation.enums.DepositWithdrawRole;
 import com.kora.android.presentation.model.TransactionEntity;
 import com.kora.android.presentation.ui.adapter.TransactionAdapter;
 import com.kora.android.presentation.ui.base.backstack.StackFragment;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
 import com.kora.android.presentation.ui.coming_soon.ComingSoonActivity;
 import com.kora.android.presentation.ui.main.MainActivity;
+import com.kora.android.presentation.ui.main.fragments.deposit_withdraw.DepositWithdrawFragment;
 import com.kora.android.presentation.ui.main.fragments.transactions.TransactionsFragment;
 import com.kora.android.views.DividerItemDecoration;
 
@@ -130,7 +132,9 @@ public class HomeFragment extends StackFragment<HomePresenter> implements HomeVi
 
     @OnClick(R.id.card_view_show_all_transactions)
     public void onClickShowTransactions() {
-        getNavigator().showFragment(TransactionsFragment.getNewInstance(), MainActivity.TAB_TRANSACTIONS_HISTORY_POSITION);
+        getNavigator().showFragment(
+                TransactionsFragment.getNewInstance(),
+                MainActivity.TAB_TRANSACTIONS_HISTORY_POSITION);
         selectHostById(MainActivity.TAB_TRANSACTIONS_HISTORY_POSITION);
     }
 
@@ -159,5 +163,21 @@ public class HomeFragment extends StackFragment<HomePresenter> implements HomeVi
                 startActivity(ComingSoonActivity.getLaunchIntent(getBaseActivity(), ComingSoonType.COOPERATIVE));
                 break;
         }
+    }
+
+    @OnClick(R.id.card_view_deposit)
+    public void onClickDeposit() {
+        getNavigator().showFragment(
+                DepositWithdrawFragment.getNewInstance(DepositWithdrawRole.DEPOSIT_USER),
+                MainActivity.TAB_DEPOSIT_POSITION);
+        selectHostById(MainActivity.TAB_DEPOSIT_POSITION);
+    }
+
+    @OnClick(R.id.card_view_withdraw)
+    public void onClickWithdraw() {
+        getNavigator().showFragment(
+                DepositWithdrawFragment.getNewInstance(DepositWithdrawRole.WITHDRAW_USER),
+                MainActivity.TAB_WITHDRAWAL_POSITION);
+        selectHostById(MainActivity.TAB_WITHDRAWAL_POSITION);
     }
 }

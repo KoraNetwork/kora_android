@@ -105,7 +105,8 @@ public class MultiBackStackNavigationImpl implements MultiBackStackNavigation {
     /**
      * @return false if back stack is missing.
      */
-    protected boolean clearBackStack(final int hostId) {
+    @Override
+    public boolean clearBackStack(final int hostId) {
         return mBackStackManager.clear(hostId);
     }
 
@@ -179,7 +180,7 @@ public class MultiBackStackNavigationImpl implements MultiBackStackNavigation {
      */
     @Override
     public boolean handleBack(final BaseView baseView) {
-        final Pair<Integer, Fragment> pair = popFragmentFromBackStack();
+         final Pair<Integer, Fragment> pair = popFragmentFromBackStack();
         if (pair != null) {
             backTo(pair.first, pair.second);
             return true;

@@ -113,7 +113,7 @@ public abstract class StackFragment<P extends BasePresenter> extends BaseFragmen
     }
 
     public MultiBackStackNavigation getNavigator() {
-        return ((BackStackActivity) getActivity()).getNavigator();
+        return ((BackStackActivity) getBaseActivity()).getNavigator();
     }
 
     public void selectHostById(final int tabId) {
