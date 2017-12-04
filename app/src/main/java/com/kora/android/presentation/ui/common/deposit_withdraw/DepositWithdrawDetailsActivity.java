@@ -255,7 +255,6 @@ public class DepositWithdrawDetailsActivity extends ToolbarActivity<DepositWithd
     private void setupInterestRate() {
         switch (getPresenter().getActionType()) {
             case CREATE_DEPOSIT:
-            case CREATE_WITHDRAW:
                 mEtInterestRate.setText(String.valueOf(getPresenter().getReceiver().getInterestRate()));
                 mEtInterestRate.setEnabled(true);
                 break;
@@ -407,6 +406,11 @@ public class DepositWithdrawDetailsActivity extends ToolbarActivity<DepositWithd
                         mEtSenderAmount.setCompoundDrawablePadding(ViewUtils.convertDpToPixel(12));
                     }
                 });
+
+        if (getPresenter().getActionType() == ActionType.CREATE_WITHDRAW) {
+            mEtInterestRate.setText(String.valueOf(sender.getInterestRate()));
+            mEtInterestRate.setEnabled(true);
+        }
     }
 
     public void retrieveReceiver(final UserEntity receiver) {
