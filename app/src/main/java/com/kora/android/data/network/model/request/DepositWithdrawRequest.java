@@ -4,7 +4,7 @@ import com.bluelinelabs.logansquare.annotation.JsonField;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
 
 @JsonObject
-public class DepositRequest {
+public class DepositWithdrawRequest {
 
     @JsonField(name = "to")
     private String mTo;
@@ -15,22 +15,22 @@ public class DepositRequest {
     @JsonField(name = "interestRate")
     private int mInterestRate;
 
-    public DepositRequest addTo(final String to) {
+    public DepositWithdrawRequest addTo(final String to) {
         mTo = to;
         return this;
     }
 
-    public DepositRequest addFromAmount(final double fromAmount) {
+    public DepositWithdrawRequest addFromAmount(final double fromAmount) {
         mFromAmount = fromAmount;
         return this;
     }
 
-    public DepositRequest addToAmount(final double toAmount) {
+    public DepositWithdrawRequest addToAmount(final double toAmount) {
         mToAmount = toAmount;
         return this;
     }
 
-    public DepositRequest addInterestRate(final int interestRate) {
+    public DepositWithdrawRequest addInterestRate(final int interestRate) {
         mInterestRate = interestRate;
         return this;
     }

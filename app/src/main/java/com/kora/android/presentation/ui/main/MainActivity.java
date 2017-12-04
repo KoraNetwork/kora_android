@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.kora.android.R;
 import com.kora.android.di.component.ActivityComponent;
+import com.kora.android.presentation.enums.DepositWithdrawRole;
 import com.kora.android.presentation.enums.Direction;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.service.wallet.CreateWalletsService;
@@ -29,7 +30,7 @@ import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
 import com.kora.android.presentation.ui.login.LoginActivity;
 import com.kora.android.presentation.ui.main.fragments.borrow.BorrowMainFragment;
-import com.kora.android.presentation.ui.main.fragments.deposit.DepositFragment;
+import com.kora.android.presentation.ui.main.fragments.deposit_withdraw.DepositWithdrawFragment;
 import com.kora.android.presentation.ui.main.fragments.home.HomeFragment;
 import com.kora.android.presentation.ui.main.fragments.profile.ProfileFragment;
 import com.kora.android.presentation.ui.main.fragments.request.RequestFragment;
@@ -154,9 +155,9 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
             case TAB_BORROW_MONEY_POSITION:
                 return BorrowMainFragment.getNewInstance();
             case TAB_DEPOSIT_POSITION:
-                return DepositFragment.getNewInstance(Direction.FROM);
+                return DepositWithdrawFragment.getNewInstance(DepositWithdrawRole.DEPOSIT_USER);
             case TAB_WITHDRAWAL_POSITION:
-                return TransactionsFragment.getNewInstance();
+                return DepositWithdrawFragment.getNewInstance(DepositWithdrawRole.WITHDRAW_USER);
             case TAB_TRANSACTIONS_HISTORY_POSITION:
                 return TransactionsFragment.getNewInstance();
             case TAB_USER_PROFILE_POSITION:
@@ -164,9 +165,9 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
             case TAB_SEND_A_FEEDBACK_POSITION:
                 return TransactionsFragment.getNewInstance();
             case TAB_AGENT_DEPOSIT_POSITION:
-                return DepositFragment.getNewInstance(Direction.TO);
+                return DepositWithdrawFragment.getNewInstance(DepositWithdrawRole.DEPOSIT_AGENT);
             case TAB_AGENT_WITHDRAW_POSITION:
-                return TransactionsFragment.getNewInstance();
+                return DepositWithdrawFragment.getNewInstance(DepositWithdrawRole.WITHDRAW_AGENT);
 
             default:
                 throw new IllegalArgumentException("No such tab");

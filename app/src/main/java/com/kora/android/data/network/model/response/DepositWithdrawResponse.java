@@ -5,14 +5,13 @@ import com.bluelinelabs.logansquare.annotation.JsonObject;
 import com.kora.android.data.network.model.converter.DateTypeCustomConverter;
 import com.kora.android.data.network.model.converter.DepositStateConverter;
 import com.kora.android.data.network.model.converter.DirectionTypeConverter;
-import com.kora.android.presentation.enums.DepositState;
+import com.kora.android.presentation.enums.DepositWithdrawState;
 import com.kora.android.presentation.enums.Direction;
-import com.kora.android.presentation.enums.RequestState;
 
 import java.util.Date;
 
 @JsonObject
-public class DepositResponse {
+public class DepositWithdrawResponse {
 
     @JsonField(name = "id")
     private String mId;
@@ -27,7 +26,7 @@ public class DepositResponse {
     @JsonField(name = "interestRate")
     private int mInterestRate;
     @JsonField(name = "state", typeConverter = DepositStateConverter.class)
-    private DepositState mState;
+    private DepositWithdrawState mState;
     @JsonField(name = "createdAt", typeConverter = DateTypeCustomConverter.class)
     private Date mCreatedAt;
     @JsonField(name = "updatedAt", typeConverter = DateTypeCustomConverter.class)
@@ -83,11 +82,11 @@ public class DepositResponse {
         this.mToAmount = mToAmount;
     }
 
-    public DepositState getState() {
+    public DepositWithdrawState getState() {
         return mState;
     }
 
-    public void setState(DepositState mState) {
+    public void setState(DepositWithdrawState mState) {
         this.mState = mState;
     }
 

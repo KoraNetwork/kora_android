@@ -1,16 +1,16 @@
 package com.kora.android.data.network.model.converter;
 
 import com.bluelinelabs.logansquare.typeconverters.StringBasedTypeConverter;
-import com.kora.android.presentation.enums.DepositState;
+import com.kora.android.presentation.enums.DepositWithdrawState;
 
-public class DepositStateConverter extends StringBasedTypeConverter<DepositState> {
+public class DepositStateConverter extends StringBasedTypeConverter<DepositWithdrawState> {
     @Override
-    public DepositState getFromString(String string) {
-        return Enum.valueOf(DepositState.class, string.toUpperCase());
+    public DepositWithdrawState getFromString(String string) {
+        return Enum.valueOf(DepositWithdrawState.class, string.toUpperCase());
     }
 
     @Override
-    public String convertToString(DepositState depositState) {
-        return depositState.name().toLowerCase();
+    public String convertToString(DepositWithdrawState depositWithdrawState) {
+        return depositWithdrawState.name().toLowerCase();
     }
 }

@@ -119,7 +119,7 @@ public interface Keys {
         String ARG_DEPOSIT_FILTER_MODEL = "deposit_filter_model_arg";
         String DEPOSIT_LIST = "deposit_list_args";
         String DEPOSIT_FILTER = "deposit_filter_args";
-        String DEPOSIT_DIRECTION = "deposit_direction_args";
+        String DEPOSIT_WITHDRAW_ROLE = "deposit_direction_args";
     }
 
     interface Users {

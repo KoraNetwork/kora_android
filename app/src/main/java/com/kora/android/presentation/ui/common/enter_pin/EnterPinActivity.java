@@ -17,7 +17,7 @@ import com.kora.android.common.utils.ViewUtils;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.enums.ActionType;
 import com.kora.android.presentation.model.BorrowEntity;
-import com.kora.android.presentation.model.DepositEntity;
+import com.kora.android.presentation.model.DepositWithdrawEntity;
 import com.kora.android.presentation.model.RequestEntity;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
@@ -87,13 +87,13 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
                                          final double senderAmount,
                                          final double receiverAmount,
                                          final ActionType actionType,
-                                         final DepositEntity depositEntity) {
+                                         final DepositWithdrawEntity depositWithdrawEntity) {
         final Intent intent = new Intent(baseActivity, EnterPinActivity.class);
         intent.putExtra(USER_ENTITY, receiver);
         intent.putExtra(SENDER_AMOUNT, senderAmount);
         intent.putExtra(RECEIVER_AMOUNT, receiverAmount);
         intent.putExtra(ACTION_TYPE, actionType);
-        intent.putExtra(DEPOSIT_ENTITY, depositEntity);
+        intent.putExtra(DEPOSIT_ENTITY, depositWithdrawEntity);
         return intent;
     }
 

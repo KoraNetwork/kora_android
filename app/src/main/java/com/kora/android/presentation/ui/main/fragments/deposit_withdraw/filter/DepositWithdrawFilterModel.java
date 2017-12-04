@@ -1,39 +1,39 @@
-package com.kora.android.presentation.ui.main.fragments.deposit.filter;
+package com.kora.android.presentation.ui.main.fragments.deposit_withdraw.filter;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.kora.android.presentation.enums.DepositState;
+import com.kora.android.presentation.enums.DepositWithdrawState;
 import com.kora.android.presentation.enums.Direction;
 import com.kora.android.presentation.ui.base.adapter.filter.FilterModel;
 
-public class DepositFilterModel extends FilterModel implements Parcelable {
+public class DepositWithdrawFilterModel extends FilterModel implements Parcelable {
 
     private Direction mDirection;
-    private DepositState mState;
+    private DepositWithdrawState mState;
 
-    public DepositFilterModel() {
+    public DepositWithdrawFilterModel() {
 
     }
 
-    protected DepositFilterModel(final Parcel in) {
+    protected DepositWithdrawFilterModel(final Parcel in) {
         String s = in.readString();
         if (!s.equals(""))
             mDirection = Direction.valueOf(s);
         s = in.readString();
         if (!s.equals(""))
-            mState = DepositState.valueOf(s);
+            mState = DepositWithdrawState.valueOf(s);
     }
 
-    public static final Creator<DepositFilterModel> CREATOR = new Creator<DepositFilterModel>() {
+    public static final Creator<DepositWithdrawFilterModel> CREATOR = new Creator<DepositWithdrawFilterModel>() {
         @Override
-        public DepositFilterModel createFromParcel(Parcel in) {
-            return new DepositFilterModel(in);
+        public DepositWithdrawFilterModel createFromParcel(Parcel in) {
+            return new DepositWithdrawFilterModel(in);
         }
 
         @Override
-        public DepositFilterModel[] newArray(int size) {
-            return new DepositFilterModel[size];
+        public DepositWithdrawFilterModel[] newArray(int size) {
+            return new DepositWithdrawFilterModel[size];
         }
     };
 
@@ -45,11 +45,11 @@ public class DepositFilterModel extends FilterModel implements Parcelable {
         this.mDirection = mDirection;
     }
 
-    public DepositState getState() {
+    public DepositWithdrawState getState() {
         return mState;
     }
 
-    public void setState(DepositState mState) {
+    public void setState(DepositWithdrawState mState) {
         this.mState = mState;
     }
 

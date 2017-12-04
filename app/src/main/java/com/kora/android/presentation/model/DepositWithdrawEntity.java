@@ -3,13 +3,12 @@ package com.kora.android.presentation.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.kora.android.presentation.enums.DepositState;
+import com.kora.android.presentation.enums.DepositWithdrawState;
 import com.kora.android.presentation.enums.Direction;
-import com.kora.android.presentation.enums.RequestState;
 
 import java.util.Date;
 
-public class DepositEntity implements Parcelable {
+public class DepositWithdrawEntity implements Parcelable {
 
     private String mId;
     private UserEntity mFrom;
@@ -17,19 +16,19 @@ public class DepositEntity implements Parcelable {
     private double mFromAmount;
     private double mToAmount;
     private int mInterestRate;
-    private DepositState mState;
+    private DepositWithdrawState mState;
     private Direction mDirection;
     private Date mCreatedAt = new Date();
 
-    public DepositEntity(String mId,
-                         UserEntity mFrom,
-                         UserEntity mTo,
-                         double mFromAmount,
-                         double mToAmount,
-                         int interestRate,
-                         DepositState mState,
-                         Direction mDirection,
-                         Date mCreatedAt) {
+    public DepositWithdrawEntity(String mId,
+                                 UserEntity mFrom,
+                                 UserEntity mTo,
+                                 double mFromAmount,
+                                 double mToAmount,
+                                 int interestRate,
+                                 DepositWithdrawState mState,
+                                 Direction mDirection,
+                                 Date mCreatedAt) {
         this.mId = mId;
         this.mFrom = mFrom;
         this.mTo = mTo;
@@ -43,7 +42,7 @@ public class DepositEntity implements Parcelable {
 
     @Override
     public String toString() {
-        return "DepositEntity{" + "\n" +
+        return "DepositWithdrawEntity{" + "\n" +
                 "mId=" + mId + "\n" +
                 "mFrom=" + mFrom + "\n" +
                 "mTo=" + mTo + "\n" +
@@ -104,11 +103,11 @@ public class DepositEntity implements Parcelable {
         this.mInterestRate = mInterestRate;
     }
 
-    public DepositState getState() {
+    public DepositWithdrawState getState() {
         return mState;
     }
 
-    public void setState(DepositState mState) {
+    public void setState(DepositWithdrawState mState) {
         this.mState = mState;
     }
 
@@ -147,7 +146,7 @@ public class DepositEntity implements Parcelable {
         dest.writeLong(this.mCreatedAt != null ? this.mCreatedAt.getTime() : -1);
     }
 
-    protected DepositEntity(Parcel in) {
+    protected DepositWithdrawEntity(Parcel in) {
         this.mId = in.readString();
         this.mFrom = in.readParcelable(UserEntity.class.getClassLoader());
         this.mTo = in.readParcelable(UserEntity.class.getClassLoader());
@@ -155,22 +154,22 @@ public class DepositEntity implements Parcelable {
         this.mToAmount = in.readDouble();
         this.mInterestRate = in.readInt();
         int tmpMState = in.readInt();
-        this.mState = tmpMState == -1 ? null : DepositState.values()[tmpMState];
+        this.mState = tmpMState == -1 ? null : DepositWithdrawState.values()[tmpMState];
         int tmpMDirection = in.readInt();
         this.mDirection = tmpMDirection == -1 ? null : Direction.values()[tmpMDirection];
         long tmpMCreatedAt = in.readLong();
         this.mCreatedAt = tmpMCreatedAt == -1 ? null : new Date(tmpMCreatedAt);
     }
 
-    public static final Creator<DepositEntity> CREATOR = new Creator<DepositEntity>() {
+    public static final Creator<DepositWithdrawEntity> CREATOR = new Creator<DepositWithdrawEntity>() {
         @Override
-        public DepositEntity createFromParcel(Parcel source) {
-            return new DepositEntity(source);
+        public DepositWithdrawEntity createFromParcel(Parcel source) {
+            return new DepositWithdrawEntity(source);
         }
 
         @Override
-        public DepositEntity[] newArray(int size) {
-            return new DepositEntity[size];
+        public DepositWithdrawEntity[] newArray(int size) {
+            return new DepositWithdrawEntity[size];
         }
     };
 }

@@ -116,7 +116,7 @@
             android:windowSoftInputMode="stateHidden"/>
 
         <activity
-            android:name=".presentation.ui.common.deposit_withdraw.DepositDetailsActivity"
+            android:name=".presentation.ui.common.deposit_withdraw.DepositWithdrawDetailsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.MainTheme"
             android:windowSoftInputMode="stateHidden"/>

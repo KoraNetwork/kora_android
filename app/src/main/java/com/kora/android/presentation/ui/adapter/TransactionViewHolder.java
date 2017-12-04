@@ -87,6 +87,8 @@ public final class TransactionViewHolder extends RecyclerView.ViewHolder {
                 return R.string.transaction_history_type_borrow_pay_back;
             case DEPOSIT:
                 return R.string.transaction_history_type_deposit;
+            case WITHDRAW:
+                return R.string.transaction_history_type_withdraw;
         }
         return 0;
     }

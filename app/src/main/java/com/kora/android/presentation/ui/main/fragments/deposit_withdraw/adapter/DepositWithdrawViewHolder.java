@@ -1,4 +1,4 @@
-package com.kora.android.presentation.ui.main.fragments.deposit.adapter;
+package com.kora.android.presentation.ui.main.fragments.deposit_withdraw.adapter;
 
 
 import android.content.Context;
@@ -10,8 +10,8 @@ import android.widget.TextView;
 
 import com.kora.android.R;
 import com.kora.android.common.utils.DateUtils;
-import com.kora.android.presentation.enums.DepositState;
-import com.kora.android.presentation.model.DepositEntity;
+import com.kora.android.presentation.enums.DepositWithdrawState;
+import com.kora.android.presentation.model.DepositWithdrawEntity;
 import com.kora.android.presentation.ui.base.adapter.OnItemClickListener;
 
 import java.text.DecimalFormat;
@@ -20,7 +20,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class DepositViewHolder extends RecyclerView.ViewHolder {
+public class DepositWithdrawViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.direction_icon)
     ImageView mDirectionIcon;
@@ -42,7 +42,7 @@ public class DepositViewHolder extends RecyclerView.ViewHolder {
 
     private DecimalFormat mFormatter;
 
-    public DepositViewHolder(final View itemView, @Nullable final OnItemClickListener onItemClickListener) {
+    public DepositWithdrawViewHolder(final View itemView, @Nullable final OnItemClickListener onItemClickListener) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         mContext = itemView.getContext();
@@ -50,28 +50,28 @@ public class DepositViewHolder extends RecyclerView.ViewHolder {
         mFormatter = new DecimalFormat("#,###,###,##0.00");
     }
 
-    public void bind(final DepositEntity depositEntity) {
-        switch (depositEntity.getDirection()) {
+    public void bind(final DepositWithdrawEntity depositWithdrawEntity) {
+        switch (depositWithdrawEntity.getDirection()) {
             case FROM:
                 mDirectionIcon.setImageResource(R.drawable.ic_arrow_red);
                 mSenderName.setText(R.string.request_money_from_my_label);
-                mAmount.setText(mContext.getString(R.string.transactions_amount, mFormatter.format(depositEntity.getFromAmount()), depositEntity.getFrom().getCurrency()));
-                mRequestName.setText(mContext.getString(R.string.request_money_ask_money_label, depositEntity.getTo().getFullName()));
+                mAmount.setText(mContext.getString(R.string.transactions_amount, mFormatter.format(depositWithdrawEntity.getFromAmount()), depositWithdrawEntity.getFrom().getCurrency()));
+                mRequestName.setText(mContext.getString(R.string.request_money_ask_money_label, depositWithdrawEntity.getTo().getFullName()));
                 break;
             case TO:
                 mDirectionIcon.setImageResource(R.drawable.ic_arrow_green);
-                mSenderName.setText(mContext.getString(R.string.request_money_from_label, depositEntity.getFrom().getFullName()));
-                mAmount.setText(mContext.getString(R.string.transactions_amount, mFormatter.format(depositEntity.getToAmount()), depositEntity.getTo().getCurrency()));
+                mSenderName.setText(mContext.getString(R.string.request_money_from_label, depositWithdrawEntity.getFrom().getFullName()));
+                mAmount.setText(mContext.getString(R.string.transactions_amount, mFormatter.format(depositWithdrawEntity.getToAmount()), depositWithdrawEntity.getTo().getCurrency()));
                 mRequestName.setText(R.string.request_money_ask_to_me);
                 break;
         }
-        showStatus(depositEntity.getState());
+        showStatus(depositWithdrawEntity.getState());
 
-        mDate.setText(DateUtils.getFormattedDate("dd.MM.yyyy", depositEntity.getCreatedAt()));
-        mTime.setText(DateUtils.getFormattedDate("hh:mm aa", depositEntity.getCreatedAt()));
+        mDate.setText(DateUtils.getFormattedDate("dd.MM.yyyy", depositWithdrawEntity.getCreatedAt()));
+        mTime.setText(DateUtils.getFormattedDate("hh:mm aa", depositWithdrawEntity.getCreatedAt()));
     }
 
-    private void showStatus(final DepositState state) {
+    private void showStatus(final DepositWithdrawState state) {
         switch (state) {
             case INPROGRESS:
                 mState.setText(R.string.request_money_status_in_progress);

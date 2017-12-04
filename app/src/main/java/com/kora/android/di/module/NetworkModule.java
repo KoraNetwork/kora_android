@@ -6,7 +6,7 @@ import com.kora.android.data.network.factory.RxErrorHandlingCallAdapterFactory;
 import com.kora.android.data.network.service.AuthService;
 import com.kora.android.data.network.service.BorrowService;
 import com.kora.android.data.network.service.CurrencyConverterService;
-import com.kora.android.data.network.service.DepositService;
+import com.kora.android.data.network.service.DepositWithdrawService;
 import com.kora.android.data.network.service.RequestService;
 import com.kora.android.data.network.service.TransactionService;
 import com.kora.android.data.network.service.UserService;
@@ -85,7 +85,7 @@ public class NetworkModule {
 
     @Singleton
     @Provides
-    DepositService provideDepositService(final Retrofit retrofit) {
-        return retrofit.create(DepositService.class);
+    DepositWithdrawService provideDepositService(final Retrofit retrofit) {
+        return retrofit.create(DepositWithdrawService.class);
     }
 }

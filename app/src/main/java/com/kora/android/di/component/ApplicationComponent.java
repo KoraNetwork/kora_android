@@ -8,7 +8,7 @@ import com.kora.android.common.preferences.PreferenceHandler;
 import com.kora.android.data.repository.AuthRepository;
 import com.kora.android.data.repository.BorrowRepository;
 import com.kora.android.data.repository.CurrencyConverterRepository;
-import com.kora.android.data.repository.DepositRepository;
+import com.kora.android.data.repository.DepositWithdrawRepository;
 import com.kora.android.data.repository.RequestRepository;
 import com.kora.android.data.repository.TransactionRepository;
 import com.kora.android.data.repository.UserRepository;
@@ -53,6 +53,6 @@ public interface ApplicationComponent {
     TransactionRepository transactionRepository();
     RequestRepository requestRepository();
     BorrowRepository borrowRepository();
-    DepositRepository depositRepository();
+    DepositWithdrawRepository depositRepository();
     Web3jRepository walletRepository();
 }

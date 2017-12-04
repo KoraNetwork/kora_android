@@ -26,7 +26,7 @@ import com.kora.android.presentation.enums.ActionType;
 import com.kora.android.presentation.enums.Direction;
 import com.kora.android.presentation.enums.TransactionType;
 import com.kora.android.presentation.model.BorrowEntity;
-import com.kora.android.presentation.model.DepositEntity;
+import com.kora.android.presentation.model.DepositWithdrawEntity;
 import com.kora.android.presentation.model.RequestEntity;
 import com.kora.android.presentation.model.TransactionEntity;
 import com.kora.android.presentation.model.UserEntity;
@@ -42,7 +42,6 @@ import javax.inject.Inject;
 
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Action;
-import io.reactivex.observers.DisposableObserver;
 
 @ConfigPersistent
 public class EnterPinPresenter extends BasePresenter<EnterPinView> {
@@ -58,7 +57,7 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
     private final SendFundLoanUseCase mSendFundLoanUseCase;
     private final CreatePayBackLoanUseCase mCreatePayBackLoanUseCase;
     private final SendPayBackLoanUseCase mSendPayBackLoanUseCase;
-    private final DeleteDepositUseCase mDeleteDepositUseCase;
+    private final DeleteDepositUseCase mDeleteDepositWithdrawUseCase;
 
     private ActionType mActionType;
     private UserEntity mReceiver;
@@ -67,7 +66,7 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
     private RequestEntity mRequestEntity;
     private BorrowEntity mBorrowEntity;
     private double mBorrowerValue;
-    private DepositEntity mDepositEntity;
+    private DepositWithdrawEntity mDepositWithdrawEntity;
 
     @Inject
     public EnterPinPresenter(final CreateRawTransactionUseCase createRawTransactionUseCase,
@@ -93,7 +92,7 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         mSendFundLoanUseCase = sendFundLoanUseCase;
         mCreatePayBackLoanUseCase = createPayBackLoanUseCase;
         mSendPayBackLoanUseCase = sendPayBackLoanUseCase;
-        mDeleteDepositUseCase = deleteDepositUseCase;
+        mDeleteDepositWithdrawUseCase = deleteDepositUseCase;
     }
 
     public ActionType getActionType() {
@@ -152,12 +151,12 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         mBorrowerValue = borrowerValue;
     }
 
-    public DepositEntity getDepositEntity() {
-        return mDepositEntity;
+    public DepositWithdrawEntity getDepositEntity() {
+        return mDepositWithdrawEntity;
     }
 
-    public void setDepositEntity(final DepositEntity depositEntity) {
-        mDepositEntity = depositEntity;
+    public void setDepositEntity(final DepositWithdrawEntity depositWithdrawEntity) {
+        mDepositWithdrawEntity = depositWithdrawEntity;
     }
 
     private TransactionType getTransactionTypeByAction(ActionType actionType) {
@@ -184,6 +183,7 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
             case SEND_MONEY:
             case SHOW_REQUEST:
             case SHOW_DEPOSIT:
+            case SHOW_WITHDRAW:
                 mCreateRawTransactionUseCase.setData(
                         mReceiver,
                         mSenderAmount,
@@ -250,7 +250,8 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
                     startDeleteRequestTask(rawTransactions);
                     break;
                 case SHOW_DEPOSIT:
-                    startDeleteDepositTask(rawTransactions);
+                case SHOW_WITHDRAW:
+                    startDeleteDepositWithdrawTask(rawTransactions);
                     break;
             }
         }
@@ -845,23 +846,30 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         }
     }
 
-    private void startDeleteDepositTask(final List<String> rawTransactions) {
-        mDeleteDepositUseCase.setData(
-                mDepositEntity.getId(),
+    private void startDeleteDepositWithdrawTask(final List<String> rawTransactions) {
+        boolean isDeposit = true;
+        if (mActionType == ActionType.SHOW_DEPOSIT)
+            isDeposit = true;
+        else if (mActionType == ActionType.SHOW_WITHDRAW)
+            isDeposit = false;
+
+        mDeleteDepositWithdrawUseCase.setData(
+                mDepositWithdrawEntity.getId(),
                 mSenderAmount,
                 mReceiverAmount,
-                rawTransactions);
-        mDeleteDepositUseCase.execute(new DeleteDepositSubscriber());
+                rawTransactions,
+                isDeposit);
+        mDeleteDepositWithdrawUseCase.execute(new DeleteDepositWithdrawSubscriber());
     }
 
     private Action mDeleteDepositAction = new Action() {
         @Override
         public void run() throws Exception {
-            mDeleteDepositUseCase.execute(new DeleteDepositSubscriber());
+            mDeleteDepositWithdrawUseCase.execute(new DeleteDepositWithdrawSubscriber());
         }
     };
 
-    private class DeleteDepositSubscriber extends DefaultInternetSubscriber<Object> {
+    private class DeleteDepositWithdrawSubscriber extends DefaultInternetSubscriber<Object> {
 
 //        @Override
 //        protected void onStart() {
@@ -913,6 +921,6 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         mSendFundLoanUseCase.dispose();
         mCreatePayBackLoanUseCase.dispose();
         mSendPayBackLoanUseCase.dispose();
-        mDeleteDepositUseCase.dispose();
+        mDeleteDepositWithdrawUseCase.dispose();
     }
 }

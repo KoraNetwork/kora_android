@@ -6,13 +6,13 @@ import com.kora.android.data.network.config.ErrorModel;
 import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
-import com.kora.android.domain.usecase.deposit.AddDepositUseCase;
+import com.kora.android.domain.usecase.deposit.AddDepositWithdrawUseCase;
 import com.kora.android.domain.usecase.deposit.UpdateDepositUseCase;
 import com.kora.android.domain.usecase.user.ConvertAmountUseCase;
 import com.kora.android.domain.usecase.user.GetUserDataUseCase;
 import com.kora.android.presentation.enums.ActionType;
 import com.kora.android.presentation.enums.Direction;
-import com.kora.android.presentation.model.DepositEntity;
+import com.kora.android.presentation.model.DepositWithdrawEntity;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
@@ -23,29 +23,29 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Action;
 
 @ConfigPersistent
-public class DepositDetailsPresenter extends BasePresenter<DepositDetailsView> {
+public class DepositWithdrawDetailsPresenter extends BasePresenter<DepositWithdrawDetailsView> {
 
     private final GetUserDataUseCase mGetUserDataUseCase;
     private final ConvertAmountUseCase mConvertAmountUseCase;
-    private final AddDepositUseCase mAddDepositUseCase;
-    private final UpdateDepositUseCase mUpdateDepositUseCase;
+    private final AddDepositWithdrawUseCase mAddDepositWithdrawUseCase;
+    private final UpdateDepositUseCase mUpdateDepositWithdrawUseCase;
 
     private ActionType mActionType;
-    private DepositEntity mDepositEntity;
+    private DepositWithdrawEntity mDepositWithdrawEntity;
     private UserEntity mSender;
     private UserEntity mReceiver;
 
     private int mAmountEditTextWidth = 0;
 
     @Inject
-    public DepositDetailsPresenter(final GetUserDataUseCase getUserDataUseCase,
-                                   final ConvertAmountUseCase convertAmountUseCase,
-                                   final AddDepositUseCase addDepositUseCase,
-                                   final UpdateDepositUseCase updateDepositUseCase) {
+    public DepositWithdrawDetailsPresenter(final GetUserDataUseCase getUserDataUseCase,
+                                           final ConvertAmountUseCase convertAmountUseCase,
+                                           final AddDepositWithdrawUseCase addDepositWithdrawUseCase,
+                                           final UpdateDepositUseCase updateDepositUseCase) {
         mGetUserDataUseCase = getUserDataUseCase;
         mConvertAmountUseCase = convertAmountUseCase;
-        mAddDepositUseCase = addDepositUseCase;
-        mUpdateDepositUseCase = updateDepositUseCase;
+        mAddDepositWithdrawUseCase = addDepositWithdrawUseCase;
+        mUpdateDepositWithdrawUseCase = updateDepositUseCase;
     }
 
     public void getCurrentUser() {
@@ -112,16 +112,16 @@ public class DepositDetailsPresenter extends BasePresenter<DepositDetailsView> {
         mSender = sender;
     }
 
-    public void setDepositEntity(DepositEntity depositEntity) {
-        mDepositEntity = depositEntity;
-        if (depositEntity == null) return;
+    public void setDepositEntity(DepositWithdrawEntity depositWithdrawEntity) {
+        mDepositWithdrawEntity = depositWithdrawEntity;
+        if (depositWithdrawEntity == null) return;
 
-        if (mDepositEntity.getDirection() == Direction.FROM) {
-            setSender(mDepositEntity.getFrom());
-            setReceiver(mDepositEntity.getTo());
+        if (mDepositWithdrawEntity.getDirection() == Direction.FROM) {
+            setSender(mDepositWithdrawEntity.getFrom());
+            setReceiver(mDepositWithdrawEntity.getTo());
         } else {
-            setSender(mDepositEntity.getTo());
-            setReceiver(mDepositEntity.getFrom());
+            setSender(mDepositWithdrawEntity.getTo());
+            setReceiver(mDepositWithdrawEntity.getFrom());
         }
     }
 
@@ -152,6 +152,14 @@ public class DepositDetailsPresenter extends BasePresenter<DepositDetailsView> {
     }
 
     private boolean validateForm(double senderAmount, double receiverAmount, String interestRate) {
+        if (interestRate == null || interestRate.isEmpty()) {
+            getView().showIncorrectInterestRate();
+            return false;
+        }
+        if (!StringUtils.isInterestRateValid(interestRate)) {
+            getView().showIncorrectInterestRate();
+            return false;
+        }
         if (!Validator.isValidPrice(senderAmount)) {
             if (!isViewAttached()) return false;
             getView().emptySenderAmountError();
@@ -162,36 +170,35 @@ public class DepositDetailsPresenter extends BasePresenter<DepositDetailsView> {
             getView().emptyReceiverAmountError();
             return false;
         }
-        if (interestRate == null || interestRate.isEmpty()) {
-            getView().showIncorrectInterestRate();
-            return false;
-        }
-        if (!StringUtils.isInterestRateValid(interestRate)) {
-            getView().showIncorrectInterestRate();
-            return false;
-        }
         return true;
     }
 
-    public void sendDeposit(final double senderAmount, final double receiverAmount, final String interestRate) {
+    public void sendDepositWithdraw(final double senderAmount, final double receiverAmount, final String interestRate) {
         if (!validateForm(senderAmount, receiverAmount, interestRate)) return;
 
-        mAddDepositUseCase.setData(
+        boolean isDeposit = true;
+        if (mActionType == ActionType.CREATE_DEPOSIT) {
+            isDeposit = true;
+        } else if (mActionType == ActionType.CREATE_WITHDRAW) {
+            isDeposit = false;
+        }
+        mAddDepositWithdrawUseCase.setData(
                 mReceiver.getId(),
                 senderAmount,
                 receiverAmount,
-                Integer.parseInt(interestRate));
-        mAddDepositUseCase.execute(new AddDepositSubscriber());
+                Integer.parseInt(interestRate),
+                isDeposit);
+        mAddDepositWithdrawUseCase.execute(new AddDepositWithdrawSubscriber());
     }
 
     private Action mAddDepositAction = new Action() {
         @Override
         public void run() throws Exception {
-            mAddDepositUseCase.execute(new AddDepositSubscriber());
+            mAddDepositWithdrawUseCase.execute(new AddDepositWithdrawSubscriber());
         }
     };
 
-    private class AddDepositSubscriber extends DefaultInternetSubscriber<DepositEntity> {
+    private class AddDepositWithdrawSubscriber extends DefaultInternetSubscriber<DepositWithdrawEntity> {
 
         @Override
         protected void onStart() {
@@ -200,9 +207,9 @@ public class DepositDetailsPresenter extends BasePresenter<DepositDetailsView> {
         }
 
         @Override
-        public void onNext(@NonNull final DepositEntity depositEntity) {
+        public void onNext(@NonNull final DepositWithdrawEntity depositWithdrawEntity) {
             if (!isViewAttached()) return;
-            getView().onDepositSent(depositEntity);
+            getView().onDepositWithdrawSent(depositWithdrawEntity);
         }
 
         @Override
@@ -230,25 +237,32 @@ public class DepositDetailsPresenter extends BasePresenter<DepositDetailsView> {
     }
 
     public void onConfirmClicked() {
-        if (mDepositEntity == null) return;
+        if (mDepositWithdrawEntity == null) return;
         if (!isViewAttached()) return;
-        getView().openPinScreen(mDepositEntity.getFrom(), mDepositEntity.getToAmount(), mDepositEntity.getFromAmount(), mDepositEntity);
+        getView().openEnterPinScreen(mDepositWithdrawEntity.getFrom(), mDepositWithdrawEntity.getToAmount(), mDepositWithdrawEntity.getFromAmount(), mDepositWithdrawEntity);
     }
 
     public void onRejectClicked() {
-        if (mDepositEntity == null) return;
-        mUpdateDepositUseCase.setData(mDepositEntity.getId());
-        mUpdateDepositUseCase.execute(new UpdateDepositSubscriber());
+        if (mDepositWithdrawEntity == null) return;
+
+        boolean isDeposit = true;
+        if (mActionType == ActionType.SHOW_DEPOSIT) {
+            isDeposit = true;
+        } else if (mActionType == ActionType.SHOW_WITHDRAW) {
+            isDeposit = false;
+        }
+        mUpdateDepositWithdrawUseCase.setData(mDepositWithdrawEntity.getId(), isDeposit);
+        mUpdateDepositWithdrawUseCase.execute(new UpdateDepositSubscriber());
     }
 
     private Action mUpdateDepositAction = new Action() {
         @Override
         public void run() throws Exception {
-            mUpdateDepositUseCase.execute(new UpdateDepositSubscriber());
+            mUpdateDepositWithdrawUseCase.execute(new UpdateDepositSubscriber());
         }
     };
 
-    private class UpdateDepositSubscriber extends DefaultInternetSubscriber<DepositEntity> {
+    private class UpdateDepositSubscriber extends DefaultInternetSubscriber<DepositWithdrawEntity> {
 
         @Override
         protected void onStart() {
@@ -257,9 +271,9 @@ public class DepositDetailsPresenter extends BasePresenter<DepositDetailsView> {
         }
 
         @Override
-        public void onNext(final DepositEntity depositEntity) {
+        public void onNext(final DepositWithdrawEntity depositWithdrawEntity) {
             if (!isViewAttached()) return;
-            getView().onUserRejected(depositEntity);
+            getView().onUserRejected(depositWithdrawEntity);
         }
 
         @Override
@@ -300,8 +314,8 @@ public class DepositDetailsPresenter extends BasePresenter<DepositDetailsView> {
         return mSender;
     }
 
-    public DepositEntity getDepositEntity() {
-        return mDepositEntity;
+    public DepositWithdrawEntity getDepositEntity() {
+        return mDepositWithdrawEntity;
     }
 
     public UserEntity getReceiver() {
@@ -320,7 +334,7 @@ public class DepositDetailsPresenter extends BasePresenter<DepositDetailsView> {
     public void onDetachView() {
         mGetUserDataUseCase.dispose();
         mConvertAmountUseCase.dispose();
-        mAddDepositUseCase.dispose();
-        mUpdateDepositUseCase.dispose();
+        mAddDepositWithdrawUseCase.dispose();
+        mUpdateDepositWithdrawUseCase.dispose();
     }
 }

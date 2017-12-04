@@ -1,10 +1,9 @@
 package com.kora.android.data.repository.mapper;
 
-
-import com.kora.android.data.network.model.response.DepositListResponse;
-import com.kora.android.data.network.model.response.DepositResponse;
-import com.kora.android.presentation.model.DepositEntity;
-import com.kora.android.presentation.model.builder.DepositEntityBuilder;
+import com.kora.android.data.network.model.response.DepositWithdrawListResponse;
+import com.kora.android.data.network.model.response.DepositWithdrawResponse;
+import com.kora.android.presentation.model.DepositWithdrawEntity;
+import com.kora.android.presentation.model.builder.DepositWithdrawEntityBuilder;
 
 import java.util.List;
 
@@ -13,23 +12,24 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
 
-public class DepositMapper {
+public class DepositWithdrawMapper {
 
     private final UserMapper mUserMapper;
 
     @Inject
-    public DepositMapper(final UserMapper userMapper) {
+    public DepositWithdrawMapper(final UserMapper userMapper) {
         mUserMapper = userMapper;
     }
 
-    public ObservableTransformer<DepositResponse, DepositEntity> transformDepositResponseToDepositEntity() {
+    public ObservableTransformer<DepositWithdrawResponse, DepositWithdrawEntity> transformResponseToEntity() {
         return requestResponseObservable -> requestResponseObservable
-                .filter(requestResponse -> requestResponse.getFrom() != null && requestResponse.getTo() != null)
+                .filter(depositWithdrawResponse ->
+                        depositWithdrawResponse.getFrom() != null && depositWithdrawResponse.getTo() != null)
                 .flatMap(requestResponse ->
                         Observable.zip(
                                 mUserMapper.transformResponseToEntityUser(requestResponse.getFrom()),
                                 mUserMapper.transformResponseToEntityUser(requestResponse.getTo()),
-                                (from, to) -> new DepositEntityBuilder()
+                                (from, to) -> new DepositWithdrawEntityBuilder()
                                         .setId(requestResponse.getId())
                                         .setFrom(from)
                                         .setTo(to)
@@ -42,9 +42,9 @@ public class DepositMapper {
                                         .createDepositEntity()));
     }
 
-    public ObservableTransformer<DepositListResponse, List<DepositEntity>> transformDepositResponseListToDepositEntityList() {
+    public ObservableTransformer<DepositWithdrawListResponse, List<DepositWithdrawEntity>> transformResponseListToDepositEntity() {
         return responseListObservable -> responseListObservable
-                .flatMap(depositListResponse -> Observable.fromIterable(depositListResponse.getDepositResponses())
-                        .compose(transformDepositResponseToDepositEntity()).toList().toObservable());
+                .flatMap(depositWithdrawListResponse -> Observable.fromIterable(depositWithdrawListResponse.getResponseList())
+                        .compose(transformResponseToEntity()).toList().toObservable());
     }
 }

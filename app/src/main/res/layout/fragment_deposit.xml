@@ -17,7 +17,7 @@
         android:layout_marginTop="?attr/actionBarSize">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view_deposits"
+            android:id="@+id/recycler_view_deposit_withraw_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="none"
@@ -26,7 +26,7 @@
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floating_button_create_deposit"
+        android:id="@+id/floating_button_create_deposit_withdraw"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

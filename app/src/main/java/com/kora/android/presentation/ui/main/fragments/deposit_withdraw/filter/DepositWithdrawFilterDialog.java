@@ -1,11 +1,11 @@
-package com.kora.android.presentation.ui.main.fragments.deposit.filter;
+package com.kora.android.presentation.ui.main.fragments.deposit_withdraw.filter;
 
 import android.os.Bundle;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.kora.android.R;
-import com.kora.android.presentation.enums.DepositState;
+import com.kora.android.presentation.enums.DepositWithdrawState;
 import com.kora.android.presentation.ui.base.adapter.filter.FilterDialog;
 
 import butterknife.BindView;
@@ -14,7 +14,7 @@ import butterknife.OnClick;
 
 import static com.kora.android.common.Keys.Args.ARG_DEPOSIT_FILTER_MODEL;
 
-public class DepositFilterDialog extends FilterDialog<DepositFilterModel> {
+public class DepositWithdrawFilterDialog extends FilterDialog<DepositWithdrawFilterModel> {
 
     @BindView(R.id.radio_group_state)
     RadioGroup mRgState;
@@ -25,17 +25,17 @@ public class DepositFilterDialog extends FilterDialog<DepositFilterModel> {
     @BindView(R.id.radio_button_rejected)
     RadioButton mRbRejected;
 
-    private DepositFilterModel mDepositFilterModel = new DepositFilterModel();
+    private DepositWithdrawFilterModel mDepositWithdrawFilterModel = new DepositWithdrawFilterModel();
 
     @Override
     protected int getLayoutRes() {
         return R.layout.dialog_deposit_filter;
     }
 
-    public static DepositFilterDialog newInstance(final DepositFilterModel depositFilterModel) {
+    public static DepositWithdrawFilterDialog newInstance(final DepositWithdrawFilterModel depositWithdrawFilterModel) {
         final Bundle arguments = new Bundle();
-        arguments.putParcelable(ARG_DEPOSIT_FILTER_MODEL, depositFilterModel);
-        final DepositFilterDialog filterDialog = new DepositFilterDialog();
+        arguments.putParcelable(ARG_DEPOSIT_FILTER_MODEL, depositWithdrawFilterModel);
+        final DepositWithdrawFilterDialog filterDialog = new DepositWithdrawFilterDialog();
         filterDialog.setArguments(arguments);
         return filterDialog;
     }
@@ -46,8 +46,8 @@ public class DepositFilterDialog extends FilterDialog<DepositFilterModel> {
                 ? savedInstanceState
                 : getArguments();
         if (arguments == null) return;
-        mDepositFilterModel = arguments.getParcelable(ARG_DEPOSIT_FILTER_MODEL);
-        if (mDepositFilterModel == null) mDepositFilterModel = new DepositFilterModel();
+        mDepositWithdrawFilterModel = arguments.getParcelable(ARG_DEPOSIT_FILTER_MODEL);
+        if (mDepositWithdrawFilterModel == null) mDepositWithdrawFilterModel = new DepositWithdrawFilterModel();
     }
 
     @Override
@@ -56,9 +56,9 @@ public class DepositFilterDialog extends FilterDialog<DepositFilterModel> {
     }
 
     private void setupStates() {
-        if (mDepositFilterModel.getState() != null && mDepositFilterModel.getState() == DepositState.INPROGRESS) {
+        if (mDepositWithdrawFilterModel.getState() != null && mDepositWithdrawFilterModel.getState() == DepositWithdrawState.INPROGRESS) {
             mRgState.check(mRbInProgress.getId());
-        } else if (mDepositFilterModel.getState() != null && mDepositFilterModel.getState() == DepositState.REJECTED) {
+        } else if (mDepositWithdrawFilterModel.getState() != null && mDepositWithdrawFilterModel.getState() == DepositWithdrawState.REJECTED) {
             mRgState.check(mRbRejected.getId());
         } else {
             mRgState.check(mRbShowAll.getId());
@@ -68,19 +68,19 @@ public class DepositFilterDialog extends FilterDialog<DepositFilterModel> {
     @OnCheckedChanged(R.id.radio_button_show_all)
     public void onShowAllCheckChanged(final boolean isChecked) {
         if (isChecked)
-            mDepositFilterModel.setState(null);
+            mDepositWithdrawFilterModel.setState(null);
     }
 
     @OnCheckedChanged(R.id.radio_button_in_progress)
     public void onInProgressCheckChanged(final boolean isChecked) {
         if (isChecked)
-            mDepositFilterModel.setState(DepositState.INPROGRESS);
+            mDepositWithdrawFilterModel.setState(DepositWithdrawState.INPROGRESS);
     }
 
     @OnCheckedChanged(R.id.radio_button_rejected)
     public void onRejectedCheckChanged(final boolean isChecked) {
         if (isChecked)
-            mDepositFilterModel.setState(DepositState.REJECTED);
+            mDepositWithdrawFilterModel.setState(DepositWithdrawState.REJECTED);
     }
 
     @OnClick(R.id.text_view_cancel)
@@ -96,12 +96,12 @@ public class DepositFilterDialog extends FilterDialog<DepositFilterModel> {
         this.dismiss();
         if (mOnFilterListener == null)
             return;
-        mOnFilterListener.onFilterChanged(mDepositFilterModel);
+        mOnFilterListener.onFilterChanged(mDepositWithdrawFilterModel);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(ARG_DEPOSIT_FILTER_MODEL, mDepositFilterModel);
+        outState.putParcelable(ARG_DEPOSIT_FILTER_MODEL, mDepositWithdrawFilterModel);
     }
 }

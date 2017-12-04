@@ -1,6 +1,6 @@
 package com.kora.android.presentation.enums;
 
-public enum DepositState {
+public enum DepositWithdrawState {
 
     INPROGRESS,
     REJECTED

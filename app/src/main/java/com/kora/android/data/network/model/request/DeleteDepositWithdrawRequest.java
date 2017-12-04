@@ -6,7 +6,7 @@ import com.bluelinelabs.logansquare.annotation.JsonObject;
 import java.util.List;
 
 @JsonObject
-public class DeleteDepositRequest {
+public class DeleteDepositWithdrawRequest {
 
     @JsonField(name = "fromAmount")
     private double mFromAmount;
@@ -15,17 +15,17 @@ public class DeleteDepositRequest {
     @JsonField(name = "rawTransactions")
     private List<String> mRawTransactions;
 
-    public DeleteDepositRequest addFromAmount(final double fromAmount) {
+    public DeleteDepositWithdrawRequest addFromAmount(final double fromAmount) {
         mFromAmount = fromAmount;
         return this;
     }
 
-    public DeleteDepositRequest addToAmount(final double toAmount) {
+    public DeleteDepositWithdrawRequest addToAmount(final double toAmount) {
         mToAmount = toAmount;
         return this;
     }
 
-    public DeleteDepositRequest addRawTransactions(final List<String> rawTransactions) {
+    public DeleteDepositWithdrawRequest addRawTransactions(final List<String> rawTransactions) {
         mRawTransactions = rawTransactions;
         return this;
     }

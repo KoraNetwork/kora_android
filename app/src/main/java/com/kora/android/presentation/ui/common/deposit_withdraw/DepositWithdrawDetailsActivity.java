@@ -28,9 +28,9 @@ import com.kora.android.common.utils.ViewUtils;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.enums.Action;
 import com.kora.android.presentation.enums.ActionType;
-import com.kora.android.presentation.enums.DepositState;
+import com.kora.android.presentation.enums.DepositWithdrawState;
 import com.kora.android.presentation.enums.Direction;
-import com.kora.android.presentation.model.DepositEntity;
+import com.kora.android.presentation.model.DepositWithdrawEntity;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.base.view.ToolbarActivity;
@@ -52,7 +52,7 @@ import static com.kora.android.common.Keys.Extras.EXTRA_ACTION;
 import static com.kora.android.common.Keys.Extras.EXTRA_DEPOSIT_ENTITY;
 import static com.kora.android.data.network.Constants.API_BASE_URL;
 
-public class DepositDetailsActivity extends ToolbarActivity<DepositDetailsPresenter> implements DepositDetailsView {
+public class DepositWithdrawDetailsActivity extends ToolbarActivity<DepositWithdrawDetailsPresenter> implements DepositWithdrawDetailsView {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -98,16 +98,18 @@ public class DepositDetailsActivity extends ToolbarActivity<DepositDetailsPresen
     public static Intent getLaunchIntent(final BaseActivity baseActivity,
                                          final UserEntity userEntity,
                                          final ActionType actionType) {
-        final Intent intent = new Intent(baseActivity, DepositDetailsActivity.class);
+        final Intent intent = new Intent(baseActivity, DepositWithdrawDetailsActivity.class);
         intent.putExtra(USER_ENTITY, userEntity);
         intent.putExtra(ACTION_TYPE, actionType);
         return intent;
     }
 
-    public static Intent getLaunchIntent(final BaseActivity baseActivity, final DepositEntity depositEntity) {
-        final Intent intent = new Intent(baseActivity, DepositDetailsActivity.class);
-        intent.putExtra(DEPOSIT_ENTITY, depositEntity);
-        intent.putExtra(ACTION_TYPE, ActionType.SHOW_DEPOSIT);
+    public static Intent getLaunchIntent(final BaseActivity baseActivity,
+                                         final DepositWithdrawEntity depositWithdrawEntity,
+                                         final ActionType actionType) {
+        final Intent intent = new Intent(baseActivity, DepositWithdrawDetailsActivity.class);
+        intent.putExtra(DEPOSIT_ENTITY, depositWithdrawEntity);
+        intent.putExtra(ACTION_TYPE, actionType);
         return intent;
     }
 
@@ -136,10 +138,13 @@ public class DepositDetailsActivity extends ToolbarActivity<DepositDetailsPresen
         super.onViewReady(savedInstanceState);
 
         initArguments(savedInstanceState);
-        if (savedInstanceState == null) {
-            getPresenter().getCurrentUser();
-        }
         initUI();
+
+        if (getPresenter().getDepositEntity() == null) {
+            if (savedInstanceState == null) {
+                getPresenter().getCurrentUser();
+            }
+        }
     }
 
     private void initArguments(final Bundle bundle) {
@@ -174,18 +179,43 @@ public class DepositDetailsActivity extends ToolbarActivity<DepositDetailsPresen
     }
 
     private void initUI() {
+        setupTitle();
+        setupState();
+        setupDetails();
+        setupInterestRate();
+        setupCurrencyAmounts();
+        setupButtons();
+    }
+
+    private void setupTitle() {
         switch (getPresenter().getActionType()) {
             case CREATE_DEPOSIT:
                 setTitle(R.string.deposit_user_title);
-                mBtnAction.setText(R.string.deposit_send_to_agent);
-                mEtInterestRate.setText(String.valueOf(getPresenter().getReceiver().getInterestRate()));
-                mEtInterestRate.setEnabled(true);
+                break;
             case SHOW_DEPOSIT:
-                final DepositEntity depositEntity = getPresenter().getDepositEntity();
-                if (depositEntity == null) return;
+                if (getPresenter().getDepositEntity().getDirection() == Direction.FROM)
+                    setTitle(R.string.deposit_user_title);
+                else
+                    setTitle(R.string.deposit_agent_title);
+                break;
+            case CREATE_WITHDRAW:
+                setTitle(R.string.withdraw_agent_title);
+                break;
+            case SHOW_WITHDRAW:
+                if (getPresenter().getDepositEntity().getDirection() == Direction.FROM)
+                    setTitle(R.string.withdraw_agent_title);
+                else
+                    setTitle(R.string.withdraw_user_title);
+                break;
+        }
+    }
 
+    private void setupState() {
+        switch (getPresenter().getActionType()) {
+            case SHOW_DEPOSIT:
+            case SHOW_WITHDRAW:
                 mTvState.setVisibility(View.VISIBLE);
-                switch (depositEntity.getState()) {
+                switch (getPresenter().getDepositEntity().getState()) {
                     case INPROGRESS:
                         mTvState.setText(R.string.deposit_state_in_progress);
                         mTvState.setTextColor(getResources().getColor(R.color.color_state_positive));
@@ -195,12 +225,58 @@ public class DepositDetailsActivity extends ToolbarActivity<DepositDetailsPresen
                         mTvState.setTextColor(getResources().getColor(R.color.color_state_negative));
                         break;
                 }
+                break;
+        }
+    }
 
-                mEtSenderAmount.setText(String.format(Locale.ENGLISH, "%1$.2f", depositEntity.getFromAmount()));
-                mEtSenderAmount.setCurrency(depositEntity.getFrom().getCurrency());
+    private void setupDetails() {
+        switch (getPresenter().getActionType()) {
+            case CREATE_DEPOSIT:
+                mTvUserRole.setText(R.string.deposit_agent_details);
+                break;
+            case SHOW_DEPOSIT:
+                if (getPresenter().getDepositEntity().getDirection() == Direction.FROM) {
+                    mTvUserRole.setText(R.string.deposit_agent_details);
+                } else
+                    mTvUserRole.setText(R.string.deposit_user_details);
+                break;
+            case CREATE_WITHDRAW:
+                mTvUserRole.setText(R.string.deposit_user_details);
+                break;
+            case SHOW_WITHDRAW:
+                if (getPresenter().getDepositEntity().getDirection() == Direction.FROM) {
+                    mTvUserRole.setText(R.string.deposit_user_details);
+                } else
+                    mTvUserRole.setText(R.string.deposit_agent_details);
+                break;
+        }
+    }
+
+    private void setupInterestRate() {
+        switch (getPresenter().getActionType()) {
+            case CREATE_DEPOSIT:
+            case CREATE_WITHDRAW:
+                mEtInterestRate.setText(String.valueOf(getPresenter().getReceiver().getInterestRate()));
+                mEtInterestRate.setEnabled(true);
+                break;
+            case SHOW_DEPOSIT:
+            case SHOW_WITHDRAW:
+                mEtInterestRate.setText(String.valueOf(getPresenter().getDepositEntity().getInterestRate()));
+                break;
+        }
+    }
+
+    private void setupCurrencyAmounts() {
+        switch (getPresenter().getActionType()) {
+            case SHOW_DEPOSIT:
+            case SHOW_WITHDRAW:
+                final DepositWithdrawEntity depositWithdrawEntity = getPresenter().getDepositEntity();
+
+                mEtSenderAmount.setText(String.format(Locale.ENGLISH, "%1$.2f", depositWithdrawEntity.getFromAmount()));
+                mEtSenderAmount.setCurrency(depositWithdrawEntity.getFrom().getCurrency());
                 Glide.with(this)
                         .asBitmap()
-                        .load(API_BASE_URL + depositEntity.getFrom().getFlag())
+                        .load(API_BASE_URL + depositWithdrawEntity.getFrom().getFlag())
                         .into(new SimpleTarget<Bitmap>() {
                             @Override
                             public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
@@ -209,11 +285,11 @@ public class DepositDetailsActivity extends ToolbarActivity<DepositDetailsPresen
                             }
                         });
 
-                mEtReceiverAmount.setText(String.format(Locale.ENGLISH, "%1$.2f", depositEntity.getToAmount()));
-                mEtReceiverAmount.setCurrency(depositEntity.getTo().getCurrency());
+                mEtReceiverAmount.setText(String.format(Locale.ENGLISH, "%1$.2f", depositWithdrawEntity.getToAmount()));
+                mEtReceiverAmount.setCurrency(depositWithdrawEntity.getTo().getCurrency());
                 Glide.with(this)
                         .asBitmap()
-                        .load(API_BASE_URL + depositEntity.getTo().getFlag())
+                        .load(API_BASE_URL + depositWithdrawEntity.getTo().getFlag())
                         .into(new SimpleTarget<Bitmap>() {
                             @Override
                             public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
@@ -222,34 +298,39 @@ public class DepositDetailsActivity extends ToolbarActivity<DepositDetailsPresen
                             }
                         });
 
-                switch (depositEntity.getDirection()) {
-                    case FROM:
-                        setTitle(getString(R.string.deposit_user_title));
-
-                        mBtnAction.setVisibility(View.GONE);
-                        break;
-                    case TO:
-                        setTitle(getString(R.string.deposit_agent_title));
-
-                        if (depositEntity.getState() == DepositState.REJECTED) {
-                            mBtnAction.setVisibility(View.GONE);
-                            mBtnReject.setVisibility(View.GONE);
-                        } else {
-                            mBtnAction.setText(R.string.deposit_send_to_user);
-                            mBtnReject.setVisibility(View.VISIBLE);
-                        }
-                        break;
-                }
-
-                mEtInterestRate.setText(String.valueOf(depositEntity.getInterestRate()));
-
                 mEtSenderAmount.setEnabled(false);
                 mEtReceiverAmount.setEnabled(false);
 
                 changeAmountContainerOrientation();
                 calculateTotals();
-
                 break;
+        }
+    }
+
+    private void setupButtons() {
+        switch (getPresenter().getActionType()) {
+            case CREATE_DEPOSIT:
+                mBtnAction.setText(R.string.deposit_send_to_agent);
+                break;
+            case CREATE_WITHDRAW:
+                mBtnAction.setText(R.string.deposit_send_to_user);
+                break;
+            case SHOW_DEPOSIT:
+            case SHOW_WITHDRAW:
+                final DepositWithdrawEntity depositWithdrawEntity = getPresenter().getDepositEntity();
+                switch (depositWithdrawEntity.getDirection()) {
+                    case FROM:
+                        mBtnAction.setVisibility(View.GONE);
+                        break;
+                    case TO:
+                        if (depositWithdrawEntity.getState() == DepositWithdrawState.INPROGRESS) {
+                            mBtnAction.setText(R.string.deposit_confirm);
+                            mBtnReject.setVisibility(View.VISIBLE);
+                        } else {
+                            mBtnAction.setVisibility(View.GONE);
+                        }
+                        break;
+                }
         }
     }
 
@@ -315,10 +396,6 @@ public class DepositDetailsActivity extends ToolbarActivity<DepositDetailsPresen
 
     @Override
     public void retrieveSender(final UserEntity sender) {
-
-        if (getPresenter().getDepositEntity() != null)
-            return;
-
         mEtSenderAmount.setCurrency(sender.getCurrency());
         Glide.with(this)
                 .asBitmap()
@@ -333,16 +410,6 @@ public class DepositDetailsActivity extends ToolbarActivity<DepositDetailsPresen
     }
 
     public void retrieveReceiver(final UserEntity receiver) {
-
-        if (getPresenter().getDepositEntity() == null)
-            mTvUserRole.setText(R.string.deposit_agent_details);
-        else {
-            if (getPresenter().getDepositEntity().getDirection() == Direction.FROM) {
-                mTvUserRole.setText(R.string.deposit_agent_details);
-            } else
-                mTvUserRole.setText(R.string.deposit_user_details);
-        }
-
         mTvUserName.setText(receiver.getFullName());
         mTvUserPhone.setText(StringUtils.getFormattedPhoneNumber(receiver.getPhoneNumber(), receiver.getCountryCode()));
         Glide.with(this)
@@ -352,20 +419,19 @@ public class DepositDetailsActivity extends ToolbarActivity<DepositDetailsPresen
                         .load(R.drawable.ic_user_default))
                 .into(mIvUserAvatar);
 
-        if (getPresenter().getDepositEntity() != null)
-            return;
-
-        mEtReceiverAmount.setCurrency(receiver.getCurrency());
-        Glide.with(this)
-                .asBitmap()
-                .load(API_BASE_URL + receiver.getFlag())
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                        mEtReceiverAmount.setCompoundDrawablesRelativeWithIntrinsicBounds(new BitmapDrawable(getResources(), resource), null, null, null);
-                        mEtReceiverAmount.setCompoundDrawablePadding(ViewUtils.convertDpToPixel(12));
-                    }
-                });
+        if (getPresenter().getDepositEntity() == null) {
+            mEtReceiverAmount.setCurrency(receiver.getCurrency());
+            Glide.with(this)
+                    .asBitmap()
+                    .load(API_BASE_URL + receiver.getFlag())
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                            mEtReceiverAmount.setCompoundDrawablesRelativeWithIntrinsicBounds(new BitmapDrawable(getResources(), resource), null, null, null);
+                            mEtReceiverAmount.setCompoundDrawablePadding(ViewUtils.convertDpToPixel(12));
+                        }
+                    });
+        }
     }
 
     @Override
@@ -392,41 +458,47 @@ public class DepositDetailsActivity extends ToolbarActivity<DepositDetailsPresen
     }
 
     @Override
-    public void openPinScreen(final UserEntity receiver,
-                              final double fromAmount,
-                              final double toAmount,
-                              final DepositEntity depositEntity) {
+    public void openEnterPinScreen(final UserEntity receiver,
+                                   final double fromAmount,
+                                   final double toAmount,
+                                   final DepositWithdrawEntity depositWithdrawEntity) {
         startActivity(EnterPinActivity.getLaunchIntent(
                 this,
                 receiver,
                 fromAmount,
                 toAmount,
                 getPresenter().getActionType(),
-                depositEntity)
+                depositWithdrawEntity)
         );
     }
 
     @Override
-    public void onUserRejected(final DepositEntity depositEntity) {
-        Toast.makeText(this, R.string.deposit_reject_success, Toast.LENGTH_SHORT).show();
+    public void onUserRejected(final DepositWithdrawEntity depositWithdrawEntity) {
+        if (getPresenter().getActionType() == ActionType.SHOW_DEPOSIT) {
+            Toast.makeText(this, R.string.deposit_reject_success, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, R.string.withdraw_reject_success, Toast.LENGTH_SHORT).show();
+        }
         final Intent intent = new Intent();
         intent.putExtra(EXTRA_ACTION, Action.UPDATE);
-        intent.putExtra(EXTRA_DEPOSIT_ENTITY, depositEntity);
+        intent.putExtra(EXTRA_DEPOSIT_ENTITY, depositWithdrawEntity);
         setResult(RESULT_OK, intent);
         finish();
     }
 
     @Override
-    public void onDepositSent(final DepositEntity depositEntity) {
-        Toast.makeText(this, R.string.deposit_send_success, Toast.LENGTH_SHORT).show();
+    public void onDepositWithdrawSent(final DepositWithdrawEntity depositWithdrawEntity) {
+        if (getPresenter().getActionType() == ActionType.SHOW_DEPOSIT) {
+            Toast.makeText(this, R.string.deposit_send_success, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, R.string.withdraw_send_success, Toast.LENGTH_SHORT).show();
+        }
         final Intent intent = new Intent();
         intent.putExtra(EXTRA_ACTION, Action.DELETE);
-        intent.putExtra(EXTRA_DEPOSIT_ENTITY, depositEntity);
+        intent.putExtra(EXTRA_DEPOSIT_ENTITY, depositWithdrawEntity);
         setResult(RESULT_OK, intent);
         finish();
     }
-
-    private Handler mTimer = new Handler();
 
     @OnTextChanged(R.id.edit_text_interest_rate)
     public void onInterestRateChanged() {
@@ -434,6 +506,13 @@ public class DepositDetailsActivity extends ToolbarActivity<DepositDetailsPresen
 
         calculateTotals();
     }
+
+    private Handler mTimer = new Handler();
+
+    private Runnable mConverter = () -> {
+        double value = mEtSenderAmount.getAmount();
+        getPresenter().convertIfNeed(value);
+    };
 
     @OnTextChanged(R.id.edit_text_sender_amount)
     public void onAmountChanged() {
@@ -448,10 +527,29 @@ public class DepositDetailsActivity extends ToolbarActivity<DepositDetailsPresen
         changeAmountContainerOrientation();
     }
 
-    private Runnable mConverter = () -> {
-        double value = mEtSenderAmount.getAmount();
-        getPresenter().convertIfNeed(value);
-    };
+    @OnClick(R.id.button_action)
+    public void onActionButtonClicked() {
+        switch (getPresenter().getActionType()) {
+            case CREATE_DEPOSIT:
+            case CREATE_WITHDRAW:
+                mElReceiverAmount.setError(null);
+                mElSenderAmount.setError(null);
+                getPresenter().sendDepositWithdraw(
+                        mEtSenderAmount.getAmount(),
+                        mEtReceiverAmount.getAmount(),
+                        mEtInterestRate.getText().toString().trim());
+                break;
+            case SHOW_DEPOSIT:
+            case SHOW_WITHDRAW:
+                getPresenter().onConfirmClicked();
+                break;
+        }
+    }
+
+    @OnClick(R.id.button_reject)
+    public void onRejectClicked() {
+        getPresenter().onRejectClicked();
+    }
 
     private void changeAmountContainerOrientation() {
         if (isTextLonger(mEtSenderAmount) || isTextLonger(mEtReceiverAmount)) {
@@ -463,29 +561,7 @@ public class DepositDetailsActivity extends ToolbarActivity<DepositDetailsPresen
         }
     }
 
-    @OnClick(R.id.button_action)
-    public void onActionButtonClicked() {
-        switch (getPresenter().getActionType()) {
-            case CREATE_DEPOSIT:
-                mElReceiverAmount.setError(null);
-                mElSenderAmount.setError(null);
-                getPresenter().sendDeposit(
-                        mEtSenderAmount.getAmount(),
-                        mEtReceiverAmount.getAmount(),
-                        mEtInterestRate.getText().toString().trim());
-                break;
-            case SHOW_DEPOSIT:
-                getPresenter().onConfirmClicked();
-                break;
-        }
-    }
-
-    @OnClick(R.id.button_reject)
-    public void onRejectClicked() {
-        getPresenter().onRejectClicked();
-    }
-
-    private boolean isTextLonger(TextInputEditText editText) {
+    private boolean isTextLonger(final TextInputEditText editText) {
         final Editable text = editText.getText();
         final TextPaint paint = editText.getPaint();
         final float textSize = paint.measureText(text.toString());
@@ -501,5 +577,4 @@ public class DepositDetailsActivity extends ToolbarActivity<DepositDetailsPresen
         }
         return false;
     }
-
 }
