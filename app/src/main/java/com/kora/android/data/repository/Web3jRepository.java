@@ -33,6 +33,7 @@ public interface Web3jRepository {
     Observable<List<String>> createRawTransaction(final UserEntity receiver,
                                                   final double senderAmount,
                                                   final double receiverAmount,
+                                                  final Integer interestRate,
                                                   final String pinCode);
 
     Observable<String> createCreateLoan(final UserEntity lender,

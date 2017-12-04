@@ -317,6 +317,7 @@ public class Web3jRepositoryImpl implements Web3jRepository {
     public Observable<List<String>> createRawTransaction(final UserEntity receiver,
                                                          final double senderAmount,
                                                          final double receiverAmount,
+                                                         final Integer interestRate,
                                                          final String pinCode) {
         return Observable.just(true).map(a -> {
 
@@ -392,11 +393,19 @@ public class Web3jRepositoryImpl implements Web3jRepository {
 
             if (sender.getCurrency().equals(receiver.getCurrency())) {
 
+                double simpleOrTotalSenderAmount;
+                if (interestRate != null) {
+                    final double totalInterest = Math.floor(senderAmount * (double) interestRate) / 100;
+                    simpleOrTotalSenderAmount = senderAmount + totalInterest;
+                } else {
+                    simpleOrTotalSenderAmount = senderAmount;
+                }
+
                 final Function transferFunction = new Function(
                         mWeb3jConnection.getGetTransferFunction(),
                         Arrays.asList(
                                 new Address(receiver.getIdentity()),
-                                new Uint256(Web3jUtils.convertTokenToBigInteger(senderAmount))
+                                new Uint256(Web3jUtils.convertTokenToBigInteger(simpleOrTotalSenderAmount))
                         ),
                         Collections.emptyList()
                 );
@@ -430,11 +439,19 @@ public class Web3jRepositoryImpl implements Web3jRepository {
 
             } else {
 
+                double simpleOrTotalSenderAmount;
+                if (interestRate != null) {
+                    final double totalInterest = Math.floor(senderAmount * (double) interestRate) / 100;
+                    simpleOrTotalSenderAmount = senderAmount + totalInterest;
+                } else {
+                    simpleOrTotalSenderAmount = senderAmount;
+                }
+
                 final Function senderTransferFunction = new Function(
                         mWeb3jConnection.getGetTransferFunction(),
                         Arrays.asList(
                                 new Address(mWeb3jConnection.getKoraWalletAddress()),
-                                new Uint256(Web3jUtils.convertTokenToBigInteger(senderAmount))
+                                new Uint256(Web3jUtils.convertTokenToBigInteger(simpleOrTotalSenderAmount))
                         ),
                         Collections.emptyList()
                 );
@@ -475,11 +492,19 @@ public class Web3jRepositoryImpl implements Web3jRepository {
                         .get();
                 final BigInteger koraTransactionCount = koraEthGetTransactionCount.getTransactionCount();
 
+                double simpleOrTotalReceiverAmount;
+                if (interestRate != null) {
+                    final double totalInterest = Math.floor(receiverAmount * (double) interestRate) / 100;
+                    simpleOrTotalReceiverAmount = receiverAmount + totalInterest;
+                } else {
+                    simpleOrTotalReceiverAmount = receiverAmount;
+                }
+
                 final Function koraTransferFunction = new Function(
                         mWeb3jConnection.getGetTransferFunction(),
                         Arrays.asList(
                                 new Address(receiver.getIdentity()),
-                                new Uint256(Web3jUtils.convertTokenToBigInteger(receiverAmount))
+                                new Uint256(Web3jUtils.convertTokenToBigInteger(simpleOrTotalReceiverAmount))
                         ),
                         Collections.emptyList()
                 );
@@ -1038,10 +1063,10 @@ public class Web3jRepositoryImpl implements Web3jRepository {
                 if (borrowerValue == borrowerBalance) {
                     lenderValue = lenderBalance;
                 } else {
-                    final int intBorrowerValue = (int) (borrowerValue * 100);
-                    final int intBorrowerBalance = (int) (borrowerBalance * 100);
-                    final int intLenderBalance = (int) (lenderBalance * 100);
-                    int intLenderValue = intBorrowerValue * intLenderBalance / intBorrowerBalance;
+                    final long longBorrowerValue = Math.round(borrowerValue * 100);
+                    final long longBorrowerBalance = Math.round(borrowerBalance * 100);
+                    final long longLenderBalance = Math.round(lenderBalance * 100);
+                    long intLenderValue = longBorrowerValue * longLenderBalance / longBorrowerBalance;
                     lenderValue = intLenderValue / 100d;
                 }
 

@@ -27,7 +27,7 @@ public class Web3jUtils {
     }
 
     public static BigInteger convertEthToWei(final double d) {
-        return BigInteger.valueOf((long) (d*100)).multiply(new BigInteger("10000000000000000"));
+        return BigInteger.valueOf(Math.round(d * 100)).multiply(new BigInteger("10000000000000000"));
     }
 
     public static double convertBigIntegerToToken(final BigInteger bigInteger) {
@@ -35,7 +35,7 @@ public class Web3jUtils {
     }
 
     public static BigInteger convertTokenToBigInteger(final double d) {
-        return BigInteger.valueOf((long) (d * 100));
+        return BigInteger.valueOf(Math.round(d * 100));
     }
 
     public static String convertDoubleToString(final double d) {
@@ -54,7 +54,7 @@ public class Web3jUtils {
     }
 
     public static BigInteger convertRateToBigInteger(final double d) {
-        return BigInteger.valueOf((long) (d * 100));
+        return BigInteger.valueOf(Math.round(d * 100));
     }
 
     public static BigInteger increaseTransactionCount(final BigInteger transactionCount) {

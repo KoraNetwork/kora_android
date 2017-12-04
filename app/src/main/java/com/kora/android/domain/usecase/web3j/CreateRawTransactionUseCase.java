@@ -18,6 +18,7 @@ public class CreateRawTransactionUseCase extends AsyncUseCase {
     private UserEntity mReceiver;
     private double mSenderAmount;
     private double mReceiverAmount;
+    private Integer mInterestRate;
     private String mPinCode;
 
     @Inject
@@ -35,12 +36,25 @@ public class CreateRawTransactionUseCase extends AsyncUseCase {
         mPinCode = pinCode;
     }
 
+    public void setData(final UserEntity receiver,
+                        final double senderAmount,
+                        final double receiverAmount,
+                        final Integer interestRate,
+                        final String pinCode) {
+        mReceiver = receiver;
+        mSenderAmount = senderAmount;
+        mReceiverAmount = receiverAmount;
+        mInterestRate = interestRate;
+        mPinCode = pinCode;
+    }
+
     @Override
     protected Observable buildObservableTask() {
         return mWeb3jRepository.createRawTransaction(
                 mReceiver,
                 mSenderAmount,
                 mReceiverAmount,
+                mInterestRate,
                 mPinCode
         );
     }

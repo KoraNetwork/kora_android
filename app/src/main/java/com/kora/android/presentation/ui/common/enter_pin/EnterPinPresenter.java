@@ -183,11 +183,19 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
             case SEND_MONEY:
             case SHOW_REQUEST:
             case SHOW_DEPOSIT:
+                mCreateRawTransactionUseCase.setData(
+                        mReceiver,
+                        mSenderAmount,
+                        mReceiverAmount,
+                        pinCode);
+                mCreateRawTransactionUseCase.execute(new CreateRawTransactionSubscriber());
+                break;
             case SHOW_WITHDRAW:
                 mCreateRawTransactionUseCase.setData(
                         mReceiver,
                         mSenderAmount,
                         mReceiverAmount,
+                        mDepositWithdrawEntity.getInterestRate(),
                         pinCode);
                 mCreateRawTransactionUseCase.execute(new CreateRawTransactionSubscriber());
                 break;
