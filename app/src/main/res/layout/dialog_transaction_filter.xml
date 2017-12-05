@@ -151,6 +151,38 @@
             android:layout_height="1dp"
             android:background="#14000000" />
 
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/type_deposit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:button="@null"
+            android:drawableRight="@drawable/btn_checkbox"
+            android:paddingBottom="14dp"
+            android:paddingTop="14dp"
+            android:text="@string/transaction_filter_type_deposit_label" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#14000000" />
+
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/type_withdraw"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:button="@null"
+            android:drawableRight="@drawable/btn_checkbox"
+            android:paddingBottom="14dp"
+            android:paddingTop="14dp"
+            android:text="@string/transaction_filter_type_withdraw_label" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#14000000" />
+
         <android.support.v7.widget.AppCompatTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

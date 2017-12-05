@@ -120,7 +120,7 @@ public class DepositWithdrawDetailsActivity extends ToolbarActivity<DepositWithd
 
     @Override
     public int getLayoutResource() {
-        return R.layout.activity_deposit_details;
+        return R.layout.activity_deposit_withdraw_details;
     }
 
     @Override

@@ -10,6 +10,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.kora.android.R;
 import com.kora.android.common.Keys;
@@ -47,6 +49,7 @@ public class RequestFragment extends StackFragment<RequestPresenter> implements 
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.request_list) RecyclerView mRequestList;
     @BindView(R.id.swipe_layout) SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.relative_layout_placeholder) RelativeLayout mRlPlaceholder;
 
     private RequestAdapter mRequestAdapter;
     private RequestFilterDialog mRequestFilterDialog;
@@ -163,7 +166,12 @@ public class RequestFragment extends StackFragment<RequestPresenter> implements 
 
     @Override
     public void showRequests(List<RequestEntity> requestEntities) {
-        mRequestAdapter.addItems(requestEntities);
+        if (requestEntities.isEmpty()) {
+            mRlPlaceholder.setVisibility(View.VISIBLE);
+        } else {
+            mRlPlaceholder.setVisibility(View.GONE);
+            mRequestAdapter.addItems(requestEntities);
+        }
     }
 
     @Override

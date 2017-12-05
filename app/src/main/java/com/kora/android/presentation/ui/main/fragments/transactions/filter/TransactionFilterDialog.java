@@ -29,6 +29,8 @@ public class TransactionFilterDialog extends FilterDialog<TransactionFilterModel
     @BindView(R.id.type_requesed) CheckBox mTypeRequestedCheckbox;
     @BindView(R.id.type_borrowed_funded) CheckBox mTypeBorrowedFundedCheckbox;
     @BindView(R.id.type_borrowed_paid_back) CheckBox mTypeBorrowedPaidBackCheckbox;
+    @BindView(R.id.type_deposit) CheckBox mTypeDepositCheckbox;
+    @BindView(R.id.type_withdraw) CheckBox mTypeWithdrawCheckbox;
     @BindView(R.id.state_success) CheckBox mSateSuccessCheckbox;
     @BindView(R.id.state_pending) CheckBox mStatePendingCheckbox;
     @BindView(R.id.state_error) CheckBox mStateErrorCheckbox;
@@ -81,6 +83,8 @@ public class TransactionFilterDialog extends FilterDialog<TransactionFilterModel
             mTypeRequestedCheckbox.setChecked(true);
             mTypeBorrowedFundedCheckbox.setChecked(true);
             mTypeBorrowedPaidBackCheckbox.setChecked(true);
+            mTypeDepositCheckbox.setChecked(true);
+            mTypeWithdrawCheckbox.setChecked(true);
             return;
         }
         final Set<TransactionType> transactionTypes = mTransactionFilterModel.getTransactionTypes();
@@ -96,6 +100,12 @@ public class TransactionFilterDialog extends FilterDialog<TransactionFilterModel
         }
         if (transactionTypes.contains(TransactionType.BORROWFUND)) {
             mTypeBorrowedPaidBackCheckbox.setChecked(true);
+        }
+        if (transactionTypes.contains(TransactionType.DEPOSIT)) {
+            mTypeDepositCheckbox.setChecked(true);
+        }
+        if (transactionTypes.contains(TransactionType.WITHDRAW)) {
+            mTypeWithdrawCheckbox.setChecked(true);
         }
     }
 
@@ -160,6 +170,18 @@ public class TransactionFilterDialog extends FilterDialog<TransactionFilterModel
     public void onTypeBorrowedPaidBackCheckChanged(boolean isChecked) {
         if (isChecked) mTransactionFilterModel.getTransactionTypes().add(TransactionType.BORROWPAYBACK);
         else mTransactionFilterModel.getTransactionTypes().remove(TransactionType.BORROWPAYBACK);
+    }
+
+    @OnCheckedChanged(R.id.type_deposit)
+    public void onTypeDepositCheckChanged(boolean isChecked) {
+        if (isChecked) mTransactionFilterModel.getTransactionTypes().add(TransactionType.DEPOSIT);
+        else mTransactionFilterModel.getTransactionTypes().remove(TransactionType.DEPOSIT);
+    }
+
+    @OnCheckedChanged(R.id.type_withdraw)
+    public void onTypeWithdrawCheckChanged(boolean isChecked) {
+        if (isChecked) mTransactionFilterModel.getTransactionTypes().add(TransactionType.WITHDRAW);
+        else mTransactionFilterModel.getTransactionTypes().remove(TransactionType.WITHDRAW);
     }
 
     @OnCheckedChanged(R.id.state_success)

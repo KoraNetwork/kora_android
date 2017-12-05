@@ -6,6 +6,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <RelativeLayout
+        android:id="@+id/relative_layout_placeholder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="60dp"
+        android:visibility="gone">
+
+        <include
+            layout="@layout/view_placeholder" />
+    </RelativeLayout>
+
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_layout"
         android:layout_width="match_parent"
@@ -21,6 +33,5 @@
             tools:listitem="@layout/item_transaction"/>
 
     </android.support.v4.widget.SwipeRefreshLayout>
-
 
 </android.support.constraint.ConstraintLayout>

@@ -6,6 +6,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.kora.android.R;
 import com.kora.android.common.Keys;
@@ -37,6 +39,7 @@ public class BorrowFragment extends StackFragment<BorrowPresenter> implements Bo
 
     @BindView(R.id.borrow_list) RecyclerView mBorrowList;
     @BindView(R.id.swipe_layout) SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.relative_layout_placeholder) RelativeLayout mRlPlaceholder;
 
     private BorrowAdapter mBorrowAdapter;
 
@@ -113,7 +116,12 @@ public class BorrowFragment extends StackFragment<BorrowPresenter> implements Bo
 
     @Override
     public void showData(List<BorrowEntity> entities) {
-        mBorrowAdapter.addItems(entities);
+        if (entities.isEmpty()) {
+            mRlPlaceholder.setVisibility(View.VISIBLE);
+        } else {
+            mRlPlaceholder.setVisibility(View.GONE);
+            mBorrowAdapter.addItems(entities);
+        }
     }
 
     private final RecyclerViewScrollListener mScrollListener = new RecyclerViewScrollListener() {

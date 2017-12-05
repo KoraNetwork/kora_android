@@ -112,8 +112,6 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
             }
             mProgressDialog.show();
             mProgressDialog.setContentView(R.layout.view_progress);
-//            final TextView tvMessage = mProgressDialog.findViewById(R.id.text_view_message);
-//            tvMessage.setText(stringId);
             final LottieAnimationView avLoading = mProgressDialog.findViewById(R.id.animation_view_loading);
 //            avLoading.setImageAssetsFolder("images/");
             avLoading.setAnimation("animation_loading.json");

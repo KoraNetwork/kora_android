@@ -250,6 +250,7 @@
     <string name="transaction_filter_type_borrowed_funded_label">Borrowed (funded)</string>
     <string name="transaction_filter_type_borrowed_paid_back_label">Borrowed (paid back)</string>
     <string name="transaction_filter_type_deposit_label">Deposit</string>
+    <string name="transaction_filter_type_withdraw_label">Withdraw</string>
     <string name="transaction_filter_state_label">State:</string>
     <string name="transaction_filter_state_pending_label">Pending</string>
     <string name="transaction_filter_state_success_label">Finished</string>
@@ -400,5 +401,8 @@
     <string name="deposit_filter_show_all">Show all</string>
     <string name="deposit_filter_in_progress">In progress</string>
     <string name="deposit_filter_rejected">Rejected</string>
+
+    <!-- Placeholder -->
+    <string name="placeholder_nothing">You don\'t have any requests yet</string>
 
 </resources>

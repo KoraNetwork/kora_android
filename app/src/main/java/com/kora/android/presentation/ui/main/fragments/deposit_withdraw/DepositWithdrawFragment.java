@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.kora.android.R;
 import com.kora.android.common.Keys;
@@ -62,6 +63,9 @@ public class DepositWithdrawFragment extends StackFragment<DepositWithdrawPresen
     SwipeRefreshLayout srlRefresh;
     @BindView(R.id.floating_button_create_deposit_withdraw)
     FloatingActionButton fabCreateDepositWithdraw;
+    @BindView(R.id.relative_layout_placeholder)
+    RelativeLayout mRlPlaceholder;
+
 
     private DepositWithdrawAdapter mDepositWithdrawAdapter;
     private DepositWithdrawFilterDialog mDepositWithdrawFilterDialog;
@@ -230,7 +234,12 @@ public class DepositWithdrawFragment extends StackFragment<DepositWithdrawPresen
 
     @Override
     public void showDepositWithdrawList(final List<DepositWithdrawEntity> depositWithdrawEntityList) {
-        mDepositWithdrawAdapter.addItems(depositWithdrawEntityList);
+        if (depositWithdrawEntityList.isEmpty()) {
+            mRlPlaceholder.setVisibility(View.VISIBLE);
+        } else {
+            mRlPlaceholder.setVisibility(View.GONE);
+            mDepositWithdrawAdapter.addItems(depositWithdrawEntityList);
+        }
     }
 
     @Override

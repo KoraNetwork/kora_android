@@ -8,7 +8,12 @@
 
     <include
         android:id="@+id/toolbar_container"
-        layout="@layout/toolbar"/>
+        layout="@layout/toolbar" />
+
+    <include
+        android:id="@+id/relative_layout_placeholder"
+        layout="@layout/view_placeholder"
+        android:visibility="gone" />
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_layout"

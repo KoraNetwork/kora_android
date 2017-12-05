@@ -10,6 +10,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.kora.android.R;
 import com.kora.android.common.Keys;
@@ -36,6 +38,7 @@ public class TransactionsFragment extends StackFragment<TransactionsPresenter>
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.transactions_list) RecyclerView mTransactionsList;
     @BindView(R.id.swipe_layout) SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.relative_layout_placeholder) RelativeLayout mRlPlaceholder;
 
     private TransactionAdapter mTransactionAdapter;
     private TransactionFilterDialog mTransactionFilterDialog;
@@ -132,7 +135,12 @@ public class TransactionsFragment extends StackFragment<TransactionsPresenter>
 
     @Override
     public void showTransactions(List<TransactionEntity> transactionEntities) {
-        mTransactionAdapter.addItems(transactionEntities);
+        if (transactionEntities.isEmpty()) {
+            mRlPlaceholder.setVisibility(View.VISIBLE);
+        } else {
+            mRlPlaceholder.setVisibility(View.GONE);
+            mTransactionAdapter.addItems(transactionEntities);
+        }
     }
 
     @Override
