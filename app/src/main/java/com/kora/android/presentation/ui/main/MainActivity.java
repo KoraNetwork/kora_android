@@ -9,7 +9,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -301,35 +300,36 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
 
     @Override
     public void selectHostById(final int hostId) {
-        unCheckAllMenuItems(mNavigationView.getMenu());
+        MenuItem currentMenuItem;
+        switch (mSelectedItemPosition) {
+            case TAB_AGENT_DEPOSIT_POSITION:
+                currentMenuItem = getAgentSubMenuItem(TAB_AGENT_DEPOSIT_SUB_MENU_POSITION);
+                break;
+            case TAB_AGENT_WITHDRAW_POSITION:
+                currentMenuItem = getAgentSubMenuItem(TAB_AGENT_WITHDRAW_SUB_MENU_POSITION);
+                break;
+            default:
+                currentMenuItem = mNavigationView.getMenu().getItem(mSelectedItemPosition);
+                break;
+        }
+        currentMenuItem.setChecked(false);
 
-        MenuItem item;
+        MenuItem nextMenuItem;
         switch (hostId) {
             case TAB_AGENT_DEPOSIT_POSITION:
-                item = getAgentSubMenuItem(TAB_AGENT_DEPOSIT_SUB_MENU_POSITION);
+                nextMenuItem = getAgentSubMenuItem(TAB_AGENT_DEPOSIT_SUB_MENU_POSITION);
                 mSelectedItemPosition = TAB_AGENT_DEPOSIT_POSITION;
                 break;
             case TAB_AGENT_WITHDRAW_POSITION:
-                item = getAgentSubMenuItem(TAB_AGENT_WITHDRAW_SUB_MENU_POSITION);
+                nextMenuItem = getAgentSubMenuItem(TAB_AGENT_WITHDRAW_SUB_MENU_POSITION);
                 mSelectedItemPosition = TAB_AGENT_WITHDRAW_POSITION;
                 break;
             default:
-                item = mNavigationView.getMenu().getItem(hostId);
+                nextMenuItem = mNavigationView.getMenu().getItem(hostId);
                 mSelectedItemPosition = hostId;
                 break;
         }
-        item.setChecked(true);
-    }
-
-    private void unCheckAllMenuItems(@NonNull final Menu menu) {
-        for (int i = 0; i < menu.size(); i++) {
-            final MenuItem item = menu.getItem(i);
-            if (item.hasSubMenu()) {
-                unCheckAllMenuItems(item.getSubMenu());
-            } else {
-                item.setChecked(false);
-            }
-        }
+        nextMenuItem.setChecked(true);
     }
 
     private MenuItem getAgentSubMenuItem(final int subMenuItemPosition) {

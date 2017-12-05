@@ -4,10 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Rect;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -70,6 +73,17 @@ public class ViewUtils {
     public static void deleteErrors(final TextInputLayout ... textInputLayoutArray) {
         for (TextInputLayout textInputLayout : textInputLayoutArray) {
             textInputLayout.setError(null);
+        }
+    }
+
+    public static void unCheckAllMenuItems(@NonNull final Menu menu) {
+        for (int i = 0; i < menu.size(); i++) {
+            final MenuItem item = menu.getItem(i);
+            if (item.hasSubMenu()) {
+                unCheckAllMenuItems(item.getSubMenu());
+            } else {
+                item.setChecked(false);
+            }
         }
     }
 }
