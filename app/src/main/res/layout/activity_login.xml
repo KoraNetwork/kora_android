@@ -34,7 +34,7 @@
                 android:text="@string/login_login"
                 android:textColor="@color/color_text_title"
                 android:textSize="24sp"
-                app:fontFamily="@font/muli_semi_bold" />
+                android:fontFamily="@font/muli_semi_bold" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_view_enter_phone_name_email"
@@ -47,9 +47,10 @@
                 android:text="@string/login_enter_identifier"
                 android:textColor="@color/color_text_text"
                 android:textSize="16sp"
-                app:fontFamily="@font/muli_normal" />
+                android:fontFamily="@font/muli_normal" />
 
             <android.support.design.widget.TextInputLayout
+                android:fontFamily="@font/muli_regular"
                 android:id="@+id/edit_layout_identifier"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -60,6 +61,7 @@
                 app:errorEnabled="true">
 
                 <android.support.design.widget.TextInputEditText
+                    android:fontFamily="@font/muli_regular"
                     android:id="@+id/edit_text_identifier"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -72,6 +74,7 @@
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
+                android:fontFamily="@font/muli_regular"
                 android:id="@+id/edit_layout_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -82,6 +85,7 @@
                 app:passwordToggleEnabled="true">
 
                 <android.support.design.widget.TextInputEditText
+                    android:fontFamily="@font/muli_regular"
                     android:id="@+id/edit_text_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -93,38 +97,19 @@
                     android:textSize="18sp" />
             </android.support.design.widget.TextInputLayout>
 
-            <android.support.v7.widget.CardView
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/card_view_login"
+                style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edit_layout_password"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="16dp"
-                android:clickable="true"
-                android:foreground="?android:attr/selectableItemBackground"
-                app:cardBackgroundColor="@color/color_button_background_green_1"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="4dp"
-                app:contentPadding="12dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_view_confirm"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:text="@string/login_log_in"
-                        android:textColor="@color/color_button_text_white"
-                        android:textSize="14sp"
-                        app:fontFamily="@font/muli_bold" />
-                </RelativeLayout>
-
-            </android.support.v7.widget.CardView>
+                android:background="@drawable/green_button_background"
+                android:fontFamily="@font/muli_bold"
+                android:text="@string/login_log_in"
+                android:textSize="14sp" />
 
             <LinearLayout
                 android:id="@+id/linear_layout_registration"
@@ -141,18 +126,18 @@
                     android:text="@string/login_no_account"
                     android:textColor="@color/color_text_text"
                     android:textSize="14sp"
-                    app:fontFamily="@font/muli_normal" />
+                    android:fontFamily="@font/muli_normal" />
 
                 <android.support.v7.widget.AppCompatTextView
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
                     android:id="@+id/text_view_registration"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
                     android:text="@string/login_registration"
                     android:textColor="@color/color_button_background_blue"
                     android:textSize="14sp"
-                    app:fontFamily="@font/muli_normal" />
+                    android:fontFamily="@font/muli_normal" />
             </LinearLayout>
 
             <LinearLayout
@@ -170,18 +155,18 @@
                     android:text="@string/login_forgot_password"
                     android:textColor="@color/color_text_text"
                     android:textSize="14sp"
-                    app:fontFamily="@font/muli_normal" />
+                    android:fontFamily="@font/muli_normal" />
 
                 <android.support.v7.widget.AppCompatTextView
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
                     android:id="@+id/text_view_restore"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
                     android:text="@string/login_restore"
                     android:textColor="@color/color_button_background_blue"
                     android:textSize="14sp"
-                    app:fontFamily="@font/muli_normal" />
+                    android:fontFamily="@font/muli_normal" />
             </LinearLayout>
 
         </RelativeLayout>

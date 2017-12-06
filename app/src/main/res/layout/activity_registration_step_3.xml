@@ -129,13 +129,13 @@
                         android:drawableLeft="@drawable/checkbox_visibility"
                         android:gravity="center"
                         android:padding="10dp" />
-
                 </LinearLayout>
 
             </android.support.design.widget.TextInputLayout>
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/card_view_next_finish"
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/button_next_finish"
+                style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edit_layout_create_pin_code"
@@ -143,31 +143,10 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="36dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?android:attr/selectableItemBackground"
-                app:cardBackgroundColor="@color/color_button_background_blue"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="4dp"
-                app:contentPadding="12dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_view_next_finish"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:text="@string/registration_next"
-                        android:textColor="@color/color_button_text_white"
-                        android:textSize="14sp"
-                        android:fontFamily="@font/muli_bold" />
-                </RelativeLayout>
-
-            </android.support.v7.widget.CardView>
+                android:background="@drawable/blue_button_background"
+                android:fontFamily="@font/muli_bold"
+                android:text="@string/registration_next"
+                android:textSize="14sp" />
 
         </RelativeLayout>
 

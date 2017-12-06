@@ -8,6 +8,8 @@ import com.kora.android.presentation.ui.common.add_contact.GetContactActivity;
 import com.kora.android.presentation.ui.common.deposit_withdraw.DepositWithdrawDetailsActivity;
 import com.kora.android.presentation.ui.common.enter_pin.EnterPinActivity;
 import com.kora.android.presentation.ui.common.send_request.RequestDetailsActivity;
+import com.kora.android.presentation.ui.forgot_password.step1.ForgotPassword1Activity;
+import com.kora.android.presentation.ui.forgot_password.step2.ForgotPassword2Activity;
 import com.kora.android.presentation.ui.login.LoginActivity;
 import com.kora.android.presentation.ui.main.MainActivity;
 import com.kora.android.presentation.ui.registration.countries.CountriesActivity;
@@ -49,4 +51,7 @@ public interface ActivityComponent {
     void inject(ComingSoonActivity comingSoonActivity);
 
     void inject(DepositWithdrawDetailsActivity depositWithdrawDetailsActivity);
+
+    void inject(ForgotPassword1Activity forgotPassword1Activity);
+    void inject(ForgotPassword2Activity forgotPassword2Activity);
 }

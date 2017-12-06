@@ -405,4 +405,20 @@
     <!-- Placeholder -->
     <string name="placeholder_nothing">You don\'t have any requests yet</string>
 
+    <!-- Forgot password -->
+    <string name="forgot_pass_forgot_pass">Forgot password</string>
+    <string name="forgot_pass_enter_email">Please, enter your email to restore password.</string>
+    <string name="forgot_pass_email">Email</string>
+    <string name="forgot_pass_email_empty">Email field is empty</string>
+    <string name="forgot_pass_email_incorrect">Email is incorrect</string>
+    <string name="forgot_pass_send">SEND</string>
+    <string name="forgot_pass_create_pass">Please, create new password to protect your account. Requirements on password creation: 8 letters, uppercase, lowercase, number.</string>
+    <string name="forgot_pass_new_pass">New Password</string>
+    <string name="forgot_pass_confirm_pass">Confirm Password</string>
+    <string name="forgot_pass_new_pass_empty">New password field is empty</string>
+    <string name="forgot_pass_new_pass_incorrect">New password is incorrect, at least one upper case letter, one lower case letter, one number, length at least 8 symbols</string>
+    <string name="forgot_pass_confirm_pass_empty">Confirm password field is empty</string>
+    <string name="forgot_pass_confirm_pass_incorrect">Confirm password does not match</string>
+    <string name="forgot_pass_confirm">CONFIRM</string>
+
 </resources>

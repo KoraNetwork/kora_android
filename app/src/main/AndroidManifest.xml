@@ -80,6 +80,18 @@
             android:windowSoftInputMode="stateHidden"/>
 
         <activity
+            android:name=".presentation.ui.forgot_password.step1.ForgotPassword1Activity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Light"
+            android:windowSoftInputMode="stateHidden"/>
+
+        <activity
+            android:name=".presentation.ui.forgot_password.step2.ForgotPassword2Activity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Light"
+            android:windowSoftInputMode="stateHidden"/>
+
+        <activity
             android:name=".presentation.ui.main.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.MainTheme"

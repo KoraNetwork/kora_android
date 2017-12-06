@@ -48,8 +48,6 @@ public class HomeFragment extends StackFragment<HomePresenter> implements HomeVi
     RecyclerView mRvTransactions;
     @BindView(R.id.swipe_layout)
     SwipeRefreshLayout mSlRefresh;
-    @BindView(R.id.card_view_show_all_transactions)
-    CardView mCvShowTransactions;
 
     private TransactionAdapter mTransactionAdapter;
 

@@ -108,7 +108,7 @@ public class FirstStepActivity extends BaseActivity<FirstStepPresenter> implemen
         mElPhoneNumber.setError(getString(R.string.registration_phone_number_incorrect));
     }
 
-    @OnClick(R.id.card_view_send)
+    @OnClick(R.id.button_send)
     public void onClickSend() {
         getPresenter().startSendPhoneNumberTask();
     }

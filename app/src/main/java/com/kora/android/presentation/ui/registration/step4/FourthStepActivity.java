@@ -277,7 +277,7 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
         startActivity(MainActivity.getLaunchIntent(this));
     }
 
-    @OnClick(R.id.card_view_confirm)
+    @OnClick(R.id.button_confirm)
     public void onClickConfirm() {
         getPresenter().startRegistrationTask();
     }

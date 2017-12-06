@@ -103,12 +103,12 @@ public class SecondStepActivity extends BaseActivity<SecondStepPresenter> implem
         mElConfirmationCode.setError(getString(R.string.registration_confirmation_code_incorrect));
     }
 
-    @OnClick(R.id.card_view_confirm)
+    @OnClick(R.id.button_confirm)
     public void onClickConfirm() {
         getPresenter().startSendConfirmationCodeTask();
     }
 
-    @OnClick(R.id.card_view_resend)
+    @OnClick(R.id.button_resend)
     public void onClickResend() {
         getPresenter().startResendPhoneNumberTask();
     }

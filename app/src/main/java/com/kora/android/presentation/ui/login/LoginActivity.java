@@ -8,6 +8,7 @@ import android.support.design.widget.TextInputLayout;
 import com.kora.android.R;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
+import com.kora.android.presentation.ui.forgot_password.step1.ForgotPassword1Activity;
 import com.kora.android.presentation.ui.main.MainActivity;
 import com.kora.android.presentation.ui.registration.step1.FirstStepActivity;
 
@@ -95,5 +96,10 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     @OnClick(R.id.text_view_registration)
     public void onClickRegistration() {
         startActivity(FirstStepActivity.getLaunchIntent(this));
+    }
+
+    @OnClick(R.id.text_view_restore)
+    public void onClickRestorePassword() {
+        startActivity(ForgotPassword1Activity.getLaunchIntent(this));
     }
 }

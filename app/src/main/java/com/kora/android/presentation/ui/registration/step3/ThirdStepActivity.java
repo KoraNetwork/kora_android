@@ -11,6 +11,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
@@ -41,14 +42,12 @@ public class ThirdStepActivity extends BaseActivity<ThirdStepPresenter> implemen
     TextInputEditText mEtPinThirdDigit;
     @BindView(R.id.edit_text_pin_fourth_digit)
     TextInputEditText mEtPinFourthDigit;
-    @BindView(R.id.card_view_next_finish)
-    CardView mCvNextFinish;
     @BindView(R.id.text_view_create_confirm_pin_code)
     TextView mTvCreateConfirmPin;
     @BindView(R.id.text_view_create_confirm_4_digit_pin_code)
     TextView mTvCreateConfirm4DigitPin;
-    @BindView(R.id.text_view_next_finish)
-    TextView mTvNextFinish;
+    @BindView(R.id.button_next_finish)
+    Button mBtnNextFinish;
     @BindView(R.id.check_box_visibility)
     CheckBox mCbVisibility;
 
@@ -177,7 +176,7 @@ public class ThirdStepActivity extends BaseActivity<ThirdStepPresenter> implemen
         mElCreatePinCode.setError(getString(R.string.registration_pin_code_does_not_match));
     }
 
-    @OnClick(R.id.card_view_next_finish)
+    @OnClick(R.id.button_next_finish)
     public void onClickNext() {
         final String pinCode =
                         mEtPinFirstDigit.getText().toString().trim() +
@@ -206,15 +205,15 @@ public class ThirdStepActivity extends BaseActivity<ThirdStepPresenter> implemen
             case VIEW_MODE_ENTER:
                 mTvCreateConfirmPin.setText(R.string.registration_confirm_pin_code);
                 mTvCreateConfirm4DigitPin.setText(R.string.registration_confirm_4_digit_pin_code);
-                mCvNextFinish.setCardBackgroundColor(ContextCompat.getColor(this, R.color.color_button_background_green_1));
-                mTvNextFinish.setText(R.string.registration_finish);
+                mBtnNextFinish.setBackground(getResources().getDrawable(R.drawable.green_button_background));
+                mBtnNextFinish.setText(R.string.registration_finish);
                 getPresenter().setViewMode(VIEW_MODE_CONFIRM);
                 break;
             case VIEW_MODE_CONFIRM:
                 mTvCreateConfirmPin.setText(R.string.registration_create_pin_code);
                 mTvCreateConfirm4DigitPin.setText(R.string.registration_create_4_digit_pin_code);
-                mCvNextFinish.setCardBackgroundColor(ContextCompat.getColor(this, R.color.color_button_background_blue));
-                mTvNextFinish.setText(R.string.registration_next);
+                mBtnNextFinish.setBackground(getResources().getDrawable(R.drawable.blue_button_background));
+                mBtnNextFinish.setText(R.string.registration_next);
                 getPresenter().setViewMode(VIEW_MODE_ENTER);
                 break;
         }

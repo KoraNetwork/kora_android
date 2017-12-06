@@ -386,8 +386,9 @@
                     tools:text="1234QWERasdf" />
             </android.support.design.widget.TextInputLayout>
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/card_view_confirm"
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/button_confirm"
+                style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edit_layout_confirm_password"
@@ -395,30 +396,10 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="16dp"
-                android:clickable="true"
-                android:foreground="?android:attr/selectableItemBackground"
-                app:cardBackgroundColor="@color/color_button_background_blue"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="4dp"
-                app:contentPadding="12dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_view_confirm"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:fontFamily="@font/muli_bold"
-                        android:text="@string/registration_confirm"
-                        android:textColor="@color/color_button_text_white"
-                        android:textSize="14sp" />
-                </RelativeLayout>
-
-            </android.support.v7.widget.CardView>
+                android:background="@drawable/blue_button_background"
+                android:fontFamily="@font/muli_bold"
+                android:text="@string/registration_confirm"
+                android:textSize="14sp" />
 
         </RelativeLayout>
 

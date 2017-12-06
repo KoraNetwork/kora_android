@@ -67,72 +67,33 @@
                     android:layout_below="@+id/text_view_balance"
                     android:layout_marginTop="16dp">
 
-                    <android.support.v7.widget.CardView
+                    <android.support.v7.widget.AppCompatButton
                         android:id="@+id/card_view_deposit"
+                        style="@style/Widget.AppCompat.Button.Colored"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="40dp"
                         android:layout_marginBottom="8dp"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="4dp"
+                        android:layout_marginEnd="4dp"
+                        android:layout_marginStart="16dp"
                         android:layout_weight="1"
-                        android:clickable="true"
-                        android:foreground="?android:attr/selectableItemBackground"
-                        app:cardBackgroundColor="@color/color_button_background_green_2"
-                        app:cardCornerRadius="4dp"
-                        app:cardElevation="4dp"
-                        app:contentPadding="10dp">
+                        android:background="@drawable/green_button_background"
+                        android:fontFamily="@font/muli_bold"
+                        android:text="@string/home_deposit"
+                        android:textSize="14sp" />
 
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <android.support.v7.widget.AppCompatTextView
-                                android:id="@+id/text_view_deposit"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerHorizontal="true"
-                                android:layout_centerVertical="true"
-                                android:fontFamily="@font/muli_bold"
-                                android:text="@string/home_deposit"
-                                android:textColor="@color/color_button_text_white"
-                                android:textSize="14sp" />
-                        </RelativeLayout>
-
-                    </android.support.v7.widget.CardView>
-
-                    <android.support.v7.widget.CardView
+                    <android.support.v7.widget.AppCompatButton
                         android:id="@+id/card_view_withdraw"
+                        style="@style/Widget.AppCompat.Button.Colored"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="40dp"
                         android:layout_marginBottom="8dp"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginRight="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginStart="4dp"
                         android:layout_weight="1"
-                        android:clickable="true"
-                        android:foreground="?android:attr/selectableItemBackground"
-                        app:cardBackgroundColor="@color/color_button_background_green_2"
-                        app:cardCornerRadius="4dp"
-                        app:cardElevation="4dp"
-                        app:contentPadding="10dp">
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <android.support.v7.widget.AppCompatTextView
-                                android:id="@+id/text_view_withdraw"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerHorizontal="true"
-                                android:layout_centerVertical="true"
-                                android:fontFamily="@font/muli_bold"
-                                android:text="@string/home_withdraw"
-                                android:textColor="@color/color_button_text_white"
-                                android:textSize="14sp" />
-                        </RelativeLayout>
-
-                    </android.support.v7.widget.CardView>
-
+                        android:background="@drawable/green_button_background"
+                        android:fontFamily="@font/muli_bold"
+                        android:text="@string/home_withdraw"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <ImageView
@@ -140,7 +101,6 @@
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:layout_below="@+id/linear_layout_deposit_withdraw"
-                    android:layout_marginLeft="20dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="16dp"
                     android:src="@drawable/ic_flag_usa" />
@@ -205,7 +165,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:background="?android:attr/selectableItemBackground"
+                            android:background="?android:attr/selectableItemBackgroundBorderless"
                             android:clickable="true"
                             android:focusable="true"
                             android:src="@drawable/ic_add_blue" />
@@ -215,7 +175,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="24dp"
-                            android:background="?android:attr/selectableItemBackground"
+                            android:background="?android:attr/selectableItemBackgroundBorderless"
                             android:clickable="true"
                             android:focusable="true"
                             android:gravity="center"
@@ -244,7 +204,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="24dp"
-                            android:background="?android:attr/selectableItemBackground"
+                            android:background="?android:attr/selectableItemBackgroundBorderless"
                             android:clickable="true"
                             android:focusable="true"
                             android:gravity="center"
@@ -274,7 +234,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="24dp"
-                            android:background="?android:attr/selectableItemBackground"
+                            android:background="?android:attr/selectableItemBackgroundBorderless"
                             android:clickable="true"
                             android:focusable="true"
                             android:gravity="center"
@@ -304,7 +264,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="24dp"
-                            android:background="?android:attr/selectableItemBackground"
+                            android:background="?android:attr/selectableItemBackgroundBorderless"
                             android:clickable="true"
                             android:focusable="true"
                             android:gravity="center"
@@ -356,8 +316,9 @@
                     android:scrollbars="none"
                     android:visibility="gone" />
 
-                <android.support.v7.widget.CardView
+                <android.support.v7.widget.AppCompatButton
                     android:id="@+id/card_view_show_all_transactions"
+                    style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/recycler_view_transactions"
@@ -365,36 +326,15 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:layout_marginTop="24dp"
-                    android:clickable="true"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    app:cardBackgroundColor="@color/color_button_background_blue"
-                    app:cardCornerRadius="4dp"
-                    app:cardElevation="4dp"
-                    app:contentPadding="12dp">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/text_view_show_all_transactions"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:layout_centerVertical="true"
-                            android:fontFamily="@font/muli_bold"
-                            android:text="@string/home_show_all_transactions"
-                            android:textColor="@color/color_button_text_white"
-                            android:textSize="14sp" />
-                    </RelativeLayout>
-
-                </android.support.v7.widget.CardView>
+                    android:background="@drawable/blue_button_background"
+                    android:fontFamily="@font/muli_bold"
+                    android:text="@string/home_show_all_transactions"
+                    android:textSize="14sp" />
 
             </RelativeLayout>
 
         </ScrollView>
 
     </android.support.v4.widget.SwipeRefreshLayout>
-
 
 </RelativeLayout>
