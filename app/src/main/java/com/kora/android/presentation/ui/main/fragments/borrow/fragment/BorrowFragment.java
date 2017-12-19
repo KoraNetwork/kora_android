@@ -116,7 +116,7 @@ public class BorrowFragment extends StackFragment<BorrowPresenter> implements Bo
 
     @Override
     public void showData(List<BorrowEntity> entities) {
-        if (entities.isEmpty()) {
+        if (entities.isEmpty() && mBorrowAdapter.getItemCount() == 0) {
             mRlPlaceholder.setVisibility(View.VISIBLE);
         } else {
             mRlPlaceholder.setVisibility(View.GONE);

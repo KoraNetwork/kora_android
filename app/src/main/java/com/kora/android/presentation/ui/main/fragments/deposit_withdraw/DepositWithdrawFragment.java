@@ -234,7 +234,7 @@ public class DepositWithdrawFragment extends StackFragment<DepositWithdrawPresen
 
     @Override
     public void showDepositWithdrawList(final List<DepositWithdrawEntity> depositWithdrawEntityList) {
-        if (depositWithdrawEntityList.isEmpty()) {
+        if (depositWithdrawEntityList.isEmpty() && mDepositWithdrawAdapter.getItemCount() == 0) {
             mRlPlaceholder.setVisibility(View.VISIBLE);
         } else {
             mRlPlaceholder.setVisibility(View.GONE);
@@ -280,6 +280,8 @@ public class DepositWithdrawFragment extends StackFragment<DepositWithdrawPresen
                 } else if (action == Action.DELETE) {
                     final DepositWithdrawEntity depositWithdrawEntity = data.getParcelableExtra(EXTRA_DEPOSIT_ENTITY);
                     depositWithdrawEntity.setState(DepositWithdrawState.INPROGRESS);
+                    if (mDepositWithdrawAdapter.getItemCount() == 0)
+                        mRlPlaceholder.setVisibility(View.GONE);
                     mDepositWithdrawAdapter.addItem(depositWithdrawEntity);
                     mRvDepositWithdrawList.scrollToPosition(0);
                 }

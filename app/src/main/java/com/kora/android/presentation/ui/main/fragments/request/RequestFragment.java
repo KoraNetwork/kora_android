@@ -166,7 +166,7 @@ public class RequestFragment extends StackFragment<RequestPresenter> implements 
 
     @Override
     public void showRequests(List<RequestEntity> requestEntities) {
-        if (requestEntities.isEmpty()) {
+        if (requestEntities.isEmpty() && mRequestAdapter.getItemCount() == 0) {
             mRlPlaceholder.setVisibility(View.VISIBLE);
         } else {
             mRlPlaceholder.setVisibility(View.GONE);
@@ -193,6 +193,8 @@ public class RequestFragment extends StackFragment<RequestPresenter> implements 
                 } else if (action == Action.DELETE) {
                     RequestEntity request = data.getParcelableExtra(Keys.Extras.EXTRA_REQUEST_ENTITY);
                     request.setState(RequestState.INPROGRESS);
+                    if (mRequestAdapter.getItemCount() == 0)
+                        mRlPlaceholder.setVisibility(View.GONE);
                     mRequestAdapter.addItem(request);
                     mRequestList.scrollToPosition(0);
                 }

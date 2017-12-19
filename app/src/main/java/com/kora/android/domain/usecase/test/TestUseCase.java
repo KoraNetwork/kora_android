@@ -49,7 +49,7 @@ public class TestUseCase extends AsyncUseCase {
     protected Observable buildObservableTask() {
         return Observable.just(true).map(a -> {
 
-            final String ownerFileName = "5c3d13b00f0fde8de60c45ab62ec0125c6b0f890".toLowerCase();
+            final String ownerFileName = "0x5c3d13b00f0fde8de60c45ab62ec0125c6b0f890.json".toLowerCase();
             final String password = "123456789";
 
             final String ownerAddress = "0x5c3d13b00f0fde8de60c45ab62ec0125c6b0f890".toLowerCase();
@@ -99,8 +99,8 @@ public class TestUseCase extends AsyncUseCase {
 //            Log.e("_____", "balance:" + String.valueOf(balanceBigDecimal));
 //
             final TransactionReceipt transactionReceipt = humanStandardToken.transfer(
-                    new Address("0x1a915f115ee5bda716759c969f9078c650feaa96"),
-                    new Uint256(new BigInteger("7575"))
+                    new Address("0x43319ff89263849d63fe7c0fc21dcb410a5b5f0e"),
+                    new Uint256(new BigInteger("100000"))
             ).get();
             Log.e("_____", "transactionHash:" + transactionReceipt.getTransactionHash());
 

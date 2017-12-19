@@ -7,7 +7,7 @@ public interface Keys {
     int ITEMS_PER_PAGE = 10;
 
     String CURRENCY_USD = "USD";
-    double DEFAULT_USD_BALANCE = 25.00;
+    double DEFAULT_USD_BALANCE = 1500.00;
     int DEFAULT_AGENT_RATE = 5;
 
     String ADDRESS_PREFIX = "0x";
