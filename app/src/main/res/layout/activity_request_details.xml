@@ -10,7 +10,7 @@
 
     <include layout="@layout/toolbar" />
 
-    <android.support.v4.widget.NestedScrollView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
@@ -247,7 +247,7 @@
                 style="@style/AppTheme.ActionButton.Blue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginBottom="16dp"/>
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/reject_button"
@@ -263,6 +263,7 @@
                 style="@style/Widget.AppCompat.Button.Borderless"/>
 
         </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+
+    </ScrollView>
 
 </LinearLayout>

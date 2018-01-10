@@ -13,22 +13,10 @@ import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import javax.inject.Inject;
 
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Action;
-
-import static com.kora.android.common.Keys.DefaultCountry.DEFAULT_COUNTRY_CODE;
-import static com.kora.android.common.Keys.DefaultCountry.DEFAULT_COUNTRY_CURRENCY;
-import static com.kora.android.common.Keys.DefaultCountry.DEFAULT_COUNTRY_FLAG;
-import static com.kora.android.common.Keys.DefaultCountry.DEFAULT_COUNTRY_NAME;
-import static com.kora.android.common.Keys.DefaultCountry.DEFAULT_COUNTRY_PHONE_CODE;
-import static com.kora.android.common.Keys.DefaultCountry.DEFAULT_CURRENCY_NAME_FULL;
-import static com.kora.android.common.Keys.DefaultCountry.DEFAULT_ERC_20_TOKEN;
 
 @ConfigPersistent
 public class FourthStepPresenter extends BasePresenter<FourthStepView> {
@@ -106,6 +94,12 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
         if (!StringUtils.isUserNameValid(mUserEntity.getUserName())) {
             getView().showIncorrectUserName();
             return;
+        }
+        if (mUserEntity.getLegalName() != null && !mUserEntity.getLegalName().isEmpty()) {
+            if (!StringUtils.isNameValid(mUserEntity.getLegalName())) {
+                getView().showIncorrectFullName();
+                return;
+            }
         }
         if (mUserEntity.getEmail() == null || mUserEntity.getEmail().isEmpty()) {
             getView().showEmptyEmail();

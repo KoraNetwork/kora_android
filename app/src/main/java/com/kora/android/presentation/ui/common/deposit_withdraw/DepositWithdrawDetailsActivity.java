@@ -480,7 +480,7 @@ public class DepositWithdrawDetailsActivity extends ToolbarActivity<DepositWithd
     public void onUserRejected(final DepositWithdrawEntity depositWithdrawEntity) {
         if (getPresenter().getActionType() == ActionType.SHOW_DEPOSIT) {
             Toast.makeText(this, R.string.deposit_reject_success, Toast.LENGTH_SHORT).show();
-        } else {
+        } else  if (getPresenter().getActionType() == ActionType.SHOW_WITHDRAW){
             Toast.makeText(this, R.string.withdraw_reject_success, Toast.LENGTH_SHORT).show();
         }
         final Intent intent = new Intent();
@@ -492,9 +492,9 @@ public class DepositWithdrawDetailsActivity extends ToolbarActivity<DepositWithd
 
     @Override
     public void onDepositWithdrawSent(final DepositWithdrawEntity depositWithdrawEntity) {
-        if (getPresenter().getActionType() == ActionType.SHOW_DEPOSIT) {
+        if (getPresenter().getActionType() == ActionType.CREATE_DEPOSIT) {
             Toast.makeText(this, R.string.deposit_send_success, Toast.LENGTH_SHORT).show();
-        } else {
+        } else if (getPresenter().getActionType() == ActionType.CREATE_WITHDRAW){
             Toast.makeText(this, R.string.withdraw_send_success, Toast.LENGTH_SHORT).show();
         }
         final Intent intent = new Intent();

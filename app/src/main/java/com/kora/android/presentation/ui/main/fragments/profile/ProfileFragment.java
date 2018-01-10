@@ -98,7 +98,8 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
     @BindView(R.id.edit_text_date_of_birth) TextInputEditText mEtDateOfBirth;
     @BindView(R.id.edit_text_address) TextInputEditText mEtAddress;
 
-    @BindView(R.id.edit_text_legal_name) TextInputEditText mEtLegalName;
+    @BindView(R.id.edit_layout_full_name) TextInputLayout mElFullName;
+    @BindView(R.id.edit_text_full_name) TextInputEditText mEtFullName;
     @BindView(R.id.edit_text_email) TextInputEditText mEtEmail;
 
     @BindView(R.id.edit_layout_date_of_birth) TextInputLayout mElDateOfBirth;
@@ -224,7 +225,7 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
 //            mEtUserName.setEnabled(true);
 //            mEtEmail.setEnabled(true);
 //            mEtPhoneNumber.setEnabled(true);
-            mEtLegalName.setEnabled(true);
+            mEtFullName.setEnabled(true);
 //            mEtCurrency.setEnabled(true);
             mEtPostalCode.setEnabled(true);
             mEtDateOfBirth.setEnabled(true);
@@ -243,13 +244,13 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
             mEtUserName.setEnabled(false);
             mEtEmail.setEnabled(false);
             mEtPhoneNumber.setEnabled(false);
-            mEtLegalName.setEnabled(false);
+            mEtFullName.setEnabled(false);
             mEtCurrency.setEnabled(false);
             mEtPostalCode.setEnabled(false);
             mEtDateOfBirth.setEnabled(false);
             mEtAddress.setEnabled(false);
             mEtInterestRate.setEnabled(false);
-            ViewUtils.clearFocus(mEtLegalName, mEtPostalCode, mEtDateOfBirth, mEtAddress, mEtInterestRate);
+            ViewUtils.clearFocus(mEtFullName, mEtPostalCode, mEtDateOfBirth, mEtAddress, mEtInterestRate);
             ViewUtils.deleteErrors(mElDateOfBirth, mElInterestRate);
             mTvExportWallet.setVisibility(View.VISIBLE);
             mTvImportWallet.setVisibility(View.VISIBLE);
@@ -273,7 +274,7 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
         mEtUserName.setText(userEntity.getUserName());
         mEtEmail.setText(userEntity.getEmail());
         mEtPhoneNumber.setText(StringUtils.getFormattedPhoneNumber(userEntity.getPhoneNumber(), userEntity.getCountryCode()));
-        mEtLegalName.setText(userEntity.getLegalName());
+        mEtFullName.setText(userEntity.getLegalName());
         mEtPostalCode.setText(userEntity.getPostalCode());
         mEtDateOfBirth.setText(DateUtils.getPrettyDateFromFormatted(userEntity.getDateOfBirth()));
         mEtAddress.setText(userEntity.getAddress());
@@ -319,9 +320,16 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
         ViewUtils.scrollToView(mSvContainer, mRlContainer, mElUserName);
     }
 
-    @OnTextChanged(R.id.edit_text_legal_name)
-    void onLegalNameChanged(final CharSequence legalName) {
+    @OnTextChanged(R.id.edit_text_full_name)
+    void onFullNameChanged(final CharSequence legalName) {
+        mElFullName.setError(null);
         getPresenter().setLegalName(legalName.toString().trim());
+    }
+
+    @Override
+    public void showIncorrectFullName() {
+        mElFullName.setError(getString(R.string.registration_full_name_incorrect));
+        ViewUtils.scrollToView(mSvContainer, mRlContainer, mElFullName);
     }
 
     @OnTextChanged(R.id.edit_text_email)

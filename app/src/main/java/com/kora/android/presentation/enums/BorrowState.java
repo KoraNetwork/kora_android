@@ -3,7 +3,7 @@ package com.kora.android.presentation.enums;
 
 public enum BorrowState {
 
-    ONGOING("On going"),
+    ONGOING("Ongoing"),
     AGREED("Agreed"),
     REJECTED("Rejected"),
     EXPIRED("Expired"),

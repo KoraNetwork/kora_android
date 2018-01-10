@@ -2,6 +2,7 @@ package com.kora.android.presentation.ui.main.fragments.send;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.AppCompatEditText;
@@ -9,6 +10,9 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 
 import com.kora.android.R;
 import com.kora.android.common.Keys;
@@ -74,13 +78,13 @@ public class SendFragment extends StackFragment<SendPresenter> implements SendVi
         if (savedInstanceState == null) {
             getPresenter().getUsers();
         } else {
-            List<UserEntity> users = savedInstanceState.getParcelableArrayList(Keys.Args.USER_LIST);
+            final List<UserEntity> users = savedInstanceState.getParcelableArrayList(Keys.Args.USER_LIST);
             mUserAdapter.addUsers(users);
         }
     }
 
     @Override
-    public void onSaveInstanceState(final Bundle outState) {
+    public void onSaveInstanceState(@NonNull final Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(Keys.Args.USER_LIST, (ArrayList<UserEntity>) mUserAdapter.getItems());
     }
@@ -112,6 +116,19 @@ public class SendFragment extends StackFragment<SendPresenter> implements SendVi
     @Override
     public void onResume() {
         super.onResume();
+        mEtSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mHandler.removeCallbacks(runnable);
+                mHandler.postDelayed(runnable, 500);
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
         mRvUsers.addOnScrollListener(mRecyclerViewScrollListener);
     }
 
@@ -127,13 +144,6 @@ public class SendFragment extends StackFragment<SendPresenter> implements SendVi
             getPresenter().getUsers(mUserAdapter.getRawItemsCount());
         }
     };
-
-
-    @OnTextChanged(R.id.edit_text_search)
-    public void onSearchKeyChanged() {
-        mHandler.removeCallbacks(runnable);
-        mHandler.postDelayed(runnable, 500);
-    }
 
     private Runnable runnable = () -> {
         mRecyclerViewScrollListener.resetParams();

@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
+            <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/image_view_kora_logo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -52,7 +52,6 @@
                     android:id="@+id/text_view_balance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="24dp"
                     android:fontFamily="@font/muli_bold"
@@ -60,12 +59,45 @@
                     android:textColor="@color/color_text_blue"
                     android:textSize="16sp" />
 
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/image_view_flag"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_below="@+id/text_view_balance"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="16dp"
+                    android:src="@drawable/ic_flag_usa" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_view_currency_balance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/image_view_flag"
+                    android:layout_marginStart="12dp"
+                    android:layout_toEndOf="@+id/image_view_flag"
+                    android:fontFamily="@font/muli_semi_bold"
+                    android:textColor="@color/color_text_black"
+                    android:textSize="14sp"
+                    tools:text="100.00 USD" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_view_currency_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/text_view_currency_balance"
+                    android:layout_marginStart="12dp"
+                    android:layout_toEndOf="@+id/image_view_flag"
+                    android:fontFamily="@font/muli_regular"
+                    android:textColor="@color/color_text_grey"
+                    android:textSize="12sp"
+                    tools:text="United States Dollar" />
+
                 <LinearLayout
                     android:id="@+id/linear_layout_deposit_withdraw"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/text_view_balance"
-                    android:layout_marginTop="16dp">
+                    android:layout_below="@+id/text_view_currency_name"
+                    android:layout_marginTop="20dp">
 
                     <android.support.v7.widget.AppCompatButton
                         android:id="@+id/card_view_deposit"
@@ -96,49 +128,11 @@
                         android:textSize="14sp" />
                 </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/image_view_flag"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_below="@+id/linear_layout_deposit_withdraw"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="16dp"
-                    android:src="@drawable/ic_flag_usa" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_view_currency_balance"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/image_view_flag"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginStart="12dp"
-                    android:layout_toEndOf="@+id/image_view_flag"
-                    android:layout_toRightOf="@+id/image_view_flag"
-                    android:fontFamily="@font/muli_semi_bold"
-                    android:textColor="@color/color_text_black"
-                    android:textSize="14sp"
-                    tools:text="100.00 USD" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_view_currency_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/text_view_currency_balance"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginStart="12dp"
-                    android:layout_toEndOf="@+id/image_view_flag"
-                    android:layout_toRightOf="@+id/image_view_flag"
-                    android:fontFamily="@font/muli_regular"
-                    android:textColor="@color/color_text_grey"
-                    android:textSize="12sp"
-                    tools:text="United States Dollar" />
-
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/text_view_my_apps"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/image_view_flag"
-                    android:layout_marginLeft="16dp"
+                    android:layout_below="@id/linear_layout_deposit_withdraw"
                     android:layout_marginStart="16sp"
                     android:layout_marginTop="36dp"
                     android:fontFamily="@font/muli_bold"
@@ -160,7 +154,7 @@
                         android:paddingLeft="24dp"
                         android:paddingRight="24dp">
 
-                        <ImageView
+                        <android.support.v7.widget.AppCompatImageView
                             android:id="@+id/image_view_add"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -181,7 +175,7 @@
                             android:gravity="center"
                             android:orientation="vertical">
 
-                            <ImageView
+                            <android.support.v7.widget.AppCompatImageView
                                 android:id="@+id/image_view_agent"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -210,7 +204,7 @@
                             android:gravity="center"
                             android:orientation="vertical">
 
-                            <ImageView
+                            <android.support.v7.widget.AppCompatImageView
                                 android:id="@+id/image_view_merchant"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -240,7 +234,7 @@
                             android:gravity="center"
                             android:orientation="vertical">
 
-                            <ImageView
+                            <android.support.v7.widget.AppCompatImageView
                                 android:id="@+id/image_view_lending"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -270,7 +264,7 @@
                             android:gravity="center"
                             android:orientation="vertical">
 
-                            <ImageView
+                            <android.support.v7.widget.AppCompatImageView
                                 android:id="@+id/image_view_cooperative"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -297,7 +291,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/scroll_view_my_apps"
-                    android:layout_marginLeft="16dp"
                     android:layout_marginStart="16sp"
                     android:layout_marginTop="36dp"
                     android:fontFamily="@font/muli_bold"

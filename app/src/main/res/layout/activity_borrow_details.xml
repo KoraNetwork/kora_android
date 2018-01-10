@@ -624,6 +624,10 @@
                     android:id="@+id/edit_text_start_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:fontFamily="@font/muli_regular"
                     android:hint="@string/borrow_borrow_start_date"
                     android:inputType="text"
@@ -631,7 +635,7 @@
                     android:maxLines="1"
                     android:textColor="@color/color_edit_text"
                     android:textSize="18sp"
-                    tools:text="Jan 13, 2017"/>
+                    tools:text="Jan 13, 2017" />
             </android.support.design.widget.TextInputLayout>
 
 
@@ -647,6 +651,10 @@
                     android:id="@+id/edit_text_maturity_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:fontFamily="@font/muli_regular"
                     android:hint="@string/borrow_borrow_maturity_date"
                     android:inputType="text"
@@ -654,7 +662,7 @@
                     android:maxLines="1"
                     android:textColor="@color/color_edit_text"
                     android:textSize="18sp"
-                    tools:text="Feb 13, 2017"/>
+                    tools:text="Feb 13, 2017" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout

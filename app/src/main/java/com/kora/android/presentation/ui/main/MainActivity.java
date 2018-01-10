@@ -34,6 +34,7 @@ import com.kora.android.presentation.ui.main.fragments.home.HomeFragment;
 import com.kora.android.presentation.ui.main.fragments.profile.ProfileFragment;
 import com.kora.android.presentation.ui.main.fragments.request.RequestFragment;
 import com.kora.android.presentation.ui.main.fragments.send.SendFragment;
+import com.kora.android.presentation.ui.main.fragments.send_feedback.SendFeedbackFragment;
 import com.kora.android.presentation.ui.main.fragments.transactions.TransactionsFragment;
 import com.kora.android.views.DividerItemDecoration;
 
@@ -166,7 +167,7 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
             case TAB_USER_PROFILE_POSITION:
                 return ProfileFragment.getNewInstance();
             case TAB_SEND_A_FEEDBACK_POSITION:
-                return TransactionsFragment.getNewInstance();
+                return SendFeedbackFragment.getNewInstance();
             case TAB_AGENT_DEPOSIT_POSITION:
                 return DepositWithdrawFragment.getNewInstance(DepositWithdrawRole.DEPOSIT_AGENT);
             case TAB_AGENT_WITHDRAW_POSITION:

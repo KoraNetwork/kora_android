@@ -69,7 +69,7 @@
     <string name="registration_upload_photo">Upload Photo</string>
     <string name="registration_required">*</string>
     <string name="registration_user_name">User Name</string>
-    <string name="registration_legal_name">Legal Name</string>
+    <string name="registration_legal_name">Full Name</string>
     <string name="registration_email">Email</string>
     <string name="registration_date_of_birth">Date of Birth</string>
     <string name="registration_currency">Currency</string>
@@ -80,6 +80,7 @@
     <string name="registration_user_name_empty">User name field is empty</string>
     <string name="registration_user_name_incorrect">User name is incorrect, only uppers case letters, lower case letters, numbers and \"_\" symbol, length at least 3 symbols</string>
     <string name="registration_user_name_too_short">User name is too short, at least 3 symbols</string>
+    <string name="registration_full_name_incorrect">Full name is incorrect</string>
     <string name="registration_email_empty">Email field is empty</string>
     <string name="registration_email_incorrect">Email is incorrect</string>
     <string name="registration_date_of_birth_incorrect">You are too young, must be at least 18 years old</string>
@@ -115,7 +116,7 @@
     <string name="login_password">Password</string>
     <string name="login_log_in">LOG IN</string>
     <string name="login_no_account">Don’t have an account?</string>
-    <string name="login_registration">Registration</string>
+    <string name="login_registration">Register</string>
     <string name="login_forgot_password">Forgot password?</string>
     <string name="login_restore">Restore</string>
     <string name="login_identifier_empty">Identifier field is empty</string>
@@ -147,7 +148,7 @@
     <string name="menu_withdrawal">Withdraw</string>
     <string name="menu_transactions_history">Transactions History</string>
     <string name="menu_user_profile">User Profile</string>
-    <string name="menu_sand_a_feedback">Send a Feedback</string>
+    <string name="menu_sand_a_feedback">Send Feedback</string>
     <string name="menu_logout">Log out</string>
     <string name="menu_agent_functions">Agent functions</string>
 
@@ -390,10 +391,10 @@
     <string name="deposit_state_rejected">Rejected</string>
     <string name="deposit_empty_sender_amount_error">Amount should be not empty</string>
     <string name="deposit_empty_receiver_amount_error">Receiver amount should be not empty</string>
-    <string name="deposit_reject_success">Deposit is rejected</string>
-    <string name="deposit_send_success">Deposit is sent</string>
-    <string name="withdraw_reject_success">Withdraw is rejected</string>
-    <string name="withdraw_send_success">Withdraw is sent</string>
+    <string name="deposit_reject_success">Deposit request is rejected</string>
+    <string name="deposit_send_success">Deposit request is sent</string>
+    <string name="withdraw_reject_success">Withdraw request is rejected</string>
+    <string name="withdraw_send_success">Withdraw request is sent</string>
     <string name="deposit_incorrect_interest_rate">Interest rate must be from 0 to 10</string>
 
     <!-- Deposit withdraw filter -->
@@ -420,5 +421,8 @@
     <string name="forgot_pass_confirm_pass_empty">Confirm password field is empty</string>
     <string name="forgot_pass_confirm_pass_incorrect">Confirm password does not match</string>
     <string name="forgot_pass_confirm">CONFIRM</string>
+
+    <!-- Send feedback -->
+    <string name="send_feedback_title">Send feedback</string>
 
 </resources>

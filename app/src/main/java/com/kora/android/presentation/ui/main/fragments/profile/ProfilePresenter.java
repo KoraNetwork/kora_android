@@ -108,6 +108,12 @@ public class ProfilePresenter extends BasePresenter<ProfileView> {
             getView().showIncorrectUserName();
             return;
         }
+        if (mUpdatedUserEntity.getLegalName() != null && !mUpdatedUserEntity.getLegalName().isEmpty()) {
+            if (!StringUtils.isNameValid(mUpdatedUserEntity.getLegalName())) {
+                getView().showIncorrectFullName();
+                return;
+            }
+        }
         if (mUpdatedUserEntity.getEmail() == null || mUpdatedUserEntity.getEmail().isEmpty()) {
             getView().showEmptyEmail();
             return;

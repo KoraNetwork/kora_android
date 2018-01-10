@@ -210,6 +210,10 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
                 if (s.toString().length() == 1) {
                     mEtPinSecondDigit.clearFocus();
                     mEtPinThirdDigit.requestFocus();
+                } else if (s.toString().length() == 0) {
+                    mEtPinSecondDigit.clearFocus();
+                    mEtPinFirstDigit.requestFocus();
+                    mEtPinFirstDigit.setSelection(mEtPinFirstDigit.length());
                 }
             }
         });
@@ -226,6 +230,10 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
                 if (s.toString().length() == 1) {
                     mEtPinThirdDigit.clearFocus();
                     mEtPinFourthDigit.requestFocus();
+                } else if (s.toString().length() == 0) {
+                    mEtPinThirdDigit.clearFocus();
+                    mEtPinSecondDigit.requestFocus();
+                    mEtPinSecondDigit.setSelection(mEtPinSecondDigit.length());
                 }
             }
         });
@@ -239,8 +247,14 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
             @Override
             public void afterTextChanged(Editable s) {
                 mElCreatePinCode.setError(null);
-                if (s.toString().length() == 1)
+                if (s.toString().length() == 1) {
                     mEtPinFourthDigit.clearFocus();
+                    ViewUtils.hideKeyboard(EnterPinActivity.this);
+                } else if (s.toString().length() == 0) {
+                    mEtPinFourthDigit.clearFocus();
+                    mEtPinThirdDigit.requestFocus();
+                    mEtPinThirdDigit.setSelection(mEtPinThirdDigit.length());
+                }
             }
         });
     }

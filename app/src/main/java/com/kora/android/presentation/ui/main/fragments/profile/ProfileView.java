@@ -12,6 +12,8 @@ public interface ProfileView extends BaseView<ProfilePresenter> {
 
     void showIncorrectUserName();
 
+    void showIncorrectFullName();
+
     void showEmptyEmail();
 
     void showIncorrectEmail();

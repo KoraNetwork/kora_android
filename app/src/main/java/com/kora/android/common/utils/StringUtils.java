@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 public class StringUtils {
 
     private static final String USER_NAME_PATTERN = "^[a-zA-Z0-9_]{3,}$"; // matcher.matches();
+    private static final String NAME_PATTERN = "^[a-zA-Z ]{3,}$"; // matcher.matches();
     private static final String EMAIL_PATTERN = "^(.)+(@)(.)+(\\.)(.)+$"; // matcher.find();
     private static final String FULL_PHONE_NUMBER_PATTERN = "(\\+?)(\\d{10,13})$"; // matcher.find();
     private static final String SHORT_PHONE_NUMBER_PATTERN = "(\\d{9,12})$"; // matcher.find();
@@ -19,6 +20,12 @@ public class StringUtils {
     public static boolean isUserNameValid(final String userName) {
         final Pattern pattern = Pattern.compile(USER_NAME_PATTERN);
         final Matcher matcher = pattern.matcher(userName);
+        return matcher.matches();
+    }
+
+    public static boolean isNameValid(final String name) {
+        final Pattern pattern = Pattern.compile(NAME_PATTERN);
+        final Matcher matcher = pattern.matcher(name);
         return matcher.matches();
     }
 

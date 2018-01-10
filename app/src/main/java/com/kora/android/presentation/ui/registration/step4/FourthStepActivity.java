@@ -50,6 +50,8 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
     TextView mTvUploadPhoto;
     @BindView(R.id.edit_layout_user_name)
     TextInputLayout mElUserName;
+    @BindView(R.id.edit_layout_full_name)
+    TextInputLayout mElFullName;
     @BindView(R.id.edit_layout_email)
     TextInputLayout mElEmail;
 
@@ -173,9 +175,16 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
         ViewUtils.scrollToView(mSvContainer, mRlContainer, mElUserName);
     }
 
-    @OnTextChanged(R.id.edit_text_legal_name)
-    void onChangedLegalName(final CharSequence legalName) {
-        getPresenter().setLegalName(legalName.toString().trim());
+    @OnTextChanged(R.id.edit_text_full_name)
+    void onChangedFullName(final CharSequence fullName) {
+        mElFullName.setError(null);
+        getPresenter().setLegalName(fullName.toString().trim());
+    }
+
+    @Override
+    public void showIncorrectFullName() {
+        mElFullName.setError(getString(R.string.registration_full_name_incorrect));
+        ViewUtils.scrollToView(mSvContainer, mRlContainer, mElFullName);
     }
 
     @OnTextChanged(R.id.edit_text_email)
