@@ -16,10 +16,12 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -61,6 +63,7 @@ import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import butterknife.OnFocusChange;
 import butterknife.OnTextChanged;
+import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltip;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -111,6 +114,7 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
     @BindView(R.id.button_export_wallet) TextView mTvExportWallet;
     @BindView(R.id.button_import_wallet) TextView mTvImportWallet;
 
+    @BindView(R.id.image_button_info) ImageButton mIbInfo;
     @BindView(R.id.text_agent_on_off) TextView mTvAgentOnOff;
     @BindView(R.id.switch_agent) SwitchCompat mScAgentSwitch;
     @BindView(R.id.edit_layout_interest_rate) TextInputLayout mElInterestRate;
@@ -280,6 +284,9 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
         mEtAddress.setText(userEntity.getAddress());
 
         mTvAgentOnOff.setText(userEntity.isAgent() ? R.string.profile_agent_on : R.string.profile_agent_off);
+        mTvAgentOnOff.setTextColor(userEntity.isAgent()
+                ? getResources().getColor(R.color.color_agent_on)
+                : getResources().getColor(R.color.color_agent_off));
         mScAgentSwitch.setChecked(userEntity.isAgent());
         mElInterestRate.setVisibility(userEntity.isAgent() ? View.VISIBLE : View.GONE);
         if (userEntity.getInterestRate() != null)
@@ -292,7 +299,7 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
         Glide.with(this)
                 .asBitmap()
                 .load(API_BASE_URL + flag)
-                .into(new SimpleTarget<Bitmap>() {
+                .into( new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
                         mEtCurrency.setCompoundDrawablesRelativeWithIntrinsicBounds(new BitmapDrawable(getResources(), resource), null, null, null);
@@ -589,5 +596,18 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
     @Override
     public void showImportedWalletMessage() {
         Toast.makeText(getBaseActivity(), R.string.import_wallet_imported, Toast.LENGTH_LONG).show();
+    }
+
+    @OnClick(R.id.image_button_info)
+    public void onClickShowInfo() {
+        new SimpleTooltip.Builder(getBaseActivity())
+                .anchorView(mIbInfo)
+                .gravity(Gravity.TOP)
+                .transparentOverlay(false)
+                .focusable(true)
+                .text("Lorem ipsum. Lorem ipsum. Lorem ipsum.")
+                .contentView(R.layout.view_info, R.id.text_view_description)
+                .build()
+                .show();
     }
 }

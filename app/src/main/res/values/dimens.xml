@@ -2,4 +2,11 @@
 <resources>
     <dimen name="fast_scroll_overlay_text_size">100dp</dimen>
     <dimen name="action_button_margin">24dp</dimen>
+
+    <dimen name="simpletooltip_overlay_offset">0dp</dimen>
+    <dimen name="simpletooltip_margin">0dp</dimen>
+    <dimen name="simpletooltip_padding">0dp</dimen>
+    <dimen name="simpletooltip_arrow_width">0dp</dimen>
+    <dimen name="simpletooltip_arrow_height">0dp</dimen>
+
 </resources>

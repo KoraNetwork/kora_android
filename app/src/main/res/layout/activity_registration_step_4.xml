@@ -313,6 +313,19 @@
             </android.support.design.widget.TextInputLayout>
 
             <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_view_password_requirements"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edit_layout_address"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
+                android:fontFamily="@font/muli_normal"
+                android:lineSpacingExtra="2sp"
+                android:text="@string/registration_password_requirements"
+                android:textColor="#2b74a5"
+                android:textSize="14sp" />
+
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/text_view_required_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -325,10 +338,11 @@
                 android:textSize="20sp" />
 
             <android.support.design.widget.TextInputLayout
+                android:layout_marginTop="16dp"
                 android:id="@+id/edit_layout_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/edit_layout_address"
+                android:layout_below="@+id/text_view_password_requirements"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:fontFamily="@font/muli_regular"

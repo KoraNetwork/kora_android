@@ -169,6 +169,8 @@ dependencies {
     }
     // lottie
     compile 'com.airbnb.android:lottie:2.2.5'
+    // tooltip
+    compile 'com.github.douglasjunior:android-simple-tooltip:0.2.2'
 
     // test
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {

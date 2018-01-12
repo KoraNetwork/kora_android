@@ -86,6 +86,7 @@
     <string name="registration_date_of_birth_incorrect">You are too young, must be at least 18 years old</string>
     <string name="registration_currency_usa">"       USD"</string>
     <string name="registration_currency_different">"       %s"</string>
+    <string name="registration_password_requirements">Requirements on password creation: minimal length 8 symbols, one upper case letter, lower case letter, one number.</string>
     <string name="registration_password_empty">Password field is empty</string>
     <string name="registration_password_incorrect">Password is incorrect, at least one upper case letter, one lower case letter, one number, length at least 8 symbols</string>
     <string name="registration_password_too_short">Password is too short, at least 8 symbols</string>

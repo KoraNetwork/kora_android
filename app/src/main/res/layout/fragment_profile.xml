@@ -196,7 +196,6 @@
                         android:textSize="16sp"/>
                 </com.kora.android.views.currency.CurrencyInputLayout>
 
-
                 <android.support.design.widget.TextInputLayout
                     android:fontFamily="@font/muli_regular"
                     android:id="@+id/edit_layout_phone_number"
@@ -263,21 +262,33 @@
                 </android.support.design.widget.TextInputLayout>
 
                 <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:paddingBottom="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingStart="2dp"
+                    android:paddingTop="8dp">
+
+                    <android.support.v7.widget.AppCompatImageButton
+                        android:id="@+id/image_button_info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:background="@null"
+                        android:padding="2dp"
+                        android:src="@drawable/ic_info" />
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/text_agent"
-                        style="@style/Widget.AppCompat.Button.Borderless"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:enabled="false"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="16dp"
+                        android:layout_toEndOf="@+id/image_button_info"
                         android:fontFamily="@font/muli_normal"
-                        android:gravity="start|center_vertical"
-                        android:paddingBottom="8dp"
-                        android:paddingTop="8dp"
                         android:text="@string/profile_agent_switch"
-                        android:textAllCaps="false"
                         android:textColor="@color/color_text_grey_2"
                         android:textSize="16sp" />
 
@@ -287,7 +298,6 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginEnd="8dp"
                         android:fontFamily="@font/muli_bold"
                         android:gravity="start|center_vertical"
                         android:text="@string/profile_agent_off"
@@ -301,7 +311,6 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginEnd="8dp"
                         android:checked="false"
                         android:visibility="gone" />
                 </RelativeLayout>
