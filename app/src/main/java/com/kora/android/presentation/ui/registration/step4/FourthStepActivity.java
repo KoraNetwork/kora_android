@@ -231,7 +231,7 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
         if (requestCode == SELECT_CURRENCY_REQUEST_CODE && resultCode == RESULT_OK) {
             final CountryEntity countryEntity = data.getParcelableExtra(SELECT_CURRENCY_EXTRA);
             getPresenter().setCurrency(countryEntity.getCurrency());
-            getPresenter().setCountryCode(countryEntity.getCountryCode());
+            getPresenter().setErc20Token(countryEntity.getERC20Token());
             Glide.with(this)
                     .load(API_BASE_URL + countryEntity.getFlag())
                     .into(mIvCountryFlag);

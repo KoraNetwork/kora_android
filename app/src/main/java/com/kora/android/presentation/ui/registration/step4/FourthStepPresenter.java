@@ -47,22 +47,15 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
         final CountryEntity countryEntity = mRegistrationPrefHelper.getCountry();
         setCountryCode(countryEntity.getCountryCode());
 
-        final CountryEntity defaultCountryEntity = new CountryEntity()
-                .addCountryCode(DEFAULT_COUNTRY_CODE)
-                .addName(DEFAULT_COUNTRY_NAME)
-                .addCurrency(DEFAULT_COUNTRY_CURRENCY)
-                .addCurrencyNameFull(DEFAULT_CURRENCY_NAME_FULL)
-                .addERC20Token(DEFAULT_ERC_20_TOKEN)
-                .addPhoneCode(DEFAULT_COUNTRY_PHONE_CODE)
-                .addFlag(DEFAULT_COUNTRY_FLAG);
-
-        if (countryEntity.getERC20Token() != null && !countryEntity.getERC20Token().isEmpty()) {
-            setCurrency(countryEntity.getCurrency());
-            getView().showCurrency(countryEntity);
-        } else {
-            setCurrency(defaultCountryEntity.getCurrency());
-            getView().showCurrency(defaultCountryEntity);
+        if (countryEntity.getERC20Token() == null || countryEntity.getERC20Token().isEmpty()) {
+            countryEntity.setCurrency(DEFAULT_COUNTRY_CURRENCY);
+            countryEntity.setERC20Token(DEFAULT_ERC_20_TOKEN);
+            countryEntity.setFlag(DEFAULT_COUNTRY_FLAG);
         }
+
+        setCurrency(countryEntity.getCurrency());
+        setErc20Token(countryEntity.getERC20Token());
+        getView().showCurrency(countryEntity);
     }
 
     public void setAvatar(final String avatar) {
@@ -87,6 +80,10 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
 
     public void setCurrency(final String currency) {
         mUserEntity.setCurrency(currency);
+    }
+
+    public void setErc20Token(final String erc20Token) {
+        mUserEntity.setERC20Token(erc20Token);
     }
 
     public void setPostalCode(final String postalCode) {

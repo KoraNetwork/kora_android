@@ -78,6 +78,8 @@ public class UserMapper {
                         map.put("dateOfBirth", createPartFromString(model.getDateOfBirth()));
                     if (model.getCurrency() != null)
                         map.put("currency", createPartFromString(model.getCurrency()));
+                    if (model.getERC20Token() != null)
+                        map.put("ERC20Token", createPartFromString(model.getERC20Token()));
                     if (model.getPostalCode() != null)
                         map.put("postalCode", createPartFromString(model.getPostalCode()));
                     if (model.getAddress() != null)
