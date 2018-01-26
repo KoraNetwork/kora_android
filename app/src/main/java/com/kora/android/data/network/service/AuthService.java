@@ -39,6 +39,9 @@ public interface AuthService {
     @GET("countries/")
     Observable<List<CountryResponse>> getCountries();
 
+    @GET("countries/currencies")
+    Observable<List<CountryResponse>> getCurrencies();
+
     @DELETE("auth/logout/")
     Observable<Object> logout();
 }

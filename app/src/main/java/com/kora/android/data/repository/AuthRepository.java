@@ -19,5 +19,7 @@ public interface AuthRepository {
 
     Observable<List<CountryEntity>> getCountries();
 
+    Observable<List<CountryEntity>> getCurrencies();
+
     Observable<Object> logout(final boolean fromNetwork);
 }

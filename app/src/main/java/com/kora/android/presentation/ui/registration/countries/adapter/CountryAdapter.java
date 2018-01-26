@@ -91,6 +91,10 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryV
                             && !mFilteredCountryEntityList.contains(countryEntity)) {
                         mFilteredCountryEntityList.add(countryEntity);
                     }
+                    if (countryEntity.getCountryCode().toLowerCase().contains(filterPattern)
+                            && !mFilteredCountryEntityList.contains(countryEntity)) {
+                        mFilteredCountryEntityList.add(countryEntity);
+                    }
                     if (countryEntity.getPhoneCode().toLowerCase().contains(filterPattern)
                             && !mFilteredCountryEntityList.contains(countryEntity)) {
                         mFilteredCountryEntityList.add(countryEntity);
@@ -125,7 +129,7 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryV
         public void setData(final CountryEntity countryEntity, final int position) {
             final Context context = mCvContainer.getContext();
             mCvContainer.setOnClickListener(v ->
-                    mOnItemClickListener.onClickSelectCounrty(countryEntity, position));
+                    mOnItemClickListener.onClickSelectCountry(countryEntity, position));
             Glide.with(context)
                     .load(API_BASE_URL + countryEntity.getFlag())
                     .into(mIvCountryFlag);
@@ -136,7 +140,7 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.CountryV
     }
 
     public interface OnItemClickListener {
-        void onClickSelectCounrty(final CountryEntity countryEntity, final int position);
+        void onClickSelectCountry(final CountryEntity countryEntity, final int position);
     }
 
     public void setOnItemClickListener(final OnItemClickListener onItemClickListener) {

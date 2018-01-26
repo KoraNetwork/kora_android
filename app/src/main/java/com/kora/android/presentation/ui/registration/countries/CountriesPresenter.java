@@ -23,14 +23,13 @@ public class CountriesPresenter extends BasePresenter<CountriesView> {
     @Inject
     public CountriesPresenter(final GetCountriesUseCase getCountriesUseCase) {
         mGetCountriesUseCase = getCountriesUseCase;
-
     }
 
     public void startGetCountriesTask() {
         mGetCountriesUseCase.execute(new GetCountriesObserver());
     }
 
-    private Action mGetPhoneNumberAction = new Action() {
+    private Action mGetCountriesAction = new Action() {
         @Override
         public void run() throws Exception {
             mGetCountriesUseCase.execute(new GetCountriesObserver());
@@ -66,7 +65,7 @@ public class CountriesPresenter extends BasePresenter<CountriesView> {
 
         @Override
         public void handleNetworkError(final RetrofitException retrofitException) {
-            getView().showErrorWithRetry(new RetryAction(mGetPhoneNumberAction));
+            getView().showErrorWithRetry(new RetryAction(mGetCountriesAction));
         }
     }
 

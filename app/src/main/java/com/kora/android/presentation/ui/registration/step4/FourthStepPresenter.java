@@ -18,6 +18,14 @@ import javax.inject.Inject;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Action;
 
+import static com.kora.android.common.Keys.DefaultCountry.DEFAULT_COUNTRY_CODE;
+import static com.kora.android.common.Keys.DefaultCountry.DEFAULT_COUNTRY_CURRENCY;
+import static com.kora.android.common.Keys.DefaultCountry.DEFAULT_COUNTRY_FLAG;
+import static com.kora.android.common.Keys.DefaultCountry.DEFAULT_COUNTRY_NAME;
+import static com.kora.android.common.Keys.DefaultCountry.DEFAULT_COUNTRY_PHONE_CODE;
+import static com.kora.android.common.Keys.DefaultCountry.DEFAULT_CURRENCY_NAME_FULL;
+import static com.kora.android.common.Keys.DefaultCountry.DEFAULT_ERC_20_TOKEN;
+
 @ConfigPersistent
 public class FourthStepPresenter extends BasePresenter<FourthStepView> {
 
@@ -37,9 +45,24 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
 
     public void startGetCountryTask() {
         final CountryEntity countryEntity = mRegistrationPrefHelper.getCountry();
-        setCurrency(countryEntity.getCurrency());
         setCountryCode(countryEntity.getCountryCode());
-        getView().showCurrency(countryEntity);
+
+        final CountryEntity defaultCountryEntity = new CountryEntity()
+                .addCountryCode(DEFAULT_COUNTRY_CODE)
+                .addName(DEFAULT_COUNTRY_NAME)
+                .addCurrency(DEFAULT_COUNTRY_CURRENCY)
+                .addCurrencyNameFull(DEFAULT_CURRENCY_NAME_FULL)
+                .addERC20Token(DEFAULT_ERC_20_TOKEN)
+                .addPhoneCode(DEFAULT_COUNTRY_PHONE_CODE)
+                .addFlag(DEFAULT_COUNTRY_FLAG);
+
+        if (countryEntity.getERC20Token() != null && !countryEntity.getERC20Token().isEmpty()) {
+            setCurrency(countryEntity.getCurrency());
+            getView().showCurrency(countryEntity);
+        } else {
+            setCurrency(defaultCountryEntity.getCurrency());
+            getView().showCurrency(defaultCountryEntity);
+        }
     }
 
     public void setAvatar(final String avatar) {

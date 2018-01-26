@@ -63,6 +63,14 @@ public class AuthRepositoryImpl implements AuthRepository {
     }
 
     @Override
+    public Observable<List<CountryEntity>> getCurrencies() {
+        return mAuthService.getCurrencies()
+                .flatMap(countryResponses -> Observable.fromIterable(countryResponses)
+                        .compose(mUserMapper.transformResponseToEntityCountry())
+                ).toList().toObservable();
+    }
+
+    @Override
     public Observable<Object> logout(final boolean fromNetwork) {
         if (fromNetwork) {
             return mAuthService.logout()

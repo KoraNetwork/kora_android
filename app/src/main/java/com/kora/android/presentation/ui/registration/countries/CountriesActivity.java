@@ -90,7 +90,7 @@ public class CountriesActivity extends BaseActivity<CountriesPresenter> implemen
     }
 
     @Override
-    public void onClickSelectCounrty(final CountryEntity countryEntity, final int position) {
+    public void onClickSelectCountry(final CountryEntity countryEntity, final int position) {
         ViewUtils.hideKeyboard(this);
         final Intent intent = new Intent();
         intent.putExtra(SELECT_COUNTRY_EXTRA, countryEntity);

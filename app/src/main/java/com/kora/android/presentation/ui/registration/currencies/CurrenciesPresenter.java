@@ -4,6 +4,7 @@ import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.usecase.registration.GetCountriesUseCase;
 import com.kora.android.di.annotation.ConfigPersistent;
+import com.kora.android.domain.usecase.registration.GetCurrenciesUseCase;
 import com.kora.android.presentation.model.CountryEntity;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
@@ -18,25 +19,25 @@ import io.reactivex.functions.Action;
 @ConfigPersistent
 public class CurrenciesPresenter extends BasePresenter<CurrenciesView> {
 
-    private final GetCountriesUseCase mGetCountriesUseCase;
+    private final GetCurrenciesUseCase mGetCurrenciesUseCase;
 
     @Inject
-    public CurrenciesPresenter(final GetCountriesUseCase getCountriesUseCase) {
-        mGetCountriesUseCase = getCountriesUseCase;
+    public CurrenciesPresenter(final GetCurrenciesUseCase getCurrenciesUseCase) {
+        mGetCurrenciesUseCase = getCurrenciesUseCase;
     }
 
     public void startGetCountriesTask() {
-        mGetCountriesUseCase.execute(new GetCountriesObserver());
+        mGetCurrenciesUseCase.execute(new GetCurrenciesObserver());
     }
 
-    private Action mGetPhoneNumberAction = new Action() {
+    private Action mGetCurrenciesAction = new Action() {
         @Override
         public void run() throws Exception {
-            mGetCountriesUseCase.execute(new GetCountriesObserver());
+            mGetCurrenciesUseCase.execute(new GetCurrenciesObserver());
         }
     };
 
-    private class GetCountriesObserver extends DefaultInternetSubscriber<List<CountryEntity>> {
+    private class GetCurrenciesObserver extends DefaultInternetSubscriber<List<CountryEntity>> {
 
         @Override
         protected void onStart() {
@@ -66,12 +67,12 @@ public class CurrenciesPresenter extends BasePresenter<CurrenciesView> {
         @Override
         public void handleNetworkError(final RetrofitException retrofitException) {
             if(!isViewAttached()) return;
-            getView().showErrorWithRetry(new RetryAction(mGetPhoneNumberAction));
+            getView().showErrorWithRetry(new RetryAction(mGetCurrenciesAction));
         }
     }
 
     @Override
     public void onDetachView() {
-        mGetCountriesUseCase.dispose();
+        mGetCurrenciesUseCase.dispose();
     }
 }
