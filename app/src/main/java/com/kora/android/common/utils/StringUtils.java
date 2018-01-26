@@ -11,8 +11,8 @@ public class StringUtils {
     private static final String USER_NAME_PATTERN = "^[a-zA-Z0-9_]{3,}$"; // matcher.matches();
     private static final String NAME_PATTERN = "^[a-zA-Z ]{3,}$"; // matcher.matches();
     private static final String EMAIL_PATTERN = "^(.)+(@)(.)+(\\.)(.)+$"; // matcher.find();
-    private static final String FULL_PHONE_NUMBER_PATTERN = "(\\+?)(\\d{10,13})$"; // matcher.find();
-    private static final String SHORT_PHONE_NUMBER_PATTERN = "(\\d{9,12})$"; // matcher.find();
+    private static final String FULL_PHONE_NUMBER_PATTERN = "(\\+?)(\\d{8,13})$"; // matcher.find();
+    private static final String SHORT_PHONE_NUMBER_PATTERN = "(\\d{5,12})$"; // matcher.find();
     private static final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,}$"; // matcher.find();
     private static final int DEFAULT_FONE_NUMBER_COUNT = 12;
     public static final int NIGERIAN_PHONE_NUMBER_COUNT = 13;
@@ -80,9 +80,10 @@ public class StringUtils {
 
     public static String addPlusIfNeeded(final String phoneNumber) {
         if (phoneNumber == null) return "";
-        if ((phoneNumber.length() == DEFAULT_FONE_NUMBER_COUNT || phoneNumber.length() == NIGERIAN_PHONE_NUMBER_COUNT) && !phoneNumber.startsWith("+")) {
+        if (!phoneNumber.startsWith("+")) {
             return "+" + phoneNumber;
-        } else return phoneNumber;
+        } else
+            return phoneNumber;
     }
 
     public static String getCodeFromMessage(final String message) {
@@ -90,11 +91,7 @@ public class StringUtils {
     }
 
     public static String getFormattedPhoneNumber(String phone, String countryCode) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            return PhoneNumberUtils.formatNumber(addPlusIfNeeded(phone), countryCode);
-        } else {
-           return PhoneNumberUtils.formatNumber(addPlusIfNeeded(phone)); //Deprecated method
-        }
+        return PhoneNumberUtils.formatNumber(addPlusIfNeeded(phone), countryCode);
     }
 
     public static String getSimplePhoneNumber(final String phoneNumber) {

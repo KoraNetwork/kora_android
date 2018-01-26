@@ -49,11 +49,24 @@
                 android:layout_height="wrap_content">
 
                 <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_view_warning"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="@font/muli_normal"
+                    android:text="@string/home_warning"
+                    android:textColor="#46a6e3"
+                    android:textSize="14sp" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_below="@+id/text_view_warning"
                     android:id="@+id/text_view_balance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="8dp"
                     android:fontFamily="@font/muli_bold"
                     android:text="@string/home_balance"
                     android:textColor="@color/color_text_blue"

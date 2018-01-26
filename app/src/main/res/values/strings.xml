@@ -129,6 +129,7 @@
     <string name="login_dialog_message_server_error">Wrong identifier or password</string>
 
     <!-- Login fragment -->
+    <string name="home_warning">This is only a test token, it is not on mainnet yet.</string>
     <string name="home_balance">Balance</string>
     <string name="home_deposit">DEPOSIT</string>
     <string name="home_withdraw">WITHDRAW</string>
@@ -425,5 +426,9 @@
 
     <!-- Send feedback -->
     <string name="send_feedback_title">Send feedback</string>
+
+    <!-- Testnet dialog -->
+    <string name="dialog_testnet_title">Info</string>
+    <string name="dialog_testnet_message">This is only a test tokens, it is not on mainnet yet.</string>
 
 </resources>
