@@ -34,6 +34,8 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
 
     private UserEntity mUserEntity;
     private String mConfirmPassword;
+    private String mOldCurrency;
+    private String mOldFlag;
 
     @Inject
     public FourthStepPresenter(final RegistrationPrefHelper registrationPrefHelper,
@@ -45,6 +47,8 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
 
     public void startGetCountryTask() {
         final CountryEntity countryEntity = mRegistrationPrefHelper.getCountry();
+        mOldCurrency = countryEntity.getCurrency();
+        mOldFlag = countryEntity.getFlag();
         setCountryCode(countryEntity.getCountryCode());
 
         if (countryEntity.getERC20Token() == null || countryEntity.getERC20Token().isEmpty()) {
@@ -56,6 +60,18 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
         setCurrency(countryEntity.getCurrency());
         setErc20Token(countryEntity.getERC20Token());
         getView().showCurrency(countryEntity);
+    }
+
+    public UserEntity getUserEntity() {
+        return mUserEntity;
+    }
+
+    public String getOldCurrency() {
+        return mOldCurrency;
+    }
+
+    public String getOldFlag() {
+        return mOldFlag;
     }
 
     public void setAvatar(final String avatar) {

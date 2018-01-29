@@ -10,6 +10,8 @@ public interface Keys {
     double DEFAULT_USD_BALANCE = 1500.00;
     int DEFAULT_AGENT_RATE = 5;
 
+    String CURRENCY_EUR = "EUR";
+
     String ADDRESS_PREFIX = "0x";
     String JSON_FILE_EXTENSION = ".json";
     String EXPORT_FOLDER_NAME = "Kora";

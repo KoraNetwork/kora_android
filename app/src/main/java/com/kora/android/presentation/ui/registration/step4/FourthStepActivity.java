@@ -36,6 +36,7 @@ import butterknife.OnTextChanged;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
+import static com.kora.android.common.Keys.CURRENCY_EUR;
 import static com.kora.android.common.Keys.SelectCurrency.SELECT_CURRENCY_EXTRA;
 import static com.kora.android.common.Keys.SelectCurrency.SELECT_CURRENCY_REQUEST_CODE;
 import static com.kora.android.data.network.Constants.API_BASE_URL;
@@ -232,10 +233,16 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
             final CountryEntity countryEntity = data.getParcelableExtra(SELECT_CURRENCY_EXTRA);
             getPresenter().setCurrency(countryEntity.getCurrency());
             getPresenter().setErc20Token(countryEntity.getERC20Token());
-            Glide.with(this)
-                    .load(API_BASE_URL + countryEntity.getFlag())
-                    .into(mIvCountryFlag);
             mEtCurrency.setText(getString(R.string.registration_currency_different, countryEntity.getCurrency()));
+            if (getPresenter().getOldCurrency().equals(CURRENCY_EUR) && countryEntity.getCurrency().equals(CURRENCY_EUR)) {
+                Glide.with(this)
+                        .load(API_BASE_URL + getPresenter().getOldFlag())
+                        .into(mIvCountryFlag);
+            } else {
+                Glide.with(this)
+                        .load(API_BASE_URL + countryEntity.getFlag())
+                        .into(mIvCountryFlag);
+            }
         }
     }
 
