@@ -211,9 +211,9 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
                     mEtPinSecondDigit.clearFocus();
                     mEtPinThirdDigit.requestFocus();
                 } else if (s.toString().length() == 0) {
-                    mEtPinSecondDigit.clearFocus();
-                    mEtPinFirstDigit.requestFocus();
-                    mEtPinFirstDigit.setSelection(mEtPinFirstDigit.length());
+//                    mEtPinSecondDigit.clearFocus();
+//                    mEtPinFirstDigit.requestFocus();
+//                    mEtPinFirstDigit.setSelection(mEtPinFirstDigit.length());
                 }
             }
         });
@@ -231,9 +231,9 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
                     mEtPinThirdDigit.clearFocus();
                     mEtPinFourthDigit.requestFocus();
                 } else if (s.toString().length() == 0) {
-                    mEtPinThirdDigit.clearFocus();
-                    mEtPinSecondDigit.requestFocus();
-                    mEtPinSecondDigit.setSelection(mEtPinSecondDigit.length());
+//                    mEtPinThirdDigit.clearFocus();
+//                    mEtPinSecondDigit.requestFocus();
+//                    mEtPinSecondDigit.setSelection(mEtPinSecondDigit.length());
                 }
             }
         });
@@ -251,9 +251,9 @@ public class EnterPinActivity extends BaseActivity<EnterPinPresenter> implements
                     mEtPinFourthDigit.clearFocus();
                     ViewUtils.hideKeyboard(EnterPinActivity.this);
                 } else if (s.toString().length() == 0) {
-                    mEtPinFourthDigit.clearFocus();
-                    mEtPinThirdDigit.requestFocus();
-                    mEtPinThirdDigit.setSelection(mEtPinThirdDigit.length());
+//                    mEtPinFourthDigit.clearFocus();
+//                    mEtPinThirdDigit.requestFocus();
+//                    mEtPinThirdDigit.setSelection(mEtPinThirdDigit.length());
                 }
             }
         });

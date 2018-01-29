@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -112,9 +110,10 @@ public class ThirdStepActivity extends BaseActivity<ThirdStepPresenter> implemen
                     mEtPinSecondDigit.clearFocus();
                     mEtPinThirdDigit.requestFocus();
                 } else if (s.toString().length() == 0) {
-                    mEtPinSecondDigit.clearFocus();
-                    mEtPinFirstDigit.requestFocus();
-                    mEtPinFirstDigit.setSelection(mEtPinFirstDigit.length());
+//                    if (areAllFieldsEmpty()) return;
+//                    mEtPinSecondDigit.clearFocus();
+//                    mEtPinFirstDigit.requestFocus();
+//                    mEtPinFirstDigit.setSelection(mEtPinFirstDigit.length());
                 }
             }
         });
@@ -132,9 +131,10 @@ public class ThirdStepActivity extends BaseActivity<ThirdStepPresenter> implemen
                     mEtPinThirdDigit.clearFocus();
                     mEtPinFourthDigit.requestFocus();
                 } else if (s.toString().length() == 0) {
-                    mEtPinThirdDigit.clearFocus();
-                    mEtPinSecondDigit.requestFocus();
-                    mEtPinSecondDigit.setSelection(mEtPinSecondDigit.length());
+//                    if (areAllFieldsEmpty()) return;
+//                    mEtPinThirdDigit.clearFocus();
+//                    mEtPinSecondDigit.requestFocus();
+//                    mEtPinSecondDigit.setSelection(mEtPinSecondDigit.length());
                 }
             }
         });
@@ -152,9 +152,10 @@ public class ThirdStepActivity extends BaseActivity<ThirdStepPresenter> implemen
                     mEtPinFourthDigit.clearFocus();
                     ViewUtils.hideKeyboard(ThirdStepActivity.this);
                 } else if (s.toString().length() == 0) {
-                    mEtPinFourthDigit.clearFocus();
-                    mEtPinThirdDigit.requestFocus();
-                    mEtPinThirdDigit.setSelection(mEtPinThirdDigit.length());
+//                    if (areAllFieldsEmpty()) return;
+//                    mEtPinFourthDigit.clearFocus();
+//                    mEtPinThirdDigit.requestFocus();
+//                    mEtPinThirdDigit.setSelection(mEtPinThirdDigit.length());
                 }
             }
         });
