@@ -12,6 +12,11 @@ public interface UserRepository {
 
     Observable<UserEntity> getUserData(final boolean fromNetwork);
 
+    Observable<UserEntity> createIdentity(final String ownerAddress,
+                                          final String recoveryAddress);
+
+    Observable <Object>increaseBalance();
+
     Observable<UserEntity> updateUser(final UserEntity userEntity);
 
     Observable<Pair<List<UserEntity>, List<UserEntity>>> getUsers(final String search,
@@ -24,5 +29,5 @@ public interface UserRepository {
 
     Observable<List<UserEntity>> getRecentUsers();
 
-    Observable addToRecent(UserEntity userEntity);
+    Observable <Object>addToRecent(UserEntity userEntity);
 }

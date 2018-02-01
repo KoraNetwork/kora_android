@@ -1,5 +1,7 @@
 package com.kora.android.presentation.service;
 
+import android.app.PendingIntent;
+
 import com.kora.android.di.component.ServiceComponent;
 
 public interface BaseServiceContractor<P extends BaseServicePresenter>  {
@@ -8,7 +10,23 @@ public interface BaseServiceContractor<P extends BaseServicePresenter>  {
 
     void injectToComponent(final ServiceComponent serviceComponent);
 
-    void showNotification(final int id, String message, final boolean cancelable);
+    void showNotification(final int id,
+                          final String title,
+                          final String text,
+                          final boolean cancelable);
+
+    void showError(final int id,
+                   final String title,
+                   final String text,
+                   final boolean cancelable,
+                   final PendingIntent ok);
+
+    void showErrorWithRetry(final int id,
+                            final String title,
+                            final String text,
+                            final boolean cancelable,
+                            final PendingIntent action,
+                            final PendingIntent cancel);
 
     void cancelNotification(final int id);
 }

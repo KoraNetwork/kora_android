@@ -274,10 +274,10 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
 
     @Override
     public void showUserData(final UserEntity userEntity) {
-        if (!userEntity.hasIdentity()) {
-            final Intent launchIntent = CreateWalletsService.getLaunchIntent(this, userEntity);
+//        if (!userEntity.hasIdentity()) {
+            final Intent launchIntent = CreateWalletsService.getLaunchIntent(this);
             startService(launchIntent);
-        }
+//        }
 
         mNavigationView.getMenu().setGroupVisible(R.id.nav_group_agent, userEntity.isAgent());
         if (!userEntity.isAgent()) {

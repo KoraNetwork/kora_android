@@ -9,7 +9,7 @@ import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.usecase.request.AddToRequestsUseCase;
 import com.kora.android.domain.usecase.request.UpdateRequestUseCase;
-import com.kora.android.domain.usecase.user.ConvertAmountUseCase;
+import com.kora.android.domain.usecase.convert.GetConvertedAmountUseCase;
 import com.kora.android.domain.usecase.user.GetUserDataUseCase;
 import com.kora.android.presentation.enums.Direction;
 import com.kora.android.presentation.model.RequestEntity;
@@ -26,7 +26,7 @@ import io.reactivex.functions.Action;
 public class RequestDetailsPresenter extends BasePresenter<RequestDetailsView> {
 
     private final GetUserDataUseCase mGetUserDataUseCase;
-    private final ConvertAmountUseCase mConvertAmountUseCase;
+    private final GetConvertedAmountUseCase mGetConvertedAmountUseCase;
     private final AddToRequestsUseCase mAddToRequestsUseCase;
     private final UpdateRequestUseCase mUpdateRequestUseCase;
 
@@ -37,11 +37,11 @@ public class RequestDetailsPresenter extends BasePresenter<RequestDetailsView> {
 
     @Inject
     public RequestDetailsPresenter(final GetUserDataUseCase getUserDataUseCase,
-                                   final ConvertAmountUseCase convertAmountUseCase,
+                                   final GetConvertedAmountUseCase getConvertedAmountUseCase,
                                    final AddToRequestsUseCase addToRequestsUseCase,
                                    final UpdateRequestUseCase updateRequestUseCase) {
         mGetUserDataUseCase = getUserDataUseCase;
-        mConvertAmountUseCase = convertAmountUseCase;
+        mGetConvertedAmountUseCase = getConvertedAmountUseCase;
         mAddToRequestsUseCase = addToRequestsUseCase;
         mUpdateRequestUseCase = updateRequestUseCase;
     }
@@ -73,15 +73,15 @@ public class RequestDetailsPresenter extends BasePresenter<RequestDetailsView> {
         getView().retrieveSender(sender);
     }
 
-    public void convertIfNeed(Double val) {
+    public void convertIfNeed(final Double value) {
         if (mSender == null || mReceiver == null) return;
         if (mSender.getCurrency().equals(mReceiver.getCurrency())) {
             if (getView() == null) return;
-            getView().showConvertedCurrency(val, mReceiver.getCurrency());
+            getView().showConvertedCurrency(value, mReceiver.getCurrency());
             return;
         }
-        mConvertAmountUseCase.setData(val, mSender.getCurrency(), mReceiver.getCurrency());
-        mConvertAmountUseCase.execute(new ConvertSubscriber());
+        mGetConvertedAmountUseCase.setData(mReceiver.getId(), value);
+        mGetConvertedAmountUseCase.execute(new ConvertSubscriber());
     }
 
     public void sendMoney(double senderAmount, double receiverAmount, String additionalNote) {
@@ -306,7 +306,7 @@ public class RequestDetailsPresenter extends BasePresenter<RequestDetailsView> {
     @Override
     public void onDetachView() {
         mGetUserDataUseCase.dispose();
-        mConvertAmountUseCase.dispose();
+        mGetConvertedAmountUseCase.dispose();
         mAddToRequestsUseCase.dispose();
         mUpdateRequestUseCase.dispose();
     }

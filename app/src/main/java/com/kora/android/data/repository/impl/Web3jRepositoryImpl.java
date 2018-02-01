@@ -13,6 +13,7 @@ import com.kora.android.common.utils.Web3jUtils;
 import com.kora.android.data.repository.Web3jRepository;
 import com.kora.android.data.web3j.connection.Web3jConnection;
 import com.kora.android.data.web3j.model.EtherWallet;
+import com.kora.android.data.web3j.model.response.CreateWalletsResponse;
 import com.kora.android.data.web3j.model.response.IdentityCreatedResponse;
 import com.kora.android.data.web3j.smart_contracts.HumanStandardToken;
 import com.kora.android.data.web3j.smart_contracts.MetaIdentityManager;
@@ -86,7 +87,7 @@ public class Web3jRepositoryImpl implements Web3jRepository {
     }
 
     @Override
-    public Observable<IdentityCreatedResponse> createWallets(final String pinCode) {
+    public Observable<CreateWalletsResponse> createWallets(final String pinCode) {
         return Observable.just(true).map(a -> {
             checkConnection();
 
@@ -102,39 +103,9 @@ public class Web3jRepositoryImpl implements Web3jRepository {
             final EtherWallet recoveryEtherWallet = EtherWallet.createEtherWalletFromFileName(recoveryWalletFileName);
             mEtherWalletStorage.addWallet(recoveryEtherWallet);
 
-//            final ECKeyPair keys = ECKeyPair.create(Hex.decode(mWeb3jConnection.getKoraWalletPrivateKey()));
-//            final String koraWalletFileName = mEtherWalletUtils.generateWalletFile(
-//                    mWeb3jConnection.getKoraWalletPassword(),
-//                    keys,
-//                    new File(mContext.getFilesDir(), ""));
-//            final EtherWallet koraEtherWallet = EtherWallet.createEtherWalletFromFileName(koraWalletFileName);
-//            mEtherWalletStorage.addWallet(koraEtherWallet);
-
-            checkConnection();
-
-            final Web3j web3j = mWeb3jConnection.getWeb3jRinkeby();
-
-            final Credentials credentials = mEtherWalletStorage.getCredentials(
-                    mWeb3jConnection.getKoraWalletFileName(),
-                    mWeb3jConnection.getKoraWalletPassword());
-
-            final MetaIdentityManager metaIdentityManager = MetaIdentityManager.load(
-                    mWeb3jConnection.getMetaIdentityManagerRinkeby(),
-                    web3j,
-                    credentials,
-                    mWeb3jConnection.getGasPrice(),
-                    mWeb3jConnection.getGasLimit()
-            );
-
-            final TransactionReceipt createIdentityTransactionReceipt =
-                    metaIdentityManager.createIdentity(
-                            new Address(ownerEtherWallet.getAddress()),
-                            new Address(recoveryEtherWallet.getAddress())
-                    ).get();
-
-            final MetaIdentityManager.IdentityCreatedEventResponse identityCreatedEventResponse =
-                    metaIdentityManager.getIdentityCreatedEvents(createIdentityTransactionReceipt).get(0);
-            return new IdentityCreatedResponse(identityCreatedEventResponse);
+            return new CreateWalletsResponse()
+                    .addOwner(ownerEtherWallet.getAddress())
+                    .addRecovery(recoveryEtherWallet.getAddress());
         });
     }
 
@@ -166,52 +137,6 @@ public class Web3jRepositoryImpl implements Web3jRepository {
             final double balanceIdentityToken = Web3jUtils.convertBigIntegerToToken(balanceIdentityBigInteger);
 
             return Web3jUtils.convertDoubleToString(balanceIdentityToken);
-        });
-    }
-
-    @Override
-    public Observable<List<String>> increaseBalance(final UserEntity userEntity,
-                                                    final double amount) {
-        return Observable.just(true).map(a -> {
-            checkConnection();
-
-            final Web3j web3j = mWeb3jConnection.getWeb3jRinkeby();
-            final Credentials credentials = mEtherWalletStorage.getCredentials(
-                    mWeb3jConnection.getKoraWalletFileName(),
-                    mWeb3jConnection.getKoraWalletPassword());
-            final BigInteger nonce = getTransactionCount(web3j, mWeb3jConnection.getKoraWalletAddress());
-
-            final RawTransaction rawTransaction = RawTransaction.createEtherTransaction(
-                    nonce,
-                    mWeb3jConnection.getGasPrice(),
-                    mWeb3jConnection.getGasLimit(),
-                    userEntity.getOwner(),
-                    Web3jUtils.convertEthToWei(mWeb3jConnection.getDefaultOwnerBalance()));
-
-            final byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
-            final String hexValue = Numeric.toHexString(signedMessage);
-
-            final EthSendTransaction ethSendTransaction = web3j
-                    .ethSendRawTransaction(hexValue)
-                    .sendAsync()
-                    .get();
-
-            final HumanStandardToken humanStandardToken = HumanStandardToken.load(
-                    userEntity.getERC20Token(),
-                    web3j,
-                    credentials,
-                    mWeb3jConnection.getGasPrice(),
-                    mWeb3jConnection.getGasLimit()
-            );
-
-            final TransactionReceipt transactionReceipt = humanStandardToken.transfer(
-                    new Address(userEntity.getIdentity()),
-                    new Uint256(Web3jUtils.convertTokenToBigInteger(amount))
-            ).get();
-
-            return Arrays.asList(
-                    ethSendTransaction.getTransactionHash(),
-                    transactionReceipt.getTransactionHash());
         });
     }
 

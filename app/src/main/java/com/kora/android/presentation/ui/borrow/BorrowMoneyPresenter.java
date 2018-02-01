@@ -10,7 +10,7 @@ import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.usecase.borrow.AddBorrowRequestUseCase;
 import com.kora.android.domain.usecase.borrow.AgreeBorrowUseCase;
-import com.kora.android.domain.usecase.user.ConvertAmountUseCase;
+import com.kora.android.domain.usecase.convert.GetConvertedAmountUseCase;
 import com.kora.android.domain.usecase.user.GetUserDataUseCase;
 import com.kora.android.presentation.enums.ActionType;
 import com.kora.android.presentation.model.BorrowEntity;
@@ -27,7 +27,7 @@ import io.reactivex.functions.Action;
 @ConfigPersistent
 public class BorrowMoneyPresenter extends BasePresenter<BorrowMoneyView> {
 
-    private final ConvertAmountUseCase mConvertAmountUseCase;
+    private final GetConvertedAmountUseCase mGetConvertedAmountUseCase;
     private final GetUserDataUseCase mGetUserDataUseCase;
     private final AddBorrowRequestUseCase mAddBorrowRequestUseCase;
     private final AgreeBorrowUseCase mAgreeBorrowUseCase;
@@ -39,10 +39,10 @@ public class BorrowMoneyPresenter extends BasePresenter<BorrowMoneyView> {
 
     @Inject
     public BorrowMoneyPresenter(final GetUserDataUseCase getUserDataUseCase,
-                                final ConvertAmountUseCase convertAmountUseCase,
+                                final GetConvertedAmountUseCase getConvertedAmountUseCase,
                                 final AddBorrowRequestUseCase addBorrowRequestUseCase,
                                 final AgreeBorrowUseCase agreeBorrowUseCase) {
-        mConvertAmountUseCase = convertAmountUseCase;
+        mGetConvertedAmountUseCase = getConvertedAmountUseCase;
         mGetUserDataUseCase = getUserDataUseCase;
         mAddBorrowRequestUseCase = addBorrowRequestUseCase;
         mAgreeBorrowUseCase = agreeBorrowUseCase;
@@ -78,15 +78,15 @@ public class BorrowMoneyPresenter extends BasePresenter<BorrowMoneyView> {
     }
 
 
-    public void convertIfNeed(Double val) {
+    public void convertIfNeed(final Double value) {
         if (mReceiver == null || mSender == null) return;
         if (mReceiver.getCurrency().equals(mSender.getCurrency())) {
             if (getView() == null) return;
-            getView().showConvertedCurrency(val);
+            getView().showConvertedCurrency(value);
             return;
         }
-        mConvertAmountUseCase.setData(val, mSender.getCurrency(), mReceiver.getCurrency());
-        mConvertAmountUseCase.execute(new ConvertSubscriber());
+        mGetConvertedAmountUseCase.setData(mReceiver.getId(), value);
+        mGetConvertedAmountUseCase.execute(new ConvertSubscriber());
     }
 
 
@@ -235,7 +235,7 @@ public class BorrowMoneyPresenter extends BasePresenter<BorrowMoneyView> {
     private Action mConvertAmountAction = new Action() {
         @Override
         public void run() throws Exception {
-            mConvertAmountUseCase.execute(new ConvertSubscriber());
+            mGetConvertedAmountUseCase.execute(new ConvertSubscriber());
         }
     };
 
@@ -362,7 +362,7 @@ public class BorrowMoneyPresenter extends BasePresenter<BorrowMoneyView> {
 
     @Override
     public void onDetachView() {
-        mConvertAmountUseCase.dispose();
+        mGetConvertedAmountUseCase.dispose();
         mGetUserDataUseCase.dispose();
         mAddBorrowRequestUseCase.dispose();
         mAgreeBorrowUseCase.dispose();

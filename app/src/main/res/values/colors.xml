@@ -69,4 +69,6 @@
 
     <color name="color_agent_on">#62cd9a</color>
     <color name="color_agent_off">#c6c5c5</color>
+
+    <color name="color_notification_icon">#2b74a5</color>
 </resources>

@@ -6,14 +6,14 @@ import com.kora.android.common.preferences.PreferenceHandler;
 import com.kora.android.common.preferences.PreferenceHandlerImpl;
 import com.kora.android.data.network.service.AuthService;
 import com.kora.android.data.network.service.BorrowService;
-import com.kora.android.data.network.service.CurrencyConverterService;
+import com.kora.android.data.network.service.CurrencyConvertService;
 import com.kora.android.data.network.service.DepositWithdrawService;
 import com.kora.android.data.network.service.RequestService;
 import com.kora.android.data.network.service.TransactionService;
 import com.kora.android.data.network.service.UserService;
 import com.kora.android.data.repository.AuthRepository;
 import com.kora.android.data.repository.BorrowRepository;
-import com.kora.android.data.repository.CurrencyConverterRepository;
+import com.kora.android.data.repository.CurrencyConvertRepository;
 import com.kora.android.data.repository.DepositWithdrawRepository;
 import com.kora.android.data.repository.RequestRepository;
 import com.kora.android.data.repository.TransactionRepository;
@@ -21,7 +21,7 @@ import com.kora.android.data.repository.UserRepository;
 import com.kora.android.data.repository.Web3jRepository;
 import com.kora.android.data.repository.impl.AuthRepositoryImpl;
 import com.kora.android.data.repository.impl.BorrowRepositoryImpl;
-import com.kora.android.data.repository.impl.CurrencyConverterRepositoryImpl;
+import com.kora.android.data.repository.impl.CurrencyConvertRepositoryImpl;
 import com.kora.android.data.repository.impl.DepositWithdrawRepositoryImpl;
 import com.kora.android.data.repository.impl.RequestRepositoryImpl;
 import com.kora.android.data.repository.impl.TransactionRepositoryImpl;
@@ -68,8 +68,8 @@ public class RepositoryModule {
 
     @Singleton
     @Provides
-    public CurrencyConverterRepository provideCurrencyConverterRepository(final CurrencyConverterService currencyConverterService) {
-        return new CurrencyConverterRepositoryImpl(currencyConverterService);
+    public CurrencyConvertRepository provideCurrencyConverterRepository(final CurrencyConvertService currencyConvertService) {
+        return new CurrencyConvertRepositoryImpl(currencyConvertService);
     }
 
     @Singleton

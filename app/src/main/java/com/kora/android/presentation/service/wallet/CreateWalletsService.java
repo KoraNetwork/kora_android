@@ -1,26 +1,31 @@
 package com.kora.android.presentation.service.wallet;
 
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
 
 import com.kora.android.R;
-import com.kora.android.common.Keys;
 import com.kora.android.di.component.ServiceComponent;
-import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.service.BaseService;
-import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 
 public class CreateWalletsService extends BaseService<CreateWalletsPresenter> implements CreateWalletsContractor {
 
-    private static final int NOTIFICATION_ID = 11;
+    private static final int NOTIFICATION_ID = 111;
+    private static final String ACTION_TRY_AGAIN = "com.kora.android.action_try_again";
+    private static final String ACTION_CANCEL = "com.kora.android.action_cancel";
+    public static final String ARG_CREATE_WALLETS = "com.kora.android.extra_create_wallets";
+    public static final String ARG_CREATE_IDENTITY = "com.kora.android.extra_create_identity";
+    public static final String ARG_INCREASE_BALANCE = "com.kora.android.extra_increase_balance";
 
-    public static Intent getLaunchIntent(final BaseActivity baseActivity, final UserEntity userEntity) {
-        final Intent intent = new Intent(baseActivity, CreateWalletsService.class);
-        intent.putExtra(Keys.Extras.EXTRA_USER, userEntity);
-        return intent;
+    public static Intent getLaunchIntent(final BaseActivity baseActivity) {
+        return new Intent(baseActivity, CreateWalletsService.class);
     }
 
     @Override
@@ -43,45 +48,124 @@ public class CreateWalletsService extends BaseService<CreateWalletsPresenter> im
     public int onStartCommand(final Intent intent, final int flags, final int startId) {
         Toast.makeText(this, R.string.wallet_service_start_message, Toast.LENGTH_LONG).show();
         startForeground(NOTIFICATION_ID, getNotification());
-
-        final UserEntity userEntity = intent.getParcelableExtra(Keys.Extras.EXTRA_USER);
-        getPresenter().setUserEntity(userEntity);
+        registerReceiver(mTryAgainReceiver, new IntentFilter(ACTION_TRY_AGAIN));
+        registerReceiver(mCancelReceiver, new IntentFilter(ACTION_CANCEL));
         getPresenter().createWallets();
-
         return START_STICKY;
     }
 
     @Override
-    public void showError(final String message, final RetryAction createIdentityAction) {
-        showNotification(NOTIFICATION_ID, message, true);
+    public void showError(final String text) {
+        Toast.makeText(this, R.string.wallet_service_error_message, Toast.LENGTH_LONG).show();
+        final PendingIntent ok = PendingIntent.getBroadcast(
+                this,
+                222,
+                new Intent(ACTION_CANCEL),
+                PendingIntent.FLAG_CANCEL_CURRENT);
+        showError(
+                NOTIFICATION_ID,
+                getString(R.string.wallet_service_notification_error_title),
+                text,
+                true,
+                ok);
     }
 
     @Override
-    public void showError(final int stringId, final RetryAction retryAction) {
-        final String message = getString(stringId);
-        showNotification(NOTIFICATION_ID, message, true);
+    public void showErrorWithRetry(final String text, final String retryArg) {
+        Toast.makeText(this, R.string.wallet_service_error_message, Toast.LENGTH_LONG).show();
+        final Intent intent = new Intent(ACTION_TRY_AGAIN);
+        final Bundle bundle = new Bundle();
+        bundle.putString(retryArg, retryArg);
+        intent.putExtras(bundle);
+        final PendingIntent tryAgain = PendingIntent.getBroadcast(
+                this,
+                111,
+                intent,
+                PendingIntent.FLAG_CANCEL_CURRENT);
+        final PendingIntent cancel = PendingIntent.getBroadcast(
+                this,
+                222,
+                new Intent(ACTION_CANCEL),
+                PendingIntent.FLAG_CANCEL_CURRENT);
+        showErrorWithRetry(
+                NOTIFICATION_ID,
+                getString(R.string.wallet_service_notification_error_title),
+                text,
+                true,
+                tryAgain,
+                cancel);
+    }
+
+    @Override
+    public void showErrorWithRetry(final int stringId, final String retryAction) {
+        Toast.makeText(this, R.string.wallet_service_error_message, Toast.LENGTH_LONG).show();
+        final String text = getString(stringId);
+        showErrorWithRetry(text, retryAction);
+    }
+
+    @Override
+    public void showCreateKeystoreFileMessage() {
+        Toast.makeText(this, R.string.wallet_service_creating_keystore_file_message, Toast.LENGTH_LONG).show();
+        showNotification(
+                NOTIFICATION_ID,
+                getString(R.string.wallet_service_notification_title),
+                getString(R.string.wallet_service_creating_keystore_file_message),
+                true);
     }
 
     @Override
     public void showCreateIdentityMessage() {
-        showNotification(NOTIFICATION_ID, getString(R.string.wallet_service_creating_identity_message), true);
-    }
-
-    @Override
-    public void showUpdateUserMessage() {
-        showNotification(NOTIFICATION_ID, getString(R.string.wallet_service_updating_user_message), true);
+        Toast.makeText(this, R.string.wallet_service_creating_identity_message, Toast.LENGTH_LONG).show();
+        showNotification(
+                NOTIFICATION_ID,
+                getString(R.string.wallet_service_notification_title),
+                getString(R.string.wallet_service_creating_identity_message),
+                true);
     }
 
     @Override
     public void showIncreaseBalanceMessage() {
-        showNotification(NOTIFICATION_ID, getString(R.string.wallet_service_increasing_balance_message), true);
+        Toast.makeText(this, R.string.wallet_service_increasing_balance_message, Toast.LENGTH_LONG).show();
+        showNotification(
+                NOTIFICATION_ID,
+                getString(R.string.wallet_service_notification_title),
+                getString(R.string.wallet_service_increasing_balance_message),
+                true);
     }
 
     @Override
-    public void finishService() {
-        Toast.makeText(this, R.string.wallet_service_finished_message, Toast.LENGTH_LONG).show();
+    public void finishService(final boolean success) {
+        if (success) {
+            Toast.makeText(this, R.string.wallet_service_finished_success_message, Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, R.string.wallet_service_finished_failure_message, Toast.LENGTH_LONG).show();
+        }
         cancelNotification(NOTIFICATION_ID);
+        unregisterReceiver(mTryAgainReceiver);
+        unregisterReceiver(mCancelReceiver);
         stopForeground(true);
         stopSelf();
     }
+
+    private final BroadcastReceiver mTryAgainReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+            final Bundle bundle = intent.getExtras();
+            if (bundle == null) return;
+            if (bundle.containsKey(ARG_CREATE_WALLETS)) {
+                getPresenter().retryCreateWallets();
+            } else if (bundle.containsKey(ARG_CREATE_IDENTITY)) {
+                getPresenter().retryCreateIdentity();
+            } else if (bundle.containsKey(ARG_INCREASE_BALANCE)) {
+                getPresenter().retryIncreaseBalance();
+            }
+        }
+    };
+
+    private final BroadcastReceiver mCancelReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+            finishService(false);
+        }
+    };
 }

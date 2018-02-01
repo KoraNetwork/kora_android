@@ -2,8 +2,11 @@ package com.kora.android.presentation.service;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
+import android.view.View;
 
 import com.kora.android.KoraApplication;
 import com.kora.android.R;
@@ -21,10 +24,10 @@ public abstract class BaseService<P extends BaseServicePresenter> extends Servic
     @Inject
     P mPresenter;
 
-    NotificationManager mNotificationManager;
-    Notification mNotification;
-
     private ServiceComponent mServiceComponent;
+
+    private Notification mNotification;
+    private NotificationManager mNotificationManager;
 
     @Override
     public void onCreate() {
@@ -57,13 +60,55 @@ public abstract class BaseService<P extends BaseServicePresenter> extends Servic
         super.onDestroy();
     }
 
+    private NotificationCompat.Builder getBuilder(final String title,
+                                                  final String text,
+                                                  final boolean cancelable) {
+        return new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_notification_small)
+                .setLargeIcon(BitmapFactory.decodeResource(this.getResources(), R.drawable.ic_notification_large))
+                .setColor(getResources().getColor(R.color.color_notification_icon))
+                .setContentTitle(title)
+                .setContentText(text)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(text))
+                .setAutoCancel(cancelable);
+    }
+
     @Override
-    public void showNotification(final int id, String message, final boolean cancelable) {
-        mNotification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.mipmap.ic_launcher_foreground)
-                .setContentTitle(message)
-                .setAutoCancel(cancelable)
+    public void showNotification(final int id,
+                                 final String title,
+                                 final String text,
+                                 final boolean cancelable) {
+        mNotification = getBuilder(title, text, cancelable)
                 .build();
+        hideSmallIcon(mNotification);
+        mNotificationManager.notify(id, mNotification);
+    }
+
+    @Override
+    public void showError(final int id,
+                          final String title,
+                          final String text,
+                          final boolean cancelable,
+                          final PendingIntent ok) {
+        mNotification = getBuilder(title, text, cancelable)
+                .addAction(R.drawable.ic_ok, "OK", ok)
+                .build();
+        hideSmallIcon(mNotification);
+        mNotificationManager.notify(id, mNotification);
+    }
+
+    @Override
+    public void showErrorWithRetry(final int id,
+                                   final String title,
+                                   final String text,
+                                   final boolean cancelable,
+                                   final PendingIntent retry,
+                                   final PendingIntent cancel) {
+        mNotification = getBuilder(title, text, cancelable)
+                .addAction(R.drawable.ic_try_again, "Try again", retry)
+                .addAction(R.drawable.ic_cancel, "Cancel", cancel)
+                .build();
+        hideSmallIcon(mNotification);
         mNotificationManager.notify(id, mNotification);
     }
 
@@ -74,7 +119,19 @@ public abstract class BaseService<P extends BaseServicePresenter> extends Servic
 
     public Notification getNotification() {
         return new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.mipmap.ic_launcher_foreground)
                 .build();
+    }
+
+    private void hideSmallIcon(final Notification notification) {
+        int smallIconId = this.getResources().getIdentifier(
+                "right_icon",
+                "id",
+                android.R.class.getPackage().getName());
+        if (smallIconId != 0) {
+            if (notification.contentView != null) {
+                notification.contentView.setViewVisibility(smallIconId, View.INVISIBLE);
+                notification.bigContentView.setViewVisibility(smallIconId, View.INVISIBLE);
+            }
+        }
     }
 }

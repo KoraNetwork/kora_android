@@ -3,19 +3,20 @@ package com.kora.android.presentation.service.wallet;
 import android.support.annotation.StringRes;
 
 import com.kora.android.presentation.service.BaseServiceContractor;
-import com.kora.android.presentation.ui.base.custom.RetryAction;
 
 public interface CreateWalletsContractor extends BaseServiceContractor<CreateWalletsPresenter> {
 
-    void showError(final String message, final RetryAction retryAction);
+    void showError(final String text);
 
-    void showError(@StringRes final  int stringId, final RetryAction retryAction);
+    void showErrorWithRetry(final String text, final String retryAction);
+
+    void showErrorWithRetry(@StringRes final int stringId, final String retryAction);
+
+    void showCreateKeystoreFileMessage();
 
     void showCreateIdentityMessage();
 
-    void showUpdateUserMessage();
-
     void showIncreaseBalanceMessage();
 
-    void finishService();
+    void finishService(final boolean success);
 }

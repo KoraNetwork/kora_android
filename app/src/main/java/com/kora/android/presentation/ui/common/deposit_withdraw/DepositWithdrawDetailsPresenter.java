@@ -6,9 +6,9 @@ import com.kora.android.data.network.config.ErrorModel;
 import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
+import com.kora.android.domain.usecase.convert.GetConvertedAmountUseCase;
 import com.kora.android.domain.usecase.deposit.AddDepositWithdrawUseCase;
 import com.kora.android.domain.usecase.deposit.UpdateDepositUseCase;
-import com.kora.android.domain.usecase.user.ConvertAmountUseCase;
 import com.kora.android.domain.usecase.user.GetUserDataUseCase;
 import com.kora.android.presentation.enums.ActionType;
 import com.kora.android.presentation.enums.Direction;
@@ -26,7 +26,7 @@ import io.reactivex.functions.Action;
 public class DepositWithdrawDetailsPresenter extends BasePresenter<DepositWithdrawDetailsView> {
 
     private final GetUserDataUseCase mGetUserDataUseCase;
-    private final ConvertAmountUseCase mConvertAmountUseCase;
+    private final GetConvertedAmountUseCase mGetConvertedAmountUseCase;
     private final AddDepositWithdrawUseCase mAddDepositWithdrawUseCase;
     private final UpdateDepositUseCase mUpdateDepositWithdrawUseCase;
 
@@ -39,11 +39,11 @@ public class DepositWithdrawDetailsPresenter extends BasePresenter<DepositWithdr
 
     @Inject
     public DepositWithdrawDetailsPresenter(final GetUserDataUseCase getUserDataUseCase,
-                                           final ConvertAmountUseCase convertAmountUseCase,
+                                           final GetConvertedAmountUseCase getConvertedAmountUseCase,
                                            final AddDepositWithdrawUseCase addDepositWithdrawUseCase,
                                            final UpdateDepositUseCase updateDepositUseCase) {
         mGetUserDataUseCase = getUserDataUseCase;
-        mConvertAmountUseCase = convertAmountUseCase;
+        mGetConvertedAmountUseCase = getConvertedAmountUseCase;
         mAddDepositWithdrawUseCase = addDepositWithdrawUseCase;
         mUpdateDepositWithdrawUseCase = updateDepositUseCase;
     }
@@ -125,15 +125,15 @@ public class DepositWithdrawDetailsPresenter extends BasePresenter<DepositWithdr
         }
     }
 
-    public void convertIfNeed(Double value) {
+    public void convertIfNeed(final Double value) {
         if (mSender == null || mReceiver == null) return;
         if (mSender.getCurrency().equals(mReceiver.getCurrency())) {
             if (getView() == null) return;
             getView().showConvertedCurrency(value, mReceiver.getCurrency());
             return;
         }
-        mConvertAmountUseCase.setData(value, mSender.getCurrency(), mReceiver.getCurrency());
-        mConvertAmountUseCase.execute(new ConvertSubscriber());
+        mGetConvertedAmountUseCase.setData(mReceiver.getId(), value);
+        mGetConvertedAmountUseCase.execute(new ConvertSubscriber());
     }
 
     private class ConvertSubscriber extends DefaultInternetSubscriber<Double> {
@@ -333,7 +333,7 @@ public class DepositWithdrawDetailsPresenter extends BasePresenter<DepositWithdr
     @Override
     public void onDetachView() {
         mGetUserDataUseCase.dispose();
-        mConvertAmountUseCase.dispose();
+        mGetConvertedAmountUseCase.dispose();
         mAddDepositWithdrawUseCase.dispose();
         mUpdateDepositWithdrawUseCase.dispose();
     }

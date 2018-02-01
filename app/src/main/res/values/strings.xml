@@ -336,13 +336,14 @@
 
     <!-- Wallet service -->
     <string name="wallet_service_start_message">It takes some time to setup your wallet. Please be patient.</string>
+    <string name="wallet_service_notification_title">Wallet setup in progress</string>
+    <string name="wallet_service_notification_error_title">Wallet setup error</string>
+    <string name="wallet_service_creating_keystore_file_message">Creating keystore file</string>
     <string name="wallet_service_creating_identity_message">Creating identity</string>
-    <string name="wallet_service_created_identity_message">Identity is created</string>
-    <string name="wallet_service_updating_user_message">Updating user data</string>
-    <string name="wallet_service_updated_user_message">User data is updated</string>
     <string name="wallet_service_increasing_balance_message">Increasing balance</string>
-    <string name="wallet_service_increased_balance_message">Balance is increased</string>
-    <string name="wallet_service_finished_message">Wallet setup is completed. Now you can make requests, send and borrow money.</string>
+    <string name="wallet_service_error_message">Error. See details in notification.</string>
+    <string name="wallet_service_finished_success_message">Wallet setup is completed. Now you can make requests, send and borrow money.</string>
+    <string name="wallet_service_finished_failure_message">Wallet setup is failed. To try again please restart the app.</string>
 
     <!-- Import export wallet -->
     <string name="export_wallet_pemission_dialog_title">Info</string>

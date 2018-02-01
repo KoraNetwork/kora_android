@@ -3,7 +3,7 @@ package com.kora.android.data.repository;
 import android.net.Uri;
 import android.support.v4.util.Pair;
 
-import com.kora.android.data.web3j.model.response.IdentityCreatedResponse;
+import com.kora.android.data.web3j.model.response.CreateWalletsResponse;
 import com.kora.android.presentation.model.UserEntity;
 
 import java.io.File;
@@ -14,13 +14,10 @@ import io.reactivex.Observable;
 
 public interface Web3jRepository {
 
-    Observable<IdentityCreatedResponse> createWallets(final String pinCode);
+    Observable<CreateWalletsResponse> createWallets(final String pinCode);
 
     Observable<String> getBalance(final String proxyAddress,
                                   final String smartContractAddress);
-
-    Observable<List<String>> increaseBalance(final UserEntity userEntity,
-                                             final double amount);
 
     Observable<File> getWalletFile(final String walletAddress);
 

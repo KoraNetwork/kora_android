@@ -4,6 +4,7 @@ import android.support.v4.util.Pair;
 
 import com.kora.android.common.Keys;
 import com.kora.android.common.preferences.PreferenceHandler;
+import com.kora.android.data.network.model.request.CreateIdentityRequest;
 import com.kora.android.data.network.model.request.UserIdRequest;
 import com.kora.android.data.network.service.UserService;
 import com.kora.android.data.repository.UserRepository;
@@ -50,6 +51,21 @@ public class UserRepositoryImpl implements UserRepository {
                     .compose(storeUser());
         else
             return Observable.just(userEntity);
+    }
+
+    @Override
+    public Observable<UserEntity> createIdentity(String ownerAddress, String recoveryAddress) {
+        final CreateIdentityRequest createIdentityRequest = new CreateIdentityRequest()
+                .addOwner(ownerAddress)
+                .addRecovery(recoveryAddress);
+        return mUserService.createIdentity(createIdentityRequest)
+                .compose(mUserMapper.transformResponseToEntityUser())
+                .compose(storeUser());
+    }
+
+    @Override
+    public Observable<Object> increaseBalance() {
+        return mUserService.increaseBalance();
     }
 
     @Override

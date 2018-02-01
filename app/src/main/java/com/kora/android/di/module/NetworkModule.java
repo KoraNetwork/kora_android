@@ -5,7 +5,7 @@ import com.kora.android.data.network.config.NetworkConfigImpl;
 import com.kora.android.data.network.factory.RxErrorHandlingCallAdapterFactory;
 import com.kora.android.data.network.service.AuthService;
 import com.kora.android.data.network.service.BorrowService;
-import com.kora.android.data.network.service.CurrencyConverterService;
+import com.kora.android.data.network.service.CurrencyConvertService;
 import com.kora.android.data.network.service.DepositWithdrawService;
 import com.kora.android.data.network.service.RequestService;
 import com.kora.android.data.network.service.TransactionService;
@@ -61,8 +61,8 @@ public class NetworkModule {
 
     @Singleton
     @Provides
-    CurrencyConverterService provideCurrencyConverterService(final Retrofit retrofit) {
-        return retrofit.create(CurrencyConverterService.class);
+    CurrencyConvertService provideCurrencyConverterService(final Retrofit retrofit) {
+        return retrofit.create(CurrencyConvertService.class);
     }
 
     @Singleton

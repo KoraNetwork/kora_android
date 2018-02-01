@@ -1,5 +1,6 @@
 package com.kora.android.data.network.service;
 
+import com.kora.android.data.network.model.request.CreateIdentityRequest;
 import com.kora.android.data.network.model.request.UserIdRequest;
 import com.kora.android.data.network.model.response.UserListResponse;
 import com.kora.android.data.network.model.response.UserResponse;
@@ -23,6 +24,12 @@ public interface UserService {
 
     @GET("profile")
     Observable<UserResponse> getUserData();
+
+    @PUT("profile/createIdentity")
+    Observable<UserResponse> createIdentity(@Body CreateIdentityRequest createIdentityRequest);
+
+    @PUT("profile/sendMoneyFromKora")
+    Observable<Object> increaseBalance();
 
     @Multipart
     @PUT("profile")
