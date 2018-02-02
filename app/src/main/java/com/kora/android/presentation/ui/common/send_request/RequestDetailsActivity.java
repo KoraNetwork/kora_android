@@ -69,8 +69,6 @@ public class RequestDetailsActivity extends ToolbarActivity<RequestDetailsPresen
 
     private int mAmountEditTextWidth = 0;
 
-    private ActionType mActionType;
-
     @Override
     public int getLayoutResource() {
         return R.layout.activity_request_details;
@@ -119,7 +117,7 @@ public class RequestDetailsActivity extends ToolbarActivity<RequestDetailsPresen
 
     private void initArguments(final Bundle bundle) {
         if (bundle != null && bundle.containsKey(ACTION_TYPE)) {
-            mActionType = (ActionType) bundle.getSerializable(ACTION_TYPE);
+            getPresenter().setActionType((ActionType) bundle.getSerializable(ACTION_TYPE));
         }
         if (bundle != null && bundle.containsKey(REQUEST_ENTITY)) {
             RequestEntity request = bundle.getParcelable(REQUEST_ENTITY);
@@ -133,14 +131,14 @@ public class RequestDetailsActivity extends ToolbarActivity<RequestDetailsPresen
         }
 
         if (getIntent() != null) {
-            mActionType = (ActionType) getIntent().getSerializableExtra(ACTION_TYPE);
+            getPresenter().setActionType((ActionType) getIntent().getSerializableExtra(ACTION_TYPE));
             getPresenter().setRequest(getIntent().getParcelableExtra(REQUEST_ENTITY));
             getPresenter().setReceiver(getIntent().getParcelableExtra(Keys.Args.USER_ENTITY));
         }
     }
 
     private void initUI() {
-        switch (mActionType) {
+        switch (getPresenter().getActionType()) {
             case CREATE_REQUEST:
                 setTitle(getString(R.string.send_money_request_title, getPresenter().getReceiver().getUserName()));
                 mActionButton.setText(R.string.send_money_request_button_label);
@@ -249,7 +247,7 @@ public class RequestDetailsActivity extends ToolbarActivity<RequestDetailsPresen
     @Override
     public void openPinScreen(UserEntity receiver, Double sAmount, Double rAmount, RequestEntity request) {
         startActivity(EnterPinActivity.getLaunchIntent(this,
-                receiver, sAmount, rAmount, mActionType, request));
+                receiver, sAmount, rAmount, getPresenter().getActionType(), request));
     }
 
     @Override
@@ -314,7 +312,7 @@ public class RequestDetailsActivity extends ToolbarActivity<RequestDetailsPresen
 
     @OnClick(R.id.action_button)
     public void onActionButtonClicked() {
-        switch (mActionType) {
+        switch (getPresenter().getActionType()) {
             case CREATE_REQUEST:
                 mReceiverAmountContainer.setError(null);
                 mSenderAmountContainer.setError(null);
@@ -351,7 +349,7 @@ public class RequestDetailsActivity extends ToolbarActivity<RequestDetailsPresen
         outState.putString(Keys.Args.SENDER_AMOUNT, mSenderAmount.getText().toString().trim());
         outState.putString(Keys.Args.RECEIVER_AMOUNT, mReceiverAmount.getText().toString().trim());
 
-        outState.putSerializable(ACTION_TYPE, mActionType);
+        outState.putSerializable(ACTION_TYPE, getPresenter().getActionType());
         outState.putParcelable(REQUEST_ENTITY, getPresenter().getRequest());
     }
 

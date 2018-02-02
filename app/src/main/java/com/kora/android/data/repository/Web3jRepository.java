@@ -25,9 +25,7 @@ public interface Web3jRepository {
 
     Observable<Object> importWalletFile(final Uri walletFileUri);
 
-    Observable<Object> importKoraWalletFile();
-
-    Observable<List<String>> createRawTransaction(final UserEntity receiver,
+    Observable<String> createRawTransaction(final UserEntity receiver,
                                                   final double senderAmount,
                                                   final double receiverAmount,
                                                   final Integer interestRate,
@@ -45,7 +43,7 @@ public interface Web3jRepository {
     Observable<String> createAgreeLoan(final String loanId,
                                        final String pinCode);
 
-    Observable<Pair<List<String>, String>> createFundLoan(final String borrowerErc20Token,
+    Observable<Pair<String, String>> createFundLoan(final String borrowerErc20Token,
                                                           final String lenderErc20Token,
                                                           final double borrowerAmount,
                                                           final double lenderAmount,

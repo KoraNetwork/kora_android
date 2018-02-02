@@ -1,15 +1,11 @@
 package com.kora.android.presentation.ui.main;
 
-import android.util.Log;
-
 import com.kora.android.data.network.config.ErrorModel;
 import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
-import com.kora.android.domain.base.DefaultWeb3jSubscriber;
 import com.kora.android.domain.usecase.login.LogoutUseCase;
 import com.kora.android.domain.usecase.user.GetUserDataUseCase;
-import com.kora.android.domain.usecase.web3j.ImportKoraWalletUseCase;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
@@ -22,57 +18,14 @@ import io.reactivex.functions.Action;
 @ConfigPersistent
 public class MainPresenter extends BasePresenter<MainView> {
 
-    private final ImportKoraWalletUseCase mImportKoraWalletUseCase;
     private final GetUserDataUseCase mGetUserDataUseCase;
     private final LogoutUseCase mLogoutUseCase;
 
     @Inject
-    public MainPresenter(final ImportKoraWalletUseCase importKoraWalletUseCase,
-                         final GetUserDataUseCase getUserDataUseCase,
+    public MainPresenter(final GetUserDataUseCase getUserDataUseCase,
                          final LogoutUseCase logoutUseCase) {
-        mImportKoraWalletUseCase = importKoraWalletUseCase;
         mGetUserDataUseCase = getUserDataUseCase;
         mLogoutUseCase = logoutUseCase;
-    }
-
-    public void importKoraWallet() {
-        mImportKoraWalletUseCase.execute(new ImportKoraWalletSubscriber());
-    }
-
-    private class ImportKoraWalletSubscriber extends DefaultWeb3jSubscriber {
-
-//        @Override
-//        protected void onStart() {
-//            if (!isViewAttached()) return;
-//            getView().showProgress(true);
-//        }
-
-        @Override
-        public void onNext(final Object object) {
-            if (!isViewAttached()) return;
-            loadUserData();
-        }
-
-//        @Override
-//        public void onComplete() {
-//            if (!isViewAttached()) return;
-//            getView().showProgress(false);
-//        }
-
-        @Override
-        public void onError(final Throwable throwable) {
-            super.onError(throwable);
-            if (!isViewAttached()) return;
-//            getView().showProgress(false);
-
-            Log.e("_____", throwable.toString());
-            throwable.printStackTrace();
-        }
-
-        @Override
-        public void handleWeb3jError(final String message) {
-            getView().showError(message);
-        }
     }
 
     public void loadUserData() {
@@ -181,7 +134,6 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     @Override
     public void onDetachView() {
-        mImportKoraWalletUseCase.dispose();
         mGetUserDataUseCase.dispose();
         mLogoutUseCase.dispose();
     }

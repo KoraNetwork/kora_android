@@ -52,11 +52,11 @@ public class RequestRepositoryImpl implements RequestRepository {
     public Observable<Object> deleteRequest(final String requestId,
                                             final double fromAmount,
                                             final double toAmount,
-                                            final List<String> rawTransactions) {
+                                            final String rawTransaction) {
         final DeleteRequestRequest deleteRequestRequest = new DeleteRequestRequest()
                 .addFromAmount(fromAmount)
                 .addToAmount(toAmount)
-                .addRawTransactions(rawTransactions);
+                .addRawTransaction(rawTransaction);
         return mRequestService.deleteRequest(requestId, deleteRequestRequest);
     }
 

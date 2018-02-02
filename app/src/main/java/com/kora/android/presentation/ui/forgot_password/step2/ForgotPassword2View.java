@@ -4,11 +4,13 @@ import com.kora.android.presentation.ui.base.view.BaseView;
 
 public interface ForgotPassword2View extends BaseView<ForgotPassword2Presenter> {
 
+    void showEmptyToken();
+
     void showEmptyNewPassword();
     void showIncorrectNewPassword();
 
     void showEmptyConfirmPassword();
     void showIncorrectConfirmPassword();
 
-    void showNext();
+    void showHomeScreen();
 }

@@ -5,8 +5,6 @@ import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.AsyncUseCase;
 import com.kora.android.presentation.enums.TransactionType;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
@@ -20,7 +18,7 @@ public class SendRawTransactionUseCase extends AsyncUseCase {
     private String mTo;
     private double mSenderAmount;
     private double mReceiverAmount;
-    private List<String> mRawTransactions;
+    private String mRawTransaction;
 
     @Inject
     public SendRawTransactionUseCase(final TransactionRepository transactionRepository) {
@@ -31,12 +29,12 @@ public class SendRawTransactionUseCase extends AsyncUseCase {
                         final String to,
                         final double senderAmount,
                         final double receiverAmount,
-                        final List<String> rawTransactions) {
+                        final String rawTransaction) {
         mType = type;
         mTo = to;
         mSenderAmount = senderAmount;
         mReceiverAmount = receiverAmount;
-        mRawTransactions = rawTransactions;
+        mRawTransaction = rawTransaction;
     }
 
     @Override
@@ -46,6 +44,6 @@ public class SendRawTransactionUseCase extends AsyncUseCase {
                     mTo,
                     mSenderAmount,
                     mReceiverAmount,
-                    mRawTransactions);
+                    mRawTransaction);
     }
 }

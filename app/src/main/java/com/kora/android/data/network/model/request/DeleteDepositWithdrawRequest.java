@@ -12,8 +12,8 @@ public class DeleteDepositWithdrawRequest {
     private double mFromAmount;
     @JsonField(name = "toAmount")
     private double mToAmount;
-    @JsonField(name = "rawTransactions")
-    private List<String> mRawTransactions;
+    @JsonField(name = "rawTransaction")
+    private String mRawTransaction;
 
     public DeleteDepositWithdrawRequest addFromAmount(final double fromAmount) {
         mFromAmount = fromAmount;
@@ -25,8 +25,8 @@ public class DeleteDepositWithdrawRequest {
         return this;
     }
 
-    public DeleteDepositWithdrawRequest addRawTransactions(final List<String> rawTransactions) {
-        mRawTransactions = rawTransactions;
+    public DeleteDepositWithdrawRequest addRawTransaction(final String rawTransaction) {
+        mRawTransaction = rawTransaction;
         return this;
     }
 
@@ -46,11 +46,11 @@ public class DeleteDepositWithdrawRequest {
         this.mToAmount = mToAmount;
     }
 
-    public List<String> getRawTransactions() {
-        return mRawTransactions;
+    public String getRawTransaction() {
+        return mRawTransaction;
     }
 
-    public void setRawTransactions(List<String> rawTransactions) {
-        this.mRawTransactions = rawTransactions;
+    public void setRawTransaction(String rawTransaction) {
+        this.mRawTransaction = rawTransaction;
     }
 }

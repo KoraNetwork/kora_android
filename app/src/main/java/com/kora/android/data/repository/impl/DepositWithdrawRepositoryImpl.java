@@ -81,12 +81,12 @@ public class DepositWithdrawRepositoryImpl implements DepositWithdrawRepository 
     public Observable<Object> deleteDeposit(final String depositId,
                                             final double fromAmount,
                                             final double toAmount,
-                                            final List<String> rawTransactions,
+                                            final String rawTransaction,
                                             final boolean isDeposit) {
         final DeleteDepositWithdrawRequest deleteDepositWithdrawRequest = new DeleteDepositWithdrawRequest()
                 .addFromAmount(fromAmount)
                 .addToAmount(toAmount)
-                .addRawTransactions(rawTransactions);
+                .addRawTransaction(rawTransaction);
         if (isDeposit) {
             return mDepositWithdrawService.deleteDeposit(depositId, deleteDepositWithdrawRequest);
         } else {

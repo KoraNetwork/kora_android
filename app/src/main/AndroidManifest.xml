@@ -34,10 +34,6 @@
         </activity>
 
         <activity
-            android:name=".presentation.ui.test.TestActivity"
-            android:screenOrientation="portrait"/>
-
-        <activity
             android:name=".presentation.ui.registration.step1.FirstStepActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Light"
@@ -89,7 +85,18 @@
             android:name=".presentation.ui.forgot_password.step2.ForgotPassword2Activity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Light"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="some_link"
+                    android:scheme="http" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name=".presentation.ui.main.MainActivity"

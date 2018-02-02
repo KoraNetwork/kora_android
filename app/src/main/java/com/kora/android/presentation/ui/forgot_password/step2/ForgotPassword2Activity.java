@@ -1,14 +1,15 @@
 package com.kora.android.presentation.ui.forgot_password.step2;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
-import android.widget.Toast;
 
 import com.kora.android.R;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.base.view.ToolbarActivity;
+import com.kora.android.presentation.ui.main.MainActivity;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -53,10 +54,31 @@ public class ForgotPassword2Activity extends ToolbarActivity<ForgotPassword2Pres
         return R.drawable.ic_back_grey;
     }
 
+    @Override
+    protected void onViewReady(final Bundle savedInstanceState) {
+        super.onViewReady(savedInstanceState);
+        initData();
+    }
+
+    private void initData() {
+        if (getIntent() != null && getIntent().getData() != null) {
+            final String url = getIntent().getData().toString();
+            final String token = url.substring(url.indexOf("/", url.length()));
+            getPresenter().setToken(token);
+        }
+    }
+
     @OnTextChanged(R.id.edit_text_new_pass)
     void onChangedPassword(final CharSequence password) {
         mElNewPassword.setError(null);
         getPresenter().setNewPassword(password.toString().trim());
+    }
+
+    @Override
+    public void showEmptyToken() {
+        showDialogMessage(
+                R.string.forgot_pass_token_error_dialog_title,
+                R.string.forgot_pass_token_error_dialog_message);
     }
 
     @Override
@@ -91,7 +113,7 @@ public class ForgotPassword2Activity extends ToolbarActivity<ForgotPassword2Pres
     }
 
     @Override
-    public void showNext() {
-        Toast.makeText(this, "Message is sent", Toast.LENGTH_SHORT).show();
+    public void showHomeScreen() {
+        startActivity(MainActivity.getLaunchIntent(this));
     }
 }

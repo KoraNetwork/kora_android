@@ -7,13 +7,9 @@ import com.bluelinelabs.logansquare.annotation.JsonObject;
 public class LoginResponse {
 
     @JsonField(name = "sessionToken")
-    String mSessionToken;
+    private String mSessionToken;
     @JsonField(name = "user")
-    UserResponse mUserResponse;
-
-    public LoginResponse() {
-
-    }
+    private UserResponse mUserResponse;
 
     public String getSessionToken() {
         return mSessionToken;
@@ -23,12 +19,12 @@ public class LoginResponse {
         return mUserResponse;
     }
 
-    @Override
-    public String toString() {
-        return "LoginResponse{" + "\n" +
-                "mSessionToken=" + mSessionToken + "\n" +
-                "mUserResponse=" + mUserResponse + "\n" +
-                '}';
+    public void setSessionToken(String mSessionToken) {
+        this.mSessionToken = mSessionToken;
+    }
+
+    public void setUserResponse(UserResponse mUserResponse) {
+        this.mUserResponse = mUserResponse;
     }
 }
 

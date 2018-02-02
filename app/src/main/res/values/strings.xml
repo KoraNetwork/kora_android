@@ -86,7 +86,7 @@
     <string name="registration_date_of_birth_incorrect">You are too young, must be at least 18 years old</string>
     <string name="registration_currency_usa">"       USD"</string>
     <string name="registration_currency_different">"       %s"</string>
-    <string name="registration_password_requirements">Requirements on password creation: minimal length 8 symbols, one upper case letter, lower case letter, one number.</string>
+    <string name="registration_password_requirements">Requirements on password creation: minimal length 8 symbols, one upper case letter, one lower case letter, one number.</string>
     <string name="registration_password_empty">Password field is empty</string>
     <string name="registration_password_incorrect">Password is incorrect, at least one upper case letter, one lower case letter, one number, length at least 8 symbols</string>
     <string name="registration_password_too_short">Password is too short, at least 8 symbols</string>
@@ -129,7 +129,7 @@
     <string name="login_dialog_message_server_error">Wrong identifier or password</string>
 
     <!-- Login fragment -->
-    <string name="home_warning">This is only a test token, it is not on mainnet yet.</string>
+    <string name="home_warning">These are test tokens on a Rinkeby Testnet. It is not a Mainnet yet.</string>
     <string name="home_balance">Balance</string>
     <string name="home_deposit">DEPOSIT</string>
     <string name="home_withdraw">WITHDRAW</string>
@@ -416,7 +416,8 @@
     <string name="forgot_pass_email_empty">Email field is empty</string>
     <string name="forgot_pass_email_incorrect">Email is incorrect</string>
     <string name="forgot_pass_send">SEND</string>
-    <string name="forgot_pass_create_pass">Please, create new password to protect your account. Requirements on password creation: 8 letters, uppercase, lowercase, number.</string>
+    <string name="forgot_pass_message_is_sent">Message is sent on your email</string>
+    <string name="forgot_pass_create_pass">Please, create new password to protect your account. Requirements on password creation: minimal length 8 symbols, one upper case letter, one lower case letter, one number.</string>
     <string name="forgot_pass_new_pass">New Password</string>
     <string name="forgot_pass_confirm_pass">Confirm Password</string>
     <string name="forgot_pass_new_pass_empty">New password field is empty</string>
@@ -424,12 +425,10 @@
     <string name="forgot_pass_confirm_pass_empty">Confirm password field is empty</string>
     <string name="forgot_pass_confirm_pass_incorrect">Confirm password does not match</string>
     <string name="forgot_pass_confirm">CONFIRM</string>
+    <string name="forgot_pass_token_error_dialog_title">Error</string>
+    <string name="forgot_pass_token_error_dialog_message">You need to click on link in email message.</string>
 
     <!-- Send feedback -->
     <string name="send_feedback_title">Send feedback</string>
-
-    <!-- Testnet dialog -->
-    <string name="dialog_testnet_title">Info</string>
-    <string name="dialog_testnet_message">This is only a test tokens, it is not on mainnet yet.</string>
 
 </resources>

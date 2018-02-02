@@ -36,7 +36,6 @@ import com.kora.android.presentation.ui.base.presenter.BasePresenter;
 import org.web3j.crypto.CipherException;
 
 import java.io.FileNotFoundException;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -239,7 +238,7 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         }
     }
 
-    private class CreateRawTransactionSubscriber extends DefaultWeb3jSubscriber<List<String>> {
+    private class CreateRawTransactionSubscriber extends DefaultWeb3jSubscriber<String> {
 
         @Override
         protected void onStart() {
@@ -248,18 +247,18 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         }
 
         @Override
-        public void onNext(final List<String> rawTransactions) {
+        public void onNext(final String rawTransaction) {
             if (!isViewAttached()) return;
             switch (mActionType) {
                 case SEND_MONEY:
-                    startSendRawTransactionTask(rawTransactions);
+                    startSendRawTransactionTask(rawTransaction);
                     break;
                 case SHOW_REQUEST:
-                    startDeleteRequestTask(rawTransactions);
+                    startDeleteRequestTask(rawTransaction);
                     break;
                 case SHOW_DEPOSIT:
                 case SHOW_WITHDRAW:
-                    startDeleteDepositWithdrawTask(rawTransactions);
+                    startDeleteDepositWithdrawTask(rawTransaction);
                     break;
             }
         }
@@ -305,13 +304,13 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         }
     }
 
-    public void startSendRawTransactionTask(final List<String> rawTransactions) {
+    public void startSendRawTransactionTask(final String rawTransaction) {
         mSendRawTransactionUseCase.setData(
                 getTransactionTypeByAction(mActionType),
                 mReceiver.getId(),
                 mSenderAmount,
                 mReceiverAmount,
-                rawTransactions);
+                rawTransaction);
         mSendRawTransactionUseCase.execute(new SendRawTransactionSubscriber());
     }
 
@@ -362,19 +361,19 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         }
     }
 
-    public void startDeleteRequestTask(final List<String> rawTransactions) {
+    public void startDeleteRequestTask(final String rawTransaction) {
         if (mRequestEntity.getDirection().equals(Direction.TO)) {
             mDeleteRequestUseCase.setData(
                     mRequestEntity.getId(),
                     mReceiverAmount,
                     mSenderAmount,
-                    rawTransactions);
+                    rawTransaction);
         } else if (mRequestEntity.getDirection().equals(Direction.FROM)) {
             mDeleteRequestUseCase.setData(
                     mRequestEntity.getId(),
                     mSenderAmount,
                     mReceiverAmount,
-                    rawTransactions);
+                    rawTransaction);
         }
         mDeleteRequestUseCase.execute(new DeleteRequestSubscriber());
     }
@@ -640,7 +639,7 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         }
     }
 
-    private class CreateFundLoanSubscriber extends DefaultWeb3jSubscriber<Pair<List<String>, String>> {
+    private class CreateFundLoanSubscriber extends DefaultWeb3jSubscriber<Pair<String, String>> {
 
         @Override
         protected void onStart() {
@@ -649,7 +648,7 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         }
 
         @Override
-        public void onNext(final Pair<List<String>, String> rawTransactions) {
+        public void onNext(final Pair<String, String> rawTransactions) {
             if (!isViewAttached()) return;
             startSendFundLoanTask(rawTransactions.first, rawTransactions.second);
         }
@@ -695,8 +694,8 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         }
     }
 
-    private void startSendFundLoanTask(final List<String> rawApproves, final String rawFundLoan) {
-        mSendFundLoanUseCase.setData(mBorrowEntity.getId(), rawApproves, rawFundLoan);
+    private void startSendFundLoanTask(final String rawApprove, final String rawFundLoan) {
+        mSendFundLoanUseCase.setData(mBorrowEntity.getId(), rawApprove, rawFundLoan);
         mSendFundLoanUseCase.execute(new SendFundLoanSubscriber());
     }
 
@@ -747,7 +746,7 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         }
     }
 
-    private class CreatePayBackLoanSubscriber extends DefaultWeb3jSubscriber<Pair<List<String>, String>> {
+    private class CreatePayBackLoanSubscriber extends DefaultWeb3jSubscriber<Pair<String, String>> {
 
         @Override
         protected void onStart() {
@@ -756,9 +755,9 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         }
 
         @Override
-        public void onNext(Pair<List<String>, String> rawTransactions) {
+        public void onNext(Pair<String, String> rawTransaction) {
             if (!isViewAttached()) return;
-            startSendPayBackLoanTask(rawTransactions.first, rawTransactions.second);
+            startSendPayBackLoanTask(rawTransaction.first, rawTransaction.second);
         }
 
 //        @Override
@@ -802,8 +801,8 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         }
     }
 
-    public void startSendPayBackLoanTask(final List<String> rawApproves, final String rawPayBackLoan) {
-        mSendPayBackLoanUseCase.setData(mBorrowEntity.getId(), rawApproves, rawPayBackLoan);
+    public void startSendPayBackLoanTask(final String rawApprove, final String rawPayBackLoan) {
+        mSendPayBackLoanUseCase.setData(mBorrowEntity.getId(), rawApprove, rawPayBackLoan);
         mSendPayBackLoanUseCase.execute(new SendPayBackLoanSubscriber());
     }
 
@@ -854,7 +853,7 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
         }
     }
 
-    private void startDeleteDepositWithdrawTask(final List<String> rawTransactions) {
+    private void startDeleteDepositWithdrawTask(final String rawTransaction) {
         boolean isDeposit = true;
         if (mActionType == ActionType.SHOW_DEPOSIT)
             isDeposit = true;
@@ -865,7 +864,7 @@ public class EnterPinPresenter extends BasePresenter<EnterPinView> {
                 mDepositWithdrawEntity.getId(),
                 mSenderAmount,
                 mReceiverAmount,
-                rawTransactions,
+                rawTransaction,
                 isDeposit);
         mDeleteDepositWithdrawUseCase.execute(new DeleteDepositWithdrawSubscriber());
     }

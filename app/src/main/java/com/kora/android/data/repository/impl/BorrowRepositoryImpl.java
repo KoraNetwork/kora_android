@@ -98,10 +98,10 @@ public class BorrowRepositoryImpl implements BorrowRepository {
 
     @Override
     public Observable<BorrowEntity> sendFundLoan(final String borrowId,
-                                                 final List<String> rawApproves,
+                                                 final String rawApprove,
                                                  final String rawFundLoan) {
         final SendFundLoanRequest sendFundLoanRequest = new SendFundLoanRequest()
-                .addRawApproves(rawApproves)
+                .addRawApprove(rawApprove)
                 .addRawFundLoan(rawFundLoan);
         return mBorrowService.sendFundLoan(borrowId, sendFundLoanRequest)
                 .compose(mBorrowMapper.transformResponseToEntity());
@@ -109,10 +109,10 @@ public class BorrowRepositoryImpl implements BorrowRepository {
 
     @Override
     public Observable<BorrowEntity> sendPayBackLoan(final String borrowId,
-                                                    final List<String> rawApproves,
+                                                    final String rawApprove,
                                                     final String rawPayBackLoan) {
         final SendPayBackLoanRequest sendPayBackLoanRequest = new SendPayBackLoanRequest()
-                .addRawApproves(rawApproves)
+                .addRawApprove(rawApprove)
                 .addRawPayBackLoan(rawPayBackLoan);
         return mBorrowService.sendPayBackLoan(borrowId, sendPayBackLoanRequest)
                 .compose(mBorrowMapper.transformResponseToEntity());

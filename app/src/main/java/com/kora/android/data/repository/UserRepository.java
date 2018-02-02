@@ -29,5 +29,10 @@ public interface UserRepository {
 
     Observable<List<UserEntity>> getRecentUsers();
 
-    Observable <Object>addToRecent(UserEntity userEntity);
+    Observable<Object>addToRecent(final UserEntity userEntity);
+
+    Observable<Object> forgotPassword(final String email);
+
+    Observable<UserEntity> restorePassword(final String token,
+                                           final String newPassword);
 }

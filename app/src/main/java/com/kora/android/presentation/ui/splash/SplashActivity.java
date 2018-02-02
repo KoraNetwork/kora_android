@@ -27,25 +27,6 @@ public class SplashActivity extends BaseActivity<SplashPresenter> implements Spl
 
     @Override
     public void showNextScreen(final boolean isSessionTokenEmpty) {
-
-//        startActivity(FirstStepActivity.getLaunchIntent(this));
-
-//        startActivity(ThirdStepActivity.getLaunchIntent(this));
-
-//        startActivity(FourthStepActivity.getLaunchIntent(this));
-
-//        startActivity(LoginActivity.getLaunchIntent(this));
-
-//        startActivity(HomeActivity.getLaunchIntent(this));
-
-//        startActivity(MainActivity.getLaunchIntent(this));
-
-//        startActivity(EnterPinActivity.getLaunchIntent(this, null, 0, 0));
-
-//        startActivity(TestActivity.getLaunchIntent(this));
-
-//        startActivity(GetContactActivity.getLaunchIntent(this, "401"));
-
         if (isSessionTokenEmpty)
             startActivity(LoginActivity.getLaunchIntent(this));
         else

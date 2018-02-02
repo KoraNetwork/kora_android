@@ -7,5 +7,5 @@ public interface ForgotPassword1View extends BaseView<ForgotPassword1Presenter> 
     void showEmptyEmail();
     void showIncorrectEmail();
 
-    void showNext();
+    void showMessageIsSent();
 }

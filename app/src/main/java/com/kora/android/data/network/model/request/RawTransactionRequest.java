@@ -3,8 +3,6 @@ package com.kora.android.data.network.model.request;
 import com.bluelinelabs.logansquare.annotation.JsonField;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
 
-import java.util.List;
-
 @JsonObject
 public class RawTransactionRequest {
 
@@ -16,8 +14,8 @@ public class RawTransactionRequest {
     private double mFromAmount;
     @JsonField(name = "toAmount")
     private double mToAmount;
-    @JsonField(name = "rawTransactions")
-    private List<String> mRawTransactions;
+    @JsonField(name = "rawTransaction")
+    private String mRawTransaction;
 
     public RawTransactionRequest addType(final String type) {
         mType = type;
@@ -39,8 +37,8 @@ public class RawTransactionRequest {
         return this;
     }
 
-    public RawTransactionRequest addRawTransactions(final List<String> rawTransactions) {
-        mRawTransactions = rawTransactions;
+    public RawTransactionRequest addRawTransaction(final String rawTransaction) {
+        mRawTransaction = rawTransaction;
         return this;
     }
 
@@ -76,11 +74,11 @@ public class RawTransactionRequest {
         this.mToAmount = mToAmount;
     }
 
-    public List<String> getRawTransactions() {
-        return mRawTransactions;
+    public String getRawTransaction() {
+        return mRawTransaction;
     }
 
-    public void setRawTransactions(List<String> rawTransactions) {
-        this.mRawTransactions = rawTransactions;
+    public void setRawTransaction(String rawTransaction) {
+        this.mRawTransaction = rawTransaction;
     }
 }

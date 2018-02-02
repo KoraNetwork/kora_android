@@ -14,15 +14,11 @@ import com.kora.android.data.repository.Web3jRepository;
 import com.kora.android.data.web3j.connection.Web3jConnection;
 import com.kora.android.data.web3j.model.EtherWallet;
 import com.kora.android.data.web3j.model.response.CreateWalletsResponse;
-import com.kora.android.data.web3j.model.response.IdentityCreatedResponse;
-import com.kora.android.data.web3j.smart_contracts.HumanStandardToken;
-import com.kora.android.data.web3j.smart_contracts.MetaIdentityManager;
 import com.kora.android.data.web3j.storage.EtherWalletStorage;
 import com.kora.android.data.web3j.storage.FileMetaData;
 import com.kora.android.data.web3j.utils.EtherWalletUtils;
 import com.kora.android.presentation.model.UserEntity;
 
-import org.spongycastle.util.encoders.Hex;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.FunctionReturnDecoder;
 import org.web3j.abi.TypeReference;
@@ -33,7 +29,6 @@ import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.crypto.Credentials;
-import org.web3j.crypto.ECKeyPair;
 import org.web3j.crypto.TransactionEncoder;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
@@ -42,8 +37,6 @@ import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthCall;
 import org.web3j.protocol.core.methods.response.EthGetBalance;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
-import org.web3j.protocol.core.methods.response.EthSendTransaction;
-import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.utils.Numeric;
 
 import java.io.File;
@@ -208,31 +201,11 @@ public class Web3jRepositoryImpl implements Web3jRepository {
     }
 
     @Override
-    public Observable<Object> importKoraWalletFile() {
-        return Observable.just(true).map(a -> {
-
-            final List<EtherWallet> etherWalletList = mEtherWalletStorage.getWalletList();
-            final EtherWallet koraEtherWallet = EtherWallet.createEtherWalletFromAddress(mWeb3jConnection.getKoraWalletAddress());
-            if (etherWalletList.contains(koraEtherWallet))
-                return a;
-
-            final ECKeyPair keys = ECKeyPair.create(Hex.decode(mWeb3jConnection.getKoraWalletPrivateKey()));
-            mEtherWalletUtils.generateWalletFile(
-                    mWeb3jConnection.getKoraWalletPassword(),
-                    keys,
-                    new File(mContext.getFilesDir(), ""));
-            mEtherWalletStorage.addWallet(koraEtherWallet);
-
-            return a;
-        });
-    }
-
-    @Override
-    public Observable<List<String>> createRawTransaction(final UserEntity receiver,
-                                                         final double senderAmount,
-                                                         final double receiverAmount,
-                                                         final Integer interestRate,
-                                                         final String pinCode) {
+    public Observable<String> createRawTransaction(final UserEntity receiver,
+                                                   final double senderAmount,
+                                                   final double receiverAmount,
+                                                   final Integer interestRate,
+                                                   final String pinCode) {
         return Observable.just(true).map(a -> {
             checkConnection();
 
@@ -249,101 +222,42 @@ public class Web3jRepositoryImpl implements Web3jRepository {
 
             ////////////////////////////////////////////////////////////////////////////////////////
 
-            if (sender.getCurrency().equals(receiver.getCurrency())) {
+            final String receiverAddress = (sender.getCurrency().equals(receiver.getCurrency()))
+                    ? receiver.getIdentity()
+                    : mWeb3jConnection.getKoraWalletAddress();
 
-                double simpleOrTotalSenderAmount;
-                if (interestRate != null) {
-                    final double totalInterest = Math.floor(senderAmount * (double) interestRate) / 100;
-                    simpleOrTotalSenderAmount = senderAmount + totalInterest;
-                } else {
-                    simpleOrTotalSenderAmount = senderAmount;
-                }
-
-                final Function transferFunction = new Function(
-                        mWeb3jConnection.getGetTransferFunction(),
-                        Arrays.asList(
-                                new Address(receiver.getIdentity()),
-                                new Uint256(Web3jUtils.convertTokenToBigInteger(simpleOrTotalSenderAmount))),
-                        Collections.emptyList());
-                final byte[] senderTransferFunctionByteArray = getFunctionByteArray(transferFunction);
-
-                final Function forwardToFunction = new Function(
-                        mWeb3jConnection.getForwardToFunction(),
-                        Arrays.asList(
-                                new Address(sender.getOwner()),
-                                new Address(sender.getIdentity()),
-                                new Address(sender.getERC20Token()),
-                                Uint256.DEFAULT,
-                                new DynamicBytes(senderTransferFunctionByteArray)),
-                        Collections.emptyList());
-                final String senderHexValue = getTransactionHexValue(
-                        forwardToFunction,
-                        senderTransactionCount,
-                        mWeb3jConnection.getMetaIdentityManagerRinkeby(),
-                        senderCredentials);
-
-                return Collections.singletonList(senderHexValue);
-
+            double simpleOrTotalSenderAmount;
+            if (interestRate != null) {
+                final double totalInterest = Math.floor(senderAmount * (double) interestRate) / 100;
+                simpleOrTotalSenderAmount = senderAmount + totalInterest;
             } else {
-
-                double simpleOrTotalSenderAmount;
-                if (interestRate != null) {
-                    final double totalInterest = Math.floor(senderAmount * (double) interestRate) / 100;
-                    simpleOrTotalSenderAmount = senderAmount + totalInterest;
-                } else {
-                    simpleOrTotalSenderAmount = senderAmount;
-                }
-
-                final Function senderTransferFunction = new Function(
-                        mWeb3jConnection.getGetTransferFunction(),
-                        Arrays.asList(
-                                new Address(mWeb3jConnection.getKoraWalletAddress()),
-                                new Uint256(Web3jUtils.convertTokenToBigInteger(simpleOrTotalSenderAmount))),
-                        Collections.emptyList());
-                final byte[] senderTransferFunctionByteArray = getFunctionByteArray(senderTransferFunction);
-
-                final Function forwardToFunction = new Function(
-                        mWeb3jConnection.getForwardToFunction(),
-                        Arrays.asList(
-                                new Address(sender.getOwner()),
-                                new Address(sender.getIdentity()),
-                                new Address(sender.getERC20Token()),
-                                Uint256.DEFAULT,
-                                new DynamicBytes(senderTransferFunctionByteArray)),
-                        Collections.emptyList());
-                final String senderHexValue = getTransactionHexValue(
-                        forwardToFunction,
-                        senderTransactionCount,
-                        mWeb3jConnection.getMetaIdentityManagerRinkeby(),
-                        senderCredentials);
-
-                final Credentials koraCredentials = mEtherWalletStorage.getCredentials(
-                        mWeb3jConnection.getKoraWalletFileName(),
-                        mWeb3jConnection.getKoraWalletPassword());
-                final BigInteger koraTransactionCount = getTransactionCount(web3j, mWeb3jConnection.getKoraWalletAddress());
-
-                double simpleOrTotalReceiverAmount;
-                if (interestRate != null) {
-                    final double totalInterest = Math.floor(receiverAmount * (double) interestRate) / 100;
-                    simpleOrTotalReceiverAmount = receiverAmount + totalInterest;
-                } else {
-                    simpleOrTotalReceiverAmount = receiverAmount;
-                }
-
-                final Function koraTransferFunction = new Function(
-                        mWeb3jConnection.getGetTransferFunction(),
-                        Arrays.asList(
-                                new Address(receiver.getIdentity()),
-                                new Uint256(Web3jUtils.convertTokenToBigInteger(simpleOrTotalReceiverAmount))),
-                        Collections.emptyList());
-                final String koraHexValue = getTransactionHexValue(
-                        koraTransferFunction,
-                        koraTransactionCount,
-                        receiver.getERC20Token(),
-                        koraCredentials);
-
-                return Arrays.asList(senderHexValue, koraHexValue);
+                simpleOrTotalSenderAmount = senderAmount;
             }
+
+            final Function transferFunction = new Function(
+                    mWeb3jConnection.getGetTransferFunction(),
+                    Arrays.asList(
+                            new Address(receiverAddress),
+                            new Uint256(Web3jUtils.convertTokenToBigInteger(simpleOrTotalSenderAmount))),
+                    Collections.emptyList());
+            final byte[] senderTransferFunctionByteArray = getFunctionByteArray(transferFunction);
+
+            final Function forwardToFunction = new Function(
+                    mWeb3jConnection.getForwardToFunction(),
+                    Arrays.asList(
+                            new Address(sender.getOwner()),
+                            new Address(sender.getIdentity()),
+                            new Address(sender.getERC20Token()),
+                            Uint256.DEFAULT,
+                            new DynamicBytes(senderTransferFunctionByteArray)),
+                    Collections.emptyList());
+            final String senderHexValue = getTransactionHexValue(
+                    forwardToFunction,
+                    senderTransactionCount,
+                    mWeb3jConnection.getMetaIdentityManagerRinkeby(),
+                    senderCredentials);
+
+            return senderHexValue;
         });
     }
 
@@ -448,7 +362,7 @@ public class Web3jRepositoryImpl implements Web3jRepository {
     }
 
     @Override
-    public Observable<Pair<List<String>, String>> createFundLoan(final String borrowerErc20Token,
+    public Observable<Pair<String, String>> createFundLoan(final String borrowerErc20Token,
                                                                  final String lenderErc20Token,
                                                                  final double borrowerAmount,
                                                                  final double lenderAmount,
@@ -467,10 +381,6 @@ public class Web3jRepositoryImpl implements Web3jRepository {
             checkTokenBalance(web3j, sender, lenderAmount);
 
             final BigInteger senderTransactionCount = getTransactionCount(web3j, sender.getOwner());
-
-            ////////////////////////////////////////////////////////////////////////////////////////
-
-            final List<String> rawApproves = new ArrayList<>();
 
             ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -496,33 +406,6 @@ public class Web3jRepositoryImpl implements Web3jRepository {
                     senderTransactionCount,
                     mWeb3jConnection.getMetaIdentityManagerRinkeby(),
                     senderCredentials);
-
-            rawApproves.add(lenderApproveHexValue);
-
-            ////////////////////////////////////////////////////////////////////////////////////////
-
-            if (!borrowerErc20Token.equals(lenderErc20Token)) {
-                checkConnection();
-
-                final Credentials koraCredentials = mEtherWalletStorage.getCredentials(
-                        mWeb3jConnection.getKoraWalletFileName(),
-                        mWeb3jConnection.getKoraWalletPassword());
-                final BigInteger koraTransactionCount = getTransactionCount(web3j, mWeb3jConnection.getKoraWalletAddress());
-
-                final Function koraApproveFunction = new Function(
-                        mWeb3jConnection.getApproveFunction(),
-                        Arrays.asList(
-                                new Address(mWeb3jConnection.getKoraLendRinkeby()),
-                                new Uint256(Web3jUtils.convertTokenToBigInteger(borrowerAmount))),
-                        Collections.emptyList());
-                final String koraApproveHexValue = getTransactionHexValue(
-                        koraApproveFunction,
-                        koraTransactionCount,
-                        borrowerErc20Token,
-                        koraCredentials);
-
-                rawApproves.add(koraApproveHexValue);
-            }
 
             ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -553,7 +436,7 @@ public class Web3jRepositoryImpl implements Web3jRepository {
 
             ////////////////////////////////////////////////////////////////////////////////////////
 
-            return new Pair<>(rawApproves, lenderFundLoanHexValue);
+            return new Pair<>(lenderApproveHexValue, lenderFundLoanHexValue);
         });
     }
 
@@ -609,42 +492,6 @@ public class Web3jRepositoryImpl implements Web3jRepository {
                     senderCredentials);
 
             rawApproves.add(borrowerApproveHexValue);
-
-            ////////////////////////////////////////////////////////////////////////////////////////
-
-            if (!borrowerErc20Token.equals(lenderErc20Token)) {
-                checkConnection();
-
-                final Credentials koraCredentials = mEtherWalletStorage.getCredentials(
-                        mWeb3jConnection.getKoraWalletFileName(),
-                        mWeb3jConnection.getKoraWalletPassword());
-                final BigInteger koraTransactionCount = getTransactionCount(web3j, mWeb3jConnection.getKoraWalletAddress());
-
-                double lenderValue;
-                if (borrowerValue == borrowerBalance) {
-                    lenderValue = lenderBalance;
-                } else {
-                    final long longBorrowerValue = Math.round(borrowerValue * 100);
-                    final long longBorrowerBalance = Math.round(borrowerBalance * 100);
-                    final long longLenderBalance = Math.round(lenderBalance * 100);
-                    long intLenderValue = longBorrowerValue * longLenderBalance / longBorrowerBalance;
-                    lenderValue = intLenderValue / 100d;
-                }
-
-                final Function koraApproveFunction = new Function(
-                        mWeb3jConnection.getApproveFunction(),
-                        Arrays.asList(
-                                new Address(mWeb3jConnection.getKoraLendRinkeby()),
-                                new Uint256(Web3jUtils.convertTokenToBigInteger(lenderValue))),
-                        Collections.emptyList());
-                final String koraApproveHexValue = getTransactionHexValue(
-                        koraApproveFunction,
-                        koraTransactionCount,
-                        lenderErc20Token,
-                        koraCredentials);
-
-                rawApproves.add(koraApproveHexValue);
-            }
 
             ////////////////////////////////////////////////////////////////////////////////////////
 

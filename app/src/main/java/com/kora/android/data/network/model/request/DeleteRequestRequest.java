@@ -3,8 +3,6 @@ package com.kora.android.data.network.model.request;
 import com.bluelinelabs.logansquare.annotation.JsonField;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
 
-import java.util.List;
-
 @JsonObject
 public class DeleteRequestRequest {
 
@@ -12,8 +10,8 @@ public class DeleteRequestRequest {
     private double mFromAmount;
     @JsonField(name = "toAmount")
     private double mToAmount;
-    @JsonField(name = "rawTransactions")
-    private List<String> mRawTransactions;
+    @JsonField(name = "rawTransaction")
+    private String mRawTransaction;
 
     public DeleteRequestRequest addFromAmount(final double fromAmount) {
         mFromAmount = fromAmount;
@@ -25,8 +23,8 @@ public class DeleteRequestRequest {
         return this;
     }
 
-    public DeleteRequestRequest addRawTransactions(final List<String> rawTransactions) {
-        mRawTransactions = rawTransactions;
+    public DeleteRequestRequest addRawTransaction(final String rawTransaction) {
+        mRawTransaction = rawTransaction;
         return this;
     }
 
@@ -46,11 +44,11 @@ public class DeleteRequestRequest {
         this.mToAmount = mToAmount;
     }
 
-    public List<String> getRawTransactions() {
-        return mRawTransactions;
+    public String getRawTransaction() {
+        return mRawTransaction;
     }
 
-    public void setRawTransactions(List<String> rawTransactions) {
-        this.mRawTransactions = rawTransactions;
+    public void setRawTransaction(String rawTransactions) {
+        this.mRawTransaction = rawTransactions;
     }
 }

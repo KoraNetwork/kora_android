@@ -16,7 +16,7 @@ public class SendFundLoanUseCase extends AsyncUseCase {
     private final BorrowRepository mBorrowRepository;
 
     private String mBorrowId;
-    private List<String> mRawApproves;
+    private String mRawApprove;
     private String mRawFundLoan;
 
     @Inject
@@ -25,16 +25,16 @@ public class SendFundLoanUseCase extends AsyncUseCase {
     }
 
     public void setData(final String borrowId,
-                        final List<String> rawApproves,
+                        final String rawApprove,
                         final String rawFundLoan) {
         mBorrowId = borrowId;
-        mRawApproves = rawApproves;
+        mRawApprove = rawApprove;
         mRawFundLoan = rawFundLoan;
     }
 
 
     @Override
     protected Observable buildObservableTask() {
-        return mBorrowRepository.sendFundLoan(mBorrowId, mRawApproves, mRawFundLoan);
+        return mBorrowRepository.sendFundLoan(mBorrowId, mRawApprove, mRawFundLoan);
     }
 }

@@ -3,18 +3,16 @@ package com.kora.android.data.network.model.request;
 import com.bluelinelabs.logansquare.annotation.JsonField;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
 
-import java.util.List;
-
 @JsonObject
 public class SendFundLoanRequest {
 
-    @JsonField(name = "rawApproves")
-    private List<String> mRawApproves;
+    @JsonField(name = "rawApprove")
+    private String mRawApprove;
     @JsonField(name = "rawFundLoan")
     private String mRawFundLoan;
 
-    public SendFundLoanRequest addRawApproves(final List<String> rawApproves) {
-        mRawApproves = rawApproves;
+    public SendFundLoanRequest addRawApprove(final String rawApprove) {
+        mRawApprove = rawApprove;
         return this;
     }
 
@@ -23,12 +21,12 @@ public class SendFundLoanRequest {
         return this;
     }
 
-    public List<String> getRawApproves() {
-        return mRawApproves;
+    public String getRawApprove() {
+        return mRawApprove;
     }
 
-    public void setRawApproves(List<String> mRawApproves) {
-        this.mRawApproves = mRawApproves;
+    public void setRawApprove(String mRawApprove) {
+        this.mRawApprove = mRawApprove;
     }
 
     public String getRawFundLoan() {

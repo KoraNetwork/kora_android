@@ -26,6 +26,6 @@ public interface DepositWithdrawRepository {
     Observable<Object> deleteDeposit(final String depositId,
                                      final double fromAmount,
                                      final double toAmount,
-                                     final List<String> rawTransactions,
+                                     final String rawTransaction,
                                      final boolean isDeposit);
 }

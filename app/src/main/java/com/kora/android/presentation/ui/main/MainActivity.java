@@ -106,7 +106,7 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
 
     @Override
     protected void onViewReady(Bundle savedInstanceState) {
-        getPresenter().importKoraWallet();
+        getPresenter().loadUserData();
 
         setupDrawer();
         getNavigator().showFragment(rootTabFragment(TAB_HOME_POSITION), TAB_HOME_POSITION);
@@ -274,10 +274,10 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
 
     @Override
     public void showUserData(final UserEntity userEntity) {
-//        if (!userEntity.hasIdentity()) {
+        if (!userEntity.hasIdentity()) {
             final Intent launchIntent = CreateWalletsService.getLaunchIntent(this);
             startService(launchIntent);
-//        }
+        }
 
         mNavigationView.getMenu().setGroupVisible(R.id.nav_group_agent, userEntity.isAgent());
         if (!userEntity.isAgent()) {

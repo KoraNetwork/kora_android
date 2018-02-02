@@ -1,7 +1,10 @@
 package com.kora.android.data.network.service;
 
 import com.kora.android.data.network.model.request.CreateIdentityRequest;
+import com.kora.android.data.network.model.request.ForgotPasswordRequest;
+import com.kora.android.data.network.model.request.RestorePasswordRequest;
 import com.kora.android.data.network.model.request.UserIdRequest;
+import com.kora.android.data.network.model.response.LoginResponse;
 import com.kora.android.data.network.model.response.UserListResponse;
 import com.kora.android.data.network.model.response.UserResponse;
 
@@ -59,4 +62,9 @@ public interface UserService {
     @POST("recents/add")
     Observable<Object> addToRecent(@Body UserIdRequest userIdRequest);
 
+    @POST("profile/forgotPassword")
+    Observable<Object> forgotPassword(@Body ForgotPasswordRequest forgotPasswordRequest);
+
+    @PUT("profile/restorePassword")
+    Observable<LoginResponse> restorePassword(@Body RestorePasswordRequest restorePasswordRequest);
 }

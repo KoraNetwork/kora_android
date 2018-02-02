@@ -18,7 +18,7 @@ public class DeleteRequestUseCase extends AsyncUseCase {
     private String mRequestId;
     private double mFromAmount;
     private double mToAmount;
-    private List<String> mRawTransactions;
+    private String mRawTransaction;
 
     @Inject
     public DeleteRequestUseCase(final RequestRepository requestRepository) {
@@ -28,11 +28,11 @@ public class DeleteRequestUseCase extends AsyncUseCase {
     public void setData(final String requestId,
                         final double fromAmount,
                         final double toAmount,
-                        final List<String> rawTransactions) {
+                        final String rawTransaction) {
         mRequestId = requestId;
         mFromAmount = fromAmount;
         mToAmount = toAmount;
-        mRawTransactions = rawTransactions;
+        mRawTransaction = rawTransaction;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class DeleteRequestUseCase extends AsyncUseCase {
                 mRequestId,
                 mFromAmount,
                 mToAmount,
-                mRawTransactions
+                mRawTransaction
         );
     }
 }

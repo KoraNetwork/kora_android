@@ -24,10 +24,10 @@ public interface BorrowRepository {
                                            final String rawAgreeLoan);
 
     Observable<BorrowEntity> sendFundLoan(final String borrowId,
-                                          final List<String> rawApproves,
+                                          final String rawApprove,
                                           final String rawFundLoan);
 
     Observable <BorrowEntity>sendPayBackLoan(final String borrowId,
-                                             final List<String> rawApproves,
+                                             final String rawApprove,
                                              final String rawPayBackLoan);
 }

@@ -2,6 +2,8 @@ package com.kora.android.data.network.model.request;
 
 import com.bluelinelabs.logansquare.annotation.JsonField;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
+import com.kora.android.data.network.model.converter.TransactionTypeConverter;
+import com.kora.android.presentation.enums.TransactionType;
 
 @JsonObject
 public class CurrencyConvertRequest {
@@ -10,6 +12,8 @@ public class CurrencyConvertRequest {
     private String mTo;
     @JsonField(name = "fromAmount")
     private double mFromAmount;
+    @JsonField(name = "type", typeConverter = TransactionTypeConverter.class)
+    private TransactionType mType;
 
     public CurrencyConvertRequest addTo(final String to) {
         mTo = to;
@@ -18,6 +22,11 @@ public class CurrencyConvertRequest {
 
     public CurrencyConvertRequest addFromAmount(final double fromAmount) {
         mFromAmount = fromAmount;
+        return this;
+    }
+
+    public CurrencyConvertRequest addType(TransactionType type) {
+        mType = type;
         return this;
     }
 
@@ -35,5 +44,13 @@ public class CurrencyConvertRequest {
 
     public void setFromAmount(double mFromAmount) {
         this.mFromAmount = mFromAmount;
+    }
+
+    public TransactionType getType() {
+        return mType;
+    }
+
+    public void setType(TransactionType mType) {
+        this.mType = mType;
     }
 }

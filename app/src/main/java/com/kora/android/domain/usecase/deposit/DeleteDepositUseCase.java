@@ -18,7 +18,7 @@ public class DeleteDepositUseCase extends AsyncUseCase {
     private String mDepositWithdrawId;
     private double mFromAmount;
     private double mToAmount;
-    private List<String> mRawTransactions;
+    private String mRawTransaction;
     private boolean mIsDeposit;
 
     @Inject
@@ -29,12 +29,12 @@ public class DeleteDepositUseCase extends AsyncUseCase {
     public void setData(final String depositWithdrawId,
                         final double fromAmount,
                         final double toAmount,
-                        final List<String> rawTransactions,
+                        final String rawTransaction,
                         final boolean isDeposit) {
         mDepositWithdrawId = depositWithdrawId;
         mFromAmount = fromAmount;
         mToAmount = toAmount;
-        mRawTransactions = rawTransactions;
+        mRawTransaction = rawTransaction;
         mIsDeposit = isDeposit;
 
     }
@@ -45,7 +45,7 @@ public class DeleteDepositUseCase extends AsyncUseCase {
                 mDepositWithdrawId,
                 mFromAmount,
                 mToAmount,
-                mRawTransactions,
+                mRawTransaction,
                 mIsDeposit
         );
     }

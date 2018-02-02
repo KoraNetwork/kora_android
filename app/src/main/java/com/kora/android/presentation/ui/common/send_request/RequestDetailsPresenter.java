@@ -11,7 +11,9 @@ import com.kora.android.domain.usecase.request.AddToRequestsUseCase;
 import com.kora.android.domain.usecase.request.UpdateRequestUseCase;
 import com.kora.android.domain.usecase.convert.GetConvertedAmountUseCase;
 import com.kora.android.domain.usecase.user.GetUserDataUseCase;
+import com.kora.android.presentation.enums.ActionType;
 import com.kora.android.presentation.enums.Direction;
+import com.kora.android.presentation.enums.TransactionType;
 import com.kora.android.presentation.model.RequestEntity;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
@@ -32,6 +34,9 @@ public class RequestDetailsPresenter extends BasePresenter<RequestDetailsView> {
 
     private UserEntity mSender;
     private UserEntity mReceiver;
+
+    private ActionType mActionType;
+
     @Nullable
     private RequestEntity mRequest;
 
@@ -80,7 +85,12 @@ public class RequestDetailsPresenter extends BasePresenter<RequestDetailsView> {
             getView().showConvertedCurrency(value, mReceiver.getCurrency());
             return;
         }
-        mGetConvertedAmountUseCase.setData(mReceiver.getId(), value);
+
+        if (mActionType == ActionType.SEND_MONEY) {
+            mGetConvertedAmountUseCase.setData(mReceiver.getId(), value, TransactionType.SEND);
+        } else if (mActionType == ActionType.CREATE_REQUEST){
+            mGetConvertedAmountUseCase.setData(mReceiver.getId(), value, TransactionType.REQUEST);
+        }
         mGetConvertedAmountUseCase.execute(new ConvertSubscriber());
     }
 
@@ -301,6 +311,14 @@ public class RequestDetailsPresenter extends BasePresenter<RequestDetailsView> {
             if (!isViewAttached()) return;
             getView().showErrorWithRetry(new RetryAction(mUpdateRequestAction));
         }
+    }
+
+    public ActionType getActionType() {
+        return mActionType;
+    }
+
+    public void setActionType(ActionType actionType) {
+        this.mActionType = actionType;
     }
 
     @Override

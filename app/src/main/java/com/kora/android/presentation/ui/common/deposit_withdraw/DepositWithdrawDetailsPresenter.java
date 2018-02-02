@@ -12,6 +12,7 @@ import com.kora.android.domain.usecase.deposit.UpdateDepositUseCase;
 import com.kora.android.domain.usecase.user.GetUserDataUseCase;
 import com.kora.android.presentation.enums.ActionType;
 import com.kora.android.presentation.enums.Direction;
+import com.kora.android.presentation.enums.TransactionType;
 import com.kora.android.presentation.model.DepositWithdrawEntity;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
@@ -132,7 +133,11 @@ public class DepositWithdrawDetailsPresenter extends BasePresenter<DepositWithdr
             getView().showConvertedCurrency(value, mReceiver.getCurrency());
             return;
         }
-        mGetConvertedAmountUseCase.setData(mReceiver.getId(), value);
+        if (mActionType == ActionType.CREATE_DEPOSIT) {
+            mGetConvertedAmountUseCase.setData(mReceiver.getId(), value, TransactionType.DEPOSIT);
+        } else  if (mActionType == ActionType.CREATE_WITHDRAW) {
+            mGetConvertedAmountUseCase.setData(mReceiver.getId(), value, TransactionType.WITHDRAW);
+        }
         mGetConvertedAmountUseCase.execute(new ConvertSubscriber());
     }
 

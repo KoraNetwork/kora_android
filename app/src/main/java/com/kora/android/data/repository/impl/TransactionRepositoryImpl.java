@@ -62,13 +62,13 @@ public class TransactionRepositoryImpl implements TransactionRepository {
                                                             final String to,
                                                             final double fromAmount,
                                                             final double toAmount,
-                                                            final List<String> rawTransactions) {
+                                                            final String rawTransaction) {
         final RawTransactionRequest rawTransactionRequest = new RawTransactionRequest()
                 .addType(type)
                 .addTo(to)
                 .addFromAmount(fromAmount)
                 .addToAmount(toAmount)
-                .addRawTransactions(rawTransactions);
+                .addRawTransaction(rawTransaction);
         return mTransactionService.sendRawTransaction(rawTransactionRequest)
                 .compose(mTransactionMapper.transformResponseToTransactionEntity());
     }

@@ -5,7 +5,11 @@ import android.support.v4.util.Pair;
 import com.kora.android.common.Keys;
 import com.kora.android.common.preferences.PreferenceHandler;
 import com.kora.android.data.network.model.request.CreateIdentityRequest;
+import com.kora.android.data.network.model.request.ForgotPasswordRequest;
+import com.kora.android.data.network.model.request.RestorePasswordRequest;
 import com.kora.android.data.network.model.request.UserIdRequest;
+import com.kora.android.data.network.model.response.LoginResponse;
+import com.kora.android.data.network.model.response.UserResponse;
 import com.kora.android.data.network.service.UserService;
 import com.kora.android.data.repository.UserRepository;
 import com.kora.android.data.repository.mapper.UserMapper;
@@ -125,10 +129,35 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
+    @Override
+    public Observable<Object> forgotPassword(final String email) {
+        final ForgotPasswordRequest forgotPasswordRequest = new ForgotPasswordRequest()
+                .addEmail(email);
+        return mUserService.forgotPassword(forgotPasswordRequest);
+    }
+
+    @Override
+    public Observable<UserEntity> restorePassword(final String token, final String newPassword) {
+        final RestorePasswordRequest restorePasswordRequest = new RestorePasswordRequest()
+                .addToken(token)
+                .addNewPassword(newPassword);
+        return mUserService.restorePassword(restorePasswordRequest)
+                .compose(saveToken())
+                .compose(mUserMapper.transformResponseToEntityUser())
+                .compose(storeUser());
+    }
+
     public ObservableTransformer<UserEntity, UserEntity> storeUser() {
         return observable -> observable.map(user -> {
             mPreferenceHandler.rememberObject(Keys.Shared.USER, user);
             return user;
+        });
+    }
+
+    public ObservableTransformer<LoginResponse, UserResponse> saveToken() {
+        return observable -> observable.map(authResponse -> {
+            mPreferenceHandler.rememberString(Keys.Shared.TOKEN, authResponse.getSessionToken());
+            return authResponse.getUserResponse();
         });
     }
 }

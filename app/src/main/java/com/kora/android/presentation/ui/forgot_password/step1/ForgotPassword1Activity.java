@@ -72,7 +72,7 @@ public class ForgotPassword1Activity extends ToolbarActivity<ForgotPassword1Pres
     }
 
     @Override
-    public void showNext() {
-        Toast.makeText(this, "Message is sent", Toast.LENGTH_SHORT).show();
+    public void showMessageIsSent() {
+        Toast.makeText(this, R.string.forgot_pass_message_is_sent, Toast.LENGTH_LONG).show();
     }
 }

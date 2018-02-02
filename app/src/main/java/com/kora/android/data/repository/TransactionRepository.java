@@ -23,5 +23,5 @@ public interface TransactionRepository {
                                                      final String to,
                                                      final double fromAmount,
                                                      final double toAmount,
-                                                     final List<String> rawTransactions);
+                                                     final String rawTransaction);
 }

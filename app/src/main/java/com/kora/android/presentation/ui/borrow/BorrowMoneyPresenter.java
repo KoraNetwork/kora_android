@@ -13,6 +13,7 @@ import com.kora.android.domain.usecase.borrow.AgreeBorrowUseCase;
 import com.kora.android.domain.usecase.convert.GetConvertedAmountUseCase;
 import com.kora.android.domain.usecase.user.GetUserDataUseCase;
 import com.kora.android.presentation.enums.ActionType;
+import com.kora.android.presentation.enums.TransactionType;
 import com.kora.android.presentation.model.BorrowEntity;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
@@ -85,7 +86,7 @@ public class BorrowMoneyPresenter extends BasePresenter<BorrowMoneyView> {
             getView().showConvertedCurrency(value);
             return;
         }
-        mGetConvertedAmountUseCase.setData(mReceiver.getId(), value);
+        mGetConvertedAmountUseCase.setData(mReceiver.getId(), value, TransactionType.BORROWFUND);
         mGetConvertedAmountUseCase.execute(new ConvertSubscriber());
     }
 
