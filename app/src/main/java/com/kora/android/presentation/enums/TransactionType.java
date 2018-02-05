@@ -4,6 +4,7 @@ public enum  TransactionType {
 
     SEND("send"),
     REQUEST("request"),
+    BORROW("borrow"),
     BORROWFUND("borrowFund"),
     BORROWPAYBACK("borrowPayBack"),
     DEPOSIT("deposit"),

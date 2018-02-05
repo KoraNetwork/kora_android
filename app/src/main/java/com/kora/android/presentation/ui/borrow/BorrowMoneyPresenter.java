@@ -86,7 +86,7 @@ public class BorrowMoneyPresenter extends BasePresenter<BorrowMoneyView> {
             getView().showConvertedCurrency(value);
             return;
         }
-        mGetConvertedAmountUseCase.setData(mReceiver.getId(), value, TransactionType.BORROWFUND);
+        mGetConvertedAmountUseCase.setData(mReceiver.getId(), value, TransactionType.BORROW);
         mGetConvertedAmountUseCase.execute(new ConvertSubscriber());
     }
 

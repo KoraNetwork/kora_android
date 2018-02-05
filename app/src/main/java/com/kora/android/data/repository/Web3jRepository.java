@@ -26,10 +26,10 @@ public interface Web3jRepository {
     Observable<Object> importWalletFile(final Uri walletFileUri);
 
     Observable<String> createRawTransaction(final UserEntity receiver,
-                                                  final double senderAmount,
-                                                  final double receiverAmount,
-                                                  final Integer interestRate,
-                                                  final String pinCode);
+                                            final double senderAmount,
+                                            final double receiverAmount,
+                                            final Integer interestRate,
+                                            final String pinCode);
 
     Observable<String> createCreateLoan(final UserEntity lender,
                                         final List<UserEntity> guarantors,
@@ -44,17 +44,17 @@ public interface Web3jRepository {
                                        final String pinCode);
 
     Observable<Pair<String, String>> createFundLoan(final String borrowerErc20Token,
-                                                          final String lenderErc20Token,
-                                                          final double borrowerAmount,
-                                                          final double lenderAmount,
-                                                          final String loanId,
-                                                          final String pinCode);
+                                                    final String lenderErc20Token,
+                                                    final double borrowerAmount,
+                                                    final double lenderAmount,
+                                                    final String loanId,
+                                                    final String pinCode);
 
-    Observable<Pair<List<String>, String>> createPayBackLoan(final String loanId,
-                                                             final String borrowerErc20Token,
-                                                             final String lenderErc20Token,
-                                                             final double borrowerValue,
-                                                             final double borrowerBalance,
-                                                             final double lenderBalance,
-                                                             final String pinCode);
+    Observable<Pair<String, String>> createPayBackLoan(final String loanId,
+                                                       final String borrowerErc20Token,
+                                                       final String lenderErc20Token,
+                                                       final double borrowerValue,
+                                                       final double borrowerBalance,
+                                                       final double lenderBalance,
+                                                       final String pinCode);
 }

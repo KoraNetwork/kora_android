@@ -441,7 +441,7 @@ public class Web3jRepositoryImpl implements Web3jRepository {
     }
 
     @Override
-    public Observable<Pair<List<String>, String>> createPayBackLoan(final String loanId,
+    public Observable<Pair<String, String>> createPayBackLoan(final String loanId,
                                                                     final String borrowerErc20Token,
                                                                     final String lenderErc20Token,
                                                                     final double borrowerValue,
@@ -461,10 +461,6 @@ public class Web3jRepositoryImpl implements Web3jRepository {
             checkTokenBalance(web3j, sender, borrowerValue);
 
             final BigInteger senderTransactionCount = getTransactionCount(web3j, sender.getOwner());
-
-            ////////////////////////////////////////////////////////////////////////////////////////
-
-            final List<String> rawApproves = new ArrayList<>();
 
             ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -490,8 +486,6 @@ public class Web3jRepositoryImpl implements Web3jRepository {
                     senderTransactionCount,
                     mWeb3jConnection.getMetaIdentityManagerRinkeby(),
                     senderCredentials);
-
-            rawApproves.add(borrowerApproveHexValue);
 
             ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -523,7 +517,7 @@ public class Web3jRepositoryImpl implements Web3jRepository {
 
             ////////////////////////////////////////////////////////////////////////////////////////
 
-            return new Pair<>(rawApproves, payBackLoanHexValue);
+            return new Pair<>(borrowerApproveHexValue, payBackLoanHexValue);
         });
     }
 
