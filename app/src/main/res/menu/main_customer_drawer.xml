@@ -30,7 +30,7 @@
 
         <item
             android:id="@+id/nav_withdrawal"
-            android:icon="@drawable/menu_withdrawal_icon"
+            android:icon="@drawable/menu_withdraw_icon"
             android:title="@string/menu_withdrawal" />
 
         <item
@@ -58,11 +58,11 @@
                 <group android:checkableBehavior="single">
                     <item
                         android:id="@+id/nav_agent_deposit"
-                        android:icon="@drawable/ic_deposit"
+                        android:icon="@drawable/menu_deposit_icon"
                         android:title="@string/menu_deposit" />
                     <item
                         android:id="@+id/nav_agent_withdrawal"
-                        android:icon="@drawable/ic_withdrawal"
+                        android:icon="@drawable/menu_withdraw_icon"
                         android:title="@string/menu_withdrawal" />
                 </group>
             </menu>

@@ -93,7 +93,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="some_link"
+                    android:host="ec2-34-201-216-112.compute-1.amazonaws.com"
                     android:scheme="http" />
             </intent-filter>
         </activity>

@@ -21,6 +21,8 @@ public class MainPresenter extends BasePresenter<MainView> {
     private final GetUserDataUseCase mGetUserDataUseCase;
     private final LogoutUseCase mLogoutUseCase;
 
+    private UserEntity mUserEntity;
+
     @Inject
     public MainPresenter(final GetUserDataUseCase getUserDataUseCase,
                          final LogoutUseCase logoutUseCase) {
@@ -28,43 +30,65 @@ public class MainPresenter extends BasePresenter<MainView> {
         mLogoutUseCase = logoutUseCase;
     }
 
-    public void loadUserData() {
-        mGetUserDataUseCase.setData(false);
-        mGetUserDataUseCase.execute(new GetUserSubscriber());
+    public UserEntity getUserEntity() {
+        return mUserEntity;
+    }
+
+    public void setUserEntity(final UserEntity userEntity) {
+        mUserEntity = userEntity;
+    }
+
+    public void loadUserData(final boolean fromNetwork) {
+        mGetUserDataUseCase.setData(fromNetwork);
+        mGetUserDataUseCase.execute(new GetUserSubscriber(fromNetwork));
     }
 
     private Action mGetUserAction = new Action() {
         @Override
         public void run() throws Exception {
-            mGetUserDataUseCase.execute(new GetUserSubscriber());
+            mGetUserDataUseCase.execute(new GetUserSubscriber(true));
         }
     };
 
     private class GetUserSubscriber extends DefaultInternetSubscriber<UserEntity> {
 
-//        @Override
-//        protected void onStart() {
-//           if (!isViewAttached()) return;
-//            getView().showProgress(true);
-//        }
+        private boolean mFromNetwork;
+
+        public GetUserSubscriber(boolean fromNetwork) {
+            mFromNetwork = fromNetwork;
+        }
+
+        @Override
+        protected void onStart() {
+           if (!isViewAttached()) return;
+           if (mFromNetwork)
+                getView().showProgress(true);
+        }
 
         @Override
         public void onNext(UserEntity userEntity) {
             if (!isViewAttached()) return;
-            getView().showUserData(userEntity);
+            mUserEntity = userEntity;
+            if (mFromNetwork) {
+                getView().showEmailConfirmed(userEntity);
+            } else {
+                getView().onUserDataLoaded(userEntity);
+            }
         }
 
-//        @Override
-//        public void onComplete() {
-//            if (!isViewAttached()) return;
-//            getView().showProgress(false);
-//        }
+        @Override
+        public void onComplete() {
+            if (!isViewAttached()) return;
+            if (mFromNetwork)
+                getView().showProgress(false);
+        }
 
         @Override
         public void onError(@NonNull Throwable throwable) {
             super.onError(throwable);
             if (!isViewAttached()) return;
-//            getView().showProgress(false);
+            if (mFromNetwork)
+                getView().showProgress(false);
         }
 
         @Override

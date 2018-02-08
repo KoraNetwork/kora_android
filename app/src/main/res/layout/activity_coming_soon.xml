@@ -15,7 +15,7 @@
         android:orientation="vertical"
         android:paddingBottom="36dp">
 
-        <ImageView
+        <android.support.v7.widget.AppCompatImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="48dp"
@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/muli_normal"
             android:text="@string/coming_soon_coming_soon"
-            android:textColor="#46a6e3"
+            android:textColor="@color/color_violet_text_light"
             android:textSize="25sp" />
 
     </LinearLayout>

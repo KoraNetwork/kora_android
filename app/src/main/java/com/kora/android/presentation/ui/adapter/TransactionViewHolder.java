@@ -23,7 +23,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public final class TransactionViewHolder extends RecyclerView.ViewHolder {
+public class TransactionViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.direction_icon) ImageView mDirectionIcon;
     @BindView(R.id.sender_name) TextView mSenderName;

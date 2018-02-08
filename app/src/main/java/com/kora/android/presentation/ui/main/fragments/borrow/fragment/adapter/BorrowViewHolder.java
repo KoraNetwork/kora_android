@@ -3,6 +3,7 @@ package com.kora.android.presentation.ui.main.fragments.borrow.fragment.adapter;
 import android.content.Context;
 import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -69,10 +70,29 @@ public class BorrowViewHolder extends RecyclerView.ViewHolder {
         }
 
         mType.setVisibility(View.GONE);
-        mState.setText(borrowEntity.getState().getText());
+        mState.setText(getStateString(borrowEntity.getState()));
         mState.setTextColor(ContextCompat.getColor(mContext, getStateColor(borrowEntity.getState())));
         mDate.setText(DateUtils.getFormattedDate("dd.MM.yyyy", borrowEntity.getCreatedAt()));
         mTime.setText(DateUtils.getFormattedDate("hh:mm aa", borrowEntity.getCreatedAt()));
+    }
+
+    @StringRes
+    private int getStateString(final BorrowState borrowState) {
+        switch (borrowState) {
+            case ONGOING:
+                return R.string.borrow_state_ongoing;
+            case AGREED:
+                return R.string.borrow_state_agreed;
+            case PENDING:
+                return R.string.borrow_state_pending;
+            case REJECTED:
+                return R.string.borrow_state_rejected;
+            case EXPIRED:
+                return R.string.borrow_state_expired;
+            case OVERDUE:
+                return R.string.borrow_state_overdue;
+        }
+        return 0;
     }
 
     @ColorRes

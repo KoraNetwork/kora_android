@@ -63,7 +63,7 @@ public class ForgotPassword2Activity extends ToolbarActivity<ForgotPassword2Pres
     private void initData() {
         if (getIntent() != null && getIntent().getData() != null) {
             final String url = getIntent().getData().toString();
-            final String token = url.substring(url.indexOf("/", url.length()));
+            final String token = url.substring(url.lastIndexOf("/") + 1, url.length());
             getPresenter().setToken(token);
         }
     }

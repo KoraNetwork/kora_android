@@ -7,14 +7,18 @@ import com.bluelinelabs.logansquare.annotation.JsonObject;
 public class PhoneNumberRequest {
 
     @JsonField(name = "phoneNumber")
-    String mPhoneNumber;
-
-    public PhoneNumberRequest() {
-
-    }
+    private String mPhoneNumber;
 
     public PhoneNumberRequest addPhoneNumber(final String phoneNumber) {
         mPhoneNumber = phoneNumber;
         return this;
+    }
+
+    public String getPhoneNumber() {
+        return mPhoneNumber;
+    }
+
+    public void setPhoneNumber(String mPhoneNumber) {
+        this.mPhoneNumber = mPhoneNumber;
     }
 }

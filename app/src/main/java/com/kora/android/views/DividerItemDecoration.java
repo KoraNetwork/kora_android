@@ -12,14 +12,16 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
     private static final int[] ATTRS = new int[]{android.R.attr.listDivider};
 
-    private Drawable divider;
+    private Drawable mDivider;
+
+    private boolean mAddLast;
 
     /**
      * Default divider will be used
      */
     public DividerItemDecoration(Context context) {
         final TypedArray styledAttributes = context.obtainStyledAttributes(ATTRS);
-        divider = styledAttributes.getDrawable(0);
+        mDivider = styledAttributes.getDrawable(0);
         styledAttributes.recycle();
     }
 
@@ -27,25 +29,32 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
      * Custom divider will be used
      */
     public DividerItemDecoration(Context context, int resId) {
-        divider = ContextCompat.getDrawable(context, resId);
+        mDivider = ContextCompat.getDrawable(context, resId);
     }
 
+    /**
+     * Add divider after last item
+     */
+    public DividerItemDecoration(Context context, int resId, boolean addLast) {
+        mDivider = ContextCompat.getDrawable(context, resId);
+        mAddLast = addLast;
+    }
     @Override
     public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
         int left = parent.getPaddingLeft();
         int right = parent.getWidth() - parent.getPaddingRight();
 
-        int childCount = parent.getChildCount();
+        int childCount = mAddLast ? parent.getChildCount() - 1 : parent.getChildCount();
         for (int i = 0; i < childCount; i++) {
             View child = parent.getChildAt(i);
 
             RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
 
             int top = child.getBottom() + params.bottomMargin;
-            int bottom = top + divider.getIntrinsicHeight();
+            int bottom = top + mDivider.getIntrinsicHeight();
 
-            divider.setBounds(left, top, right, bottom);
-            divider.draw(c);
+            mDivider.setBounds(left, top, right, bottom);
+            mDivider.draw(c);
         }
     }
 }

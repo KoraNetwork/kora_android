@@ -137,7 +137,7 @@
                 android:id="@+id/button_next_finish"
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="44dp"
                 android:layout_below="@+id/edit_layout_create_pin_code"
                 android:layout_marginBottom="24dp"
                 android:layout_marginLeft="16dp"

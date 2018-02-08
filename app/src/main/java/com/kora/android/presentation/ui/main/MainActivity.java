@@ -1,19 +1,19 @@
 package com.kora.android.presentation.ui.main;
 
+import android.support.v7.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.design.internal.NavigationMenuView;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
 import android.view.View;
+
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -64,19 +64,18 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
     public static final int TAB_AGENT_DEPOSIT_SUB_MENU_POSITION = 0;
     public static final int TAB_AGENT_WITHDRAW_SUB_MENU_POSITION = 1;
 
-    @BindView(R.id.root_view) CoordinatorLayout mRootView;
-    @BindView(R.id.content_layout) LinearLayout mContentLayout;
     @BindView(R.id.drawer_layout) DrawerLayout mDrawerLayout;
     @BindView(R.id.nav_view) NavigationView mNavigationView;
-    @BindView(R.id.left_nav_view_base) NavigationView mNavigationViewBase;
     @BindView(R.id.frame_layout) FrameLayout mFrameLayout;
+
+    private int mSelectedItemPosition = TAB_HOME_POSITION;
 
     private ImageView mUserAvatar;
     private TextView mUserName;
     private TextView mUserEmail;
 
-    private int mSelectedItemPosition = TAB_HOME_POSITION;
-    private int mNotificationsCount = 0;
+    private Bundle mSavedInstanceState;
+    private HomeFragment mHomeFragment;
 
     public static Intent getLaunchIntent(final BaseActivity baseActivity) {
         return getLaunchIntent(baseActivity, TAB_HOME_POSITION);
@@ -100,58 +99,86 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
     }
 
     @Override
-    public void injectToComponent(ActivityComponent activityComponent) {
+    public void injectToComponent(final ActivityComponent activityComponent) {
         activityComponent.inject(this);
     }
 
     @Override
-    protected void onViewReady(Bundle savedInstanceState) {
-        getPresenter().loadUserData();
+    protected void onViewReady(final Bundle savedInstanceState) {
+        getPresenter().loadUserData(false);
+        mSavedInstanceState = savedInstanceState;
+    }
 
-        setupDrawer();
-        getNavigator().showFragment(rootTabFragment(TAB_HOME_POSITION), TAB_HOME_POSITION);
+    @Override
+    public void onUserDataLoaded(final UserEntity userEntity) {
+        setupNavigationView();
+
+        initArguments(mSavedInstanceState);
+
+        startWalletsService(userEntity);
+
+        showUserData(userEntity);
+    }
+
+    private void setupNavigationView() {
+        mNavigationView.setNavigationItemSelectedListener(this);
+        mNavigationView.setItemIconTintList(null);
+        final NavigationMenuView navigationMenuView = (NavigationMenuView) mNavigationView.getChildAt(0);
+        navigationMenuView.addItemDecoration(new DividerItemDecoration(this, R.drawable.list_divider_transparent));
 
         final View headerView = mNavigationView.getHeaderView(0);
         mUserAvatar = headerView.findViewById(R.id.avatar_image);
         mUserName = headerView.findViewById(R.id.user_name);
         mUserEmail = headerView.findViewById(R.id.user_email);
         mUserAvatar.setOnClickListener(v -> {
-            final MenuItem item = mNavigationView.getMenu().getItem(TAB_USER_PROFILE_POSITION);
-            onNavigationItemSelected(item);
+            getNavigator().showFragment(rootTabFragment(TAB_USER_PROFILE_POSITION), TAB_USER_PROFILE_POSITION);
+            selectHostById(TAB_USER_PROFILE_POSITION);
+            mDrawerLayout.closeDrawer(GravityCompat.START);
         });
-
-        if (savedInstanceState == null) {
-            final MenuItem item = mNavigationView.getMenu().getItem(TAB_HOME_POSITION);
-            mNavigationView.getMenu().performIdentifierAction(item.getItemId(), TAB_HOME_POSITION);
-            item.setChecked(true);
-        }
-
-        initArgs();
     }
 
-    private void initArgs() {
+    private void initArguments(final Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            return;
+        }
         if (getIntent() != null) {
             if (getIntent().hasExtra(EXTRA_CURRENT_TAB)) {
-                final int tabId = getIntent().getIntExtra(EXTRA_CURRENT_TAB, 0);
-                final MenuItem item = mNavigationView.getMenu().getItem(tabId);
-                mNavigationView.getMenu().performIdentifierAction(item.getItemId(), tabId);
-                item.setChecked(true);
+                final int tabId = getIntent().getIntExtra(EXTRA_CURRENT_TAB, TAB_HOME_POSITION);
+                getNavigator().showFragment(rootTabFragment(tabId), tabId);
+                selectHostById(tabId);
             }
         }
     }
 
-    private void setupDrawer() {
-        mNavigationView.setNavigationItemSelectedListener(this);
-        mNavigationView.setItemIconTintList(null);
-        NavigationMenuView navMenuView = (NavigationMenuView) mNavigationView.getChildAt(0);
-        navMenuView.addItemDecoration(new DividerItemDecoration(this, R.drawable.list_divider_transparent));
+    private void startWalletsService(final UserEntity userEntity) {
+        if (!userEntity.hasIdentity()) {
+            final Intent launchIntent = CreateWalletsService.getLaunchIntent(this);
+            startService(launchIntent);
+        }
+    }
+
+    public void showUserData(final UserEntity userEntity) {
+        mNavigationView.getMenu().setGroupVisible(R.id.nav_group_agent, userEntity.isAgent());
+        if (!userEntity.isAgent()) {
+            getNavigator().clearBackStack(TAB_AGENT_DEPOSIT_POSITION);
+            getNavigator().clearBackStack(TAB_AGENT_WITHDRAW_POSITION);
+        }
+
+        Glide.with(this)
+                .load(API_BASE_URL + userEntity.getAvatar())
+                .apply(RequestOptions.circleCropTransform())
+                .thumbnail(Glide.with(this).load(R.drawable.ic_user_default))
+                .into(mUserAvatar);
+        mUserName.setText(userEntity.getLegalName());
+        mUserEmail.setText(userEntity.getEmail());
     }
 
     @NonNull
     private BaseFragment rootTabFragment(final int tabId) {
         switch (tabId) {
             case TAB_HOME_POSITION:
-                return HomeFragment.getNewInstance();
+                mHomeFragment = (HomeFragment) HomeFragment.getNewInstance();
+                return mHomeFragment;
             case TAB_SEND_MONEY_POSITION:
                 return SendFragment.getNewInstance();
             case TAB_REQUEST_MONEY_POSITION:
@@ -200,36 +227,74 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
             case R.id.nav_home:
                 position = TAB_HOME_POSITION;
                 break;
-            case R.id.nav_send_money:
-                position = TAB_SEND_MONEY_POSITION;
-                break;
-            case R.id.nav_requests_money:
-                position = TAB_REQUEST_MONEY_POSITION;
-                break;
-            case R.id.nav_borrow_money:
-                position = TAB_BORROW_MONEY_POSITION;
-                break;
-            case R.id.nav_deposit:
-                position = TAB_DEPOSIT_POSITION;
-                break;
-            case R.id.nav_withdrawal:
-                position = TAB_WITHDRAWAL_POSITION;
-                break;
-            case R.id.nav_transactions_history:
-                position = TAB_TRANSACTIONS_HISTORY_POSITION;
-                break;
             case R.id.nav_user_profile:
                 position = TAB_USER_PROFILE_POSITION;
                 break;
+
+            case R.id.nav_send_money:
+                if (!getPresenter().getUserEntity().isEmailConfirmed()) {
+                    showEmailConfirmationDialog();
+                    return false;
+                }
+                position = TAB_SEND_MONEY_POSITION;
+                break;
+            case R.id.nav_requests_money:
+                if (!getPresenter().getUserEntity().isEmailConfirmed()) {
+                    showEmailConfirmationDialog();
+                    return false;
+                }
+                position = TAB_REQUEST_MONEY_POSITION;
+                break;
+            case R.id.nav_borrow_money:
+                if (!getPresenter().getUserEntity().isEmailConfirmed()) {
+                    showEmailConfirmationDialog();
+                    return false;
+                }
+                position = TAB_BORROW_MONEY_POSITION;
+                break;
+            case R.id.nav_deposit:
+                if (!getPresenter().getUserEntity().isEmailConfirmed()) {
+                    showEmailConfirmationDialog();
+                    return false;
+                }
+                position = TAB_DEPOSIT_POSITION;
+                break;
+            case R.id.nav_withdrawal:
+                if (!getPresenter().getUserEntity().isEmailConfirmed()) {
+                    showEmailConfirmationDialog();
+                    return false;
+                }
+                position = TAB_WITHDRAWAL_POSITION;
+                break;
+            case R.id.nav_transactions_history:
+                if (!getPresenter().getUserEntity().isEmailConfirmed()) {
+                    showEmailConfirmationDialog();
+                    return false;
+                }
+                position = TAB_TRANSACTIONS_HISTORY_POSITION;
+                break;
             case R.id.nav_send_a_feedback:
+                if (!getPresenter().getUserEntity().isEmailConfirmed()) {
+                    showEmailConfirmationDialog();
+                    return false;
+                }
                 position = TAB_SEND_A_FEEDBACK_POSITION;
                 break;
             case R.id.nav_agent_deposit:
+                if (!getPresenter().getUserEntity().isEmailConfirmed()) {
+                    showEmailConfirmationDialog();
+                    return false;
+                }
                 position = TAB_AGENT_DEPOSIT_POSITION;
                 break;
             case R.id.nav_agent_withdrawal:
+                if (!getPresenter().getUserEntity().isEmailConfirmed()) {
+                    showEmailConfirmationDialog();
+                    return false;
+                }
                 position = TAB_AGENT_WITHDRAW_POSITION;
                 break;
+
             case R.id.nav_log_out:
                 position = TAB_LOG_OUT;
                 new MultiDialog.DialogBuilder()
@@ -248,50 +313,51 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
         if (position == TAB_LOG_OUT) {
             return false;
         }
-        if (position != mSelectedItemPosition)
+        if (position != mSelectedItemPosition) {
             getNavigator().showFragment(rootTabFragment(position), position);
-
+        }
         mSelectedItemPosition = position;
 
         return true;
     }
 
+    public void showEmailConfirmationDialog() {
+        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.show();
+        alertDialog.setContentView(R.layout.dialog_email_confirmation);
+        final TextView tvPositive = alertDialog.findViewById(R.id.text_view_positive);
+        if (tvPositive != null)
+            tvPositive.setOnClickListener(v -> {
+                alertDialog.dismiss();
+                loadUserDataFromNetwork();
+            });
+        final TextView tvNegative = alertDialog.findViewById(R.id.text_view_negative);
+        if (tvNegative != null)
+            tvNegative.setOnClickListener(v ->
+                    alertDialog.dismiss());
+    }
+
+    public void loadUserDataFromNetwork() {
+        getPresenter().loadUserData(true);
+    }
+
     @Override
-    public void onClick(final View v) {
+    public void showEmailConfirmed(final UserEntity userEntity) {
+        if (!userEntity.isEmailConfirmed()) {
+            showEmailConfirmationDialog();
+        } else {
+            if (mHomeFragment != null)
+                mHomeFragment.onEmailConfirmed(userEntity);
+        }
+    }
+
+    @Override
+    public void onClick(final View view) {
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
         } else {
             mDrawerLayout.openDrawer(GravityCompat.START);
         }
-    }
-
-    @Override
-    public void showFragmentByPosition(int position) {
-        final MenuItem item = mNavigationView.getMenu().getItem(0);
-        mNavigationView.getMenu().performIdentifierAction(item.getItemId(), position);
-        item.setChecked(true);
-    }
-
-    @Override
-    public void showUserData(final UserEntity userEntity) {
-        if (!userEntity.hasIdentity()) {
-            final Intent launchIntent = CreateWalletsService.getLaunchIntent(this);
-            startService(launchIntent);
-        }
-
-        mNavigationView.getMenu().setGroupVisible(R.id.nav_group_agent, userEntity.isAgent());
-        if (!userEntity.isAgent()) {
-            getNavigator().clearBackStack(TAB_AGENT_DEPOSIT_POSITION);
-            getNavigator().clearBackStack(TAB_AGENT_WITHDRAW_POSITION);
-        }
-
-        Glide.with(this)
-                .load(API_BASE_URL + userEntity.getAvatar())
-                .apply(RequestOptions.circleCropTransform())
-                .thumbnail(Glide.with(this).load(R.drawable.ic_user_default))
-                .into(mUserAvatar);
-        mUserName.setText(userEntity.getLegalName());
-        mUserEmail.setText(userEntity.getEmail());
     }
 
     @Override
@@ -343,17 +409,5 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
 
     public DrawerLayout getDrawerLayout() {
         return mDrawerLayout;
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        getNavigator().saveState(outState);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        getNavigator().restoreState(savedInstanceState);
     }
 }

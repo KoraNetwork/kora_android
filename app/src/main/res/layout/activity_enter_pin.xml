@@ -11,7 +11,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/color_toolbar"
+        android:background="@color/color_violet_toolbar"
         android:contentInsetLeft="0dp"
         android:contentInsetStart="0dp"
         app:contentInsetLeft="0dp"
@@ -39,7 +39,9 @@
         android:layout_below="@+id/toolbar"
         android:fillViewport="true">
 
-        <RelativeLayout
+        <LinearLayout
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -59,8 +61,6 @@
                 android:id="@+id/edit_layout_enter_pin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/text_view_to_confirm"
-                android:layout_centerHorizontal="true"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="36dp"
@@ -141,42 +141,22 @@
 
             </android.support.design.widget.TextInputLayout>
 
-            <android.support.v7.widget.CardView
+            <android.support.v7.widget.AppCompatButton
                 android:id="@+id/card_view_finish"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/edit_layout_enter_pin"
+                android:layout_height="44dp"
                 android:layout_marginBottom="24dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="36dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?android:attr/selectableItemBackground"
-                app:cardBackgroundColor="@color/color_button_background_green_1"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="4dp"
-                app:contentPadding="12dp">
+                android:background="@drawable/green_button_background"
+                android:fontFamily="@font/muli_bold"
+                android:text="@string/enter_pin_finish"
+                android:textColor="@color/color_button_text_white"
+                android:textSize="14sp"
+                android:theme="@style/Widget.AppCompat.Button.Colored" />
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/text_view_finish"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:fontFamily="@font/muli_bold"
-                        android:text="@string/enter_pin_finish"
-                        android:textColor="@color/color_button_text_white"
-                        android:textSize="14sp" />
-                </RelativeLayout>
-
-            </android.support.v7.widget.CardView>
-
-        </RelativeLayout>
+        </LinearLayout>
 
     </ScrollView>
 

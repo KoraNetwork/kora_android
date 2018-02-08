@@ -57,7 +57,7 @@
         android:id="@+id/checked_icon"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:src="@drawable/ic_circular_check_button_activ"
+        android:src="@drawable/ic_circular_check_button_active"
         android:background="@null"
         android:scaleType="center"
         android:visibility="gone"/>

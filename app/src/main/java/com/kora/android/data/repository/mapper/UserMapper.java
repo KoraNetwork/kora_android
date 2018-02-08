@@ -51,6 +51,7 @@ public class UserMapper {
                         .addCurrencyNameFull(userResponse.getCurrencyNameFull())
                         .addAgent(userResponse.getAgent())
                         .addInterestRate(userResponse.getInterestRate())
+                        .addEmailConfirmed(userResponse.getEmailVerified())
                 );
     }
 
@@ -60,14 +61,6 @@ public class UserMapper {
                     final HashMap<String, RequestBody> map = new HashMap<>();
                     if (model.getPhoneNumber() != null)
                         map.put("phone", createPartFromString(model.getPhoneNumber()));
-                    if (model.getIdentity() != null)
-                        map.put("identity", createPartFromString(model.getIdentity()));
-                    if (model.getCreator() != null)
-                        map.put("creator", createPartFromString(model.getCreator()));
-                    if (model.getRecoveryKey() != null)
-                        map.put("recoveryKey", createPartFromString(model.getRecoveryKey()));
-                    if (model.getOwner() != null)
-                        map.put("owner", createPartFromString(model.getOwner()));
                     if (model.getUserName() != null)
                         map.put("userName", createPartFromString(model.getUserName()));
                     if (model.getLegalName() != null)
@@ -113,46 +106,16 @@ public class UserMapper {
                 );
     }
 
-    public Observable<Map<String, RequestBody>> transformAvatarToFormData(String avatar) {
-        return Observable.just(avatar)
-                .map(model -> {
-                            final HashMap<String, RequestBody> map = new HashMap<>();
-                            map.put("test", createPartFromString("test"));
-                            return map;
-                        }
-                );
-    }
-
-    private MultipartBody.Part getFile(final String imagePath, final String key) {
-        if (imagePath == null)
-            return null;
-        final File file = new File(imagePath);
-        final RequestBody requestFile =
-                RequestBody.create(MediaType.parse(getMimeType(imagePath)), file);
-        return MultipartBody.Part.createFormData(key, file.getName(), requestFile);
-    }
-
-    private String getMimeType(final String imagePath) {
-        String type = null;
-        final String extension = MimeTypeMap.getFileExtensionFromUrl(imagePath);
-        if (extension != null)
-            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
-        return type;
-    }
-
     public ObservableTransformer<List<UserResponse>, List<UserEntity>> transformUserListResponseToEntityUserList() {
         return userResponseObservable -> userResponseObservable
                 .flatMap(userResponses -> Observable.fromIterable(userResponses)
                         .compose(transformResponseToEntityUser())).toList().toObservable();
-
     }
 
     public Observable<List<UserEntity>> transformUserListResponseToEntityUserList(List<UserResponse> userResponses) {
         if (userResponses == null) return Observable.just(new ArrayList<>());
         return Observable.just(userResponses)
                 .compose(transformUserListResponseToEntityUserList());
-
-
     }
 
     public Observable<UserEntity> transformResponseToEntityUser(UserResponse userResponse) {

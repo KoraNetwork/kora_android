@@ -25,6 +25,7 @@
         app:fontFamily="@font/muli_semi_bold" />
 
     <LinearLayout
+        android:background="#fafafa"
         android:layout_marginTop="24dp"
         android:id="@+id/linear_layout_search"
         android:layout_below="@+id/text_view_select_currency"
@@ -36,17 +37,16 @@
         android:paddingBottom="10dp"
         android:gravity="center_vertical">
 
-        <ImageView
+        <android.support.v7.widget.AppCompatImageView
             android:id="@+id/image_view_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_search"/>
 
-        <EditText
+        <android.support.v7.widget.AppCompatEditText
             android:id="@+id/edit_text_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
             android:inputType="text"
             android:maxLength="35"

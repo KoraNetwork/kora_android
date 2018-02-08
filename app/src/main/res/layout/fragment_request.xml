@@ -42,7 +42,7 @@
         android:layout_marginRight="@dimen/action_button_margin"
         android:clickable="true"
         android:src="@drawable/ic_add_white"
-        app:backgroundTint="@color/color_floating_button"
+        app:backgroundTint="@color/color_violet_floating_button"
         app:fabSize="normal"/>
 
 </android.support.design.widget.CoordinatorLayout>

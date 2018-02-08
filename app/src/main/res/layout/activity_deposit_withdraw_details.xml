@@ -257,7 +257,7 @@
                 android:id="@+id/button_action"
                 style="@style/AppTheme.ActionButton.Blue"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="44dp"
                 android:layout_marginBottom="0dp" />
 
             <android.support.v7.widget.AppCompatButton
@@ -265,7 +265,7 @@
                 android:id="@+id/button_reject"
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="44dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:fontFamily="@font/muli_bold"

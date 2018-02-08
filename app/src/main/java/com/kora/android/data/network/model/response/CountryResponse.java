@@ -7,19 +7,19 @@ import com.bluelinelabs.logansquare.annotation.JsonObject;
 public class CountryResponse {
 
     @JsonField(name = "countryCode")
-    String mCountryCode;
+    private String mCountryCode;
     @JsonField(name = "name")
-    String mName;
+    private String mName;
     @JsonField(name = "currency")
-    String mCurrency;
+    private String mCurrency;
     @JsonField(name = "currencyNameFull")
-    String mCurrencyNameFull;
+    private String mCurrencyNameFull;
     @JsonField(name = "ERC20Token")
-    String mERC20Token;
+    private String mERC20Token;
     @JsonField(name = "phoneCode")
-    String mPhoneCode;
+    private String mPhoneCode;
     @JsonField(name = "flag")
-    String mFlag;
+    private String mFlag;
 
     public String getCountryCode() {
         return mCountryCode;
@@ -47,5 +47,33 @@ public class CountryResponse {
 
     public String getERC20Token() {
         return mERC20Token;
+    }
+
+    public void setCountryCode(String mCountryCode) {
+        this.mCountryCode = mCountryCode;
+    }
+
+    public void setName(String mName) {
+        this.mName = mName;
+    }
+
+    public void setCurrency(String mCurrency) {
+        this.mCurrency = mCurrency;
+    }
+
+    public void setCurrencyNameFull(String mCurrencyNameFull) {
+        this.mCurrencyNameFull = mCurrencyNameFull;
+    }
+
+    public void setERC20Token(String mERC20Token) {
+        this.mERC20Token = mERC20Token;
+    }
+
+    public void setPhoneCode(String mPhoneCode) {
+        this.mPhoneCode = mPhoneCode;
+    }
+
+    public void setFlag(String mFlag) {
+        this.mFlag = mFlag;
     }
 }

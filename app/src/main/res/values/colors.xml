@@ -67,8 +67,27 @@
     <color name="color_state_positive">#2b74a5</color>
     <color name="color_state_negative">#e62f60</color>
 
-    <color name="color_agent_on">#62cd9a</color>
+    <color name="color_agent_on">#c8554ff4</color>
     <color name="color_agent_off">#c6c5c5</color>
 
     <color name="color_notification_icon">#2b74a5</color>
+
+    <color name="color_violet_text">#554ff4</color>
+    <color name="color_violet_text_light">#c8554ff4</color>
+    <color name="color_violet_status_bar">#554ff4</color>
+    <color name="color_violet_toolbar">#554ff4</color>
+    <color name="color_violet_accent">#554ff4</color>
+    <color name="color_violet_tab_layout">#554ff4</color>
+    <color name="color_violet_menu_text">#554ff4</color>
+    <color name="color_violet_menu_header">#554ff4</color>
+    <color name="color_violet_button">#554ff4</color>
+    <color name="color_violet_button_ripple">#3e3ab4</color>
+    <color name="color_violet_button_disabled">#4d554ff4</color>
+    <color name="color_green_button">#19b6a5</color>
+    <color name="color_green_button_ripple">#138b7e</color>
+    <color name="color_green_button_disabled">#4d19b6a5</color>
+    <color name="color_violet_dialog_button">#554ff4</color>
+    <color name="color_violet_floating_button">#554ff4</color>
+    <color name="color_green_text">#19b6a5</color>
+
 </resources>

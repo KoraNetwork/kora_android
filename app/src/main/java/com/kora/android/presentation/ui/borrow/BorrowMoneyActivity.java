@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.StringRes;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
@@ -39,6 +40,7 @@ import com.kora.android.common.utils.ViewUtils;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.enums.Action;
 import com.kora.android.presentation.enums.ActionType;
+import com.kora.android.presentation.enums.BorrowState;
 import com.kora.android.presentation.enums.BorrowType;
 import com.kora.android.presentation.enums.Direction;
 import com.kora.android.presentation.enums.ViewMode;
@@ -396,7 +398,7 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter> i
         Intent intent = new Intent();
         intent.putExtra(Keys.Extras.EXTRA_BORROW, borrowEntity);
         setResult(RESULT_OK, intent);
-        finishActivity();
+        finish();
     }
 
     @Override
@@ -670,7 +672,7 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter> i
 
     private void setupState(final BorrowEntity borrowEntity) {
         mTvState.setVisibility(View.VISIBLE);
-        mTvState.setText(borrowEntity.getState().getText());
+        mTvState.setText(getBorrowStateString(borrowEntity.getState()));
         switch (borrowEntity.getState()) {
             case ONGOING:
             case AGREED:
@@ -696,7 +698,7 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter> i
             case REJECTED:
                 mActionButton.setVisibility(View.GONE);
                 mDisagreeButton.setVisibility(View.INVISIBLE);
-                mBorrowRequestStatusLender.setText(borrow.getState().getText());
+                mBorrowRequestStatusLender.setText(getBorrowStateString(borrow.getState()));
                 mBorrowRequestStatusLender.setTextColor(getResources().getColor(R.color.color_text_red));
 
                 if (borrow.getReceiver().getAgreed() != null && !borrow.getReceiver().getAgreed()) {
@@ -762,7 +764,7 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter> i
             case REJECTED:
                 mActionButton.setVisibility(View.GONE);
                 mDisagreeButton.setVisibility(View.INVISIBLE);
-                mBorrowRequestStatusBorower.setText(borrow.getState().getText());
+                mBorrowRequestStatusBorower.setText(getBorrowStateString(borrow.getState()));
                 mBorrowRequestStatusBorower.setTextColor(getResources().getColor(R.color.color_text_red));
                 break;
             case PENDING:
@@ -842,7 +844,7 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter> i
             case REJECTED:
                 mActionButton.setVisibility(View.GONE);
                 mDisagreeButton.setVisibility(View.INVISIBLE);
-                mBorrowRequestStatusBorower.setText(borrow.getState().getText());
+                mBorrowRequestStatusBorower.setText(getBorrowStateString(borrow.getState()));
                 mBorrowRequestStatusBorower.setTextColor(getResources().getColor(R.color.color_text_red));
                 break;
             case PENDING:
@@ -1029,5 +1031,26 @@ public class BorrowMoneyActivity extends ToolbarActivity<BorrowMoneyPresenter> i
     @Override
     public void showEmptyReturnAmount() {
         mElAmount.setError(getString(R.string.dialog_return_empty_amount));
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    @StringRes
+    private int getBorrowStateString(final BorrowState borrowState) {
+        switch (borrowState) {
+            case ONGOING:
+                return R.string.borrow_state_ongoing;
+            case AGREED:
+                return R.string.borrow_state_agreed;
+            case PENDING:
+                return R.string.borrow_state_pending;
+            case REJECTED:
+                return R.string.borrow_state_rejected;
+            case EXPIRED:
+                return R.string.borrow_state_expired;
+            case OVERDUE:
+                return R.string.borrow_state_overdue;
+        }
+        return 0;
     }
 }

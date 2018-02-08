@@ -8,14 +8,11 @@ import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -114,7 +111,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
             mProgressDialog.setContentView(R.layout.view_progress);
             final LottieAnimationView avLoading = mProgressDialog.findViewById(R.id.animation_view_loading);
 //            avLoading.setImageAssetsFolder("images/");
-            avLoading.setAnimation("animation_loading.json");
+            avLoading.setAnimation("animation_loading_violet.json");
             avLoading.loop(true);
             avLoading.playAnimation();
             if (isCancelable) {
@@ -264,11 +261,6 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         }
     }
 
-    @Override
-    public void finishActivity() {
-        finish();
-    }
-
     @IdRes
     public int getFragmentContainer() {
         return 0;
@@ -276,70 +268,6 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
 
     public FragmentManager getBaseFragmentManager() {
         return super.getSupportFragmentManager();
-    }
-
-    @Override
-    public void switchFragment(final BaseFragment fragment, boolean addToBackStack) {
-//        FragmentTransaction fragmentTransaction = getBaseFragmentManager().beginTransaction();
-//
-//        if (addToBackStack) {
-//            fragmentTransaction.addToBackStack(fragment.getClass().getName());
-//        }
-//        fragmentTransaction.replace(getFragmentContainer(), fragment, fragment.getClass().getName());
-//
-//        fragmentTransaction.commit();
-//        getBaseFragmentManager().executePendingTransactions();
-//        ViewUtil.hideKeyboard(this);
-
-        final int fragmentContainerId = getFragmentContainer();
-
-        if (fragmentContainerId == 0)
-            throw new RuntimeException("Layout resource id should be provided. Check the method description");
-
-        final FragmentManager fragmentManager = getSupportFragmentManager();
-
-        final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        if (fragmentManager.getFragments() == null || fragmentManager.getFragments().size() == 0) {
-            fragmentTransaction.replace(fragmentContainerId, fragment)
-                    .commit();
-        } else {
-            if (addToBackStack) {
-                fragmentTransaction
-                        .replace(fragmentContainerId, fragment, fragment.getClass().getSimpleName())
-                        .addToBackStack(null)
-                        .commit();
-            } else {
-                fragmentTransaction
-                        .replace(fragmentContainerId, fragment, fragment.getClass().getSimpleName())
-                        .commit();
-            }
-
-        }
-    }
-
-    @Override
-    public void addFragment(BaseFragment fragment, boolean addToBackStack) {
-        FragmentTransaction fragmentTransaction = getBaseFragmentManager().beginTransaction();
-
-        if (addToBackStack) {
-            fragmentTransaction.addToBackStack(fragment.getClass().getName());
-        }
-        fragmentTransaction.add(getFragmentContainer(), fragment, fragment.getClass().getName());
-
-        fragmentTransaction.commit();
-        getBaseFragmentManager().executePendingTransactions();
-//        ViewUtil.hideKeyboard(this);
-    }
-
-    public void clearBackStack() {
-        getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-    }
-
-    public void removeFragmentByTag(String tag) {
-        Fragment fragment = getBaseFragmentManager().findFragmentByTag(tag);
-        if (fragment != null) {
-            getBaseFragmentManager().beginTransaction().remove(fragment).commit();
-        }
     }
 
     @Inject

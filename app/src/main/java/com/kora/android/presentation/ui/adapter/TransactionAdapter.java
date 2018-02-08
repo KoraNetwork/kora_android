@@ -15,9 +15,6 @@ import java.util.List;
 
 public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-//    private static final int REQUEST_TYPE = 0;
-//    private static final int DEPOSIT_TYPE = 1;
-
     @Nullable
     private OnItemClickListener mOnItemClickListener;
 
@@ -31,41 +28,14 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final View itemView;
-//        switch (viewType) {
-//            case REQUEST_TYPE:
-                itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_transaction, parent, false);
-                return new TransactionViewHolder(itemView, mOnItemClickListener);
-//            case DEPOSIT_TYPE:
-//                itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_transaction_cash, parent, false);
-//                return new CashViewHolder(itemView, mOnItemClickListener);
-//        }
-//        return null;
+        itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_transaction, parent, false);
+        return new TransactionViewHolder(itemView, mOnItemClickListener);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-//        if (holder instanceof TransactionViewHolder) {
-            ((TransactionViewHolder) holder).bind(mTransactions.get(position));
-//        } else if (holder instanceof CashViewHolder){
-//            ((CashViewHolder) holder).bind(mTransactions.get(position));
-//        }
+        ((TransactionViewHolder) holder).bind(mTransactions.get(position));
     }
-
-//    @Override
-//    public int getItemViewType(int position) {
-//        TransactionEntity transaction = mTransactions.get(position);
-//        switch (transaction.getTransactionType()) {
-//            case BORROWFUND:
-//            case BORROWPAYBACK:
-//            case SEND:
-//            case REQUEST:
-//                return REQUEST_TYPE;
-//            case DEPOSIT:
-//                return DEPOSIT_TYPE;
-//            default:
-//                return super.getItemViewType(position);
-//        }
-//    }
 
     @Override
     public int getItemCount() {
@@ -78,19 +48,18 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         notifyItemRangeInserted(size, mTransactions.size());
     }
 
-    public void setItems(ArrayList<TransactionEntity> transactions) {
-        mTransactions.clear();
-        mTransactions.addAll(transactions);
-        notifyItemRangeInserted(0, mTransactions.size());
-    }
-
-    public List<TransactionEntity> getItems() {
-        return mTransactions;
+    public void setItems(List<TransactionEntity> transactions) {
+        clearAll();
+        addItems(transactions);
     }
 
     public void clearAll() {
         int size = mTransactions.size();
         mTransactions.clear();
         notifyItemRangeRemoved(0, size);
+    }
+
+    public List<TransactionEntity> getItems() {
+        return mTransactions;
     }
 }

@@ -7,13 +7,9 @@ import com.bluelinelabs.logansquare.annotation.JsonObject;
 public class ConfirmationCodeRequest {
 
     @JsonField(name = "phoneNumber")
-    String mPhoneNumber;
+    private String mPhoneNumber;
     @JsonField(name = "verificationCode")
-    String mConfirmationCode;
-
-    public ConfirmationCodeRequest() {
-
-    }
+    private String mConfirmationCode;
 
     public ConfirmationCodeRequest addPhoneNumber(final String phoneNumber) {
         mPhoneNumber = phoneNumber;
@@ -23,5 +19,21 @@ public class ConfirmationCodeRequest {
     public ConfirmationCodeRequest addConfirmationCode(final String confirmationCode) {
         mConfirmationCode = confirmationCode;
         return this;
+    }
+
+    public String getPhoneNumber() {
+        return mPhoneNumber;
+    }
+
+    public void setPhoneNumber(String mPhoneNumber) {
+        this.mPhoneNumber = mPhoneNumber;
+    }
+
+    public String getConfirmationCode() {
+        return mConfirmationCode;
+    }
+
+    public void setConfirmationCode(String mConfirmationCode) {
+        this.mConfirmationCode = mConfirmationCode;
     }
 }

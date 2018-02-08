@@ -89,9 +89,9 @@ public class TransactionsFragment extends StackFragment<TransactionsPresenter>
         if (savedInstanceState == null) {
             getPresenter().retrieveTransactionsWithFilter(0);
         } else {
-            ArrayList<TransactionEntity> transactions = savedInstanceState.getParcelableArrayList(Keys.Args.TRANSACTION_LIST);
-            mTransactionAdapter.addItems(transactions);
-            TransactionFilterModel filter = savedInstanceState.getParcelable(Keys.Args.TRANSACTION_FILTER);
+            final ArrayList<TransactionEntity> transactions = savedInstanceState.getParcelableArrayList(Keys.Args.TRANSACTION_LIST);
+            showTransactions(transactions);
+            final TransactionFilterModel filter = savedInstanceState.getParcelable(Keys.Args.TRANSACTION_FILTER);
             getPresenter().setFilter(filter);
         }
 
@@ -135,10 +135,12 @@ public class TransactionsFragment extends StackFragment<TransactionsPresenter>
 
     @Override
     public void showTransactions(List<TransactionEntity> transactionEntities) {
-        if (transactionEntities.isEmpty()) {
+        if (transactionEntities.isEmpty() && mTransactionAdapter.getItemCount() == 0) {
             mRlPlaceholder.setVisibility(View.VISIBLE);
+            mTransactionsList.setVisibility(View.GONE);
         } else {
             mRlPlaceholder.setVisibility(View.GONE);
+            mTransactionsList.setVisibility(View.VISIBLE);
             mTransactionAdapter.addItems(transactionEntities);
         }
     }

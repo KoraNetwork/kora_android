@@ -1,176 +1,170 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:focusableInTouchMode="true">
+    android:fillViewport="true">
 
-    <ScrollView
+    <LinearLayout
+        android:gravity="center"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:layout_height="wrap_content"
+        android:focusableInTouchMode="true">
 
-        <RelativeLayout
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_view_kora_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="64dp"
+            android:src="@drawable/ic_kora_logo" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_view_log_in"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="48dp"
+            android:fontFamily="@font/muli_semi_bold"
+            android:text="@string/login_login"
+            android:textColor="@color/color_text_title"
+            android:textSize="24sp" />
 
-            <ImageView
-                android:layout_marginTop="64dp"
-                android:id="@+id/image_view_kora_logo"
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/text_view_enter_phone_name_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="6dp"
+            android:fontFamily="@font/muli_normal"
+            android:text="@string/login_enter_identifier"
+            android:textColor="@color/color_text_text"
+            android:textSize="16sp" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/edit_layout_identifier"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="36dp"
+            android:fontFamily="@font/muli_regular"
+            app:errorEnabled="true">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/edit_text_identifier"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/muli_regular"
+                android:hint="@string/login_identifier"
+                android:inputType="text"
+                android:maxLength="35"
+                android:maxLines="1"
+                android:textColor="@color/color_edit_text"
+                android:textSize="18sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/edit_layout_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:fontFamily="@font/muli_regular"
+            app:errorEnabled="true"
+            app:passwordToggleEnabled="true">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/edit_text_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/muli_regular"
+                android:hint="@string/login_password"
+                android:inputType="textPassword"
+                android:maxLength="20"
+                android:maxLines="1"
+                android:textColor="@color/color_edit_text"
+                android:textSize="18sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/card_view_login"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/green_button_background"
+            android:fontFamily="@font/muli_bold"
+            android:text="@string/login_log_in"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:id="@+id/linear_layout_registration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:gravity="center">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_view_no_account"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_kora_logo"
-                android:layout_centerHorizontal="true"/>
-
-            <android.support.v7.widget.AppCompatTextView
-                android:layout_below="@+id/image_view_kora_logo"
-                android:id="@+id/text_view_log_in"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="48dp"
-                android:text="@string/login_login"
-                android:textColor="@color/color_text_title"
-                android:textSize="24sp"
-                android:fontFamily="@font/muli_semi_bold" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_view_enter_phone_name_email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/text_view_log_in"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="6dp"
-                android:text="@string/login_enter_identifier"
+                android:fontFamily="@font/muli_normal"
+                android:text="@string/login_no_account"
                 android:textColor="@color/color_text_text"
-                android:textSize="16sp"
-                android:fontFamily="@font/muli_normal" />
-
-            <android.support.design.widget.TextInputLayout
-                android:fontFamily="@font/muli_regular"
-                android:id="@+id/edit_layout_identifier"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/text_view_enter_phone_name_email"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="36dp"
-                app:errorEnabled="true">
-
-                <android.support.design.widget.TextInputEditText
-                    android:fontFamily="@font/muli_regular"
-                    android:id="@+id/edit_text_identifier"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/login_identifier"
-                    android:inputType="text"
-                    android:maxLength="35"
-                    android:maxLines="1"
-                    android:textColor="@color/color_edit_text"
-                    android:textSize="18sp" />
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:fontFamily="@font/muli_regular"
-                android:id="@+id/edit_layout_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/edit_layout_identifier"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                app:errorEnabled="true"
-                app:passwordToggleEnabled="true">
-
-                <android.support.design.widget.TextInputEditText
-                    android:fontFamily="@font/muli_regular"
-                    android:id="@+id/edit_text_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/login_password"
-                    android:inputType="textPassword"
-                    android:maxLength="20"
-                    android:maxLines="1"
-                    android:textColor="@color/color_edit_text"
-                    android:textSize="18sp" />
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/card_view_login"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/edit_layout_password"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/green_button_background"
-                android:fontFamily="@font/muli_bold"
-                android:text="@string/login_log_in"
                 android:textSize="14sp" />
 
-            <LinearLayout
-                android:id="@+id/linear_layout_registration"
-                android:layout_width="match_parent"
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_view_registration"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/card_view_login"
-                android:layout_marginTop="36dp"
-                android:gravity="center">
+                android:layout_marginStart="5dp"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:fontFamily="@font/muli_normal"
+                android:text="@string/login_registration"
+                android:textColor="@color/color_button_background_blue"
+                android:textSize="14sp" />
+        </LinearLayout>
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_view_no_account"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/login_no_account"
-                    android:textColor="@color/color_text_text"
-                    android:textSize="14sp"
-                    android:fontFamily="@font/muli_normal" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:layout_marginTop="12dp"
+            android:gravity="center">
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:background="?android:attr/selectableItemBackgroundBorderless"
-                    android:id="@+id/text_view_registration"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:text="@string/login_registration"
-                    android:textColor="@color/color_button_background_blue"
-                    android:textSize="14sp"
-                    android:fontFamily="@font/muli_normal" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_view_forgot_password"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/linear_layout_registration"
-                android:layout_marginBottom="24dp"
-                android:layout_marginTop="12dp"
-                android:gravity="center">
+                android:fontFamily="@font/muli_normal"
+                android:text="@string/login_forgot_password"
+                android:textColor="@color/color_text_text"
+                android:textSize="14sp" />
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/text_view_forgot_password"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/login_forgot_password"
-                    android:textColor="@color/color_text_text"
-                    android:textSize="14sp"
-                    android:fontFamily="@font/muli_normal" />
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_view_restore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:fontFamily="@font/muli_normal"
+                android:text="@string/login_restore"
+                android:textColor="@color/color_button_background_blue"
+                android:textSize="14sp" />
+        </LinearLayout>
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:background="?android:attr/selectableItemBackgroundBorderless"
-                    android:id="@+id/text_view_restore"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:text="@string/login_restore"
-                    android:textColor="@color/color_button_background_blue"
-                    android:textSize="14sp"
-                    android:fontFamily="@font/muli_normal" />
-            </LinearLayout>
+    </LinearLayout>
 
-        </RelativeLayout>
+</ScrollView>
 
-    </ScrollView>
-
-</RelativeLayout>

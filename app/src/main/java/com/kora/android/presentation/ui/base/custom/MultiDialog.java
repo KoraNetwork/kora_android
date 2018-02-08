@@ -45,7 +45,7 @@ public class MultiDialog {
 
     public MultiDialog(final BaseActivity baseActivity) {
         mDialog = new Dialog(baseActivity);
-        mRootView = LayoutInflater.from(baseActivity).inflate(R.layout.view_dialog, null);
+        mRootView = LayoutInflater.from(baseActivity).inflate(R.layout.dialog_common, null);
         mUnbinder = ButterKnife.bind(this, mRootView);
         mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         mDialog.setContentView(mRootView);

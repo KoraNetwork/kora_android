@@ -48,6 +48,8 @@ public class UserResponse {
     private Boolean mAgent;
     @JsonField(name = "interestRate")
     private Integer mInterestRate;
+    @JsonField(name = "emailVerified")
+    private Boolean mEmailVerified;
 
     public String getId() {
         return mId;
@@ -215,5 +217,13 @@ public class UserResponse {
 
     public void setInterestRate(Integer mInterestRate) {
         this.mInterestRate = mInterestRate;
+    }
+
+    public Boolean getEmailVerified() {
+        return mEmailVerified;
+    }
+
+    public void setEmailVerified(Boolean mEmailVerified) {
+        this.mEmailVerified = mEmailVerified;
     }
 }

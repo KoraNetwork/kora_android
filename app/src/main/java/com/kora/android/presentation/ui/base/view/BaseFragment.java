@@ -3,12 +3,10 @@ package com.kora.android.presentation.ui.base.view;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,6 +97,10 @@ public abstract class BaseFragment<P extends Presenter> extends Fragment impleme
         return (BaseActivity) getActivity();
     }
 
+    public Navigation getNavigator() {
+        return ((BaseActivity) getActivity()).getNavigator();
+    }
+
     @Override
     public void showProgress(boolean showProgress) {
         getBaseActivity().showProgress(showProgress);
@@ -162,65 +164,5 @@ public abstract class BaseFragment<P extends Presenter> extends Fragment impleme
                                   final String message,
                                   final DialogInterface.OnClickListener onClickListener) {
         getBaseActivity().showDialogMessage(title, message, onClickListener);
-    }
-
-    @Override
-    public void finishActivity() {
-        getBaseActivity().finishActivity();
-    }
-
-    @Override
-    public void switchFragment(BaseFragment fragment, boolean addToBackStack) {
-        getBaseActivity().switchFragment(fragment, addToBackStack);
-    }
-
-    @Override
-    public void addFragment(BaseFragment fragment, boolean addToBackStack) {
-        getBaseActivity().addFragment(fragment, addToBackStack);
-    }
-
-    @Override
-    public void addFragment(BaseFragment fragment, BaseActivity activity, boolean addToBackStack) {
-        activity.addFragment(fragment, addToBackStack);
-    }
-
-    @Override
-    public void showFragment(@IdRes int idContainer) {
-        BaseFragment fragment = (BaseFragment) getChildFragmentManager().findFragmentById(idContainer);
-
-        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-
-        fragmentTransaction.show(fragment);
-        fragmentTransaction.commitAllowingStateLoss();
-    }
-
-    @Override
-    public void hideFragment(@IdRes int idContainer) {
-        BaseFragment fragment = (BaseFragment) getChildFragmentManager().findFragmentById(idContainer);
-
-        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-
-        fragmentTransaction.hide(fragment);
-        fragmentTransaction.commitAllowingStateLoss();
-    }
-
-    @Override
-    public void showFragment(Fragment fragment) {
-        getChildFragmentManager()
-                .beginTransaction()
-                .show(fragment)
-                .commitAllowingStateLoss();
-    }
-
-    public Navigation getNavigator() {
-        return ((BaseActivity) getActivity()).getNavigator();
-    }
-
-    @Override
-    public void hideFragment(Fragment fragment) {
-        getChildFragmentManager()
-                .beginTransaction()
-                .hide(fragment)
-                .commitAllowingStateLoss();
     }
 }

@@ -2,13 +2,14 @@ package com.kora.android.presentation.ui.main.fragments.home;
 
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -17,6 +18,7 @@ import com.kora.android.di.component.FragmentComponent;
 import com.kora.android.presentation.enums.ComingSoonType;
 import com.kora.android.presentation.enums.DepositWithdrawRole;
 import com.kora.android.presentation.model.TransactionEntity;
+import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.adapter.TransactionAdapter;
 import com.kora.android.presentation.ui.base.backstack.StackFragment;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
@@ -38,6 +40,8 @@ public class HomeFragment extends StackFragment<HomePresenter> implements HomeVi
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
+    @BindView(R.id.ll_email_confirmation)
+    LinearLayout mLlEmailConfirmation;
     @BindView(R.id.image_view_flag)
     ImageView mIvFlag;
     @BindView(R.id.text_view_currency_balance)
@@ -46,6 +50,12 @@ public class HomeFragment extends StackFragment<HomePresenter> implements HomeVi
     TextView mTvCurrencyName;
     @BindView(R.id.recycler_view_transactions)
     RecyclerView mRvTransactions;
+    @BindView(R.id.ll_transactions)
+    LinearLayout mLlTransactions;
+    @BindView(R.id.ll_placeholder)
+    LinearLayout mLlPlaceholder;
+    @BindView(R.id.button_show_all_transactions)
+    Button mBtnShowAllTransactions;
     @BindView(R.id.swipe_layout)
     SwipeRefreshLayout mSlRefresh;
 
@@ -85,9 +95,15 @@ public class HomeFragment extends StackFragment<HomePresenter> implements HomeVi
         mRvTransactions.setItemAnimator(new DefaultItemAnimator());
         mRvTransactions.addItemDecoration(new DividerItemDecoration(
                 mRvTransactions.getContext(),
-                R.drawable.list_divider));
+                R.drawable.list_divider,
+                true));
 
         mSlRefresh.setOnRefreshListener(this);
+    }
+
+    @Override
+    public void showEmailConfirmation(final boolean isEmailConfirmed) {
+        mLlEmailConfirmation.setVisibility(isEmailConfirmed ? View.GONE : View.VISIBLE);
     }
 
     @Override
@@ -109,10 +125,17 @@ public class HomeFragment extends StackFragment<HomePresenter> implements HomeVi
 
     @Override
     public void showTransactions(final List<TransactionEntity> transactionEntityList) {
-        if (transactionEntityList != null && !transactionEntityList.isEmpty()) {
-            mRvTransactions.setVisibility(View.VISIBLE);
-            mTransactionAdapter.clearAll();
-            mTransactionAdapter.addItems(transactionEntityList);
+        if (transactionEntityList.isEmpty() && mTransactionAdapter.getItemCount() == 0) {
+            mLlPlaceholder.setVisibility(View.VISIBLE);
+            mLlTransactions.setVisibility(View.GONE);
+        } else {
+            mLlPlaceholder.setVisibility(View.GONE);
+            mLlTransactions.setVisibility(View.VISIBLE);
+
+            mTransactionAdapter.setItems(transactionEntityList);
+
+            if (transactionEntityList.size() > 5)
+                mBtnShowAllTransactions.setVisibility(View.VISIBLE);
         }
     }
 
@@ -128,7 +151,7 @@ public class HomeFragment extends StackFragment<HomePresenter> implements HomeVi
         getPresenter().startGetUserTask();
     }
 
-    @OnClick(R.id.card_view_show_all_transactions)
+    @OnClick(R.id.button_show_all_transactions)
     public void onClickShowTransactions() {
         getNavigator().showFragment(
                 TransactionsFragment.getNewInstance(),
@@ -163,19 +186,37 @@ public class HomeFragment extends StackFragment<HomePresenter> implements HomeVi
         }
     }
 
-    @OnClick(R.id.card_view_deposit)
+    @OnClick(R.id.button_deposit)
     public void onClickDeposit() {
-        getNavigator().showFragment(
-                DepositWithdrawFragment.getNewInstance(DepositWithdrawRole.DEPOSIT_USER),
-                MainActivity.TAB_DEPOSIT_POSITION);
-        selectHostById(MainActivity.TAB_DEPOSIT_POSITION);
+        if (getPresenter().getUserEntity().isEmailConfirmed()) {
+            getNavigator().showFragment(
+                    DepositWithdrawFragment.getNewInstance(DepositWithdrawRole.DEPOSIT_USER),
+                    MainActivity.TAB_DEPOSIT_POSITION);
+            selectHostById(MainActivity.TAB_DEPOSIT_POSITION);
+        } else {
+            ((MainActivity) getBaseActivity()).showEmailConfirmationDialog();
+        }
     }
 
-    @OnClick(R.id.card_view_withdraw)
+    @OnClick(R.id.button_withdraw)
     public void onClickWithdraw() {
-        getNavigator().showFragment(
-                DepositWithdrawFragment.getNewInstance(DepositWithdrawRole.WITHDRAW_USER),
-                MainActivity.TAB_WITHDRAWAL_POSITION);
-        selectHostById(MainActivity.TAB_WITHDRAWAL_POSITION);
+        if (getPresenter().getUserEntity().isEmailConfirmed()) {
+            getNavigator().showFragment(
+                    DepositWithdrawFragment.getNewInstance(DepositWithdrawRole.WITHDRAW_USER),
+                    MainActivity.TAB_WITHDRAWAL_POSITION);
+            selectHostById(MainActivity.TAB_WITHDRAWAL_POSITION);
+        } else {
+            ((MainActivity) getBaseActivity()).showEmailConfirmationDialog();
+        }
+    }
+
+    @OnClick(R.id.button_email_confirmed)
+    public void onClickEmailConfirmed() {
+        ((MainActivity) getBaseActivity()).loadUserDataFromNetwork();
+    }
+
+    public void onEmailConfirmed(final UserEntity userEntity) {
+        getPresenter().setUserEntity(userEntity);
+        showEmailConfirmation(userEntity.isEmailConfirmed());
     }
 }

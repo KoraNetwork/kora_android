@@ -127,14 +127,15 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/star"/>
+                        android:src="@drawable/ic_star"/>
 
                     <TextView
+                        android:layout_marginStart="13dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/muli_regular"
                         android:text="returned: 0"
-                        android:textColor="@color/color_text_green"
+                        android:textColor="@color/color_green_text"
                         android:textSize="12sp"/>
 
                     <TextView
@@ -144,7 +145,7 @@
                         android:layout_marginStart="25dp"
                         android:fontFamily="@font/muli_regular"
                         android:text="not returned: 0"
-                        android:textColor="@color/color_text_green"
+                        android:textColor="@color/color_green_text"
                         android:textSize="12sp"/>
 
                 </LinearLayout>
@@ -243,7 +244,7 @@
                         android:id="@+id/checked_icon"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
-                        android:src="@drawable/ic_circular_check_button_activ"
+                        android:src="@drawable/ic_circular_check_button_active"
                         android:background="@null"
                         android:scaleType="center"
                         android:visibility="gone"/>
@@ -262,14 +263,15 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/star"/>
+                        android:src="@drawable/ic_star"/>
 
                     <TextView
+                        android:layout_marginStart="13dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/muli_regular"
                         android:text="returned: 0"
-                        android:textColor="@color/color_text_green"
+                        android:textColor="@color/color_green_text"
                         android:textSize="12sp"/>
 
                     <TextView
@@ -279,7 +281,7 @@
                         android:layout_marginStart="25dp"
                         android:fontFamily="@font/muli_regular"
                         android:text="not returned: 0"
-                        android:textColor="@color/color_text_green"
+                        android:textColor="@color/color_green_text"
                         android:textSize="12sp"/>
 
                 </LinearLayout>

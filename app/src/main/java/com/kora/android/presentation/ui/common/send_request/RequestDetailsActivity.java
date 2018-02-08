@@ -6,6 +6,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PersistableBundle;
+import android.support.annotation.StringRes;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.AppCompatImageView;
@@ -155,7 +156,7 @@ public class RequestDetailsActivity extends ToolbarActivity<RequestDetailsPresen
                         setTitle(getString(R.string.send_money_request_from, request.getTo().getFullName()));
                         mActionButton.setVisibility(View.GONE);
                         mRequestStatus.setVisibility(View.VISIBLE);
-                        mRequestStatus.setText(request.getState().text());
+                        mRequestStatus.setText(getRequestStateString(request.getState()));
                         mReceiverAmount.setText(String.format(Locale.ENGLISH, "%1$.2f", request.getToAmount()));
                         mReceiverAmount.setCurrency(request.getTo().getCurrency());
                         mSenderAmount.setText(String.format(Locale.ENGLISH, "%1$.2f", request.getFromAmount()));
@@ -175,7 +176,7 @@ public class RequestDetailsActivity extends ToolbarActivity<RequestDetailsPresen
                         if (request.getState() == RequestState.REJECTED) {
                             mRequestStatus.setTextColor(getResources().getColor(R.color.color_text_red));
                             mRequestStatus.setVisibility(View.VISIBLE);
-                            mRequestStatus.setText(request.getState().text());
+                            mRequestStatus.setText(getRequestStateString(request.getState()));
                             mActionButton.setVisibility(View.GONE);
                             mRejectButton.setVisibility(View.GONE);
                         } else {
@@ -381,4 +382,20 @@ public class RequestDetailsActivity extends ToolbarActivity<RequestDetailsPresen
         return false;
     }
 
+    @StringRes
+    private int getRequestStateString(final RequestState requestState) {
+        switch (requestState) {
+            case INPROGRESS:
+                return R.string.request_state_in_progress;
+            case REJECTED:
+                return R.string.request_state_rejected;
+            case REQUESTED:
+                return R.string.request_state_requested;
+            case BORROWED:
+                return R.string.request_state_borrowed;
+            case PENDING:
+                return R.string.request_state_pending;
+        }
+        return 0;
+    }
 }

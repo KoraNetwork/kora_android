@@ -9,7 +9,7 @@ import java.util.List;
 public class BorrowListResponse {
 
     @JsonField(name = "data")
-    List<BorrowResponse> mList;
+    private List<BorrowResponse> mList;
 
     public List<BorrowResponse> getList() {
         return mList;

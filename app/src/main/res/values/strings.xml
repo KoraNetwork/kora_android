@@ -129,7 +129,9 @@
     <string name="login_dialog_message_server_error">Wrong identifier or password</string>
 
     <!-- Login fragment -->
-    <string name="home_warning">These are test tokens on a Rinkeby Testnet. It is not a Mainnet yet.</string>
+    <string name="home_info_tesnet">These are test tokens on a Rinkeby Testnet. It is not a Mainnet yet.</string>
+    <string name="home_info_email">In order to use full version of the application, you need to check your email and click on the link that we\'ve sent you. If you have already done this, please click this button.</string>
+    <string name="home_email_confirmed">Email confirmed</string>
     <string name="home_balance">Balance</string>
     <string name="home_deposit">DEPOSIT</string>
     <string name="home_withdraw">WITHDRAW</string>
@@ -140,6 +142,7 @@
     <string name="home_cooperative">Cooperative</string>
     <string name="home_transactions">Transactions</string>
     <string name="home_show_all_transactions">SHOW ALL TRANSACTIONS</string>
+    <string name="home_transactions_placeholder">You don’t have any transactions yet</string>
 
     <!-- Menu and main activity -->
     <string name="menu_home">Home</string>
@@ -272,6 +275,12 @@
     <string name="request_money_status_pending">Pending</string>
     <string name="request_money_status_rejected">Rejected</string>
 
+    <string name="request_state_in_progress">In progress</string>
+    <string name="request_state_rejected">Rejected</string>
+    <string name="request_state_requested">Requested</string>
+    <string name="request_state_borrowed">Borrowed</string>
+    <string name="request_state_pending">Pending</string>
+
     <!-- Request filter -->
     <string name="request_filter_show_label">Show:</string>
     <string name="request_filter_show_all_label">Show All</string>
@@ -328,6 +337,13 @@
     <string name="borrow_request_added_message">Request Added</string>
     <string name="borrow_past_start_date_error_message">Start date should be in future</string>
     <string name="borrow_past_maturity_date_error_message">Maturity date should be after start date</string>
+
+    <string name="borrow_state_ongoing">Ongoing</string>
+    <string name="borrow_state_agreed">Agreed</string>
+    <string name="borrow_state_pending">Pending</string>
+    <string name="borrow_state_rejected">Rejected</string>
+    <string name="borrow_state_expired">Expired</string>
+    <string name="borrow_state_overdue">Overdue</string>
 
     <!-- Borrow list -->
     <string name="borrow_request_title">Request</string>
@@ -407,7 +423,7 @@
     <string name="deposit_filter_rejected">Rejected</string>
 
     <!-- Placeholder -->
-    <string name="placeholder_nothing">You don\'t have any requests yet</string>
+    <string name="placeholder_nothing">You don\'t have any actions yet</string>
 
     <!-- Forgot password -->
     <string name="forgot_pass_forgot_pass">Forgot password</string>
@@ -416,7 +432,7 @@
     <string name="forgot_pass_email_empty">Email field is empty</string>
     <string name="forgot_pass_email_incorrect">Email is incorrect</string>
     <string name="forgot_pass_send">SEND</string>
-    <string name="forgot_pass_message_is_sent">Message is sent on your email</string>
+    <string name="forgot_pass_message_is_sent">Message with restore link is sent on your email</string>
     <string name="forgot_pass_create_pass">Please, create new password to protect your account. Requirements on password creation: minimal length 8 symbols, one upper case letter, one lower case letter, one number.</string>
     <string name="forgot_pass_new_pass">New Password</string>
     <string name="forgot_pass_confirm_pass">Confirm Password</string>
@@ -426,9 +442,15 @@
     <string name="forgot_pass_confirm_pass_incorrect">Confirm password does not match</string>
     <string name="forgot_pass_confirm">CONFIRM</string>
     <string name="forgot_pass_token_error_dialog_title">Error</string>
-    <string name="forgot_pass_token_error_dialog_message">You need to click on link in email message.</string>
+    <string name="forgot_pass_token_error_dialog_message">You need to click on restore link in email message.</string>
 
     <!-- Send feedback -->
     <string name="send_feedback_title">Send feedback</string>
+
+    <!-- Email confirmation dialog -->
+    <string name="dialog_email_confirmation_title">Info</string>
+    <string name="dialog_email_confirmation_text">In order to use full version of the application, you need to check your email and click on the link that we\'ve sent you. If you have already done this, please click this button.</string>
+    <string name="dialog_email_confirmation_positive">Email confirmed</string>
+    <string name="dialog_email_confirmation_negative">Cancel</string>
 
 </resources>

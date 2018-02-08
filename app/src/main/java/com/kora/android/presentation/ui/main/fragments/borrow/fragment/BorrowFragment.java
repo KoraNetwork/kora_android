@@ -79,12 +79,11 @@ public class BorrowFragment extends StackFragment<BorrowPresenter> implements Bo
         if (savedInstanceState == null) {
             getPresenter().retrieveBorrowList();
         } else {
-            ArrayList<BorrowEntity> entities = savedInstanceState.getParcelableArrayList(Keys.Args.BORROW_LIST);
-            mBorrowAdapter.addItems(entities);
-            BorrowListType type = (BorrowListType) savedInstanceState.getSerializable(Keys.Args.BORROW_TYPE);
+            final ArrayList<BorrowEntity> entities = savedInstanceState.getParcelableArrayList(Keys.Args.BORROW_LIST);
+            showData(entities);
+            final BorrowListType type = (BorrowListType) savedInstanceState.getSerializable(Keys.Args.BORROW_TYPE);
             getPresenter().setBorrowType(type);
         }
-
     }
 
     private void initArguments() {
@@ -118,8 +117,10 @@ public class BorrowFragment extends StackFragment<BorrowPresenter> implements Bo
     public void showData(List<BorrowEntity> entities) {
         if (entities.isEmpty() && mBorrowAdapter.getItemCount() == 0) {
             mRlPlaceholder.setVisibility(View.VISIBLE);
+            mBorrowList.setVisibility(View.GONE);
         } else {
             mRlPlaceholder.setVisibility(View.GONE);
+            mBorrowList.setVisibility(View.VISIBLE);
             mBorrowAdapter.addItems(entities);
         }
     }

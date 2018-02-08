@@ -10,7 +10,8 @@
     app:contentPaddingBottom="8dp"
     app:contentPaddingLeft="24dp"
     app:contentPaddingRight="24dp"
-    app:contentPaddingTop="8dp">
+    app:contentPaddingTop="8dp"
+    app:cardCornerRadius="0dp">
 
     <RelativeLayout
         android:layout_width="match_parent"

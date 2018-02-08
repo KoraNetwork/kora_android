@@ -46,8 +46,8 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Observable<UserEntity> getUserData(boolean fromNetwork) {
-        UserEntity userEntity = mPreferenceHandler.remindObject(Keys.Shared.USER, UserEntity.class);
+    public Observable<UserEntity> getUserData(final boolean fromNetwork) {
+        final UserEntity userEntity = mPreferenceHandler.remindObject(Keys.Shared.USER, UserEntity.class);
         if (userEntity == null) return null;
         if (fromNetwork)
             return mUserService.getUserData()

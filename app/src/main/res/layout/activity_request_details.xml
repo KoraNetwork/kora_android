@@ -86,11 +86,11 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
                 android:id="@+id/returned_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
@@ -98,24 +98,23 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/star"/>
+                    android:src="@drawable/ic_star" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="13dp"
                     android:text="returned: 0"
-                    android:textColor="#62cd9a"
-                    android:textSize="12sp"
-                    />
+                    android:textColor="@color/color_green_text"
+                    android:textSize="12sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="25dp"
                     android:text="not returned: 0"
-                    android:textColor="#62cd9a"
-                    android:textSize="12sp"
-                    />
+                    android:textColor="@color/color_green_text"
+                    android:textSize="12sp" />
 
             </LinearLayout>
 
@@ -246,13 +245,13 @@
                 android:id="@+id/action_button"
                 style="@style/AppTheme.ActionButton.Blue"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="44dp"
                 android:layout_marginBottom="16dp"/>
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/reject_button"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="44dp"
                 android:layout_gravity="center_horizontal"
                 android:textColor="@color/color_text_blue"
                 android:textSize="16sp"

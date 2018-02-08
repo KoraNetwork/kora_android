@@ -1,9 +1,9 @@
 <resources>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/color_violet_toolbar</item>
+        <item name="colorPrimaryDark">@color/color_violet_status_bar</item>
+        <item name="colorAccent">@color/color_violet_accent</item>
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@color/color_white</item>
@@ -18,18 +18,10 @@
         <item name="android:windowFullscreen">true</item>
     </style>
 
-    <style name="TextLabel" parent="TextAppearance.AppCompat">
-        <item name="android:textColorHint">@color/color_edit_text</item>
-        <item name="android:textSize">16sp</item>
-        <item name="colorAccent">@color/color_edit_text</item>
-        <item name="colorControlNormal">@color/color_edit_text</item>
-        <item name="colorControlActivated">@color/color_edit_text</item>
-    </style>
-
     <style name="AppTheme.MainTheme">
-        <item name="colorPrimary">#46a6e3</item>
-        <item name="colorPrimaryDark">@color/color_status_bar</item>
-        <item name="android:statusBarColor">#46a6e3</item>
+        <item name="colorPrimary">@color/color_violet_toolbar</item>
+        <item name="colorPrimaryDark">@color/color_violet_status_bar</item>
+        <item name="android:statusBarColor">@color/color_violet_status_bar</item>
     </style>
 
     <style name="AppTheme.MainTheme.ActionBar.TitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
@@ -91,7 +83,7 @@
 
     <style name="AppTheme.MainTheme.TabLayout" parent="Widget.Design.TabLayout">
         <item name="tabIndicatorColor">@android:color/white</item>
-        <item name="tabBackground">@color/color_status_bar</item>
+        <item name="tabBackground">@color/color_violet_tab_layout</item>
         <item name="tabTextAppearance">@style/AppTheme.MainTheme.TabLayout.TextAppearance</item>
         <item name="tabSelectedTextColor">@android:color/white</item>
         <item name="tabMaxWidth">0dp</item>
@@ -106,16 +98,6 @@
         <item name="textAllCaps">true</item>
         <item name="fontFamily">@font/muli_bold</item>
         <item name="android:typeface">normal</item>
-    </style>
-
-    <!-- simple progress dialog -->
-    <style name="AppTheme.Dialog" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <!--<item name="android:windowBackground">@color/color_progress_dialog_background_transparent</item>-->
-    </style>
-
-    <!-- wrap content progress dialog -->
-    <style name="AppTheme.Dialog.FixedSize" parent="Base.Theme.AppCompat.Light.Dialog.FixedSize">
-        <!--<item name="android:windowBackground">@color/color_progress_dialog_background_transparent</item>-->
     </style>
 
     <!-- full screen progress dialog -->

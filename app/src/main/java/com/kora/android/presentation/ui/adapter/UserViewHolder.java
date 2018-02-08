@@ -19,14 +19,12 @@ import butterknife.ButterKnife;
 
 import static com.kora.android.data.network.Constants.API_BASE_URL;
 
-public final class UserViewHolder extends RecyclerView.ViewHolder {
+public class UserViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.root_layout) LinearLayout rootLayout;
     @BindView(R.id.user_image) AppCompatImageView userImage;
     @BindView(R.id.user_name) TextView userName;
     @BindView(R.id.user_phone) TextView userPhone;
-
-    private UserEntity mUserEntity;
 
     public UserViewHolder(View itemView) {
         super(itemView);
@@ -34,8 +32,6 @@ public final class UserViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(UserEntity user) {
-        mUserEntity = user;
-
         final Context context = itemView.getContext();
         Glide.with(context)
                 .load(API_BASE_URL + user.getAvatar())

@@ -69,7 +69,7 @@
             android:focusable="true"
             android:fontFamily="@font/muli_bold"
             android:text="@string/dialog_return_negative"
-            android:textColor="@color/color_dialog_button_text"
+            android:textColor="@color/color_violet_dialog_button"
             android:textSize="18sp" />
 
         <android.support.v7.widget.AppCompatTextView
@@ -82,7 +82,7 @@
             android:focusable="true"
             android:fontFamily="@font/muli_bold"
             android:text="@string/dialog_return_positive"
-            android:textColor="@color/color_dialog_button_text"
+            android:textColor="@color/color_violet_dialog_button"
             android:textSize="18sp" />
 
     </LinearLayout>

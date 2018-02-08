@@ -5,9 +5,9 @@ import com.kora.android.presentation.ui.base.view.BaseView;
 
 public interface MainView extends BaseView<MainPresenter> {
 
-    void showFragmentByPosition(int position);
+    void onUserDataLoaded(final UserEntity userEntity);
 
-    void showUserData(UserEntity userEntity);
+    void showEmailConfirmed(final UserEntity userEntity);
 
     void showLoginScreen();
 }

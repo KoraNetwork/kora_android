@@ -55,7 +55,7 @@ public final class GuarantorViewHolder extends RecyclerView.ViewHolder {
             case VIEW_MODE:
                 deleteButton.setVisibility(View.GONE);
                 checkedIcon.setVisibility(user.getAgreed() == null ? View.GONE : View.VISIBLE);
-                checkedIcon.setImageResource(user.getAgreed() == null || !user.getAgreed() ? R.drawable.ic_delete : R.drawable.ic_circular_check_button_activ);
+                checkedIcon.setImageResource(user.getAgreed() == null || !user.getAgreed() ? R.drawable.ic_delete : R.drawable.ic_circular_check_button_active);
 
                 break;
             case EDIT_MODE:

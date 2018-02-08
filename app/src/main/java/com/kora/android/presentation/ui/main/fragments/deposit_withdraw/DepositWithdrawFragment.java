@@ -117,7 +117,7 @@ public class DepositWithdrawFragment extends StackFragment<DepositWithdrawPresen
             getPresenter().retrieveDepositListWithFilter(0);
         } else {
             final List<DepositWithdrawEntity> depositWithdrawEntityList = savedInstanceState.getParcelableArrayList(DEPOSIT_LIST);
-            mDepositWithdrawAdapter.addItems(depositWithdrawEntityList);
+            showDepositWithdrawList(depositWithdrawEntityList);
             final DepositWithdrawFilterModel depositWithdrawFilterModel = savedInstanceState.getParcelable(DEPOSIT_FILTER);
             getPresenter().setFilter(depositWithdrawFilterModel);
         }
@@ -236,8 +236,10 @@ public class DepositWithdrawFragment extends StackFragment<DepositWithdrawPresen
     public void showDepositWithdrawList(final List<DepositWithdrawEntity> depositWithdrawEntityList) {
         if (depositWithdrawEntityList.isEmpty() && mDepositWithdrawAdapter.getItemCount() == 0) {
             mRlPlaceholder.setVisibility(View.VISIBLE);
+            mRvDepositWithdrawList.setVisibility(View.GONE);
         } else {
             mRlPlaceholder.setVisibility(View.GONE);
+            mRvDepositWithdrawList.setVisibility(View.VISIBLE);
             mDepositWithdrawAdapter.addItems(depositWithdrawEntityList);
         }
     }

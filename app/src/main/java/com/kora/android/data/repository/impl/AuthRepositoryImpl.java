@@ -44,7 +44,7 @@ public class AuthRepositoryImpl implements AuthRepository {
     }
 
     @Override
-    public Observable<UserEntity> login(String identifier, String password) {
+    public Observable<UserEntity> login(final String identifier, final String password) {
         final LoginRequest loginRequest = new LoginRequest()
                 .addIdentifier(identifier)
                 .addPassword(password);

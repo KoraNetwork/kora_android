@@ -33,6 +33,14 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
     private UserEntity mUserEntity;
 
+    public UserEntity getUserEntity() {
+        return mUserEntity;
+    }
+
+    public void setUserEntity(final UserEntity userEntity) {
+        mUserEntity = userEntity;
+    }
+
     @Inject
     public HomePresenter(final GetUserDataUseCase userDataUseCase,
                          final GetBalanceUseCase getBalanceUseCase,
@@ -66,6 +74,8 @@ public class HomePresenter extends BasePresenter<HomeView> {
         @Override
         public void onNext(final UserEntity userEntity) {
             if (!isViewAttached()) return;
+
+            getView().showEmailConfirmation(userEntity.isEmailConfirmed());
             getView().showFlag(userEntity.getFlag());
 
             mUserEntity = userEntity;

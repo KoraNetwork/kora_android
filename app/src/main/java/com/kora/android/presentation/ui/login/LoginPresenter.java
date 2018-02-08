@@ -103,18 +103,18 @@ public class LoginPresenter extends BasePresenter<LoginView> {
 
     public void startLogoutTask() {
         mLogoutUseCase.setData(false);
-        mLogoutUseCase.execute(new LogoutSubsriberSubscriber());
+        mLogoutUseCase.execute(new LogoutSubscriberSubscriber());
     }
 
     private Action mLogoutAction = new Action() {
 
         @Override
         public void run() throws Exception {
-            mLogoutUseCase.execute(new LogoutSubsriberSubscriber());
+            mLogoutUseCase.execute(new LogoutSubscriberSubscriber());
         }
     };
 
-    private class LogoutSubsriberSubscriber extends DefaultInternetSubscriber {
+    private class LogoutSubscriberSubscriber extends DefaultInternetSubscriber {
 
         @Override
         protected void onStart() {

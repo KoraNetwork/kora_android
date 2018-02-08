@@ -27,6 +27,7 @@ public class UserEntity implements Parcelable {
     private Boolean mAgreed;
     private Boolean mAgent;
     private Integer mInterestRate;
+    private Boolean mEmailConfirmed;
 
     public UserEntity addId(final String id) {
         mId = id;
@@ -130,6 +131,11 @@ public class UserEntity implements Parcelable {
 
     public UserEntity addInterestRate(final Integer interestRate) {
         mInterestRate = interestRate;
+        return this;
+    }
+
+    public UserEntity addEmailConfirmed(final Boolean emailConfirmed) {
+        mEmailConfirmed = emailConfirmed;
         return this;
     }
 
@@ -309,6 +315,14 @@ public class UserEntity implements Parcelable {
         this.mInterestRate = interestRate;
     }
 
+    public Boolean isEmailConfirmed() {
+        return mEmailConfirmed;
+    }
+
+    public void setEmailConfirmed(Boolean mEmailConfirmed) {
+        this.mEmailConfirmed = mEmailConfirmed;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -338,6 +352,7 @@ public class UserEntity implements Parcelable {
         dest.writeInt(mAgreed == null ? -1 : mAgreed ? 1 : 0);
         dest.writeInt(mAgent == null ? -1 : mAgent ? 1 : 0);
         dest.writeInt(mInterestRate == null ? -1 : mInterestRate);
+        dest.writeInt(mEmailConfirmed == null ? -1 : mEmailConfirmed ? 1 : 0);
     }
 
     public UserEntity() {
@@ -369,6 +384,8 @@ public class UserEntity implements Parcelable {
         mAgent = agent == -1 ? null : agent == 1;
         int interestRate = in.readInt();
         mInterestRate = interestRate == -1 ? null : interestRate;
+        int emailConfirmed = in.readInt();
+        mEmailConfirmed = emailConfirmed == -1 ? null : emailConfirmed == 1;
     }
 
     public static final Creator<UserEntity> CREATOR = new Creator<UserEntity>() {

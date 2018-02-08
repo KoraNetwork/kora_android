@@ -15,7 +15,6 @@
         android:id="@+id/scroll_view_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar_container"
         android:fillViewport="true">
 
         <RelativeLayout
@@ -23,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
+            <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/image_view_avatar"
                 android:layout_width="98dp"
                 android:layout_height="98dp"
@@ -39,7 +38,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="6dp"
                 android:text="@string/registration_upload_photo"
-                android:textColor="@color/color_text_blue"
+                android:textColor="@color/color_violet_text"
                 android:visibility="invisible"
                 app:fontFamily="@font/muli_semi_bold"/>
 
@@ -53,25 +52,26 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp">
 
-                <ImageView
+                <android.support.v7.widget.AppCompatImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/star"/>
+                    android:src="@drawable/ic_star"/>
 
                 <TextView
+                    android:layout_marginStart="13dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="returned: 0"
-                    android:textColor="#62cd9a"
+                    android:textColor="@color/color_green_text"
                     android:textSize="12sp"
                     />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="25dp"
+                    android:layout_marginStart="25dp"
                     android:text="not returned: 0"
-                    android:textColor="#62cd9a"
+                    android:textColor="@color/color_green_text"
                     android:textSize="12sp"
                     />
 

@@ -95,9 +95,9 @@ public class RequestFragment extends StackFragment<RequestPresenter> implements 
         if (savedInstanceState == null) {
             getPresenter().retrieveRequestListWithFilter(0);
         } else {
-            ArrayList<RequestEntity> requests = savedInstanceState.getParcelableArrayList(Keys.Args.REQUEST_LIST);
-            mRequestAdapter.addItems(requests);
-            RequestFilterModel filter = savedInstanceState.getParcelable(Keys.Args.REQUEST_FILTER);
+            final ArrayList<RequestEntity> requests = savedInstanceState.getParcelableArrayList(Keys.Args.REQUEST_LIST);
+            showRequests(requests);
+            final RequestFilterModel filter = savedInstanceState.getParcelable(Keys.Args.REQUEST_FILTER);
             getPresenter().setFilter(filter);
         }
 
@@ -168,8 +168,10 @@ public class RequestFragment extends StackFragment<RequestPresenter> implements 
     public void showRequests(List<RequestEntity> requestEntities) {
         if (requestEntities.isEmpty() && mRequestAdapter.getItemCount() == 0) {
             mRlPlaceholder.setVisibility(View.VISIBLE);
+            mRequestList.setVisibility(View.GONE);
         } else {
             mRlPlaceholder.setVisibility(View.GONE);
+            mRequestList.setVisibility(View.VISIBLE);
             mRequestAdapter.addItems(requestEntities);
         }
     }

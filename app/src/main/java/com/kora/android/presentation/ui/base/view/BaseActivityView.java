@@ -17,6 +17,8 @@ public interface BaseActivityView<P extends Presenter> extends BaseView<P> {
 
     void showToastMessage(@NonNull final String text);
 
+
+
     void showDialogMessage(@StringRes int title,
                            final String message);
 
@@ -38,15 +40,4 @@ public interface BaseActivityView<P extends Presenter> extends BaseView<P> {
                            final String message,
                            final Dialog.OnClickListener onClickListener);
 
-
-
-    void finishActivity();
-
-    void switchFragment(final BaseFragment fragment, boolean addToBackStack);
-
-    void addFragment(final BaseFragment fragment, boolean addToBackStack);
-
-    void removeFragmentByTag(String tag);
-
-    void clearBackStack();
 }
