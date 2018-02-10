@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:focusableInTouchMode="true">
+
+    <include layout="@layout/toolbar" />
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <ScrollView
+            android:fillViewport="true"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/ll_root_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="24dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="24dp"
+                android:visibility="invisible">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_view_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/muli_normal"
+                        android:gravity="start"
+                        android:textColor="@color/color_violet_text"
+                        android:textSize="14sp"
+                        tools:text="Sent" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:textColor="@color/color_transaction_state_success"
+                        android:id="@+id/text_view_state"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/muli_normal"
+                        android:gravity="end"
+                        android:textSize="14sp"
+                        tools:text="Finished" />
+
+                </LinearLayout>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/transaction_details_from"
+                    android:textColor="#61000000"
+                    android:textSize="12sp" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/image_view_sender_avatar"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        app:srcCompat="@drawable/ic_user_default" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_view_sender_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_toEndOf="@+id/image_view_sender_avatar"
+                        android:fontFamily="@font/muli_bold"
+                        android:textColor="#3b3d3d"
+                        android:textSize="16sp"
+                        tools:text="Evelina Bogumil" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_view_sender_phone_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/text_view_sender_name"
+                        android:layout_marginStart="8dp"
+                        android:layout_toEndOf="@+id/image_view_sender_avatar"
+                        android:fontFamily="@font/muli_regular"
+                        android:textColor="#696a6b"
+                        android:textSize="14sp"
+                        tools:text="631-270-2352" />
+
+                </RelativeLayout>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/transaction_details_to"
+                    android:textColor="#61000000"
+                    android:textSize="12sp" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/image_view_receiver_avatar"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        app:srcCompat="@drawable/ic_user_default" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_view_receiver_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_toEndOf="@+id/image_view_receiver_avatar"
+                        android:fontFamily="@font/muli_bold"
+                        android:textColor="#3b3d3d"
+                        android:textSize="16sp"
+                        tools:text="Evelina Bogumil" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_view_receiver_phone_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/text_view_receiver_name"
+                        android:layout_marginStart="8dp"
+                        android:layout_toEndOf="@+id/image_view_receiver_avatar"
+                        android:fontFamily="@font/muli_regular"
+                        android:textColor="#696a6b"
+                        android:textSize="14sp"
+                        tools:text="631-270-2352" />
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/linear_layout_amount_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:orientation="horizontal">
+
+                    <com.kora.android.views.currency.CurrencyInputLayout
+                        android:id="@+id/edit_layout_sender_amount"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:errorEnabled="true">
+
+                        <com.kora.android.views.currency.CurrencyEditText
+                            android:id="@+id/edit_text_sender_amount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:fontFamily="@font/muli_regular"
+                            android:hint="@string/transaction_details_from_amount"
+                            android:importantForAutofill="noExcludeDescendants"
+                            android:inputType="numberDecimal"
+                            android:maxLength="22"
+                            android:maxLines="1"
+                            android:textColor="@color/color_edit_text"
+                            android:textSize="16sp"
+                            app:allow_negative_values="false"
+                            app:decimal_digits="2"
+                            tools:text="100 USD" />
+                    </com.kora.android.views.currency.CurrencyInputLayout>
+
+                    <com.kora.android.views.currency.CurrencyInputLayout
+                        android:id="@+id/edit_layout_receiver_amount"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_weight="1"
+                        app:errorEnabled="true">
+
+                        <com.kora.android.views.currency.CurrencyEditText
+                            android:id="@+id/edit_text_receiver_amount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:fontFamily="@font/muli_regular"
+                            android:hint="@string/transaction_details_to_amount"
+                            android:importantForAutofill="noExcludeDescendants"
+                            android:inputType="numberDecimal"
+                            android:maxLength="22"
+                            android:maxLines="1"
+                            android:textColor="@color/color_edit_text"
+                            android:textSize="16sp"
+                            app:allow_negative_values="false"
+                            app:decimal_digits="2"
+                            tools:text="2750 UAH" />
+                    </com.kora.android.views.currency.CurrencyInputLayout>
+
+                </LinearLayout>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_view_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/muli_normal"
+                    android:textColor="#61000000"
+                    android:textSize="14sp"
+                    tools:text="17.10.2017" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/text_view_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/muli_normal"
+                    android:textColor="#61000000"
+                    android:textSize="14sp"
+                    tools:text="10:00 PM" />
+
+                <RelativeLayout
+                    android:id="@+id/ll_transaction_hash"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:orientation="vertical">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/text_view_transaction_hash"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/muli_normal"
+                        android:text="@string/transaction_details_transaction_hash"
+                        android:textColor="@color/color_violet_text"
+                        android:textSize="14sp" />
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="0.75dp"
+                        android:layout_alignBottom="@+id/text_view_transaction_hash"
+                        android:layout_alignEnd="@+id/text_view_transaction_hash"
+                        android:layout_marginBottom="2dp"
+                        android:background="@color/color_violet_text" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+</LinearLayout>

@@ -19,6 +19,7 @@ public class TransactionEntityBuilder {
     private TransactionType mTransactionType;
     private Direction mDirection;
     private Date mCreatedAt;
+    private Date mUpdatedAt;
     private TransactionState mTransactionState;
 
     public TransactionEntityBuilder setId(String id) {
@@ -66,6 +67,11 @@ public class TransactionEntityBuilder {
         return this;
     }
 
+    public TransactionEntityBuilder setUpdatedAt (Date updatedAt) {
+        mUpdatedAt = updatedAt;
+        return this;
+    }
+
     public TransactionEntityBuilder setTransactionState (TransactionState transactionState) {
         mTransactionState = transactionState;
         return this;
@@ -82,6 +88,7 @@ public class TransactionEntityBuilder {
                 mTransactionType,
                 mDirection,
                 mCreatedAt,
+                mUpdatedAt,
                 mTransactionState);
     }
 }

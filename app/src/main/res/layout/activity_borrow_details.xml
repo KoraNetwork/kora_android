@@ -692,7 +692,7 @@
                 android:id="@+id/action_button"
                 style="@style/AppTheme.ActionButton.Blue"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="44dp"
                 android:layout_marginBottom="0dp"
                 android:text="@string/borrow_borrow_request_now"
                 android:fontFamily="@font/muli_bold"/>
@@ -702,7 +702,7 @@
                 android:id="@+id/disagree_button"
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="44dp"
                 android:layout_marginBottom="24dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"

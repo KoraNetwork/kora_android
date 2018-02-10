@@ -72,4 +72,10 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         return mTransactionService.sendRawTransaction(rawTransactionRequest)
                 .compose(mTransactionMapper.transformResponseToTransactionEntity());
     }
+
+    @Override
+    public Observable<TransactionEntity> getTransaction(final String transactionId) {
+        return mTransactionService.getTransaction(transactionId)
+                .compose(mTransactionMapper.transformResponseToTransactionEntity());
+    }
 }

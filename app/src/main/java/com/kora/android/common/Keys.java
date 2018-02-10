@@ -118,6 +118,8 @@ public interface Keys {
         String DEPOSIT_LIST = "deposit_list_args";
         String DEPOSIT_FILTER = "deposit_filter_args";
         String DEPOSIT_WITHDRAW_ROLE = "deposit_direction_args";
+        String TRANSACTION_ID = "transaction_id_arg";
+        String TRANSACTION_ENTITY = "transaction_entity_arg";
     }
 
     interface Users {

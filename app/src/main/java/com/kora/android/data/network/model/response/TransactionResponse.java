@@ -21,11 +21,10 @@ public class TransactionResponse {
     @JsonField(name = "direction", typeConverter = DirectionTypeConverter.class) private Direction mDirection;
     @JsonField(name = "fromAmount") private double mFromAmount;
     @JsonField(name = "toAmount") private double mToAmount;
-    @JsonField(name = "transactionHash") private List<String> mTransactionHash;
+    @JsonField(name = "transactionHashes") private List<String> mTransactionHash;
     @JsonField(name = "from") private UserResponse mSender;
     @JsonField(name = "to") private UserResponse mReceiver;
     @JsonField(name = "state", typeConverter = TransactionStateConverter.class) private TransactionState mState;
-
     @JsonField(name = "createdAt", typeConverter = DateTypeCustomConverter.class) private Date mCreatedAt;
     @JsonField(name = "updatedAt", typeConverter = DateTypeCustomConverter.class) private Date mUpdatedAt;
 

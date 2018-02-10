@@ -21,7 +21,8 @@ public class TransactionEntity implements Parcelable {
     private TransactionType transactionType;
     private Direction mDirection;
     private Date createdAt = new Date();
-    private TransactionState mTransactionState;
+    private Date updatedAt = new Date();
+    private TransactionState transactionState;
 
     public TransactionEntity(String id,
                              double fromAmount,
@@ -32,6 +33,7 @@ public class TransactionEntity implements Parcelable {
                              TransactionType transactionType,
                              Direction direction,
                              Date createdAt,
+                             Date updatedAt,
                              TransactionState transactionState) {
         this.id = id;
         this.fromAmount = fromAmount;
@@ -42,7 +44,8 @@ public class TransactionEntity implements Parcelable {
         this.transactionType = transactionType;
         this.mDirection = direction;
         this.createdAt = createdAt;
-        this.mTransactionState = transactionState;
+        this.updatedAt = updatedAt;
+        this.transactionState = transactionState;
     }
 
     public String getId() {
@@ -117,18 +120,26 @@ public class TransactionEntity implements Parcelable {
         this.createdAt = createdAt;
     }
 
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
     public TransactionState getTransactionState() {
-        return mTransactionState;
+        return transactionState;
     }
 
     public void setTransactionState(TransactionState transactionState) {
-        mTransactionState = transactionState;
+        transactionState = transactionState;
     }
 
     @Override
     public String toString() {
         return "TransactionEntity{" + "\n" +
-                "id='" + id + "\n" +
+                "id=" + id + "\n" +
                 "fromAmount=" + fromAmount + "\n" +
                 "toAmount=" + toAmount + "\n" +
                 "transactionHash=" + transactionHash + "\n" +
@@ -137,7 +148,8 @@ public class TransactionEntity implements Parcelable {
                 "transactionType=" + transactionType + "\n" +
                 "mDirection=" + mDirection + "\n" +
                 "createdAt=" + createdAt + "\n" +
-                "mTransactionState=" + mTransactionState + "\n" +
+                "updatedAt=" + updatedAt + "\n" +
+                "mTransactionState=" + transactionState + "\n" +
                 "}";
     }
 
@@ -157,7 +169,8 @@ public class TransactionEntity implements Parcelable {
         dest.writeInt(this.transactionType == null ? -1 : this.transactionType.ordinal());
         dest.writeInt(this.mDirection == null ? -1 : this.mDirection.ordinal());
         dest.writeLong(this.createdAt != null ? this.createdAt.getTime() : -1);
-        dest.writeInt(this.mTransactionState == null ? -1 : this.mTransactionState.ordinal());
+        dest.writeLong(this.updatedAt != null ? this.updatedAt.getTime() : -1);
+        dest.writeInt(this.transactionState == null ? -1 : this.transactionState.ordinal());
     }
 
     protected TransactionEntity(Parcel in) {
@@ -173,8 +186,10 @@ public class TransactionEntity implements Parcelable {
         this.mDirection = tmpMDirection == -1 ? null : Direction.values()[tmpMDirection];
         long tmpCreatedAt = in.readLong();
         this.createdAt = tmpCreatedAt == -1 ? null : new Date(tmpCreatedAt);
+        long tmpUpdatedAt = in.readLong();
+        this.updatedAt = tmpUpdatedAt == -1 ? null : new Date(tmpUpdatedAt);
         int tmpMTransactionState = in.readInt();
-        this.mTransactionState = tmpMTransactionState == -1 ? null : TransactionState.values()[tmpMTransactionState];
+        this.transactionState = tmpMTransactionState == -1 ? null : TransactionState.values()[tmpMTransactionState];
     }
 
     public static final Creator<TransactionEntity> CREATOR = new Creator<TransactionEntity>() {

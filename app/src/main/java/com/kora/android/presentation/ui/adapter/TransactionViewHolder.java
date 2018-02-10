@@ -21,6 +21,7 @@ import java.text.DecimalFormat;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class TransactionViewHolder extends RecyclerView.ViewHolder {
@@ -70,8 +71,8 @@ public class TransactionViewHolder extends RecyclerView.ViewHolder {
         mState.setVisibility(View.VISIBLE);
         mState.setText(getStateString(transactionEntity.getTransactionState()));
         mState.setTextColor(ContextCompat.getColor(mContext, getStateColor(transactionEntity.getTransactionState())));
-        mDate.setText(DateUtils.getFormattedDate("dd.MM.yyyy", transactionEntity.getCreatedAt()));
-        mTime.setText(DateUtils.getFormattedDate("hh:mm aa", transactionEntity.getCreatedAt()));
+        mDate.setText(DateUtils.getFormattedDate("dd.MM.yyyy", transactionEntity.getUpdatedAt()));
+        mTime.setText(DateUtils.getFormattedDate("hh:mm aa", transactionEntity.getUpdatedAt()));
     }
 
     @StringRes
@@ -117,5 +118,11 @@ public class TransactionViewHolder extends RecyclerView.ViewHolder {
                 return R.color.color_transaction_state_error;
         }
         return 0;
+    }
+
+    @OnClick(R.id.root_view)
+    public void onItemClicked() {
+        if (mOnItemClickListener == null) return;
+        mOnItemClickListener.onItemClicked(getAdapterPosition());
     }
 }

@@ -62,4 +62,8 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public List<TransactionEntity> getItems() {
         return mTransactions;
     }
+
+    public TransactionEntity getItemByPosition(final int position) {
+        return mTransactions.get(position);
+    }
 }

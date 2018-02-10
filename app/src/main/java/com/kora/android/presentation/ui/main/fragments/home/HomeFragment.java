@@ -20,12 +20,14 @@ import com.kora.android.presentation.enums.DepositWithdrawRole;
 import com.kora.android.presentation.model.TransactionEntity;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.adapter.TransactionAdapter;
+import com.kora.android.presentation.ui.base.adapter.OnItemClickListener;
 import com.kora.android.presentation.ui.base.backstack.StackFragment;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
 import com.kora.android.presentation.ui.coming_soon.ComingSoonActivity;
 import com.kora.android.presentation.ui.main.MainActivity;
 import com.kora.android.presentation.ui.main.fragments.deposit_withdraw.DepositWithdrawFragment;
 import com.kora.android.presentation.ui.main.fragments.transactions.TransactionsFragment;
+import com.kora.android.presentation.ui.transactions.TransactionDetailsActivity;
 import com.kora.android.views.DividerItemDecoration;
 
 import java.util.List;
@@ -36,7 +38,7 @@ import butterknife.OnClick;
 import static com.kora.android.data.network.Constants.API_BASE_URL;
 
 public class HomeFragment extends StackFragment<HomePresenter> implements HomeView,
-        SwipeRefreshLayout.OnRefreshListener {
+        SwipeRefreshLayout.OnRefreshListener, OnItemClickListener {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -88,7 +90,7 @@ public class HomeFragment extends StackFragment<HomePresenter> implements HomeVi
     }
 
     private void initUI() {
-        mTransactionAdapter = new TransactionAdapter(null);
+        mTransactionAdapter = new TransactionAdapter(this);
 
         mRvTransactions.setLayoutManager(new LinearLayoutManager(getBaseActivity()));
         mRvTransactions.setAdapter(mTransactionAdapter);
@@ -218,5 +220,11 @@ public class HomeFragment extends StackFragment<HomePresenter> implements HomeVi
     public void onEmailConfirmed(final UserEntity userEntity) {
         getPresenter().setUserEntity(userEntity);
         showEmailConfirmation(userEntity.isEmailConfirmed());
+    }
+
+    @Override
+    public void onItemClicked(final int position) {
+        final TransactionEntity transactionEntity = mTransactionAdapter.getItemByPosition(position);
+        startActivity(TransactionDetailsActivity.getLaunchIntent(getBaseActivity(), transactionEntity.getId()));
     }
 }

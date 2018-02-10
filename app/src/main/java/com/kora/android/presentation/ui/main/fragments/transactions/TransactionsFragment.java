@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import com.kora.android.R;
 import com.kora.android.common.Keys;
 import com.kora.android.di.component.FragmentComponent;
+import com.kora.android.presentation.ui.base.adapter.OnItemClickListener;
 import com.kora.android.presentation.ui.base.adapter.filter.OnFilterListener;
 import com.kora.android.presentation.ui.main.fragments.transactions.filter.TransactionFilterModel;
 import com.kora.android.presentation.model.TransactionEntity;
@@ -24,6 +25,7 @@ import com.kora.android.presentation.ui.base.view.BaseFragment;
 import com.kora.android.presentation.ui.adapter.TransactionAdapter;
 import com.kora.android.presentation.ui.main.fragments.transactions.filter.TransactionFilterDialog;
 import com.kora.android.presentation.ui.base.adapter.RecyclerViewScrollListener;
+import com.kora.android.presentation.ui.transactions.TransactionDetailsActivity;
 import com.kora.android.views.DividerItemDecoration;
 
 import java.util.ArrayList;
@@ -33,7 +35,7 @@ import butterknife.BindView;
 
 public class TransactionsFragment extends StackFragment<TransactionsPresenter>
         implements TransactionsView, SwipeRefreshLayout.OnRefreshListener,
-        OnFilterListener<TransactionFilterModel> {
+        OnFilterListener<TransactionFilterModel>, OnItemClickListener {
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.transactions_list) RecyclerView mTransactionsList;
@@ -76,7 +78,7 @@ public class TransactionsFragment extends StackFragment<TransactionsPresenter>
     @Override
     protected void onViewReady(final Bundle savedInstanceState) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        mTransactionAdapter = new TransactionAdapter(null);
+        mTransactionAdapter = new TransactionAdapter(this);
         mTransactionsList.setLayoutManager(layoutManager);
         mTransactionsList.setAdapter(mTransactionAdapter);
         mTransactionsList.setItemAnimator(new DefaultItemAnimator());
@@ -186,5 +188,11 @@ public class TransactionsFragment extends StackFragment<TransactionsPresenter>
     public void onPause() {
         super.onPause();
         mTransactionsList.removeOnScrollListener(mScrollListener);
+    }
+
+    @Override
+    public void onItemClicked(final int position) {
+        final TransactionEntity transactionEntity = mTransactionAdapter.getItemByPosition(position);
+        startActivity(TransactionDetailsActivity.getLaunchIntent(getBaseActivity(), transactionEntity.getId()));
     }
 }

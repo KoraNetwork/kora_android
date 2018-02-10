@@ -24,4 +24,6 @@ public interface TransactionRepository {
                                                      final double fromAmount,
                                                      final double toAmount,
                                                      final String rawTransaction);
+
+    Observable<TransactionEntity> getTransaction(final String transactionId);
 }

@@ -453,4 +453,12 @@
     <string name="dialog_email_confirmation_positive">Email confirmed</string>
     <string name="dialog_email_confirmation_negative">Cancel</string>
 
+    <!-- Transaction details -->
+    <string name="transaction_details_title">Transaction details</string>
+    <string name="transaction_details_from">Sender</string>
+    <string name="transaction_details_to">Receiver</string>
+    <string name="transaction_details_from_amount">Sender amount</string>
+    <string name="transaction_details_to_amount">Receiver amount</string>
+    <string name="transaction_details_transaction_hash">Transaction hash</string>
+
 </resources>

@@ -140,6 +140,12 @@
             android:theme="@style/AppTheme.MainTheme"
             android:windowSoftInputMode="stateHidden"/>
 
+        <activity
+            android:name=".presentation.ui.transactions.TransactionDetailsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.MainTheme"
+            android:windowSoftInputMode="stateHidden"/>
+
         <service
             android:name=".presentation.service.sms.IncomingSmsService"
             android:exported="false"/>

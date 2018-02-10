@@ -21,10 +21,12 @@ public interface Constants {
     String FUNCTION_GET_BALANCE = "balanceOf";
     String FUNCTION_APPROVE = "approve";
 
-    String RINKEBY_KORA_LOAN_ADDRESS = "0x75c5ff68527bd11c71604d5a5bbdf68ce0457987";
+    String RINKEBY_KORA_LOAN_ADDRESS = "0x52a6ea5a93a58f51f1761145b1a93538f64df292";
 
     String FUNCTION_CREATE_LOAN = "createLoan";
     String FUNCTION_AGREE_LOAN = "agreeLoan";
     String FUNCTION_FUND_LOAN = "fundLoan";
     String FUNCTION_PAY_BACK_LOAN = "payBackLoan";
+
+    String RINKKEBY_TX_URL = "https://rinkeby.etherscan.io/tx/";
 }

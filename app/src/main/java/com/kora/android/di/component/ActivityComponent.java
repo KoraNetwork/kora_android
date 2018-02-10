@@ -19,6 +19,7 @@ import com.kora.android.presentation.ui.registration.step2.SecondStepActivity;
 import com.kora.android.presentation.ui.registration.step3.ThirdStepActivity;
 import com.kora.android.presentation.ui.registration.step4.FourthStepActivity;
 import com.kora.android.presentation.ui.splash.SplashActivity;
+import com.kora.android.presentation.ui.transactions.TransactionDetailsActivity;
 
 import dagger.Subcomponent;
 
@@ -52,4 +53,6 @@ public interface ActivityComponent {
 
     void inject(ForgotPassword1Activity forgotPassword1Activity);
     void inject(ForgotPassword2Activity forgotPassword2Activity);
+
+    void inject(TransactionDetailsActivity transactionDetailsActivity);
 }

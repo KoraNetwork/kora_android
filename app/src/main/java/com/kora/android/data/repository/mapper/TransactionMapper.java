@@ -35,6 +35,7 @@ public class TransactionMapper {
                                         .setTransactionType(transactionResponse.getType())
                                         .setDirection(transactionResponse.getDirection())
                                         .setCreatedAt(transactionResponse.getCreatedAt())
+                                        .setUpdatedAt(transactionResponse.getUpdatedAt())
                                         .setSender(sender)
                                         .setReceiver(receiver)
                                         .setTransactionState(transactionResponse.getState())
