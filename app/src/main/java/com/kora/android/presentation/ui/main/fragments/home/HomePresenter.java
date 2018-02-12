@@ -25,8 +25,6 @@ import io.reactivex.functions.Action;
 @ConfigPersistent
 public class HomePresenter extends BasePresenter<HomeView> {
 
-    private static int ITEMS_PER_PAGE = 5;
-
     private final GetUserDataUseCase mUserDataUseCase;
     private final GetBalanceUseCase mGetBalanceUseCase;
     private final GetTransactionsUseCase mGetTransactionsUseCase;
@@ -140,7 +138,6 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
             mGetTransactionsUseCase.setData(
                     new TransactionFilterModel(),
-                    ITEMS_PER_PAGE,
                     0);
             mGetTransactionsUseCase.execute(new GetTransactionsSubscriber());
         }

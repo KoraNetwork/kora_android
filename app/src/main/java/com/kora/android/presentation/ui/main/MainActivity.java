@@ -131,7 +131,8 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
         mUserName = headerView.findViewById(R.id.user_name);
         mUserEmail = headerView.findViewById(R.id.user_email);
         mUserAvatar.setOnClickListener(v -> {
-            getNavigator().showFragment(rootTabFragment(TAB_USER_PROFILE_POSITION), TAB_USER_PROFILE_POSITION);
+            if (mSelectedItemPosition != TAB_USER_PROFILE_POSITION)
+                getNavigator().showFragment(rootTabFragment(TAB_USER_PROFILE_POSITION), TAB_USER_PROFILE_POSITION);
             selectHostById(TAB_USER_PROFILE_POSITION);
             mDrawerLayout.closeDrawer(GravityCompat.START);
         });

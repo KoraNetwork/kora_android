@@ -134,7 +134,9 @@ public class TransactionDetailsActivity extends ToolbarActivity<TransactionDetai
     public void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(TRANSACTION_ID, getPresenter().getTransactionId());
-        outState.putParcelable(TRANSACTION_ENTITY, getPresenter().getTransactionEntity());
+        if (getPresenter().getTransactionEntity() != null) {
+            outState.putParcelable(TRANSACTION_ENTITY, getPresenter().getTransactionEntity());
+        }
     }
 
     private void initUI() {

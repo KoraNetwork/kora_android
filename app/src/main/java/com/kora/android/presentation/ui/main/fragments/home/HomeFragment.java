@@ -134,10 +134,15 @@ public class HomeFragment extends StackFragment<HomePresenter> implements HomeVi
             mLlPlaceholder.setVisibility(View.GONE);
             mLlTransactions.setVisibility(View.VISIBLE);
 
-            mTransactionAdapter.setItems(transactionEntityList);
-
-            if (transactionEntityList.size() > 5)
+            if (transactionEntityList.size() > 5) {
+                for (int i = 0; i < transactionEntityList.size(); i++) {
+                    if (transactionEntityList.size() == 5) break;
+                    transactionEntityList.remove(transactionEntityList.size() - 1);
+                }
                 mBtnShowAllTransactions.setVisibility(View.VISIBLE);
+            }
+
+            mTransactionAdapter.setItems(transactionEntityList);
         }
     }
 
