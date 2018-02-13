@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.kora.android.R;
+import com.kora.android.common.utils.CommonUtils;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.enums.DepositWithdrawRole;
 import com.kora.android.presentation.model.UserEntity;
@@ -152,10 +153,10 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
     }
 
     private void startWalletsService(final UserEntity userEntity) {
-        if (!userEntity.hasIdentity()) {
-            final Intent launchIntent = CreateWalletsService.getLaunchIntent(this);
-            startService(launchIntent);
-        }
+        if (userEntity.hasIdentity()) return;
+        if (CommonUtils.isServiceRunning(this, CreateWalletsService.class)) return;
+        final Intent intent = CreateWalletsService.getLaunchIntent(this);
+        startService(intent);
     }
 
     public void showUserData(final UserEntity userEntity) {

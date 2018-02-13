@@ -5,6 +5,7 @@ import com.kora.android.data.network.config.ErrorModel;
 import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
+import com.kora.android.domain.usecase.user.ConfirmPasswordUseCase;
 import com.kora.android.domain.usecase.user.RestorePasswordUseCase;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
@@ -18,18 +19,35 @@ import io.reactivex.observers.DisposableObserver;
 public class ForgotPassword2Presenter extends BasePresenter<ForgotPassword2View> {
 
     private final RestorePasswordUseCase mRestorePasswordUseCase;
+    private final ConfirmPasswordUseCase mConfirmPasswordUseCase;
 
+    private String mPath;
     private String mToken;
+
     private String mNewPassword;
     private String mConfirmPassword;
 
     @Inject
-    public ForgotPassword2Presenter(final RestorePasswordUseCase restorePasswordUseCase) {
+    public ForgotPassword2Presenter(final RestorePasswordUseCase restorePasswordUseCase,
+                                    final ConfirmPasswordUseCase confirmPasswordUseCase) {
         mRestorePasswordUseCase = restorePasswordUseCase;
+        mConfirmPasswordUseCase = confirmPasswordUseCase;
+    }
+
+    public String getPath() {
+        return mPath;
+    }
+
+    public void setPath(final String path) {
+        mPath = path;
     }
 
     public void setToken(final String token) {
         mToken = token;
+    }
+
+    public String getToken() {
+        return mToken;
     }
 
     public void setNewPassword(final String newPassword) {
@@ -84,8 +102,8 @@ public class ForgotPassword2Presenter extends BasePresenter<ForgotPassword2View>
         @Override
         public void onComplete() {
             if (!isViewAttached()) return;
-            getView().showProgress(true);
             getView().showHomeScreen();
+            getView().showProgress(false);
         }
 
         @Override
@@ -108,8 +126,62 @@ public class ForgotPassword2Presenter extends BasePresenter<ForgotPassword2View>
         }
     }
 
+    public void confirmEmail() {
+        if (mToken == null || mToken.isEmpty()) {
+            getView().showEmptyToken();
+            return;
+        }
+
+        mConfirmPasswordUseCase.setData(mToken);
+        mConfirmPasswordUseCase.execute(new ConfirmEmailSubscriber());
+    }
+
+    private Action mConfirmEmailAction = new Action() {
+        @Override
+        public void run() throws Exception {
+            mConfirmPasswordUseCase.execute(new ConfirmEmailSubscriber());
+        }
+    };
+
+
+    private class ConfirmEmailSubscriber extends DefaultInternetSubscriber {
+
+        @Override
+        protected void onStart() {
+            if (!isViewAttached()) return;
+            getView().showProgress(true);
+        }
+
+        @Override
+        public void onComplete() {
+            if (!isViewAttached()) return;
+            getView().showHomeScreen();
+            getView().showProgress(false);
+        }
+
+        @Override
+        public void onError(final Throwable throwable) {
+            super.onError(throwable);
+            if (!isViewAttached()) return;
+            getView().showProgress(false);
+        }
+
+        @Override
+        public void handleUnprocessableEntity(final ErrorModel errorModel) {
+            if (!isViewAttached()) return;
+            getView().showError(errorModel.getError());
+        }
+
+        @Override
+        public void handleNetworkError(final RetrofitException retrofitException) {
+            if (!isViewAttached()) return;
+            getView().showErrorWithRetry(new RetryAction(mConfirmEmailAction));
+        }
+    }
+
     @Override
     public void onDetachView() {
         mRestorePasswordUseCase.dispose();
+        mConfirmPasswordUseCase.dispose();
     }
 }

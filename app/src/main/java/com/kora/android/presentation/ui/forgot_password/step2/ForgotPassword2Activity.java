@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import com.kora.android.R;
 import com.kora.android.di.component.ActivityComponent;
@@ -15,11 +18,20 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 
+import static com.kora.android.common.Keys.Args.PATH_STRING;
+import static com.kora.android.common.Keys.Args.TOKEN_STRING;
+
 public class ForgotPassword2Activity extends ToolbarActivity<ForgotPassword2Presenter> implements ForgotPassword2View {
+
+    final static String CONFIRM_EMAIL_PATH = "confirmEmail";
+    final static String RESTORE_PASSWORD_PATH = "restorePassword";
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-
+    @BindView(R.id.ll_confirm_email)
+    LinearLayout mLlConfirmEmail;
+    @BindView(R.id.ll_restore_password)
+    LinearLayout mLlRestorePassword;
     @BindView(R.id.edit_layout_new_pass)
     TextInputLayout mElNewPassword;
     @BindView(R.id.edit_layout_confirm_pass)
@@ -57,14 +69,49 @@ public class ForgotPassword2Activity extends ToolbarActivity<ForgotPassword2Pres
     @Override
     protected void onViewReady(final Bundle savedInstanceState) {
         super.onViewReady(savedInstanceState);
-        initData();
+        initArguments(savedInstanceState);
+        initUI();
     }
 
-    private void initData() {
+    private void initArguments(final Bundle savedInstanceState) {
         if (getIntent() != null && getIntent().getData() != null) {
             final String url = getIntent().getData().toString();
+            if (url.contains(CONFIRM_EMAIL_PATH)) {
+                getPresenter().setPath(CONFIRM_EMAIL_PATH);
+            } else if (url.contains(RESTORE_PASSWORD_PATH)) {
+                getPresenter().setPath(RESTORE_PASSWORD_PATH);
+            }
             final String token = url.substring(url.lastIndexOf("/") + 1, url.length());
             getPresenter().setToken(token);
+        }
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(PATH_STRING)) {
+                getPresenter().setPath(savedInstanceState.getString(PATH_STRING));
+            }
+            if (savedInstanceState.containsKey(TOKEN_STRING)) {
+                getPresenter().setToken(savedInstanceState.getString(TOKEN_STRING));
+            }
+        }
+    }
+
+    private void initUI() {
+        if (getPresenter().getPath().equals(CONFIRM_EMAIL_PATH)) {
+            mLlConfirmEmail.setVisibility(View.VISIBLE);
+            mLlRestorePassword.setVisibility(View.GONE);
+        } else if (getPresenter().getPath().equals(RESTORE_PASSWORD_PATH)){
+            mLlConfirmEmail.setVisibility(View.GONE);
+            mLlRestorePassword.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(final Bundle outState ) {
+        super.onSaveInstanceState(outState);
+        if (getPresenter().getPath() != null) {
+            outState.putString(PATH_STRING, getPresenter().getPath());
+        }
+        if (getPresenter().getToken() != null) {
+            outState.putString(TOKEN_STRING, getPresenter().getToken());
         }
     }
 
@@ -107,9 +154,14 @@ public class ForgotPassword2Activity extends ToolbarActivity<ForgotPassword2Pres
         mElConfirmPassword.setError(getString(R.string.forgot_pass_confirm_pass_incorrect));
     }
 
-    @OnClick(R.id.button_confirm)
-    public void onClickConfirm() {
+    @OnClick(R.id.button_confirm_password)
+    public void onClickConfirmPassword() {
         getPresenter().confirmPassword();
+    }
+
+    @OnClick(R.id.button_confirm_email)
+    public void onClickConfirmEmail() {
+        getPresenter().confirmEmail();
     }
 
     @Override

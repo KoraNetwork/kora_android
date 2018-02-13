@@ -21,6 +21,7 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.PartMap;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface UserService {
@@ -67,4 +68,7 @@ public interface UserService {
 
     @PUT("profile/restorePassword")
     Observable<LoginResponse> restorePassword(@Body RestorePasswordRequest restorePasswordRequest);
+
+    @GET("profile/confirmEmail/{token}")
+    Observable<List<UserResponse>> confirmEmail(@Path("token") final String token);
 }

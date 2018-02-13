@@ -35,4 +35,6 @@ public interface UserRepository {
 
     Observable<UserEntity> restorePassword(final String token,
                                            final String newPassword);
+
+    Observable<UserEntity> confirmEmail(final String token);
 }

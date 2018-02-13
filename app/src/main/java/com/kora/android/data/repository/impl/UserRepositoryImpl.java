@@ -147,6 +147,14 @@ public class UserRepositoryImpl implements UserRepository {
                 .compose(storeUser());
     }
 
+    @Override
+    public Observable<UserEntity> confirmEmail(final String token) {
+        return mUserService.confirmEmail(token)
+                .compose(mUserMapper.transformUserListResponseToEntityUserList())
+                .map(userEntityList -> userEntityList.get(0))
+                .compose(storeUser());
+    }
+
     public ObservableTransformer<UserEntity, UserEntity> storeUser() {
         return observable -> observable.map(user -> {
             mPreferenceHandler.rememberObject(Keys.Shared.USER, user);

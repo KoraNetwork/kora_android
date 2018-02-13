@@ -120,6 +120,8 @@ public interface Keys {
         String DEPOSIT_WITHDRAW_ROLE = "deposit_direction_args";
         String TRANSACTION_ID = "transaction_id_arg";
         String TRANSACTION_ENTITY = "transaction_entity_arg";
+        String PATH_STRING = "path_string_arg";
+        String TOKEN_STRING = "token_string_arg";
     }
 
     interface Users {

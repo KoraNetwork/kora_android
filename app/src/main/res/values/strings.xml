@@ -444,6 +444,11 @@
     <string name="forgot_pass_token_error_dialog_title">Error</string>
     <string name="forgot_pass_token_error_dialog_message">You need to click on restore link in email message.</string>
 
+    <!-- Confirm email -->
+    <string name="confirm_email_title">Confirm email</string>
+    <string name="confirm_email_text">Please confirm your email to use full version of application.</string>
+    <string name="confirm_email_confirm">CONFIRM</string>
+
     <!-- Send feedback -->
     <string name="send_feedback_title">Send feedback</string>
 
