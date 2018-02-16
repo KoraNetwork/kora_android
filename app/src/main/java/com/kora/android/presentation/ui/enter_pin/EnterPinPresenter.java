@@ -1,4 +1,4 @@
-package com.kora.android.presentation.ui.common.enter_pin;
+package com.kora.android.presentation.ui.enter_pin;
 
 import android.support.v4.util.Pair;
 import android.util.Log;

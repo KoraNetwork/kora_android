@@ -1,4 +1,4 @@
-package com.kora.android.presentation.ui.common.deposit_withdraw;
+package com.kora.android.presentation.ui.deposit_withdraw;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -34,7 +34,7 @@ import com.kora.android.presentation.model.DepositWithdrawEntity;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.base.view.ToolbarActivity;
-import com.kora.android.presentation.ui.common.enter_pin.EnterPinActivity;
+import com.kora.android.presentation.ui.enter_pin.EnterPinActivity;
 import com.kora.android.views.currency.CurrencyEditText;
 
 import java.util.Locale;

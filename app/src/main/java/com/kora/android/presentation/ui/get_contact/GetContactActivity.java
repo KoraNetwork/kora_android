@@ -1,4 +1,4 @@
-package com.kora.android.presentation.ui.common.add_contact;
+package com.kora.android.presentation.ui.get_contact;
 
 import android.content.Intent;
 import android.os.Bundle;

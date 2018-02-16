@@ -26,8 +26,8 @@ import com.kora.android.presentation.ui.base.adapter.RecyclerViewScrollListener;
 import com.kora.android.presentation.ui.base.adapter.filter.OnFilterListener;
 import com.kora.android.presentation.ui.base.backstack.StackFragment;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
-import com.kora.android.presentation.ui.common.add_contact.GetContactActivity;
-import com.kora.android.presentation.ui.common.send_request.RequestDetailsActivity;
+import com.kora.android.presentation.ui.get_contact.GetContactActivity;
+import com.kora.android.presentation.ui.send_request.SendRequestDetailsActivity;
 import com.kora.android.presentation.ui.main.fragments.request.adapter.RequestAdapter;
 import com.kora.android.presentation.ui.main.fragments.request.filter.RequestFilterDialog;
 import com.kora.android.presentation.ui.main.fragments.request.filter.RequestFilterModel;
@@ -179,7 +179,7 @@ public class RequestFragment extends StackFragment<RequestPresenter> implements 
     @Override
     public void onItemClicked(int position) {
         RequestEntity request = mRequestAdapter.getItemByPosition(position);
-        startActivityForResult(RequestDetailsActivity.getLaunchIntent(getBaseActivity(), request), REQUEST_DETAILS);
+        startActivityForResult(SendRequestDetailsActivity.getLaunchIntent(getBaseActivity(), request), REQUEST_DETAILS);
     }
 
     @Override
@@ -206,7 +206,7 @@ public class RequestFragment extends StackFragment<RequestPresenter> implements 
                 if (action == Action.CREATE) {
                     UserEntity user = data.getParcelableExtra(Keys.Extras.EXTRA_USER);
                     startActivityForResult(
-                            RequestDetailsActivity.getLaunchIntent(getBaseActivity(), user, ActionType.CREATE_REQUEST),
+                            SendRequestDetailsActivity.getLaunchIntent(getBaseActivity(), user, ActionType.CREATE_REQUEST),
                             REQUEST_DETAILS);
                 }
                 break;

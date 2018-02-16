@@ -14,6 +14,7 @@ import com.kora.android.R;
 import com.kora.android.di.component.ServiceComponent;
 import com.kora.android.presentation.service.BaseService;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
+import com.kora.android.presentation.ui.main.MainActivity;
 
 public class CreateWalletsService extends BaseService<CreateWalletsPresenter> implements CreateWalletsContractor {
 
@@ -54,6 +55,15 @@ public class CreateWalletsService extends BaseService<CreateWalletsPresenter> im
         return START_STICKY;
     }
 
+    private PendingIntent getMainActivityIntent() {
+        return PendingIntent.getActivity(
+                this,
+                111,
+                MainActivity.getLaunchIntent(this),
+                PendingIntent.FLAG_UPDATE_CURRENT
+        );
+    }
+
     @Override
     public void showError(final String text) {
         Toast.makeText(this, R.string.wallet_service_error_message, Toast.LENGTH_LONG).show();
@@ -67,6 +77,7 @@ public class CreateWalletsService extends BaseService<CreateWalletsPresenter> im
                 getString(R.string.wallet_service_notification_error_title),
                 text,
                 true,
+                getMainActivityIntent(),
                 ok);
     }
 
@@ -79,12 +90,12 @@ public class CreateWalletsService extends BaseService<CreateWalletsPresenter> im
         intent.putExtras(bundle);
         final PendingIntent tryAgain = PendingIntent.getBroadcast(
                 this,
-                111,
+                333,
                 intent,
                 PendingIntent.FLAG_CANCEL_CURRENT);
         final PendingIntent cancel = PendingIntent.getBroadcast(
                 this,
-                222,
+                444,
                 new Intent(ACTION_CANCEL),
                 PendingIntent.FLAG_CANCEL_CURRENT);
         showErrorWithRetry(
@@ -92,6 +103,7 @@ public class CreateWalletsService extends BaseService<CreateWalletsPresenter> im
                 getString(R.string.wallet_service_notification_error_title),
                 text,
                 true,
+                getMainActivityIntent(),
                 tryAgain,
                 cancel);
     }
@@ -110,7 +122,8 @@ public class CreateWalletsService extends BaseService<CreateWalletsPresenter> im
                 NOTIFICATION_ID,
                 getString(R.string.wallet_service_notification_title),
                 getString(R.string.wallet_service_creating_keystore_file_message),
-                true);
+                true,
+                getMainActivityIntent());
     }
 
     @Override
@@ -120,7 +133,8 @@ public class CreateWalletsService extends BaseService<CreateWalletsPresenter> im
                 NOTIFICATION_ID,
                 getString(R.string.wallet_service_notification_title),
                 getString(R.string.wallet_service_creating_identity_message),
-                true);
+                true,
+                getMainActivityIntent());
     }
 
     @Override
@@ -130,7 +144,8 @@ public class CreateWalletsService extends BaseService<CreateWalletsPresenter> im
                 NOTIFICATION_ID,
                 getString(R.string.wallet_service_notification_title),
                 getString(R.string.wallet_service_increasing_balance_message),
-                true);
+                true,
+                getMainActivityIntent());
     }
 
     @Override

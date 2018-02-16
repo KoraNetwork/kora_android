@@ -13,7 +13,7 @@ import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.backstack.StackFragment;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
 import com.kora.android.presentation.ui.borrow.BorrowMoneyActivity;
-import com.kora.android.presentation.ui.common.add_contact.GetContactActivity;
+import com.kora.android.presentation.ui.get_contact.GetContactActivity;
 import com.kora.android.presentation.ui.main.fragments.borrow.adapter.BorrowPageAdapter;
 import com.kora.android.presentation.ui.main.fragments.borrow.fragment.BorrowFragment;
 

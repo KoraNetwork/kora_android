@@ -12,7 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 
 import com.kora.android.R;
 import com.kora.android.common.Keys;
@@ -24,13 +23,12 @@ import com.kora.android.presentation.ui.base.adapter.OnItemClickListener;
 import com.kora.android.presentation.ui.base.adapter.RecyclerViewScrollListener;
 import com.kora.android.presentation.ui.base.backstack.StackFragment;
 import com.kora.android.presentation.ui.base.view.BaseFragment;
-import com.kora.android.presentation.ui.common.send_request.RequestDetailsActivity;
+import com.kora.android.presentation.ui.send_request.SendRequestDetailsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.OnTextChanged;
 
 public class SendFragment extends StackFragment<SendPresenter> implements SendView,
         OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
@@ -156,7 +154,7 @@ public class SendFragment extends StackFragment<SendPresenter> implements SendVi
     @Override
     public void onItemClicked(final int position) {
         getPresenter().setAsRecent(mUserAdapter.getItem(position));
-        startActivity(RequestDetailsActivity.getLaunchIntent(getBaseActivity(),
+        startActivity(SendRequestDetailsActivity.getLaunchIntent(getBaseActivity(),
                 mUserAdapter.getItem(position),
                 ActionType.SEND_MONEY));
     }

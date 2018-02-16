@@ -77,8 +77,10 @@ public abstract class BaseService<P extends BaseServicePresenter> extends Servic
     public void showNotification(final int id,
                                  final String title,
                                  final String text,
-                                 final boolean cancelable) {
+                                 final boolean cancelable,
+                                 final PendingIntent onClick) {
         mNotification = getBuilder(title, text, cancelable)
+                .setContentIntent(onClick)
                 .build();
         hideSmallIcon(mNotification);
         mNotificationManager.notify(id, mNotification);
@@ -89,8 +91,10 @@ public abstract class BaseService<P extends BaseServicePresenter> extends Servic
                           final String title,
                           final String text,
                           final boolean cancelable,
+                          final PendingIntent onClick,
                           final PendingIntent ok) {
         mNotification = getBuilder(title, text, cancelable)
+                .setContentIntent(onClick)
                 .addAction(R.drawable.ic_ok, "OK", ok)
                 .build();
         hideSmallIcon(mNotification);
@@ -102,9 +106,11 @@ public abstract class BaseService<P extends BaseServicePresenter> extends Servic
                                    final String title,
                                    final String text,
                                    final boolean cancelable,
+                                   final PendingIntent onClick,
                                    final PendingIntent retry,
                                    final PendingIntent cancel) {
         mNotification = getBuilder(title, text, cancelable)
+                .setContentIntent(onClick)
                 .addAction(R.drawable.ic_try_again, "Try again", retry)
                 .addAction(R.drawable.ic_cancel, "Cancel", cancel)
                 .build();

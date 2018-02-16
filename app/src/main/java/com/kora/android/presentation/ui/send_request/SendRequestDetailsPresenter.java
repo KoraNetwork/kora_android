@@ -1,4 +1,4 @@
-package com.kora.android.presentation.ui.common.send_request;
+package com.kora.android.presentation.ui.send_request;
 
 import android.support.annotation.Nullable;
 
@@ -25,7 +25,7 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Action;
 
 @ConfigPersistent
-public class RequestDetailsPresenter extends BasePresenter<RequestDetailsView> {
+public class SendRequestDetailsPresenter extends BasePresenter<SendRequestDetailsView> {
 
     private final GetUserDataUseCase mGetUserDataUseCase;
     private final GetConvertedAmountUseCase mGetConvertedAmountUseCase;
@@ -41,10 +41,10 @@ public class RequestDetailsPresenter extends BasePresenter<RequestDetailsView> {
     private RequestEntity mRequest;
 
     @Inject
-    public RequestDetailsPresenter(final GetUserDataUseCase getUserDataUseCase,
-                                   final GetConvertedAmountUseCase getConvertedAmountUseCase,
-                                   final AddToRequestsUseCase addToRequestsUseCase,
-                                   final UpdateRequestUseCase updateRequestUseCase) {
+    public SendRequestDetailsPresenter(final GetUserDataUseCase getUserDataUseCase,
+                                       final GetConvertedAmountUseCase getConvertedAmountUseCase,
+                                       final AddToRequestsUseCase addToRequestsUseCase,
+                                       final UpdateRequestUseCase updateRequestUseCase) {
         mGetUserDataUseCase = getUserDataUseCase;
         mGetConvertedAmountUseCase = getConvertedAmountUseCase;
         mAddToRequestsUseCase = addToRequestsUseCase;

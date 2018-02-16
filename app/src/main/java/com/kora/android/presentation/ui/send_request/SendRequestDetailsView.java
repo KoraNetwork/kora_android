@@ -1,10 +1,10 @@
-package com.kora.android.presentation.ui.common.send_request;
+package com.kora.android.presentation.ui.send_request;
 
 import com.kora.android.presentation.model.RequestEntity;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.view.BaseView;
 
-public interface RequestDetailsView extends BaseView<RequestDetailsPresenter> {
+public interface SendRequestDetailsView extends BaseView<SendRequestDetailsPresenter> {
     void retrieveSender(UserEntity userEntity);
 
     void retrieveReceiver(UserEntity user);

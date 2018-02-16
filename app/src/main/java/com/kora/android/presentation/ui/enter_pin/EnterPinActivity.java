@@ -1,4 +1,4 @@
-package com.kora.android.presentation.ui.common.enter_pin;
+package com.kora.android.presentation.ui.enter_pin;
 
 import android.content.Intent;
 import android.os.Bundle;

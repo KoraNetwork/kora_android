@@ -86,43 +86,10 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/returned_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_star" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="13dp"
-                    android:text="returned: 0"
-                    android:textColor="@color/color_green_text"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="25dp"
-                    android:text="not returned: 0"
-                    android:textColor="@color/color_green_text"
-                    android:textSize="12sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
                 android:id="@+id/amount_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:orientation="horizontal">
 
                 <RelativeLayout

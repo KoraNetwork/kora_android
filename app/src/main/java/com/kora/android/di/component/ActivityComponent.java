@@ -4,10 +4,10 @@ import com.kora.android.di.annotation.PerActivity;
 import com.kora.android.di.module.ActivityModule;
 import com.kora.android.presentation.ui.borrow.BorrowMoneyActivity;
 import com.kora.android.presentation.ui.coming_soon.ComingSoonActivity;
-import com.kora.android.presentation.ui.common.add_contact.GetContactActivity;
-import com.kora.android.presentation.ui.common.deposit_withdraw.DepositWithdrawDetailsActivity;
-import com.kora.android.presentation.ui.common.enter_pin.EnterPinActivity;
-import com.kora.android.presentation.ui.common.send_request.RequestDetailsActivity;
+import com.kora.android.presentation.ui.get_contact.GetContactActivity;
+import com.kora.android.presentation.ui.deposit_withdraw.DepositWithdrawDetailsActivity;
+import com.kora.android.presentation.ui.enter_pin.EnterPinActivity;
+import com.kora.android.presentation.ui.send_request.SendRequestDetailsActivity;
 import com.kora.android.presentation.ui.forgot_password.step1.ForgotPassword1Activity;
 import com.kora.android.presentation.ui.forgot_password.step2.ForgotPassword2Activity;
 import com.kora.android.presentation.ui.login.LoginActivity;
@@ -43,7 +43,7 @@ public interface ActivityComponent {
 
     void inject(GetContactActivity getContactActivity);
     void inject(EnterPinActivity enterPinActivity);
-    void inject(RequestDetailsActivity requestDetailsActivity);
+    void inject(SendRequestDetailsActivity sendRequestDetailsActivity);
 
     void inject(BorrowMoneyActivity borrowMoneyActivity);
 

@@ -17,7 +17,7 @@
             android:id="@+id/image_view_kora_logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="64dp"
+            android:layout_marginTop="48dp"
             android:src="@drawable/ic_kora_logo" />
 
         <android.support.v7.widget.AppCompatTextView
@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="36dp"
             android:fontFamily="@font/muli_semi_bold"
             android:text="@string/login_login"
             android:textColor="@color/color_text_title"
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="8dp"
             android:fontFamily="@font/muli_normal"
             android:text="@string/login_enter_identifier"
             android:textColor="@color/color_text_text"
@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="24dp"
             android:fontFamily="@font/muli_regular"
             app:errorEnabled="true">
 
@@ -112,7 +112,7 @@
             android:id="@+id/linear_layout_registration"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="24dp"
             android:gravity="center">
 
             <android.support.v7.widget.AppCompatTextView
@@ -140,7 +140,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="8dp"
             android:gravity="center">
 
             <android.support.v7.widget.AppCompatTextView

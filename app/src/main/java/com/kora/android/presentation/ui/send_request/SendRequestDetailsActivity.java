@@ -1,4 +1,4 @@
-package com.kora.android.presentation.ui.common.send_request;
+package com.kora.android.presentation.ui.send_request;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -36,7 +36,7 @@ import com.kora.android.presentation.model.RequestEntity;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.base.view.ToolbarActivity;
-import com.kora.android.presentation.ui.common.enter_pin.EnterPinActivity;
+import com.kora.android.presentation.ui.enter_pin.EnterPinActivity;
 import com.kora.android.views.currency.CurrencyEditText;
 
 import java.util.Locale;
@@ -49,7 +49,7 @@ import static com.kora.android.common.Keys.Args.ACTION_TYPE;
 import static com.kora.android.common.Keys.Args.REQUEST_ENTITY;
 import static com.kora.android.data.network.Constants.API_BASE_URL;
 
-public class RequestDetailsActivity extends ToolbarActivity<RequestDetailsPresenter> implements RequestDetailsView {
+public class SendRequestDetailsActivity extends ToolbarActivity<SendRequestDetailsPresenter> implements SendRequestDetailsView {
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.user_name) TextView mUserName;
@@ -72,7 +72,7 @@ public class RequestDetailsActivity extends ToolbarActivity<RequestDetailsPresen
 
     @Override
     public int getLayoutResource() {
-        return R.layout.activity_request_details;
+        return R.layout.activity_send_request_details;
     }
 
     @Override
@@ -91,14 +91,14 @@ public class RequestDetailsActivity extends ToolbarActivity<RequestDetailsPresen
     }
 
     public static Intent getLaunchIntent(final BaseActivity baseActivity, final UserEntity userEntity, final ActionType actionType) {
-        final Intent intent = new Intent(baseActivity, RequestDetailsActivity.class);
+        final Intent intent = new Intent(baseActivity, SendRequestDetailsActivity.class);
         intent.putExtra(Keys.Args.USER_ENTITY, userEntity);
         intent.putExtra(ACTION_TYPE, actionType);
         return intent;
     }
 
     public static Intent getLaunchIntent(final BaseActivity baseActivity, final RequestEntity requestEntity) {
-        final Intent intent = new Intent(baseActivity, RequestDetailsActivity.class);
+        final Intent intent = new Intent(baseActivity, SendRequestDetailsActivity.class);
         intent.putExtra(REQUEST_ENTITY, requestEntity);
         intent.putExtra(ACTION_TYPE, ActionType.SHOW_REQUEST);
         return intent;

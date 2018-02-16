@@ -23,6 +23,7 @@ import com.kora.android.common.utils.CommonUtils;
 import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.enums.DepositWithdrawRole;
 import com.kora.android.presentation.model.UserEntity;
+import com.kora.android.presentation.service.BaseService;
 import com.kora.android.presentation.service.wallet.CreateWalletsService;
 import com.kora.android.presentation.ui.base.backstack.BackStackActivity;
 import com.kora.android.presentation.ui.base.custom.MultiDialog;
@@ -86,6 +87,13 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
         final Intent intent = new Intent(baseActivity, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra(EXTRA_CURRENT_TAB, tabId);
+        return intent;
+    }
+
+    public static Intent getLaunchIntent(final BaseService baseService) {
+        final Intent intent = new Intent(baseService, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.putExtra(EXTRA_CURRENT_TAB, TAB_HOME_POSITION);
         return intent;
     }
 

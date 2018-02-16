@@ -1,4 +1,4 @@
-package com.kora.android.presentation.ui.common.deposit_withdraw;
+package com.kora.android.presentation.ui.deposit_withdraw;
 
 import com.kora.android.common.utils.StringUtils;
 import com.kora.android.common.utils.Validator;

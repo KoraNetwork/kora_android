@@ -105,19 +105,19 @@
             android:windowSoftInputMode="stateHidden"/>
 
         <activity
-            android:name=".presentation.ui.common.add_contact.GetContactActivity"
+            android:name=".presentation.ui.get_contact.GetContactActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.MainTheme"
             android:windowSoftInputMode="stateHidden"/>
 
         <activity
-            android:name=".presentation.ui.common.enter_pin.EnterPinActivity"
+            android:name=".presentation.ui.enter_pin.EnterPinActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.MainTheme"
             android:windowSoftInputMode="stateHidden"/>
 
         <activity
-            android:name=".presentation.ui.common.send_request.RequestDetailsActivity"
+            android:name=".presentation.ui.send_request.SendRequestDetailsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.MainTheme"
             android:windowSoftInputMode="stateHidden"/>
@@ -135,7 +135,7 @@
             android:windowSoftInputMode="stateHidden"/>
 
         <activity
-            android:name=".presentation.ui.common.deposit_withdraw.DepositWithdrawDetailsActivity"
+            android:name=".presentation.ui.deposit_withdraw.DepositWithdrawDetailsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.MainTheme"
             android:windowSoftInputMode="stateHidden"/>
