@@ -93,8 +93,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="ec2-34-201-216-112.compute-1.amazonaws.com"
-                    android:scheme="http" />
+                    android:host="mvp.kora.network"
+                    android:scheme="https" />
             </intent-filter>
         </activity>
 
