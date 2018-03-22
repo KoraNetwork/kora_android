@@ -221,8 +221,10 @@ public class TransactionDetailsActivity extends ToolbarActivity<TransactionDetai
 
     @OnClick(R.id.ll_transaction_hash)
     public void onClickTransactionHash() {
-        if (getPresenter().getTransactionEntity() == null) return;
-        final String transactionHash = getPresenter().getTransactionEntity().getTransactionHash().get(0);
+        final TransactionEntity transactionEntity = getPresenter().getTransactionEntity();
+        if (transactionEntity == null) return;
+        if (transactionEntity.getTransactionHash() == null || transactionEntity.getTransactionHash().isEmpty()) return;
+        final String transactionHash = transactionEntity.getTransactionHash().get(0);
         final String url = RINKKEBY_TX_URL + transactionHash;
         final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         startActivity(intent);

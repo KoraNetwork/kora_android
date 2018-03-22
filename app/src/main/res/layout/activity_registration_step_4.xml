@@ -212,11 +212,11 @@
             </android.support.design.widget.TextInputLayout>
 
             <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/text_view_required_currency"
+                android:id="@+id/text_view_required_phone_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_alignTop="@+id/relative_layout_currency"
+                android:layout_alignTop="@+id/relative_layout_phone_number"
                 android:layout_marginEnd="25dp"
                 android:fontFamily="@font/muli_regular"
                 android:text="@string/registration_required"
@@ -296,6 +296,18 @@
                 </android.support.design.widget.TextInputLayout>
 
             </RelativeLayout>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_view_required_currency"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/relative_layout_currency"
+                android:layout_marginEnd="25dp"
+                android:fontFamily="@font/muli_regular"
+                android:text="@string/registration_required"
+                android:textColor="@color/color_text_blue"
+                android:textSize="20sp" />
 
             <RelativeLayout
                 android:id="@+id/relative_layout_currency"

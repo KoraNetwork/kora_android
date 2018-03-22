@@ -82,11 +82,11 @@ public class CreateWalletsService extends BaseService<CreateWalletsPresenter> im
     }
 
     @Override
-    public void showErrorWithRetry(final String text, final String retryArg) {
+    public void showErrorWithRetry(final String retryActionArg) {
         Toast.makeText(this, R.string.wallet_service_error_message, Toast.LENGTH_LONG).show();
         final Intent intent = new Intent(ACTION_TRY_AGAIN);
         final Bundle bundle = new Bundle();
-        bundle.putString(retryArg, retryArg);
+        bundle.putString(retryActionArg, retryActionArg);
         intent.putExtras(bundle);
         final PendingIntent tryAgain = PendingIntent.getBroadcast(
                 this,
@@ -101,18 +101,11 @@ public class CreateWalletsService extends BaseService<CreateWalletsPresenter> im
         showErrorWithRetry(
                 NOTIFICATION_ID,
                 getString(R.string.wallet_service_notification_error_title),
-                text,
+                getString(R.string.wallet_service_notification_error_message),
                 true,
                 getMainActivityIntent(),
                 tryAgain,
                 cancel);
-    }
-
-    @Override
-    public void showErrorWithRetry(final int stringId, final String retryAction) {
-        Toast.makeText(this, R.string.wallet_service_error_message, Toast.LENGTH_LONG).show();
-        final String text = getString(stringId);
-        showErrorWithRetry(text, retryAction);
     }
 
     @Override

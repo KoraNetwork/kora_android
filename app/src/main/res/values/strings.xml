@@ -354,6 +354,7 @@
     <string name="wallet_service_start_message">It takes some time to setup your wallet. Please be patient.</string>
     <string name="wallet_service_notification_title">Wallet setup in progress</string>
     <string name="wallet_service_notification_error_title">Wallet setup error</string>
+    <string name="wallet_service_notification_error_message">Something went wrong. Maybe problems with internet connection.</string>
     <string name="wallet_service_creating_keystore_file_message">Creating keystore file</string>
     <string name="wallet_service_creating_identity_message">Creating identity</string>
     <string name="wallet_service_increasing_balance_message">Increasing balance</string>

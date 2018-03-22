@@ -2,10 +2,7 @@ package com.kora.android.presentation.service.wallet;
 
 import android.util.Log;
 
-import com.kora.android.R;
 import com.kora.android.common.helper.RegistrationPrefHelper;
-import com.kora.android.data.network.config.ErrorModel;
-import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.data.web3j.model.response.CreateWalletsResponse;
 import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
@@ -17,8 +14,6 @@ import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.service.BaseServicePresenter;
 
 import javax.inject.Inject;
-
-import io.reactivex.annotations.NonNull;
 
 @ConfigPersistent
 public class CreateWalletsPresenter extends BaseServicePresenter<CreateWalletsContractor> {
@@ -59,7 +54,7 @@ public class CreateWalletsPresenter extends BaseServicePresenter<CreateWalletsCo
         }
 
         @Override
-        public void onNext(@NonNull final CreateWalletsResponse createWalletsResponse) {
+        public void onNext(final CreateWalletsResponse createWalletsResponse) {
             mCreateIdentityUseCase.setData(
                     createWalletsResponse.getOwner(),
                     createWalletsResponse.getRecovery());
@@ -67,26 +62,12 @@ public class CreateWalletsPresenter extends BaseServicePresenter<CreateWalletsCo
         }
 
         @Override
-        public void onError(@NonNull final Throwable throwable) {
+        public void onError(final Throwable throwable) {
             super.onError(throwable);
-            Log.e("_____", throwable.toString());
+            Log.e("CreateWalletsPresenter", throwable.toString());
             throwable.printStackTrace();
-        }
-
-        @Override
-        public void handleNetworkError(final Throwable throwable) {
             if (!isServiceAttached()) return;
-            getService().showErrorWithRetry(
-                    R.string.web3j_error_message_network_problems,
-                    CreateWalletsService.ARG_CREATE_WALLETS);
-        }
-
-        @Override
-        public void handleWeb3jError(final String message) {
-            if (!isServiceAttached()) return;
-            getService().showErrorWithRetry(
-                    message,
-                    CreateWalletsService.ARG_CREATE_WALLETS);
+            getService().showErrorWithRetry(CreateWalletsService.ARG_CREATE_WALLETS);
         }
     }
 
@@ -112,22 +93,10 @@ public class CreateWalletsPresenter extends BaseServicePresenter<CreateWalletsCo
         @Override
         public void onError(final Throwable throwable) {
             super.onError(throwable);
-            Log.e("_____", throwable.toString());
+            Log.e("CreateWalletsPresenter", throwable.toString());
             throwable.printStackTrace();
-        }
-
-        @Override
-        public void handleNetworkError(final RetrofitException retrofitException) {
             if (!isServiceAttached()) return;
-            getService().showErrorWithRetry(
-                    R.string.web3j_error_message_no_network,
-                    CreateWalletsService.ARG_CREATE_IDENTITY);
-        }
-
-        @Override
-        public void handleUnprocessableEntity(final ErrorModel errorModel) {
-            if (!isServiceAttached()) return;
-            getService().showError(errorModel.getError());
+            getService().showErrorWithRetry(CreateWalletsService.ARG_CREATE_IDENTITY);
         }
     }
 
@@ -153,24 +122,12 @@ public class CreateWalletsPresenter extends BaseServicePresenter<CreateWalletsCo
         }
 
         @Override
-        public void onError(@NonNull final Throwable throwable) {
+        public void onError(final Throwable throwable) {
             super.onError(throwable);
-            Log.e("_____", throwable.toString());
+            Log.e("CreateWalletsPresenter", throwable.toString());
             throwable.printStackTrace();
-        }
-
-        @Override
-        public void handleNetworkError(final RetrofitException retrofitException) {
             if (!isServiceAttached()) return;
-            getService().showErrorWithRetry(
-                    R.string.web3j_error_message_no_network,
-                    CreateWalletsService.ARG_INCREASE_BALANCE);
-        }
-
-        @Override
-        public void handleUnprocessableEntity(final ErrorModel errorModel) {
-            if (!isServiceAttached()) return;
-            getService().showError(errorModel.getError());
+            getService().showErrorWithRetry(CreateWalletsService.ARG_INCREASE_BALANCE);
         }
     }
 
