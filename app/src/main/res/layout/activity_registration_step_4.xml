@@ -224,15 +224,89 @@
                 android:textSize="20sp" />
 
             <RelativeLayout
-                android:id="@+id/relative_layout_currency"
+                android:id="@+id/relative_layout_phone_number"
                 android:layout_width="match_parent"
-                android:layout_height="86dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/edit_layout_date_of_birth"
+                android:orientation="horizontal"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp">
 
-                <ImageView
-                    android:id="@+id/image_view_country_flag"
+                <RelativeLayout
+                    android:id="@+id/relative_layout_phone_code"
+                    android:layout_width="wrap_content"
+                    android:layout_height="86dp">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/image_view_phone_flag"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="20dp"
+                        android:src="@drawable/ic_flag_usa" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/edit_layout_phone_code"
+                        android:layout_width="wrap_content"
+                        android:layout_height="86dp"
+                        app:errorEnabled="true">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/edit_text_phone_code"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:cursorVisible="false"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:fontFamily="@font/muli_regular"
+                            android:inputType="number"
+                            android:maxLines="1"
+                            android:paddingEnd="5dp"
+                            android:paddingStart="35dp"
+                            android:scrollHorizontally="false"
+                            android:text="@string/registration_phone_code_usa"
+                            android:textColor="@color/color_edit_text"
+                            android:textSize="18sp" />
+                    </android.support.design.widget.TextInputLayout>
+
+                </RelativeLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/edit_layout_phone_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="86dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_toEndOf="@+id/relative_layout_phone_code"
+                    app:errorEnabled="true"
+                    app:hintEnabled="true">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/edit_text_phone_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/muli_regular"
+                        android:hint="@string/registration_phone_number"
+                        android:inputType="number"
+                        android:maxLength="12"
+                        android:maxLines="1"
+                        android:textColor="@color/color_edit_text"
+                        android:textSize="18sp"
+                        tools:text="55544332211" />
+                </android.support.design.widget.TextInputLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/relative_layout_currency"
+                android:layout_width="match_parent"
+                android:layout_height="86dp"
+                android:layout_below="@+id/relative_layout_phone_number"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/image_view_currency_flag"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_marginStart="5dp"

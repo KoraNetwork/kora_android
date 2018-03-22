@@ -1,6 +1,5 @@
 package com.kora.android.presentation.ui.registration.step4;
 
-import com.kora.android.common.helper.RegistrationPrefHelper;
 import com.kora.android.common.utils.DateUtils;
 import com.kora.android.common.utils.StringUtils;
 import com.kora.android.data.network.config.ErrorModel;
@@ -8,7 +7,6 @@ import com.kora.android.data.network.exception.RetrofitException;
 import com.kora.android.di.annotation.ConfigPersistent;
 import com.kora.android.domain.base.DefaultInternetSubscriber;
 import com.kora.android.domain.usecase.registration.RegisterUseCase;
-import com.kora.android.presentation.model.CountryEntity;
 import com.kora.android.presentation.model.UserEntity;
 import com.kora.android.presentation.ui.base.custom.RetryAction;
 import com.kora.android.presentation.ui.base.presenter.BasePresenter;
@@ -18,60 +16,18 @@ import javax.inject.Inject;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Action;
 
-import static com.kora.android.common.Keys.DefaultCountry.DEFAULT_COUNTRY_CODE;
-import static com.kora.android.common.Keys.DefaultCountry.DEFAULT_COUNTRY_CURRENCY;
-import static com.kora.android.common.Keys.DefaultCountry.DEFAULT_COUNTRY_FLAG;
-import static com.kora.android.common.Keys.DefaultCountry.DEFAULT_COUNTRY_NAME;
-import static com.kora.android.common.Keys.DefaultCountry.DEFAULT_COUNTRY_PHONE_CODE;
-import static com.kora.android.common.Keys.DefaultCountry.DEFAULT_CURRENCY_NAME_FULL;
-import static com.kora.android.common.Keys.DefaultCountry.DEFAULT_ERC_20_TOKEN;
-
 @ConfigPersistent
 public class FourthStepPresenter extends BasePresenter<FourthStepView> {
 
-    private final RegistrationPrefHelper mRegistrationPrefHelper;
     private final RegisterUseCase mRegisterUseCase;
 
     private UserEntity mUserEntity;
     private String mConfirmPassword;
-    private String mOldCurrency;
-    private String mOldFlag;
 
     @Inject
-    public FourthStepPresenter(final RegistrationPrefHelper registrationPrefHelper,
-                               final RegisterUseCase registerUseCase) {
-        mRegistrationPrefHelper = registrationPrefHelper;
+    public FourthStepPresenter(final RegisterUseCase registerUseCase) {
         mRegisterUseCase = registerUseCase;
         mUserEntity = new UserEntity();
-    }
-
-    public void startGetCountryTask() {
-        final CountryEntity countryEntity = mRegistrationPrefHelper.getCountry();
-        mOldCurrency = countryEntity.getCurrency();
-        mOldFlag = countryEntity.getFlag();
-        setCountryCode(countryEntity.getCountryCode());
-
-        if (countryEntity.getERC20Token() == null || countryEntity.getERC20Token().isEmpty()) {
-            countryEntity.setCurrency(DEFAULT_COUNTRY_CURRENCY);
-            countryEntity.setERC20Token(DEFAULT_ERC_20_TOKEN);
-            countryEntity.setFlag(DEFAULT_COUNTRY_FLAG);
-        }
-
-        setCurrency(countryEntity.getCurrency());
-        setErc20Token(countryEntity.getERC20Token());
-        getView().showCurrency(countryEntity);
-    }
-
-    public UserEntity getUserEntity() {
-        return mUserEntity;
-    }
-
-    public String getOldCurrency() {
-        return mOldCurrency;
-    }
-
-    public String getOldFlag() {
-        return mOldFlag;
     }
 
     public void setAvatar(final String avatar) {
@@ -114,12 +70,27 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
         mUserEntity.setPassword(password);
     }
 
+    public void setConfirmPassword(final String confirmPassword) {
+        mConfirmPassword = confirmPassword;
+    }
+
     public void setCountryCode(final String countryCode) {
         mUserEntity.setCountryCode(countryCode);
     }
 
-    public void setConfirmPassword(final String confirmPassword) {
-        mConfirmPassword = confirmPassword;
+    public void setFlag(final String flag) {
+        mUserEntity.setFlag(flag);
+    }
+
+    private String mPhoneCode;
+    private String mPhoneNumber;
+
+    public void setPhoneCode(final String phoneCode) {
+        mPhoneCode = phoneCode;
+    }
+
+    public void setPhoneNumber(final String phoneNumber) {
+        mPhoneNumber = phoneNumber;
     }
 
     public void startRegistrationTask() {
@@ -149,6 +120,15 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
             getView().showIncorrectDate();
             return;
         }
+        if (mPhoneNumber == null || mPhoneNumber.isEmpty()) {
+            getView().showEmptyPhoneNumber();
+            return;
+        }
+        if (!StringUtils.isPhoneNumberValid(mPhoneNumber)) {
+            getView().showIncorrectPhoneNumber();
+            return;
+        }
+
         if (mUserEntity.getPassword() == null || mUserEntity.getPassword().isEmpty()) {
             getView().showEmptyPassword();
             return;
@@ -165,7 +145,7 @@ public class FourthStepPresenter extends BasePresenter<FourthStepView> {
             getView().showIncorrectConfirmPassword();
             return;
         }
-        mUserEntity.setPhoneNumber(mRegistrationPrefHelper.getPhoneNumber());
+        mUserEntity.setPhoneNumber(StringUtils.deletePlusIfNeeded(mPhoneCode + mPhoneNumber));
 
         mRegisterUseCase.setData(mUserEntity);
         mRegisterUseCase.execute(new RegistrationObserver());

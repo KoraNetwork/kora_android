@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.kora.android.GlideApp;
 import com.kora.android.R;
 import com.kora.android.common.utils.DateUtils;
 import com.kora.android.common.utils.ViewUtils;
@@ -22,6 +23,7 @@ import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.model.CountryEntity;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.main.MainActivity;
+import com.kora.android.presentation.ui.registration.countries.CountriesActivity;
 import com.kora.android.presentation.ui.registration.currencies.CurrenciesActivity;
 import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo;
 import com.miguelbcr.ui.rx_paparazzo2.entities.Options;
@@ -36,23 +38,31 @@ import butterknife.OnTextChanged;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-import static com.kora.android.common.Keys.CURRENCY_EUR;
+import static com.kora.android.common.Keys.DefaultCountry.DEFAULT_COUNTRY_CODE;
+import static com.kora.android.common.Keys.DefaultCountry.DEFAULT_COUNTRY_CURRENCY;
+import static com.kora.android.common.Keys.DefaultCountry.DEFAULT_COUNTRY_FLAG;
+import static com.kora.android.common.Keys.DefaultCountry.DEFAULT_COUNTRY_PHONE_CODE;
+import static com.kora.android.common.Keys.DefaultCountry.DEFAULT_ERC_20_TOKEN;
+import static com.kora.android.common.Keys.SelectCountry.SELECT_COUNTRY_EXTRA;
 import static com.kora.android.common.Keys.SelectCurrency.SELECT_CURRENCY_EXTRA;
-import static com.kora.android.common.Keys.SelectCurrency.SELECT_CURRENCY_REQUEST_CODE;
 import static com.kora.android.data.network.Constants.API_BASE_URL;
 
 public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implements FourthStepView {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
+
     @BindView(R.id.image_view_avatar)
     ImageView mIvAvatar;
     @BindView(R.id.text_view_upload_photo)
     TextView mTvUploadPhoto;
+
     @BindView(R.id.edit_layout_user_name)
     TextInputLayout mElUserName;
+
     @BindView(R.id.edit_layout_full_name)
     TextInputLayout mElFullName;
+
     @BindView(R.id.edit_layout_email)
     TextInputLayout mElEmail;
 
@@ -61,16 +71,27 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
     @BindView(R.id.edit_text_date_of_birth)
     TextInputEditText mEtDateOfBirth;
 
-    @BindView(R.id.image_view_country_flag)
-    ImageView mIvCountryFlag;
+    @BindView(R.id.image_view_phone_flag)
+    ImageView mIvPhoneFlag;
+    @BindView(R.id.edit_text_phone_code)
+    TextInputEditText mEtPhoneCode;
+    @BindView(R.id.edit_layout_phone_number)
+    TextInputLayout mElPhoneNumber;
+    @BindView(R.id.edit_text_phone_number)
+    TextInputEditText mEtPhoneNumber;
+    @BindView(R.id.relative_layout_phone_number)
+    RelativeLayout mRlPhoneNumber;
+
+    @BindView(R.id.image_view_currency_flag)
+    ImageView mIvCurrencyFlag;
     @BindView(R.id.edit_text_currency)
     TextInputEditText mEtCurrency;
-
 
     @BindView(R.id.edit_layout_password)
     TextInputLayout mElPassword;
     @BindView(R.id.edit_layout_confirm_password)
     TextInputLayout mElConfirmPassword;
+
     @BindView(R.id.scroll_view_container)
     ScrollView mSvContainer;
     @BindView(R.id.relative_layout_container)
@@ -95,7 +116,7 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
         setToolbar(mToolbar, R.drawable.ic_back_grey);
 
         initDate();
-        getPresenter().startGetCountryTask();
+        initPhoneAndCurrency();
     }
 
     private void initDate() {
@@ -112,17 +133,13 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
         mEtDateOfBirth.setText(prettyDate);
     }
 
-    @Override
-    public void showCurrency(final CountryEntity countryEntity) {
-        Glide.with(this)
-                .load(API_BASE_URL + countryEntity.getFlag())
-                .into(mIvCountryFlag);
-        mEtCurrency.setText(getString(R.string.registration_currency_different, countryEntity.getCurrency()));
-    }
+    public void initPhoneAndCurrency() {
+        getPresenter().setPhoneCode(DEFAULT_COUNTRY_PHONE_CODE);
+        getPresenter().setCountryCode(DEFAULT_COUNTRY_CODE);
+        getPresenter().setFlag(DEFAULT_COUNTRY_FLAG);
 
-    @Override
-    public void showDateOfBirth(final String dateOfBirth) {
-        mEtDateOfBirth.setText(dateOfBirth);
+        getPresenter().setErc20Token(DEFAULT_ERC_20_TOKEN);
+        getPresenter().setCurrency(DEFAULT_COUNTRY_CURRENCY);
     }
 
     @OnClick({R.id.image_view_avatar, R.id.text_view_upload_photo})
@@ -220,31 +237,65 @@ public class FourthStepActivity extends BaseActivity<FourthStepPresenter> implem
     @Override
     public void showIncorrectDate() {
         mElDateOfBirth.setError(getString(R.string.registration_date_of_birth_incorrect));
+        ViewUtils.scrollToView(mSvContainer, mRlContainer, mElDateOfBirth);
     }
 
-    @OnClick({R.id.edit_text_currency, R.id.image_view_country_flag})
+    @OnClick({R.id.edit_text_currency, R.id.image_view_currency_flag})
     void OnClickCurrency() {
-        startActivityForResult(CurrenciesActivity.getLaunchIntent(this), SELECT_CURRENCY_REQUEST_CODE);
+        startActivityForResult(CurrenciesActivity.getLaunchIntent(this), 222);
+    }
+
+    @OnClick({R.id.edit_text_phone_code, R.id.image_view_phone_flag})
+    public void onClickPhoneCode() {
+        startActivityForResult(CountriesActivity.getLaunchIntent(this), 111);
     }
 
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-        if (requestCode == SELECT_CURRENCY_REQUEST_CODE && resultCode == RESULT_OK) {
+        if (requestCode == 111 && resultCode == RESULT_OK) {
+
+            final CountryEntity countryEntity = data.getParcelableExtra(SELECT_COUNTRY_EXTRA);
+            getPresenter().setPhoneCode(countryEntity.getPhoneCode());
+            getPresenter().setCountryCode(countryEntity.getCountryCode());
+            getPresenter().setFlag(countryEntity.getFlag());
+            GlideApp.with(this)
+                    .load(API_BASE_URL + countryEntity.getFlag())
+                    .into(mIvPhoneFlag);
+            mEtPhoneCode.setText(countryEntity.getPhoneCode());
+            mElPhoneNumber.setError(null);
+            mEtPhoneNumber.setText(null);
+            ViewUtils.setMaxLength(mEtPhoneNumber, countryEntity.getPhoneCode());
+
+        } else if (requestCode == 222 && resultCode == RESULT_OK) {
+
             final CountryEntity countryEntity = data.getParcelableExtra(SELECT_CURRENCY_EXTRA);
             getPresenter().setCurrency(countryEntity.getCurrency());
             getPresenter().setErc20Token(countryEntity.getERC20Token());
+            Glide.with(this)
+                    .load(API_BASE_URL + countryEntity.getFlag())
+                    .into(mIvCurrencyFlag);
             mEtCurrency.setText(getString(R.string.registration_currency_different, countryEntity.getCurrency()));
-            if (getPresenter().getOldCurrency().equals(CURRENCY_EUR) && countryEntity.getCurrency().equals(CURRENCY_EUR)) {
-                Glide.with(this)
-                        .load(API_BASE_URL + getPresenter().getOldFlag())
-                        .into(mIvCountryFlag);
-            } else {
-                Glide.with(this)
-                        .load(API_BASE_URL + countryEntity.getFlag())
-                        .into(mIvCountryFlag);
-            }
         }
     }
+
+    @OnTextChanged(R.id.edit_text_phone_number)
+    void onChangedPhoneNumber(final CharSequence phoneNumber) {
+        mElPhoneNumber.setError(null);
+        getPresenter().setPhoneNumber(phoneNumber.toString().trim());
+    }
+
+    @Override
+    public void showEmptyPhoneNumber() {
+        mElPhoneNumber.setError(getString(R.string.registration_phone_number_empty));
+        ViewUtils.scrollToView(mSvContainer, mRlContainer, mRlPhoneNumber);
+    }
+
+    @Override
+    public void showIncorrectPhoneNumber() {
+        mElPhoneNumber.setError(getString(R.string.registration_phone_number_incorrect));
+        ViewUtils.scrollToView(mSvContainer, mRlContainer, mRlPhoneNumber);
+    }
+
 
     @OnTextChanged(R.id.edit_text_postal_code)
     void onChangedPostalCode(final CharSequence postalCode) {

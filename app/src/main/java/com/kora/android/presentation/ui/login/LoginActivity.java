@@ -10,7 +10,7 @@ import com.kora.android.di.component.ActivityComponent;
 import com.kora.android.presentation.ui.base.view.BaseActivity;
 import com.kora.android.presentation.ui.forgot_password.step1.ForgotPassword1Activity;
 import com.kora.android.presentation.ui.main.MainActivity;
-import com.kora.android.presentation.ui.registration.step1.FirstStepActivity;
+import com.kora.android.presentation.ui.registration.step3.ThirdStepActivity;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -95,7 +95,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @OnClick(R.id.text_view_registration)
     public void onClickRegistration() {
-        startActivity(FirstStepActivity.getLaunchIntent(this));
+        startActivity(ThirdStepActivity.getLaunchIntent(this));
     }
 
     @OnClick(R.id.text_view_restore)
