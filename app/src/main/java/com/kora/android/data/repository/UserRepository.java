@@ -15,7 +15,7 @@ public interface UserRepository {
     Observable<UserEntity> createIdentity(final String ownerAddress,
                                           final String recoveryAddress);
 
-    Observable <Object>increaseBalance();
+    Observable <UserEntity>increaseBalance();
 
     Observable<UserEntity> updateUser(final UserEntity userEntity);
 

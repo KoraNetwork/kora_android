@@ -106,7 +106,7 @@ public class CreateWalletsPresenter extends BaseServicePresenter<CreateWalletsCo
         mIncreaseBalanceUseCase.execute(new IncreaseBalanceSubscriber());
     }
 
-    private class IncreaseBalanceSubscriber extends DefaultInternetSubscriber<Object> {
+    private class IncreaseBalanceSubscriber extends DefaultInternetSubscriber<UserEntity> {
 
         @Override
         protected void onStart() {
@@ -115,7 +115,7 @@ public class CreateWalletsPresenter extends BaseServicePresenter<CreateWalletsCo
         }
 
         @Override
-        public void onNext(final Object object) {
+        public void onNext(final UserEntity userEntity) {
             if (!isServiceAttached()) return;
             mRegistrationPrefHelper.clear();
             getService().finishService(true);

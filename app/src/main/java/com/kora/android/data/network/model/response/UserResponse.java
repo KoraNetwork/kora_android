@@ -50,6 +50,8 @@ public class UserResponse {
     private Integer mInterestRate;
     @JsonField(name = "emailVerified")
     private Boolean mEmailVerified;
+    @JsonField(name = "isKoraMoneySent")
+    private Boolean mIsKoraMoneySent;
 
     public String getId() {
         return mId;
@@ -225,5 +227,13 @@ public class UserResponse {
 
     public void setEmailVerified(Boolean mEmailVerified) {
         this.mEmailVerified = mEmailVerified;
+    }
+
+    public Boolean getIsKoraMoneySent() {
+        return mIsKoraMoneySent;
+    }
+
+    public void setIsKoraMoneySent(Boolean mIsKoraMoneySent) {
+        this.mIsKoraMoneySent = mIsKoraMoneySent;
     }
 }

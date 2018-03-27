@@ -68,8 +68,14 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Observable<Object> increaseBalance() {
-        return mUserService.increaseBalance();
+    public Observable<UserEntity> increaseBalance() {
+        return mUserService.increaseBalance()
+                .map(o -> {
+                    final UserEntity userEntity = mPreferenceHandler.remindObject(Keys.Shared.USER, UserEntity.class);
+                    userEntity.setIsMoneySent(true);
+                    mPreferenceHandler.rememberObject(Keys.Shared.USER, userEntity);
+                    return userEntity;
+                });
     }
 
     @Override

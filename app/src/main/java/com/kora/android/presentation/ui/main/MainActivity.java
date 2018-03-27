@@ -161,7 +161,7 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
     }
 
     private void startWalletsService(final UserEntity userEntity) {
-        if (userEntity.hasIdentity()) return;
+        if (userEntity.hasIdentity() && userEntity.isMoneySent()) return;
         if (CommonUtils.isServiceRunning(this, CreateWalletsService.class)) return;
         final Intent intent = CreateWalletsService.getLaunchIntent(this);
         startService(intent);

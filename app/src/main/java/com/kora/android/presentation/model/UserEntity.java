@@ -28,6 +28,7 @@ public class UserEntity implements Parcelable {
     private Boolean mAgent;
     private Integer mInterestRate;
     private Boolean mEmailConfirmed;
+    private Boolean mIsMoneySent;
 
     public UserEntity addId(final String id) {
         mId = id;
@@ -136,6 +137,11 @@ public class UserEntity implements Parcelable {
 
     public UserEntity addEmailConfirmed(final Boolean emailConfirmed) {
         mEmailConfirmed = emailConfirmed;
+        return this;
+    }
+
+    public UserEntity addIsMoneySent(final Boolean isMoneySent) {
+        mIsMoneySent = isMoneySent;
         return this;
     }
 
@@ -323,6 +329,14 @@ public class UserEntity implements Parcelable {
         this.mEmailConfirmed = mEmailConfirmed;
     }
 
+    public Boolean getIsMoneySent() {
+        return mIsMoneySent;
+    }
+
+    public void setIsMoneySent(Boolean mIsMoneySent) {
+        this.mIsMoneySent = mIsMoneySent;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -353,6 +367,7 @@ public class UserEntity implements Parcelable {
         dest.writeInt(mAgent == null ? -1 : mAgent ? 1 : 0);
         dest.writeInt(mInterestRate == null ? -1 : mInterestRate);
         dest.writeInt(mEmailConfirmed == null ? -1 : mEmailConfirmed ? 1 : 0);
+        dest.writeInt(mIsMoneySent == null ? -1 : mIsMoneySent ? 1 : 0);
     }
 
     public UserEntity() {
@@ -386,6 +401,8 @@ public class UserEntity implements Parcelable {
         mInterestRate = interestRate == -1 ? null : interestRate;
         int emailConfirmed = in.readInt();
         mEmailConfirmed = emailConfirmed == -1 ? null : emailConfirmed == 1;
+        int isMoneySent = in.readInt();
+        mIsMoneySent = isMoneySent == -1 ? null : isMoneySent == 1;
     }
 
     public static final Creator<UserEntity> CREATOR = new Creator<UserEntity>() {
@@ -411,6 +428,10 @@ public class UserEntity implements Parcelable {
                 getOwner() != null && !getOwner().isEmpty() &&
                 getRecoveryKey() != null && !getRecoveryKey().isEmpty() &&
                 getIdentity() != null && !getIdentity().isEmpty();
+    }
+
+    public boolean isMoneySent() {
+        return getIsMoneySent() != null && getIsMoneySent();
     }
 
     public static class Section implements Parcelable {

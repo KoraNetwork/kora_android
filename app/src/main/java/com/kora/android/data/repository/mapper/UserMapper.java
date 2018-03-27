@@ -52,6 +52,7 @@ public class UserMapper {
                         .addAgent(userResponse.getAgent())
                         .addInterestRate(userResponse.getInterestRate())
                         .addEmailConfirmed(userResponse.getEmailVerified())
+                        .addIsMoneySent(userResponse.getIsKoraMoneySent())
                 );
     }
 
