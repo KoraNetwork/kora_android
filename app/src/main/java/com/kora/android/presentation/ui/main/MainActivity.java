@@ -420,4 +420,8 @@ public class MainActivity extends BackStackActivity<MainPresenter> implements Ma
     public DrawerLayout getDrawerLayout() {
         return mDrawerLayout;
     }
+
+    public void setUser(final UserEntity userEntity) {
+        getPresenter().setUserEntity(userEntity);
+    }
 }

@@ -229,7 +229,12 @@ public class HomeFragment extends StackFragment<HomePresenter> implements HomeVi
 
     @Override
     public void onItemClicked(final int position) {
-        final TransactionEntity transactionEntity = mTransactionAdapter.getItemByPosition(position);
-        startActivity(TransactionDetailsActivity.getLaunchIntent(getBaseActivity(), transactionEntity.getId()));
+        if (getPresenter().getUserEntity().isEmailConfirmed()) {
+            final TransactionEntity transactionEntity = mTransactionAdapter.getItemByPosition(position);
+            if (transactionEntity == null) return;
+            startActivity(TransactionDetailsActivity.getLaunchIntent(getBaseActivity(), transactionEntity.getId()));
+        } else {
+            ((MainActivity) getBaseActivity()).showEmailConfirmationDialog();
+        }
     }
 }

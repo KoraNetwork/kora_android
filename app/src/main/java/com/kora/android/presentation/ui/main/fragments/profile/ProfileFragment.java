@@ -227,7 +227,7 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
             setDrawerListener(true);
 //            setRequirements(true);
 //            mEtUserName.setEnabled(true);
-//            mEtEmail.setEnabled(true);
+            mEtEmail.setEnabled(true);
 //            mEtPhoneNumber.setEnabled(true);
             mEtFullName.setEnabled(true);
 //            mEtCurrency.setEnabled(true);
@@ -266,6 +266,7 @@ public class ProfileFragment extends StackFragment<ProfilePresenter> implements 
     @Override
     public void retrieveUserData(final UserEntity userEntity) {
         if (getBaseActivity() != null) {
+            ((MainActivity) getBaseActivity()).setUser(userEntity);
             ((MainActivity) getBaseActivity()).showUserData(userEntity);
         }
         Glide.with(this)
